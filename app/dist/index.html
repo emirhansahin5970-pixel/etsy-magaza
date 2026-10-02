@@ -1,0 +1,2198 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- @artifact-head-start -->
+<title>Küçük Adımlar, Daha Net Günler</title>
+<meta name="description" content="Genix Studio: kısa bir okuma ve sakin bir günlük planlayıcı.">
+<meta name="theme-color" content="#fbf6ec">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
+<style>
+/* Tek sütunlu, okuma odaklı düzen: metin ~36rem, kenarlarda en az 16px boşluk; gezinme üstte yapışık sekmeler. */
+:root {
+  /* Renk: açık krem zemin, koyu yüksek kontrastlı metin, adaçayı ve ölçülü sıcak turuncu */
+  --cream: #fbf6ec;
+  --paper: #fffdf8;
+  --ink: #1d231f;
+  --ink-soft: #4a524c;
+  --line: #e4dccb;
+  --sage: #4b6a54;        /* metin/ikon için: kremde ~5.6:1 */
+  --sage-deep: #36503e;   /* birincil düğme zemini: krem yazıyla ~8:1 */
+  --sage-soft: #dfe8dc;
+  --sage-wash: #eef3ea;
+  --orange: #d9692c;      /* yalnızca dolgu ve işaret */
+  --orange-text: #a3461a; /* metin olarak turuncu: kremde ~5.5:1 */
+  --orange-soft: #f8e3d3;
+  --danger: #9e2f22;
+  --focus: #1f5fbf;
+
+  /* Yazı: başlıklarda karakterli bir serif, kitap metninde okuma serifi, arayüzde sade bir sans */
+  --font-display: "Fraunces", "Iowan Old Style", "Georgia", serif;
+  --font-read: "Literata", "Iowan Old Style", "Georgia", serif;
+  --font-ui: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --step--1: 0.9rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.1875rem;
+  --step-2: 1.45rem;
+  --step-3: 1.85rem;
+
+  --measure: 36rem;
+  --gutter: max(1rem, env(safe-area-inset-left, 0px));
+  --radius: 14px;
+  --tap: 3rem;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --dur: 220ms;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html, body { margin: 0; background: var(--cream); color: var(--ink); }
+body {
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  /* Uzun Türkçe kelimeler (ör. "kolaylaştırabilirim") büyük yazı boyutunda dar ekrana sığmazsa bölünebilsin */
+  overflow-wrap: anywhere;
+  -webkit-tap-highlight-color: transparent;
+}
+img, svg { max-width: 100%; }
+button, input, textarea { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+
+.skip {
+  position: absolute; left: 0.5rem; top: -4rem; z-index: 50;
+  background: var(--ink); color: var(--cream); padding: 0.6rem 1rem; border-radius: 8px;
+}
+.skip:focus { top: calc(0.5rem + env(safe-area-inset-top, 0px)); }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Üst bölüm ---------- */
+.topbar {
+  padding-inline: var(--gutter);
+  padding-block: 0.75rem 0.25rem;
+}
+.topbar__inner {
+  max-width: var(--measure); margin-inline: auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+}
+.brand { min-width: 0; display: grid; gap: 0.05rem; }
+.brand__studio {
+  font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage); font-weight: 600;
+}
+.brand__title {
+  font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; line-height: 1.2;
+}
+
+.icon-btn {
+  flex: none; min-width: var(--tap); min-height: var(--tap);
+  display: inline-grid; place-items: center;
+  border: 1px solid var(--line); background: var(--paper); border-radius: 999px; cursor: pointer;
+}
+.icon-btn svg { width: 1.35rem; height: 1.35rem; stroke: var(--ink); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.tabs {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+  padding-inline: var(--gutter);
+  padding-block: 0.4rem;
+}
+.tabs__list {
+  max-width: var(--measure); margin: 0 auto; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem;
+}
+.tab {
+  width: 100%; min-height: var(--tap);
+  padding: 0.35rem 0.4rem;
+  border: 0; border-radius: 10px; background: transparent; cursor: pointer;
+  font-weight: 600; font-size: 0.95rem; line-height: 1.2; color: var(--ink-soft);
+  display: grid; place-items: center; text-align: center;
+}
+.tab[aria-current="page"] { background: var(--sage-soft); color: var(--ink); }
+@media (max-height: 30rem) and (orientation: landscape) {
+  .tabs { position: static; }
+}
+
+/* ---------- Ana alan ---------- */
+main { padding-inline: var(--gutter); padding-block: 1.25rem 4rem; }
+.view { max-width: var(--measure); margin-inline: auto; }
+.view:focus { outline: none; }
+.view.is-entering { animation: view-in var(--dur) var(--ease); }
+@keyframes view-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.2; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--step-3); letter-spacing: -0.01em; }
+h2 { font-size: var(--step-2); }
+h3 { font-size: var(--step-1); }
+p { margin: 0; }
+.stack { display: grid; gap: 1rem; }
+.stack-lg { display: grid; gap: 1.5rem; }
+.stack > *, .stack-lg > *, .card > *, .box > *, .exercise > *, .welcome > *, .day > *, .empty > * { min-width: 0; }
+.lead { font-size: var(--step-1); color: var(--ink); }
+.muted { color: var(--ink-soft); }
+.eyebrow {
+  font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--sage);
+}
+
+/* ---------- Düğmeler ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: var(--tap); padding: 0.7rem 1.2rem;
+  border-radius: 999px; border: 1.5px solid transparent;
+  font-weight: 650; font-size: 1rem; line-height: 1.2; text-align: center; text-decoration: none; cursor: pointer;
+  transition: background-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.btn:active { transform: scale(0.98); }
+.btn--primary { background: var(--sage-deep); color: var(--cream); }
+.btn--secondary { background: var(--paper); color: var(--ink); border-color: var(--sage); }
+.btn--quiet { background: transparent; color: var(--sage-deep); padding-inline: 0.6rem; text-decoration: underline; text-underline-offset: 3px; }
+.btn--danger { background: var(--danger); color: #fff; }
+.btn--danger-outline { background: var(--paper); color: var(--danger); border-color: var(--danger); }
+.btn--block { width: 100%; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.btn-row > .btn { flex: 1 1 12rem; }
+
+/* ---------- Karşılama ---------- */
+.welcome { display: grid; gap: 1.25rem; padding-top: 0.5rem; }
+.welcome__art { color: var(--sage); }
+.welcome__art svg { display: block; width: 100%; height: auto; max-height: 11rem; }
+.welcome .btn-row { margin-top: 0.25rem; }
+.note {
+  display: flex; gap: 0.6rem; align-items: flex-start;
+  font-size: var(--step--1); color: var(--ink-soft);
+  border-top: 1px solid var(--line); padding-top: 1rem;
+}
+.note svg { flex: none; width: 1.2rem; height: 1.2rem; margin-top: 0.15rem; stroke: var(--sage); fill: none; stroke-width: 1.8; }
+
+/* ---------- İçindekiler ---------- */
+.toc { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.toc__item {
+  display: grid; gap: 0.35rem;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1rem;
+}
+.toc__item.is-locked { background: transparent; border-style: dashed; }
+.toc__meta { font-size: var(--step--1); color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; }
+.toc__title { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; line-height: 1.25; }
+.toc__item .btn { justify-self: start; margin-top: 0.4rem; }
+.badge {
+  display: inline-block; font-size: 0.8rem; font-weight: 600; padding: 0.15rem 0.55rem; border-radius: 999px;
+  background: var(--sage-wash); color: var(--sage-deep);
+}
+.resume {
+  background: var(--sage-wash); border-radius: var(--radius); padding: 1rem; display: grid; gap: 0.6rem;
+}
+
+/* ---------- Okuma ---------- */
+.reader { font-family: var(--font-read); font-size: 1.125rem; line-height: 1.7; }
+.reader > * + * { margin-top: 1.1rem; }
+.reader h1 { font-size: var(--step-3); }
+.reader h2 { font-size: 1.3rem; margin-top: 2rem; }
+.reader .chapter-head { display: grid; gap: 0.4rem; margin-bottom: 1.5rem; }
+.reader .chapter-head .eyebrow { font-family: var(--font-ui); }
+
+.scene {
+  border-left: 3px solid var(--orange);
+  padding: 0.25rem 0 0.25rem 1rem;
+  display: grid; gap: 0.75rem;
+  font-style: italic; color: var(--ink);
+}
+
+.box {
+  font-family: var(--font-ui); font-size: 1rem; line-height: 1.6;
+  border-radius: var(--radius); padding: 1rem 1.1rem; display: grid; gap: 0.5rem;
+}
+.box__label { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+.box--research { background: var(--sage-wash); }
+.box--research .box__label { color: var(--sage-deep); }
+.box--suggestion { background: var(--orange-soft); }
+.box--suggestion .box__label { color: var(--orange-text); }
+.box__refs { font-size: var(--step--1); color: var(--ink-soft); }
+
+.figure { margin-inline: 0; margin-block: 1.5rem; display: grid; gap: 0.6rem; }
+.figure__art {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1rem;
+}
+.figure__art svg { display: block; width: 100%; height: auto; }
+.figure figcaption { font-family: var(--font-ui); font-size: var(--step--1); color: var(--ink-soft); }
+
+.exercise {
+  font-family: var(--font-ui); font-size: 1rem;
+  border: 1.5px solid var(--sage); border-radius: var(--radius); background: var(--paper);
+  padding: 1.1rem; display: grid; gap: 0.85rem;
+}
+.exercise__label { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--sage-deep); }
+.exercise h3 { font-size: var(--step-1); }
+.exercise ol { margin: 0; padding-left: 1.3rem; display: grid; gap: 0.45rem; }
+.timer { display: grid; gap: 0.5rem; }
+.timer__bar { height: 6px; border-radius: 99px; background: var(--sage-soft); overflow: hidden; }
+.timer__fill { height: 100%; width: 100%; background: var(--sage); transform-origin: left; transform: scaleX(0); }
+.timer__status { font-variant-numeric: tabular-nums; color: var(--ink-soft); font-size: var(--step--1); }
+
+.summary {
+  font-family: var(--font-display); font-size: 1.2rem; line-height: 1.45;
+  border-top: 2px solid var(--ink); padding-top: 1rem; margin-top: 2rem !important;
+}
+.summary .eyebrow { display: block; font-family: var(--font-ui); margin-bottom: 0.35rem; }
+
+.sources { font-family: var(--font-ui); font-size: var(--step--1); color: var(--ink-soft); display: grid; gap: 0.5rem; }
+.sources h2 { font-size: 1rem; margin: 0; font-family: var(--font-ui); color: var(--ink); }
+.sources ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.5rem; }
+.sources a { color: var(--sage-deep); word-break: break-all; }
+
+.chapter-end { font-family: var(--font-ui); display: grid; gap: 0.75rem; margin-top: 2rem !important; }
+
+/* ---------- Planlayıcı ---------- */
+.planner-head { display: grid; gap: 0.3rem; }
+.planner-date { font-size: var(--step--1); color: var(--ink-soft); font-weight: 600; }
+.banner {
+  border-radius: 12px; padding: 0.85rem 1rem; display: grid; gap: 0.6rem;
+  background: var(--orange-soft); color: var(--ink); font-size: 0.98rem;
+}
+.banner--info { background: var(--sage-wash); }
+.banner .btn { justify-self: start; }
+
+.card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1rem; display: grid; gap: 0.75rem;
+  scroll-margin-top: 5rem;
+}
+.card__head { display: grid; gap: 0.15rem; }
+.card__head h2 { font-size: 1.2rem; }
+.card__hint { font-size: var(--step--1); color: var(--ink-soft); }
+.card.is-highlight { box-shadow: 0 0 0 3px var(--orange-soft); border-color: var(--orange); }
+
+.field { display: grid; gap: 0.3rem; min-width: 0; }
+.field label { font-weight: 600; font-size: 0.95rem; }
+.input, .textarea {
+  width: 100%; min-height: var(--tap);
+  border: 1.5px solid #cfc6b3; border-radius: 10px; background: #fff;
+  padding: 0.65rem 0.75rem;
+  font-size: 1.0625rem; /* 16px üstü: iOS'ta odaklanınca yakınlaştırmayı önler */
+  line-height: 1.45;
+}
+.textarea { resize: vertical; min-height: 6.5rem; }
+.input:focus, .textarea:focus { border-color: var(--sage); outline: 3px solid var(--sage-soft); outline-offset: 0; }
+.input::placeholder, .textarea::placeholder { color: #8a8f88; }
+
+.task { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.65rem; align-items: start; }
+.check {
+  position: relative; width: var(--tap); height: var(--tap); flex: none;
+  display: grid; place-items: center; cursor: pointer;
+}
+.check input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.check__box {
+  width: 1.75rem; height: 1.75rem; border-radius: 8px; border: 2px solid var(--sage);
+  display: grid; place-items: center; background: #fff;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.check__box svg { width: 1.1rem; height: 1.1rem; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+.check input:checked + .check__box { background: var(--orange); border-color: var(--orange); }
+.check input:checked + .check__box svg { opacity: 1; }
+.check input:focus-visible + .check__box { outline: 3px solid var(--focus); outline-offset: 2px; }
+.check.is-pop .check__box { animation: pop 320ms var(--ease); }
+@keyframes pop { 0% { transform: scale(1); } 45% { transform: scale(1.18); } 100% { transform: scale(1); } }
+.task.is-done .input { text-decoration: line-through; text-decoration-color: var(--orange); color: var(--ink-soft); }
+
+.start-grid { display: grid; gap: 0.75rem; }
+.start-preview {
+  font-family: var(--font-read); font-style: italic; color: var(--ink);
+  background: var(--sage-wash); border-radius: 10px; padding: 0.75rem 0.9rem;
+}
+
+.save-status {
+  position: sticky; bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  justify-self: center; margin-top: 0.5rem;
+  background: var(--ink); color: var(--cream); border-radius: 999px; padding: 0.45rem 1rem; font-size: 0.9rem;
+  opacity: 0; transition: opacity var(--dur) var(--ease);
+  pointer-events: none;
+}
+.save-status.is-visible { opacity: 1; }
+.save-status.is-error { background: var(--danger); color: #fff; opacity: 1; border-radius: 12px; }
+
+/* ---------- Geçmiş ---------- */
+.days { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.day {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1rem; display: grid; gap: 0.5rem;
+}
+.day__date { font-weight: 700; display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; align-items: center; }
+.day__main { font-family: var(--font-read); }
+.day__meta { font-size: var(--step--1); color: var(--ink-soft); }
+.day .btn-row > .btn { flex: 1 1 9rem; }
+.empty { background: var(--sage-wash); border-radius: var(--radius); padding: 1.25rem; display: grid; gap: 0.75rem; }
+
+/* ---------- Ayarlar paneli ve onay penceresi ---------- */
+dialog {
+  border: 0; padding: 0; background: var(--cream); color: var(--ink);
+  width: min(36rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem);
+  border-radius: 18px; box-shadow: 0 20px 60px rgb(29 35 31 / 0.25);
+}
+dialog::backdrop { background: rgb(29 35 31 / 0.45); }
+dialog[open] { animation: dialog-in var(--dur) var(--ease); }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.dialog__body { padding: 1.25rem; display: grid; gap: 1.25rem; overflow-y: auto; max-height: calc(100dvh - 2rem); }
+.dialog__head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.panel-section { display: grid; gap: 0.6rem; padding-top: 1.1rem; border-top: 1px solid var(--line); }
+.panel-section h3 { font-size: 1.1rem; }
+.panel-section ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.35rem; }
+
+.segmented { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; border: 0; margin: 0; padding: 0; }
+.segmented legend { margin-bottom: 0.4rem; }
+.segmented label {
+  min-height: var(--tap); display: grid; place-items: center; text-align: center;
+  border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper); cursor: pointer;
+  font-weight: 600; font-size: 0.95rem; padding: 0.3rem; line-height: 1.2;
+}
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented input:checked + span { color: var(--ink); }
+.segmented label:has(input:checked) { background: var(--sage-soft); border-color: var(--sage); }
+.segmented label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.file-pick { position: relative; }
+.file-pick input[type="file"] { position: absolute; inset: 0; opacity: 0; width: 100%; cursor: pointer; }
+.file-pick:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 999px; }
+
+.msg { border-radius: 10px; padding: 0.75rem 0.9rem; font-size: 0.98rem; display: grid; gap: 0.4rem; }
+.msg--ok { background: var(--sage-wash); }
+.msg--error { background: #f7dcd6; color: #5c1a12; }
+.msg--check { background: var(--paper); border: 1.5px solid var(--sage); }
+.code-out { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85rem; min-height: 8rem; }
+
+.toast-region {
+  position: fixed; left: 0; right: 0; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); z-index: 60;
+  display: grid; justify-items: center; pointer-events: none; padding-inline: 1rem;
+}
+.toast {
+  background: var(--ink); color: var(--cream); border-radius: 12px; padding: 0.7rem 1rem;
+  max-width: 30rem; font-size: 0.95rem;
+}
+
+/* ---------- Hareket: cihaz tercihi ve uygulama içi ayar ---------- */
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="on"]) { --dur: 0ms; }
+  :root:not([data-motion="on"]) *, :root:not([data-motion="on"]) *::before, :root:not([data-motion="on"]) *::after {
+    animation: none !important; transition: none !important; scroll-behavior: auto !important;
+  }
+}
+:root[data-motion="off"] { --dur: 0ms; }
+:root[data-motion="off"] *, :root[data-motion="off"] *::before, :root[data-motion="off"] *::after {
+  animation: none !important; transition: none !important; scroll-behavior: auto !important;
+}
+
+/* ---------- Görsel sınıfları (SVG) ---------- */
+.il-soft { fill: var(--sage-wash); }
+.il-line { stroke: var(--sage); stroke-width: 5; stroke-linecap: round; fill: none; opacity: 0.55; }
+.il-arrow { stroke: var(--orange); stroke-width: 3.5; stroke-linecap: round; fill: none; }
+.il-arrow-head { stroke: var(--orange); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.il-step { fill: var(--sage); }
+.il-step--far { opacity: 0.45; }
+.il-dot { fill: var(--orange); }
+.il-ground { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; opacity: 0.25; }
+.il-scribble { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; fill: none; opacity: 0.7; }
+.il-ring { stroke: var(--sage-deep); stroke-width: 2.5; fill: none; }
+.il-paper { fill: #fff; stroke: var(--ink); stroke-width: 2; }
+.il-rule { stroke: var(--sage); stroke-width: 4; stroke-linecap: round; fill: none; }
+.il-box { fill: none; stroke: var(--sage-deep); stroke-width: 2; }
+.il-check { stroke: var(--orange); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+
+</style>
+<!-- @artifact-head-end -->
+</head>
+<body>
+<!-- @artifact-body-start -->
+<a class="skip" href="#main" data-t="app.skipToContent"></a>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <div class="brand">
+      <span class="brand__studio" data-t="app.brand"></span>
+      <span class="brand__title" data-t="app.title"></span>
+    </div>
+    <button type="button" class="icon-btn" id="open-settings" data-t-label="app.settingsButton">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.8 12h2.4M18.8 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
+    </button>
+  </div>
+</header>
+
+<nav class="tabs" data-t-label="nav.label">
+  <ul class="tabs__list">
+    <li><button type="button" class="tab" data-nav="oku" data-t="nav.read"></button></li>
+    <li><button type="button" class="tab" data-nav="planla" data-t="nav.plan"></button></li>
+    <li><button type="button" class="tab" data-nav="gecmis" data-t="nav.history"></button></li>
+  </ul>
+</nav>
+
+<main id="main" tabindex="-1">
+  <div id="view" class="view"></div>
+  <noscript><p>Bu uygulama JavaScript gerektirir. Tarayıcında JavaScript'i açıp sayfayı yenile.</p></noscript>
+</main>
+
+<dialog id="settings" aria-labelledby="settings-title"></dialog>
+<dialog id="confirm" aria-labelledby="confirm-title"></dialog>
+
+<div class="toast-region" aria-live="polite" aria-atomic="true" id="toast-region"></div>
+
+<script>
+/*
+ * Arayüz metinleri (Türkçe).
+ * Kitap içeriği burada değil: content/book.tr.js
+ * İngilizce sürüm için bu dosyanın aynı anahtarlarla bir kopyası (en.js) hazırlanır.
+ * {degisken} biçimindeki yer tutucular app.js içindeki t() fonksiyonu ile doldurulur.
+ */
+window.GX_STRINGS = {
+  locale: "tr-TR",
+  htmlLang: "tr",
+
+  app: {
+    brand: "Genix Studio",
+    title: "Küçük Adımlar, Daha Net Günler",
+    subtitle: "Kısa bir okuma ve sakin bir günlük planlayıcı",
+    skipToContent: "İçeriğe geç",
+    settingsButton: "Ayarlar ve veriler",
+  },
+
+  nav: {
+    label: "Ana bölümler",
+    read: "Kitabı Oku",
+    plan: "Günümü Planla",
+    history: "Geçmiş Günler",
+  },
+
+  welcome: {
+    eyebrow: "Kısa bir okuma ve günlük planlayıcı",
+    title: "Küçük Adımlar, Daha Net Günler",
+    lead: "Aklındaki işleri bir yere bırak, bugün için tek bir ana iş seç ve küçük bir adımla başla.",
+    body: "Burada iki şey var: Kısa bölümlerden oluşan bir okuma ve birkaç dakikada doldurabileceğin bir günlük plan. İkisini birlikte de kullanabilirsin, ayrı ayrı da.",
+    startReading: "Okumaya başla",
+    startPlanning: "Doğrudan bugünü planla",
+    privacyNote: "Kayıtların yalnızca bu cihazdaki bu tarayıcıda tutulur. Hesap açman gerekmez.",
+  },
+
+  reader: {
+    contentsTitle: "İçindekiler",
+    contentsLead: "Her bölüm, yolda ya da bir kahve molasında okunabilecek kadar kısa.",
+    chapterLabel: "Bölüm {n}",
+    continueReading: "Kaldığın yerden devam et",
+    startChapter: "Bölümü oku",
+    notInPrototype: "Prototipte henüz yok",
+    backToContents: "İçindekilere dön",
+    researchLabel: "Araştırma ne diyor?",
+    suggestionLabel: "Önerim",
+    exerciseLabel: "Küçük uygulama",
+    summaryLabel: "Bölümün özeti",
+    sourcesTitle: "Bu bölümde yararlanılan kaynaklar",
+    exerciseToPlanner: "Bunu planlayıcıda yap",
+    timerStart: "3 dakikalık sayacı başlat",
+    timerStop: "Sayacı durdur",
+    timerDone: "Üç dakika doldu. Yazdıklarını bırakabilirsin; liste tamam olmak zorunda değil.",
+    timerRemaining: "Kalan süre: {time}",
+    nextChapter: "Sonraki bölüm: {title}",
+    nextChapterSoon: "Sonraki bölümler, prototip değerlendirmesinden sonra eklenecek.",
+    readingTime: "Yaklaşık {min} dakikalık okuma",
+  },
+
+  planner: {
+    titleToday: "Bugünün planı",
+    titlePast: "Geçmiş bir gün",
+    pastBanner: "Bu gün geçmişte kaldı. Değişikliklerin yine bu tarihe kaydedilir.",
+    backToToday: "Bugüne dön",
+    backToBook: "Kitapta kaldığın yere dön",
+    newDayBanner: "Yeni bir gün başladı. Dünkü kaydın olduğu gibi saklandı.",
+    openNewDay: "Bugünün planını aç",
+    intro: "Hepsini doldurman gerekmiyor. Bir alan bile yeterli bir başlangıç.",
+
+    brainTitle: "Aklımdakiler",
+    brainHint: "Aklına gelenleri sırasız, kısa kısa yaz.",
+    brainLabel: "Aklımdakiler notu",
+    brainPlaceholder: "Faturayı öde, annemi ara, rapor taslağı…",
+
+    mainTitle: "Bugünün Ana İşi",
+    mainHint: "Bugün bitse rahatlayacağın tek iş.",
+    mainLabel: "Ana iş",
+    mainPlaceholder: "Ör. Sunumun ilk taslağı",
+    stepLabel: "İlk küçük adım",
+    stepPlaceholder: "Ör. Dosyayı açıp üç başlık yazmak",
+    mainDoneLabel: "Ana işi tamamlandı olarak işaretle",
+
+    extrasTitle: "İki Küçük Ek İş",
+    extrasHint: "En fazla iki tane. Yer kalmazsa bu bir işaret: yarına bırak.",
+    extraLabel: "Ek iş {n}",
+    extraPlaceholder: "Ör. Kargo için adres yaz",
+    extraDoneLabel: "Ek iş {n} tamamlandı olarak işaretle",
+
+    startTitle: "Başlama Planım",
+    startHint: "Şu zamanda, şu yerde, şu küçük adımla başlayacağım.",
+    whenLabel: "Ne zaman?",
+    whenPlaceholder: "Ör. Öğle yemeğinden hemen sonra",
+    whereLabel: "Nerede?",
+    wherePlaceholder: "Ör. Kütüphanenin üst katında",
+    whatLabel: "Hangi küçük adımla?",
+    whatPlaceholder: "Ör. Dosyayı açıp ilk başlığı yazarak",
+    startPreview: "{when}, {where}, {what} başlayacağım.",
+
+    eveningTitle: "Akşam Notum",
+    eveningHint: "Kısa ve yargılamadan.",
+    workedLabel: "Bugün ne işe yaradı?",
+    workedPlaceholder: "Ör. Telefonu başka odaya koymak",
+    easierLabel: "Yarın neyi kolaylaştırabilirim?",
+    easierPlaceholder: "Ör. Çantamı akşamdan hazırlamak",
+
+    doneFeedback: "İşaretlendi",
+    undoneFeedback: "İşaret kaldırıldı",
+    saved: "Kaydedildi",
+    saving: "Kaydediliyor…",
+    saveFailed: "Kaydedilemedi. Tarayıcı bu sayfanın veri saklamasına izin vermiyor olabilir (ör. gizli sekme).",
+    storageWarning: "Bu tarayıcı veri saklamaya izin vermiyor. Yazdıkların sayfa kapanınca kaybolabilir.",
+  },
+
+  history: {
+    title: "Geçmiş Günler",
+    lead: "Önceki günlerin kayıtları burada. Açıp düzenleyebilirsin.",
+    empty: "Henüz kayıtlı bir gün yok. Bugünün planına bir şey yazdığında burada görünecek.",
+    emptyAction: "Bugünü planla",
+    today: "Bugün",
+    noMain: "Ana iş yazılmamış",
+    doneCount: "{done}/{total} iş işaretli",
+    open: "Aç ve düzenle",
+    delete: "Sil",
+    deleteTitle: "Bu günü silmek istiyor musun?",
+    deleteBody: "{date} tarihli kayıt bu cihazdan kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+    deleteConfirm: "Evet, sil",
+    deleted: "{date} tarihli kayıt silindi.",
+  },
+
+  settings: {
+    title: "Ayarlar ve veriler",
+    close: "Kapat",
+    motionTitle: "Animasyonlar",
+    motionHint: "Kapalıyken bütün özellikler aynı şekilde çalışır.",
+    motionSystem: "Cihaz ayarına uy",
+    motionOn: "Açık",
+    motionOff: "Kapalı",
+    motionSystemReduced: "Cihazın azaltılmış hareket tercihi açık, bu yüzden animasyonlar şu an kapalı.",
+
+    dataTitle: "Kayıtların nerede?",
+    dataPoints: [
+      "Kayıtların yalnızca bu cihazda ve bu tarayıcıda tutulur.",
+      "Telefonun, tabletin ve bilgisayarın arasında otomatik eşitlenmez.",
+      "Tarayıcı verilerini (geçmiş, site verileri) silersen kayıtlar da silinebilir.",
+      "Düzenli olarak yedek dosyası almanı öneririz.",
+    ],
+    dayCount: "Bu cihazda {n} günlük kayıt var.",
+
+    exportTitle: "Yedek al",
+    exportHint: "Kayıtlarını tek bir dosya olarak indir. Dosyayı Dosyalar, Drive veya e-posta gibi güvendiğin bir yerde sakla.",
+    exportButton: "Yedek dosyasını indir",
+    exportCopyButton: "Yedeği metin olarak göster",
+    exportCopyHint: "İndirme çalışmazsa bu metni kopyalayıp bir nota yapıştırabilirsin. Geri yüklerken aynı metni kullanırsın.",
+    copy: "Metni kopyala",
+    copied: "Kopyalandı",
+    copyFailed: "Kopyalanamadı. Metni seçip elle kopyalayabilirsin.",
+    exportDone: "İndirme başlatıldı: {file}. Dosya inmediyse \"Yedeği metin olarak göster\" düğmesini kullan.",
+    exportEmpty: "Henüz yedeklenecek bir kayıt yok.",
+
+    importTitle: "Yedekten geri yükle",
+    importHint: "Daha önce aldığın yedek dosyasını seç. Dosya önce kontrol edilir; hatalıysa mevcut kayıtlarına dokunulmaz.",
+    importFileLabel: "Yedek dosyası seç",
+    importPasteToggle: "Dosya yerine metin yapıştır",
+    importPasteLabel: "Yedek metni",
+    importPasteButton: "Metni kontrol et",
+    importCheckTitle: "Yedek kontrol edildi",
+    importSummary: "Yedekte {n} gün var. Bunlardan {overlap} tanesi bu cihazdaki bir günle aynı tarihte; o günlerde yedekteki kayıt kullanılacak. Diğer kayıtların olduğu gibi kalır.",
+    importConfirm: "Geri yükle",
+    importDone: "{n} gün geri yüklendi.",
+    importErrorTitle: "Bu yedek geri yüklenemedi",
+    importErrorKept: "Mevcut kayıtlarında hiçbir değişiklik yapılmadı.",
+    importErrors: {
+      tooLarge: "Dosya çok büyük. Bu uygulamanın yedekleri genellikle birkaç yüz kilobaytı geçmez.",
+      notJson: "Dosya okunamadı. Bu uygulamadan alınmış bir yedek dosyası (.json) seçtiğinden emin ol.",
+      wrongApp: "Bu dosya Küçük Adımlar, Daha Net Günler yedeği gibi görünmüyor.",
+      wrongVersion: "Bu yedek, uygulamanın desteklemediği bir sürümden.",
+      badDays: "Yedekteki gün kayıtları beklenen biçimde değil.",
+      badDate: "Yedekte geçersiz bir tarih var: {key}",
+      badField: "{key} tarihli kayıtta beklenmeyen bir alan var: {field}",
+      empty: "Yedekte geri yüklenecek bir gün yok.",
+      readFailed: "Dosya okunurken bir sorun oldu. Tekrar dene.",
+    },
+
+    resetTitle: "Bütün kayıtları sil",
+    resetHint: "Bu cihazdaki bütün günlük kayıtlarını siler. Önce yedek almanı öneririz.",
+    resetButton: "Bütün kayıtları sil",
+    resetConfirmTitle: "Bütün kayıtlar silinsin mi?",
+    resetConfirmBody: "Bu cihazdaki {n} günlük kayıt kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+    resetConfirm: "Evet, hepsini sil",
+    resetDone: "Bütün kayıtlar silindi.",
+
+    aboutTitle: "Bu sürüm hakkında",
+    aboutBody: "Bu bir ilk deneme sürümüdür. Kitabın yalnızca ilk bölümü eklendi. Uygulama internet bağlantısıyla açılır; çevrimdışı kullanım henüz desteklenmiyor.",
+  },
+
+  dialog: {
+    cancel: "Vazgeç",
+  },
+};
+
+</script>
+<script>
+/*
+ * Kitap içeriği (Türkçe): "Küçük Adımlar, Daha Net Günler"
+ * Arayüz metinleri burada değil: i18n/tr.js
+ *
+ * Blok türleri:
+ *   h        – ara başlık
+ *   p        – paragraf
+ *   scene    – gündelik sahne (paragraflar dizisi)
+ *   figure   – görsel (illustrations.js içindeki anahtar + açıklama)
+ *   research – araştırma bulgusu (refs: kaynak kimlikleri)
+ *   suggestion – yazarın kendi önerisi (araştırma bulgusundan ayrı tutulur)
+ *   exercise – küçük uygulama (planner: planlayıcıdaki hedef alan)
+ *   summary  – tek cümlelik bölüm özeti
+ * Her bloğun benzersiz bir id'si var; okuma konumu bu id ile hatırlanır.
+ */
+window.GX_BOOK = {
+  title: "Küçük Adımlar, Daha Net Günler",
+  subtitle: "Kısa bir okuma ve sakin bir günlük planlayıcı",
+
+  chapters: [
+    {
+      id: "baslarken",
+      kind: "intro",
+      title: "Başlarken",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "g1", type: "p", text: "Bu kısa kitap, günü kurtarmaya çalışan biri için yazıldı. Dersleri, işi, evi ve telefondaki bitmeyen bildirimleri aynı anda taşıyan; akşam olunca “Bugün ne yaptım ki?” diye soran biri için." },
+        { id: "g2", type: "p", text: "Burada büyük bir sistem bulmayacaksın. Renk kodlu ajandalar, yirmi adımlı sabah rutinleri ya da her şeyi bir gecede değiştirme sözü yok. Üç küçük fikir var: Aklındakileri bir yere bırakmak, bugün için tek bir ana iş seçmek ve gün değişince planı da değiştirebilmek." },
+        { id: "g3", type: "p", text: "Her bölüm, bir otobüs yolculuğunda okunabilecek kadar kısa. Her bölümün sonunda birkaç dakikalık bir uygulama var. İstersen uygulamayı kâğıda yaparsın, istersen bu uygulamadaki planlayıcıya." },
+        { id: "g4", type: "p", text: "Yer yer araştırmalardan söz edeceğim. Bunları “bilim kanıtladı” diye değil, “bazı insanlarla, belirli koşullarda şu görüldü” diye okumanı isterim. Araştırmanın söylediğiyle benim önerimi ayrı kutularda göreceksin. Hangisinin hangisi olduğunu bilmek, kendi hayatına neyi alacağına karar vermeni kolaylaştırır." },
+      ],
+    },
+
+    {
+      id: "bolum-1",
+      kind: "chapter",
+      number: 1,
+      title: "Her Şeyi Aklında Tutmak Zorunda Değilsin",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b1-sahne",
+          type: "scene",
+          paragraphs: [
+            "Sabah 08.10. Deniz metroda, kapının yanında ayakta. Bir eliyle tutamağa tutunuyor, diğer eliyle telefonda e-postalara bakıyor.",
+            "Aklından geçenler sırayla gelmiyor. Cuma teslim edilecek ödev. Ev sahibine kirayla ilgili yazılacak mesaj. Kargoya verilmesi gereken iade paketi. Annesinin haftaya doğum günü. Staj başvurusundaki yarım kalmış form. Bir de dün akşam bir arkadaşına “Yarın ararım” demişti. Ne zaman arayacaktı?",
+            "Metro durağa yaklaşırken içinde tanıdık bir his beliriyor: Bir şeyi unutuyorum ama ne? Daha gün başlamadan yorgun.",
+          ],
+        },
+
+        { id: "b1-h1", type: "h", text: "Akıl iyi bir hatırlatıcı, kötü bir depo" },
+        { id: "b1-p1", type: "p", text: "Deniz'in sorunu tembellik ya da dağınıklık değil. Sorun, bütün işlerin aynı anda, aynı yerde, yani kafasının içinde durması." },
+        { id: "b1-p2", type: "p", text: "Bitmemiş bir iş, bir yere not edilmediği sürece arada bir kendini hatırlatır. Ders dinlerken iade paketi aklına gelir, yemek yerken ödev. Bu hatırlatmalar bazen işe yarar. Ama sıralarını ve zamanlarını seçmezler. Önemli bir iş ile önemsiz bir iş aynı sesle seslenir." },
+        { id: "b1-p3", type: "p", text: "Sonuçta elinde yirmi tane yarım düşünce olur ve hiçbirini tam olarak düşünemezsin. Gün boyu meşgul hissedip akşam hiçbir şey yapmamış gibi hissetmenin bir nedeni bu olabilir." },
+
+        {
+          id: "b1-arastirma-1",
+          type: "research",
+          text: "Masicampo ve Baumeister'ın 2011'de yayımlanan bir dizi deneyinde, bitmemiş bir hedefi hatırlatılan katılımcıların, ilgisiz bir okuma görevi sırasında akıllarının o hedefe daha sık kaydığı görüldü. Aynı hedef için belirli bir plan yapmalarına izin verildiğinde bu etki ortadan kalktı. Araştırmacılara göre fark yaratan, işi yalnızca hatırlamak değil, onun için somut bir plan kurmaktı. Bu çalışmalar laboratuvarda, çoğunlukla üniversite öğrencileriyle yapıldı; günlük hayatta herkeste aynı sonucu vereceği anlamına gelmez.",
+          refs: ["masicampo2011"],
+        },
+
+        { id: "b1-h2", type: "h", text: "Yazmanın pratik amacı" },
+        { id: "b1-p4", type: "p", text: "Aklındakileri yazmak, o işleri yapacağına dair bir söz vermek değil. Daha çok, onları bir yere park etmek gibi. Araba otoparkta dururken onu düşünmeye devam etmen gerekmez; nerede olduğunu bilmen yeter." },
+        { id: "b1-p5", type: "p", text: "Kâğıda dökülen liste üç somut iş görür. Birincisi, işleri karşılaştırmanı sağlar. Kafanda hepsi aynı büyüklükte görünür; yazınca bazılarının iki dakikalık, bazılarının iki haftalık olduğunu fark edersin. İkincisi, unutma kaygısını azaltır, çünkü artık hatırlama işini kâğıt yapar. Üçüncüsü, bir sonraki adımı, yani bugün neyi seçeceğine karar vermeyi kolaylaştırır." },
+
+        {
+          id: "b1-gorsel",
+          type: "figure",
+          art: "thoughtsToPaper",
+          alt: "Solda birbirine dolanmış, farklı boyutlarda kısa çizgiler ve halkalar; ortadan bir ok, sağdaki düzenli satırlara sahip bir kâğıda uzanıyor. Kâğıtta birkaç satır ve bir satırın yanında küçük bir işaret var.",
+          caption: "Kafanın içinde her şey birbirine dolanır. Kâğıtta aynı işler sıraya girer ve karşılaştırılabilir hâle gelir.",
+        },
+
+        {
+          id: "b1-arastirma-2",
+          type: "research",
+          text: "Scullin ve arkadaşlarının 2018'de yayımladığı bir uyku laboratuvarı çalışmasında, 57 genç yetişkin yatmadan önce beş dakika yazı yazdı. Önümüzdeki günlerde yapacaklarını yazanlar, son günlerde tamamladıklarını yazanlara göre ortalamada daha çabuk uykuya daldı. Yapılacaklarını daha ayrıntılı yazanlar da daha çabuk uyudu. Çalışma tek bir gece, uyku sorunu olmayan küçük bir grupla yapıldı. Yazmanın herkesin uykusuna iyi geleceğini göstermiyor; ama listeyi akıldan kâğıda taşımanın rahatlatıcı olabileceğine dair ilginç bir ipucu veriyor.",
+          refs: ["scullin2018"],
+        },
+
+        { id: "b1-h3", type: "h", text: "Bütün hayatını düzenlemen gerekmiyor" },
+        { id: "b1-p6", type: "p", text: "Bu noktada akla gelen ilk fikir genellikle büyük bir temizlik olur: Yeni bir uygulama indirmek, her şeyi kategorilere ayırmak, renkler, etiketler, öncelik seviyeleri. Bir hafta sonra sistem, bakımı gereken bir iş daha olur." },
+        { id: "b1-p7", type: "p", text: "Buna gerek yok. Bu bölümde yapacağın tek şey, birkaç dakikalığına aklındakileri dışarı çıkarmak. Sınıflandırma, sıralama ya da plan yok. O kısma ikinci bölümde geleceğiz ve orada da tek bir iş seçeceğiz, yirmi değil." },
+
+        {
+          id: "b1-oneri",
+          type: "suggestion",
+          text: "Listeyi tek bir yerde tut. Bir gün telefonun not uygulamasına, ertesi gün bir kâğıda, öbür gün bir mesaj taslağına yazarsan, aklın bu sefer listelerin nerede olduğunu hatırlamaya çalışır. Hangi yer olduğu önemli değil; aynı yer olması önemli.",
+        },
+
+        { id: "b1-p8", type: "p", text: "Bir de şunu bilmek işine yarayabilir: Listen dağınık görünecek. “Annemi ara” ile “Mezuniyetten sonra ne yapacağımı düşün” alt alta duracak. Bu normal. Liste düzenli olmak için değil, kafandaki yükü görünür kılmak için var." },
+        { id: "b1-h4", type: "h", text: "Liste uzayınca ne olur?" },
+        { id: "b1-p10", type: "p", text: "İlk kez her şeyi yazan birçok kişi, ortaya çıkan listeye bakınca bir an geriler. On beş, yirmi satır. “Bu kadar işim mi var?” Aslında bu işler zaten oradaydı; sadece şimdi sayılabilir hâldeler." },
+        { id: "b1-p11", type: "p", text: "Uzun bir liste, hepsini bugün yapman gerektiği anlamına gelmez. Bazı satırlar bir mesajlık iş, bazıları aylarca sürecek bir konu, bazıları da aslında bir iş değil, bir kaygı: “Staj bulabilecek miyim?” Bunları ayırmak için şimdilik bir şey yapmana gerek yok. Sadece hepsinin aynı türden olmadığını görmek bile yükü biraz hafifletebilir." },
+        { id: "b1-p12", type: "p", text: "Yazarken aklına gelen ama yazmak istemediğin şeyler de olabilir. Her şeyi yazmak zorunda değilsin. Bu liste kimseye gösterilmeyecek; amacı seni sınamak değil, kafandaki yerden biraz yer açmak." },
+        { id: "b1-p13", type: "p", text: "Bir de şunu fark edebilirsin: Bazı işler yazıldıktan hemen sonra küçülür. “Ev sahibine mesaj” kafanda büyük bir konuşma gibi dururken, kâğıtta iki cümlelik bir mesaja dönüşür. Bu her iş için olmaz, ama olduğunda iyi gelir." },
+        { id: "b1-p9", type: "p", text: "Deniz o sabah metrodan indiğinde, telefonundaki notlara üç dakika boyunca aklına gelen her şeyi yazdı. On dört satır çıktı. Hiçbirini o an yapmadı. Ama arkadaşını öğle arasında arayacağını ve iade paketini akşam eve dönerken kargoya bırakacağını görünce, gerisi biraz daha sessizleşti." },
+
+        {
+          id: "b1-uygulama",
+          type: "exercise",
+          title: "Üç dakikalık boşaltma",
+          planner: "brain",
+          timerSeconds: 180,
+          steps: [
+            "Üç dakikalık bir sayaç kur. Aşağıdaki düğmeyi de kullanabilirsin.",
+            "Aklına gelen her işi, sırasız ve kısa yaz. Büyük ya da küçük ayırt etme: “Kira mesajı”, “Ödev”, “Diş randevusu”.",
+            "“Yapmalıyım” diye başlayan cümleler kurma; işin adını yazman yeter.",
+            "Sayaç bitince dur. Liste eksik kalabilir; eksik kalanlar sonra da eklenebilir.",
+            "Listeye şimdilik hiçbir şey yapmana gerek yok. Sadece orada durduğunu bil.",
+          ],
+        },
+
+        {
+          id: "b1-ozet",
+          type: "summary",
+          text: "Aklındaki işleri bir yere yazmak onları hemen yapmanı gerektirmez; yalnızca hepsini aynı anda taşımayı bırakmanı sağlar.",
+        },
+      ],
+      sources: ["masicampo2011", "scullin2018"],
+    },
+
+    {
+      id: "bolum-2",
+      kind: "chapter",
+      number: 2,
+      title: "Bugünün Bir Ana İşi Olsun",
+      minutes: 8,
+      available: false,
+      blocks: [],
+    },
+
+    {
+      id: "bolum-3",
+      kind: "chapter",
+      number: 3,
+      title: "Planını Hayatına Uydur",
+      minutes: 7,
+      available: false,
+      blocks: [],
+    },
+  ],
+
+  /*
+   * Kaynakça. Künyeler ve DOI'ler web aramasıyla akademik/üniversite kayıtlarından eşleştirildi.
+   * Yayıncı sayfaları bu geliştirme ortamından açılamadı; satıştan önce bağlantılar tarayıcıda bir kez açılıp kontrol edilmeli.
+   */
+  sources: {
+    masicampo2011: {
+      authors: "Masicampo, E. J. ve Baumeister, R. F.",
+      year: 2011,
+      title: "Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals",
+      venue: "Journal of Personality and Social Psychology, 101(4), 667–683",
+      doi: "10.1037/a0024192",
+    },
+    scullin2018: {
+      authors: "Scullin, M. K., Krueger, M. L., Ballard, H. K., Pruett, N. ve Bliwise, D. L.",
+      year: 2018,
+      title: "The effects of bedtime writing on difficulty falling asleep: A polysomnographic study comparing to-do lists and completed activity lists",
+      venue: "Journal of Experimental Psychology: General, 147(1), 139–146",
+      doi: "10.1037/xge0000374",
+    },
+    gollwitzer1999: {
+      authors: "Gollwitzer, P. M.",
+      year: 1999,
+      title: "Implementation intentions: Strong effects of simple plans",
+      venue: "American Psychologist, 54(7), 493–503",
+      doi: "10.1037/0003-066X.54.7.493",
+    },
+    gollwitzer2006: {
+      authors: "Gollwitzer, P. M. ve Sheeran, P.",
+      year: 2006,
+      title: "Implementation intentions and goal achievement: A meta-analysis of effects and processes",
+      venue: "Advances in Experimental Social Psychology, 38, 69–119",
+      doi: "10.1016/S0065-2601(06)38002-1",
+    },
+    lally2010: {
+      authors: "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W. ve Wardle, J.",
+      year: 2010,
+      title: "How are habits formed: Modelling habit formation in the real world",
+      venue: "European Journal of Social Psychology, 40(6), 998–1009",
+      doi: "10.1002/ejsp.674",
+    },
+  },
+};
+
+</script>
+<script>
+/*
+ * Kitap ve arayüz görselleri: elle çizilmiş, satır içi SVG.
+ * Renkler CSS sınıflarından gelir (styles.css: .il-*), böylece PDF ve web aynı paleti kullanır.
+ * Görseller süslemeden çok anlamı taşır; açıklayıcı metinleri (alt) kitap içeriğinde tutulur.
+ */
+window.GX_ART = {
+  // Karşılama: büyük bir iş, küçük basamaklara ayrılıyor; ilk basamakta turuncu bir başlangıç noktası.
+  smallSteps:
+    '<svg viewBox="0 0 320 150" role="img" aria-hidden="true" focusable="false">' +
+    '<rect class="il-soft" x="14" y="34" width="96" height="96" rx="10"/>' +
+    '<path class="il-line" d="M30 58h64M30 76h50M30 94h58M30 112h36"/>' +
+    '<path class="il-arrow" d="M120 82c14 0 22 0 34 0"/>' +
+    '<path class="il-arrow-head" d="M150 75l8 7-8 7"/>' +
+    '<rect class="il-step" x="170" y="114" width="34" height="16" rx="4"/>' +
+    '<rect class="il-step" x="208" y="96" width="34" height="34" rx="4"/>' +
+    '<rect class="il-step" x="246" y="78" width="34" height="52" rx="4"/>' +
+    '<rect class="il-step il-step--far" x="284" y="60" width="22" height="70" rx="4"/>' +
+    '<circle class="il-dot" cx="187" cy="102" r="7"/>' +
+    '<path class="il-ground" d="M10 131h300"/>' +
+    "</svg>",
+
+  // Bölüm 1: Dolanık düşünceler, sıraya girmiş bir kâğıda aktarılıyor.
+  thoughtsToPaper:
+    '<svg viewBox="0 0 320 180" role="img" aria-hidden="true" focusable="false">' +
+    '<circle class="il-soft" cx="70" cy="90" r="62"/>' +
+    '<path class="il-scribble" d="M36 70c10-12 24 4 34-6s20 8 28 0"/>' +
+    '<path class="il-scribble" d="M30 98c14 8 22-10 36-2s18 12 30 2"/>' +
+    '<path class="il-scribble" d="M48 120c8-6 18 6 26-2"/>' +
+    '<path class="il-scribble" d="M56 48c6 4 14-2 20 2"/>' +
+    '<circle class="il-ring" cx="98" cy="58" r="6"/>' +
+    '<circle class="il-ring" cx="40" cy="128" r="4"/>' +
+    '<circle class="il-ring" cx="106" cy="112" r="5"/>' +
+    '<path class="il-arrow" d="M136 90c18-10 34-10 50 0"/>' +
+    '<path class="il-arrow-head" d="M181 82l8 9-11 3"/>' +
+    '<rect class="il-paper" x="200" y="22" width="102" height="138" rx="6"/>' +
+    '<path class="il-rule" d="M230 52h56M230 74h48M230 96h56M230 118h40M230 140h50"/>' +
+    '<rect class="il-box" x="212" y="45" width="12" height="12" rx="3"/>' +
+    '<rect class="il-box" x="212" y="67" width="12" height="12" rx="3"/>' +
+    '<rect class="il-box" x="212" y="89" width="12" height="12" rx="3"/>' +
+    '<rect class="il-box" x="212" y="111" width="12" height="12" rx="3"/>' +
+    '<rect class="il-box" x="212" y="133" width="12" height="12" rx="3"/>' +
+    '<path class="il-check" d="M214 74l3 3 6-7"/>' +
+    "</svg>",
+};
+
+</script>
+<script>
+/*
+ * Veri katmanı: günlük kayıtlar, ayarlar, yedek alma ve geri yükleme.
+ * Kayıtlar tarayıcının localStorage alanında, tarih anahtarıyla (YYYY-AA-GG, yerel saat) tutulur.
+ * Her gün ayrı bir anahtar olduğu için gün değişince eski kayıtların üzerine yazılmaz.
+ */
+(function (root) {
+  "use strict";
+
+  var APP_ID = "genix-small-steps-clear-days";
+  var SCHEMA_VERSION = 1;
+  var DAYS_KEY = "gx.ssc.days.v1";
+  var SETTINGS_KEY = "gx.ssc.settings.v1";
+  var BACKUP_KEY = "gx.ssc.days.beforeRestore";
+  var MAX_IMPORT_BYTES = 2 * 1024 * 1024;
+  var MAX_TEXT = 4000;
+  var MAX_BRAIN = 10000;
+
+  var DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+  function pad(n) {
+    return (n < 10 ? "0" : "") + n;
+  }
+
+  /** Yerel saate göre tarih anahtarı. toISOString() UTC kullandığı için gece yarısı yanlış güne yazabilir. */
+  function dateKey(d) {
+    d = d || new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+
+  function isValidDateKey(key) {
+    var m = DATE_RE.exec(key);
+    if (!m) return false;
+    var y = +m[1], mo = +m[2], da = +m[3];
+    if (y < 2000 || y > 2100) return false;
+    var d = new Date(y, mo - 1, da);
+    return d.getFullYear() === y && d.getMonth() === mo - 1 && d.getDate() === da;
+  }
+
+  function keyToDate(key) {
+    var m = DATE_RE.exec(key);
+    return new Date(+m[1], +m[2] - 1, +m[3]);
+  }
+
+  function emptyDay() {
+    return {
+      brain: "",
+      main: { text: "", step: "", done: false },
+      extras: [
+        { text: "", done: false },
+        { text: "", done: false },
+      ],
+      start: { when: "", where: "", what: "" },
+      evening: { worked: "", easier: "" },
+      updatedAt: null,
+    };
+  }
+
+  function isDayEmpty(day) {
+    if (!day) return true;
+    var texts = [
+      day.brain, day.main.text, day.main.step,
+      day.extras[0].text, day.extras[1].text,
+      day.start.when, day.start.where, day.start.what,
+      day.evening.worked, day.evening.easier,
+    ];
+    for (var i = 0; i < texts.length; i++) if (texts[i] && texts[i].trim()) return false;
+    return !(day.main.done || day.extras[0].done || day.extras[1].done);
+  }
+
+  /* ---------- Doğrulama: yedekten gelen veriyi alan alan kontrol eder ---------- */
+
+  function ValidationError(code, params) {
+    this.code = code;
+    this.params = params || {};
+  }
+
+  function checkObject(v, key, field) {
+    if (!v || typeof v !== "object" || Array.isArray(v)) throw new ValidationError("badField", { key: key, field: field });
+    return v;
+  }
+  function checkText(v, key, field, max) {
+    if (v === undefined || v === null) return "";
+    if (typeof v !== "string" || v.length > (max || MAX_TEXT)) throw new ValidationError("badField", { key: key, field: field });
+    return v;
+  }
+  function checkBool(v, key, field) {
+    if (v === undefined || v === null) return false;
+    if (typeof v !== "boolean") throw new ValidationError("badField", { key: key, field: field });
+    return v;
+  }
+
+  /** Tek bir günü temizler; bilinmeyen alanları atar, tür hatasında ValidationError fırlatır. */
+  function sanitizeDay(raw, key) {
+    checkObject(raw, key, "gün");
+    var main = checkObject(raw.main || {}, key, "main");
+    var start = checkObject(raw.start || {}, key, "start");
+    var evening = checkObject(raw.evening || {}, key, "evening");
+    var extras = raw.extras === undefined ? [] : raw.extras;
+    if (!Array.isArray(extras) || extras.length > 2) throw new ValidationError("badField", { key: key, field: "extras" });
+
+    var day = emptyDay();
+    day.brain = checkText(raw.brain, key, "brain", MAX_BRAIN);
+    day.main.text = checkText(main.text, key, "main.text");
+    day.main.step = checkText(main.step, key, "main.step");
+    day.main.done = checkBool(main.done, key, "main.done");
+    for (var i = 0; i < extras.length; i++) {
+      var ex = checkObject(extras[i], key, "extras");
+      day.extras[i].text = checkText(ex.text, key, "extras.text");
+      day.extras[i].done = checkBool(ex.done, key, "extras.done");
+    }
+    day.start.when = checkText(start.when, key, "start.when");
+    day.start.where = checkText(start.where, key, "start.where");
+    day.start.what = checkText(start.what, key, "start.what");
+    day.evening.worked = checkText(evening.worked, key, "evening.worked");
+    day.evening.easier = checkText(evening.easier, key, "evening.easier");
+    if (raw.updatedAt !== undefined && raw.updatedAt !== null) {
+      if (typeof raw.updatedAt !== "string" || raw.updatedAt.length > 40) throw new ValidationError("badField", { key: key, field: "updatedAt" });
+      day.updatedAt = raw.updatedAt;
+    }
+    return day;
+  }
+
+  /**
+   * Yedek metnini ayrıştırır ve doğrular. Hiçbir yan etkisi yoktur.
+   * Başarılıysa { ok: true, days }, değilse { ok: false, code, params } döner.
+   */
+  function parseBackup(text) {
+    try {
+      if (typeof text !== "string") throw new ValidationError("notJson");
+      if (text.length > MAX_IMPORT_BYTES) throw new ValidationError("tooLarge");
+      var data;
+      try {
+        data = JSON.parse(text.replace(/^﻿/, ""));
+      } catch (e) {
+        throw new ValidationError("notJson");
+      }
+      if (!data || typeof data !== "object" || Array.isArray(data)) throw new ValidationError("notJson");
+      if (data.app !== APP_ID) throw new ValidationError("wrongApp");
+      if (data.version !== SCHEMA_VERSION) throw new ValidationError("wrongVersion");
+      if (!data.days || typeof data.days !== "object" || Array.isArray(data.days)) throw new ValidationError("badDays");
+      var keys = Object.keys(data.days);
+      if (!keys.length) throw new ValidationError("empty");
+      var days = {};
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i];
+        if (!isValidDateKey(k)) throw new ValidationError("badDate", { key: k.slice(0, 40) });
+        var day = sanitizeDay(data.days[k], k);
+        if (!isDayEmpty(day)) days[k] = day;
+      }
+      if (!Object.keys(days).length) throw new ValidationError("empty");
+      return { ok: true, days: days };
+    } catch (err) {
+      if (err instanceof ValidationError) return { ok: false, code: err.code, params: err.params };
+      return { ok: false, code: "notJson", params: {} };
+    }
+  }
+
+  function buildBackup(days, now) {
+    return JSON.stringify(
+      { app: APP_ID, version: SCHEMA_VERSION, exportedAt: (now || new Date()).toISOString(), days: days },
+      null,
+      2
+    );
+  }
+
+  /* ---------- Tarayıcı deposu ---------- */
+
+  function createStore(storage) {
+    var available = true;
+    try {
+      var probe = "gx.ssc.probe";
+      storage.setItem(probe, "1");
+      storage.removeItem(probe);
+    } catch (e) {
+      available = false;
+    }
+
+    var memoryDays = {};
+
+    function readJSON(key, fallback) {
+      try {
+        var raw = storage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function loadDays() {
+      if (!available) return memoryDays;
+      var raw = readJSON(DAYS_KEY, {});
+      var out = {};
+      if (!raw || typeof raw !== "object") return out;
+      Object.keys(raw).forEach(function (k) {
+        if (!isValidDateKey(k)) return;
+        try {
+          out[k] = sanitizeDay(raw[k], k);
+        } catch (e) {
+          /* Bozuk tek bir gün diğerlerini engellemesin; olduğu gibi bırakılır, ama okunmaz. */
+        }
+      });
+      return out;
+    }
+
+    function writeDays(days) {
+      memoryDays = days;
+      if (!available) return false;
+      try {
+        storage.setItem(DAYS_KEY, JSON.stringify(days));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    return {
+      available: available,
+
+      getDays: loadDays,
+
+      getDay: function (key) {
+        var days = loadDays();
+        return days[key] ? days[key] : emptyDay();
+      },
+
+      /** Yalnızca verilen tarihin kaydını yazar; diğer günlere dokunmaz. Boş gün kaydedilmez. */
+      saveDay: function (key, day) {
+        if (!isValidDateKey(key)) return false;
+        var days = loadDays();
+        if (isDayEmpty(day)) {
+          delete days[key];
+        } else {
+          day.updatedAt = new Date().toISOString();
+          try {
+            days[key] = sanitizeDay(day, key);
+          } catch (e) {
+            return false;
+          }
+        }
+        return writeDays(days);
+      },
+
+      deleteDay: function (key) {
+        var days = loadDays();
+        delete days[key];
+        return writeDays(days);
+      },
+
+      deleteAll: function () {
+        return writeDays({});
+      },
+
+      /** Geri yükleme: önce mevcut kayıtların bir kopyası saklanır, sonra yedekteki günler eklenir. */
+      mergeDays: function (incoming) {
+        var days = loadDays();
+        if (available) {
+          try {
+            storage.setItem(BACKUP_KEY, JSON.stringify(days));
+          } catch (e) {
+            /* Kopya alınamazsa da geri yükleme yapılabilir; yedek dosyası kullanıcıda. */
+          }
+        }
+        Object.keys(incoming).forEach(function (k) {
+          days[k] = incoming[k];
+        });
+        return writeDays(days);
+      },
+
+      exportText: function () {
+        return buildBackup(loadDays());
+      },
+
+      getSettings: function () {
+        var s = readJSON(SETTINGS_KEY, {});
+        return s && typeof s === "object" ? s : {};
+      },
+
+      setSettings: function (patch) {
+        var s = this.getSettings();
+        Object.keys(patch).forEach(function (k) {
+          s[k] = patch[k];
+        });
+        if (!available) return false;
+        try {
+          storage.setItem(SETTINGS_KEY, JSON.stringify(s));
+          return true;
+        } catch (e) {
+          return false;
+        }
+      },
+
+      DAYS_KEY: DAYS_KEY,
+    };
+  }
+
+  var api = {
+    APP_ID: APP_ID,
+    SCHEMA_VERSION: SCHEMA_VERSION,
+    dateKey: dateKey,
+    keyToDate: keyToDate,
+    isValidDateKey: isValidDateKey,
+    emptyDay: emptyDay,
+    isDayEmpty: isDayEmpty,
+    parseBackup: parseBackup,
+    buildBackup: buildBackup,
+    createStore: createStore,
+  };
+
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  else root.GX_STORE = api;
+})(typeof window !== "undefined" ? window : this);
+
+</script>
+<script>
+/*
+ * Küçük Adımlar, Daha Net Günler — uygulama mantığı.
+ * Üç bölüm: Kitabı Oku (#oku), Günümü Planla (#planla, #gun-YYYY-AA-GG), Geçmiş Günler (#gecmis).
+ * Metinler: i18n/tr.js (GX_STRINGS), kitap: content/book.tr.js (GX_BOOK), veri: storage.js (GX_STORE).
+ */
+(function () {
+  "use strict";
+
+  var S = window.GX_STRINGS;
+  var BOOK = window.GX_BOOK;
+  var ART = window.GX_ART;
+  var STORE = window.GX_STORE;
+
+  var storage = null;
+  try {
+    storage = window.localStorage;
+  } catch (e) {
+    storage = null;
+  }
+  var store = STORE.createStore(storage || { getItem: function () { throw 0; }, setItem: function () { throw 0; }, removeItem: function () {} });
+
+  /* ---------------- Yardımcılar ---------------- */
+
+  function get(path) {
+    return path.split(".").reduce(function (o, k) { return o == null ? o : o[k]; }, S);
+  }
+
+  /** Metin anahtarını bulur ve {yer tutucuları} doldurur. */
+  function t(path, params) {
+    var s = get(path);
+    if (typeof s !== "string") return path;
+    if (!params) return s;
+    return s.replace(/\{(\w+)\}/g, function (m, k) { return params[k] != null ? String(params[k]) : m; });
+  }
+
+  /** Küçük DOM oluşturucu. Kullanıcı metni her zaman textContent ile girer. */
+  function h(tag, attrs, children) {
+    var el = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (k) {
+        var v = attrs[k];
+        if (v == null || v === false) return;
+        if (k === "class") el.className = v;
+        else if (k === "text") el.textContent = v;
+        else if (k === "html") el.innerHTML = v; // yalnızca sabit SVG görseller için
+        else if (k.slice(0, 2) === "on") el.addEventListener(k.slice(2), v);
+        else if (v === true) el.setAttribute(k, "");
+        else el.setAttribute(k, v);
+      });
+    }
+    (children || []).forEach(function (c) {
+      if (c == null || c === false) return;
+      el.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+    });
+    return el;
+  }
+
+  var ICON_INFO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5" stroke-linecap="round"/></svg>';
+  var ICON_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+  var dateFmt = new Intl.DateTimeFormat(S.locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  function formatDate(key) {
+    return dateFmt.format(STORE.keyToDate(key));
+  }
+
+  var reduceMQ = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+
+  function motionMode() {
+    var m = store.getSettings().motion;
+    return m === "on" || m === "off" ? m : "system";
+  }
+  function motionAllowed() {
+    var m = motionMode();
+    return m === "on" || (m === "system" && !reduceMQ.matches);
+  }
+  function applyMotion() {
+    var m = motionMode();
+    if (m === "system") document.documentElement.removeAttribute("data-motion");
+    else document.documentElement.setAttribute("data-motion", m);
+  }
+
+  function scrollToEl(el, block) {
+    if (!el) return;
+    el.scrollIntoView({ block: block || "start", behavior: motionAllowed() ? "smooth" : "auto" });
+  }
+
+  var toastTimer = null;
+  function toast(msg) {
+    var region = document.getElementById("toast-region");
+    region.textContent = "";
+    region.appendChild(h("div", { class: "toast", text: msg }));
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { region.textContent = ""; }, 3500);
+  }
+
+  /* ---------------- Onay penceresi (tarayıcının confirm() penceresi yerine) ---------------- */
+
+  function confirmDialog(opts) {
+    var dlg = document.getElementById("confirm");
+    return new Promise(function (resolve) {
+      var done = false;
+      function finish(v) {
+        if (done) return;
+        done = true;
+        if (dlg.open) dlg.close();
+        resolve(v);
+      }
+      var cancelBtn = h("button", { type: "button", class: "btn btn--secondary", text: t("dialog.cancel"), onclick: function () { finish(false); } });
+      dlg.textContent = "";
+      dlg.appendChild(
+        h("div", { class: "dialog__body" }, [
+          h("h2", { id: "confirm-title", text: opts.title }),
+          h("p", { text: opts.body }),
+          h("div", { class: "btn-row" }, [
+            cancelBtn,
+            h("button", { type: "button", class: "btn btn--danger", text: opts.confirm, onclick: function () { finish(true); } }),
+          ]),
+        ])
+      );
+      dlg.addEventListener("close", function () { finish(false); }, { once: true });
+      dlg.showModal();
+      cancelBtn.focus();
+    });
+  }
+
+  /* ---------------- Durum ve yönlendirme ---------------- */
+
+  var state = {
+    view: null,
+    planDate: null,
+    planOpenedAsToday: false,
+    cameFromBook: null, // { chapterId, blockId }
+    focusField: null,
+  };
+
+  function navigate(hash) {
+    if (location.hash === "#" + hash) route();
+    else location.hash = hash;
+  }
+
+  function parseHash() {
+    var hsh = decodeURIComponent((location.hash || "").replace(/^#/, ""));
+    if (hsh === "hosgeldin") return { view: "welcome" };
+    if (hsh === "oku") return { view: "contents" };
+    if (hsh.indexOf("oku-") === 0) return { view: "chapter", id: hsh.slice(4) };
+    if (hsh === "planla") return { view: "plan", date: STORE.dateKey(), today: true };
+    if (hsh.indexOf("gun-") === 0 && STORE.isValidDateKey(hsh.slice(4))) return { view: "plan", date: hsh.slice(4), today: hsh.slice(4) === STORE.dateKey() };
+    if (hsh === "gecmis") return { view: "history" };
+    return null;
+  }
+
+  var viewEl, cleanupFns = [];
+
+  function route() {
+    var r = parseHash();
+    if (!r) r = store.getSettings().welcomed ? { view: "contents" } : { view: "welcome" };
+
+    flushSave();
+    cleanupFns.forEach(function (fn) { fn(); });
+    cleanupFns = [];
+
+    state.view = r.view;
+    viewEl.textContent = "";
+    viewEl.classList.remove("is-entering");
+
+    var tab = { contents: "oku", chapter: "oku", plan: "planla", history: "gecmis" }[r.view];
+    document.querySelectorAll("[data-nav]").forEach(function (b) {
+      if (b.getAttribute("data-nav") === tab) b.setAttribute("aria-current", "page");
+      else b.removeAttribute("aria-current");
+    });
+
+    if (r.view === "welcome") renderWelcome();
+    else if (r.view === "contents") renderContents();
+    else if (r.view === "chapter") renderChapter(r.id);
+    else if (r.view === "plan") renderPlanner(r.date, r.today);
+    else if (r.view === "history") renderHistory();
+
+    if (motionAllowed()) {
+      void viewEl.offsetWidth;
+      viewEl.classList.add("is-entering");
+    }
+    if (!state.pendingScroll) window.scrollTo(0, 0);
+    state.pendingScroll = false;
+  }
+
+  /* ---------------- Karşılama ---------------- */
+
+  function renderWelcome() {
+    function start(hash) {
+      return function () {
+        store.setSettings({ welcomed: true });
+        navigate(hash);
+      };
+    }
+    viewEl.appendChild(
+      h("section", { class: "welcome", "aria-labelledby": "welcome-title" }, [
+        h("div", { class: "welcome__art", html: ART.smallSteps }),
+        h("p", { class: "eyebrow", text: t("welcome.eyebrow") }),
+        h("h1", { id: "welcome-title", text: t("welcome.title") }),
+        h("p", { class: "lead", text: t("welcome.lead") }),
+        h("p", { class: "muted", text: t("welcome.body") }),
+        h("div", { class: "btn-row" }, [
+          h("button", { type: "button", class: "btn btn--primary", id: "start-reading", text: t("welcome.startReading"), onclick: start("oku-baslarken") }),
+          h("button", { type: "button", class: "btn btn--secondary", id: "start-planning", text: t("welcome.startPlanning"), onclick: start("planla") }),
+        ]),
+        h("p", { class: "note" }, [h("span", { html: ICON_INFO }), h("span", { text: t("welcome.privacyNote") })]),
+      ])
+    );
+  }
+
+  /* ---------------- Kitap: içindekiler ---------------- */
+
+  function chapterLabel(ch) {
+    return ch.kind === "chapter" ? t("reader.chapterLabel", { n: ch.number }) : "";
+  }
+
+  function renderContents() {
+    var reading = store.getSettings().reading;
+    var resumeCh = reading && BOOK.chapters.filter(function (c) { return c.id === reading.chapterId && c.available; })[0];
+
+    var items = BOOK.chapters.map(function (ch) {
+      var meta = h("div", { class: "toc__meta" }, [
+        chapterLabel(ch) ? h("span", { text: chapterLabel(ch) }) : null,
+        h("span", { text: t("reader.readingTime", { min: ch.minutes }) }),
+      ]);
+      return h("li", { class: "toc__item" + (ch.available ? "" : " is-locked") }, [
+        meta,
+        h("span", { class: "toc__title", text: ch.title }),
+        ch.available
+          ? h("button", { type: "button", class: "btn btn--secondary", "data-open-chapter": ch.id, text: t("reader.startChapter"), onclick: function () { state.resume = "top"; navigate("oku-" + ch.id); } })
+          : h("span", { class: "badge", text: t("reader.notInPrototype") }),
+      ]);
+    });
+
+    viewEl.appendChild(
+      h("section", { class: "stack-lg", "aria-labelledby": "toc-title" }, [
+        h("div", { class: "stack" }, [
+          h("p", { class: "eyebrow", text: BOOK.title }),
+          h("h1", { id: "toc-title", text: t("reader.contentsTitle") }),
+          h("p", { class: "muted", text: t("reader.contentsLead") }),
+        ]),
+        resumeCh
+          ? h("div", { class: "resume" }, [
+              h("p", { text: (chapterLabel(resumeCh) ? chapterLabel(resumeCh) + " · " : "") + resumeCh.title }),
+              h("button", { type: "button", class: "btn btn--primary", id: "resume-reading", text: t("reader.continueReading"), onclick: function () {
+                state.resume = reading.blockId;
+                navigate("oku-" + resumeCh.id);
+              } }),
+            ])
+          : null,
+        h("ol", { class: "toc" }, items),
+      ])
+    );
+  }
+
+  /* ---------------- Kitap: bölüm ---------------- */
+
+  function renderRefs(ids) {
+    return ids.map(function (id) {
+      var s = BOOK.sources[id];
+      return s ? s.authors.split(",")[0].replace(/ ve .*/, "") + (s.authors.indexOf(",") > -1 || s.authors.indexOf(" ve ") > -1 ? " vd." : "") + ", " + s.year : id;
+    }).join("; ");
+  }
+
+  function renderBlock(b) {
+    var attrs = { id: "blk-" + b.id, "data-block": b.id };
+    switch (b.type) {
+      case "h":
+        return h("h2", attrs, [b.text]);
+      case "p":
+        return h("p", attrs, [b.text]);
+      case "scene":
+        return h("div", Object.assign({ class: "scene" }, attrs), b.paragraphs.map(function (p) { return h("p", { text: p }); }));
+      case "figure":
+        return h("figure", Object.assign({ class: "figure" }, attrs), [
+          h("div", { class: "figure__art", role: "img", "aria-label": b.alt, html: ART[b.art] || "" }),
+          h("figcaption", { text: b.caption }),
+        ]);
+      case "research":
+        return h("aside", Object.assign({ class: "box box--research" }, attrs), [
+          h("span", { class: "box__label", text: t("reader.researchLabel") }),
+          h("p", { text: b.text }),
+          b.refs ? h("p", { class: "box__refs", text: renderRefs(b.refs) }) : null,
+        ]);
+      case "suggestion":
+        return h("aside", Object.assign({ class: "box box--suggestion" }, attrs), [
+          h("span", { class: "box__label", text: t("reader.suggestionLabel") }),
+          h("p", { text: b.text }),
+        ]);
+      case "exercise":
+        return renderExercise(b, attrs);
+      case "summary":
+        return h("p", Object.assign({ class: "summary" }, attrs), [h("span", { class: "eyebrow", text: t("reader.summaryLabel") }), b.text]);
+      default:
+        return null;
+    }
+  }
+
+  function renderExercise(b, attrs) {
+    var children = [
+      h("span", { class: "exercise__label", text: t("reader.exerciseLabel") }),
+      h("h3", { text: b.title }),
+      h("ol", null, b.steps.map(function (s) { return h("li", { text: s }); })),
+    ];
+    if (b.timerSeconds) children.push(renderTimer(b.timerSeconds));
+    if (b.planner) {
+      children.push(
+        h("button", { type: "button", class: "btn btn--primary", "data-to-planner": b.planner, text: t("reader.exerciseToPlanner"), onclick: function () {
+          var ch = currentChapterId;
+          store.setSettings({ reading: { chapterId: ch, blockId: b.id } });
+          state.cameFromBook = { chapterId: ch, blockId: b.id };
+          state.focusField = b.planner;
+          navigate("planla");
+        } })
+      );
+    }
+    return h("section", Object.assign({ class: "exercise", "aria-label": t("reader.exerciseLabel") + ": " + b.title }, attrs), children);
+  }
+
+  function renderTimer(seconds) {
+    var fill = h("div", { class: "timer__fill" });
+    var status = h("p", { class: "timer__status", "aria-live": "polite" });
+    var btn = h("button", { type: "button", class: "btn btn--secondary", text: t("reader.timerStart") });
+    var handle = null, endAt = 0;
+
+    function fmt(s) {
+      var m = Math.floor(s / 60), r = s % 60;
+      return m + ":" + (r < 10 ? "0" : "") + r;
+    }
+    function stop(finished) {
+      clearInterval(handle);
+      handle = null;
+      btn.textContent = t("reader.timerStart");
+      fill.style.transition = "none";
+      fill.style.transform = "scaleX(" + (finished ? 1 : 0) + ")";
+      status.textContent = finished ? t("reader.timerDone") : "";
+    }
+    function tick() {
+      var left = Math.max(0, Math.round((endAt - Date.now()) / 1000));
+      var progress = 1 - left / seconds;
+      fill.style.transition = motionAllowed() ? "transform 1s linear" : "none";
+      fill.style.transform = "scaleX(" + progress + ")";
+      // Ekran okuyucuyu her saniye konuşturmamak için durum yalnızca 30 saniyede bir güncellenir.
+      if (left % 30 === 0 || left <= 5) status.textContent = t("reader.timerRemaining", { time: fmt(left) });
+      if (left <= 0) stop(true);
+    }
+    btn.addEventListener("click", function () {
+      if (handle) return stop(false);
+      endAt = Date.now() + seconds * 1000;
+      btn.textContent = t("reader.timerStop");
+      status.textContent = t("reader.timerRemaining", { time: fmt(seconds) });
+      fill.style.transition = "none";
+      fill.style.transform = "scaleX(0)";
+      handle = setInterval(tick, 1000);
+    });
+    cleanupFns.push(function () { clearInterval(handle); });
+
+    return h("div", { class: "timer" }, [h("div", { class: "timer__bar", "aria-hidden": "true" }, [fill]), status, btn]);
+  }
+
+  var currentChapterId = null;
+
+  function renderChapter(id) {
+    var idx = -1;
+    BOOK.chapters.forEach(function (c, i) { if (c.id === id) idx = i; });
+    var ch = BOOK.chapters[idx];
+    if (!ch || !ch.available) return navigate("oku");
+    currentChapterId = ch.id;
+
+    var article = h("article", { class: "reader", "aria-labelledby": "chapter-title" }, [
+      h("header", { class: "chapter-head" }, [
+        h("p", { class: "eyebrow", text: chapterLabel(ch) || BOOK.title }),
+        h("h1", { id: "chapter-title", text: ch.title }),
+        h("p", { class: "muted", style: "font-family: var(--font-ui); font-size: .95rem", text: t("reader.readingTime", { min: ch.minutes }) }),
+      ]),
+    ]);
+    ch.blocks.forEach(function (b) {
+      var el = renderBlock(b);
+      if (el) article.appendChild(el);
+    });
+
+    if (ch.sources && ch.sources.length) {
+      article.appendChild(
+        h("section", { class: "sources", "aria-labelledby": "sources-title" }, [
+          h("h2", { id: "sources-title", text: t("reader.sourcesTitle") }),
+          h("ol", null, ch.sources.map(function (sid) {
+            var s = BOOK.sources[sid];
+            var url = "https://doi.org/" + s.doi;
+            return h("li", null, [
+              s.authors + " (" + s.year + "). " + s.title + ". " + s.venue + ". ",
+              h("a", { href: url, target: "_blank", rel: "noopener", text: url }),
+            ]);
+          })),
+        ])
+      );
+    }
+
+    var next = BOOK.chapters[idx + 1];
+    var end = h("div", { class: "chapter-end" });
+    if (next && next.available) {
+      end.appendChild(h("button", { type: "button", class: "btn btn--primary btn--block", text: t("reader.nextChapter", { title: next.title }), onclick: function () { state.resume = "top"; navigate("oku-" + next.id); } }));
+    } else if (next) {
+      end.appendChild(h("p", { class: "muted", text: t("reader.nextChapterSoon") }));
+    }
+    end.appendChild(h("button", { type: "button", class: "btn btn--secondary btn--block", text: t("reader.backToContents"), onclick: function () { navigate("oku"); } }));
+    article.appendChild(end);
+    viewEl.appendChild(article);
+
+    // Kaldığın yeri hatırla: ekranın üst kısmındaki blok kaydedilir.
+    var blocks = Array.prototype.slice.call(article.querySelectorAll("[data-block]"));
+    var saveTimer = null;
+    function remember() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () {
+        var top = null;
+        for (var i = 0; i < blocks.length; i++) {
+          var r = blocks[i].getBoundingClientRect();
+          if (r.bottom > 80) { top = blocks[i]; break; }
+        }
+        if (top) store.setSettings({ reading: { chapterId: ch.id, blockId: top.getAttribute("data-block") } });
+      }, 250);
+    }
+    window.addEventListener("scroll", remember, { passive: true });
+    cleanupFns.push(function () { window.removeEventListener("scroll", remember); clearTimeout(saveTimer); });
+
+    // Bölüm yeniden yüklendiyse ya da geri gelindiyse, bu bölümde kalınan yer kullanılır.
+    var saved = store.getSettings().reading;
+    if (!state.resume && saved && saved.chapterId === ch.id) state.resume = saved.blockId;
+    if (state.resume === "top") state.resume = null;
+    if (state.resume) {
+      var target = document.getElementById("blk-" + state.resume);
+      state.resume = null;
+      if (target) {
+        state.pendingScroll = true;
+        requestAnimationFrame(function () { target.scrollIntoView({ block: "start" }); });
+      }
+    } else {
+      store.setSettings({ reading: { chapterId: ch.id, blockId: ch.blocks[0] && ch.blocks[0].id } });
+    }
+  }
+
+  /* ---------------- Planlayıcı ---------------- */
+
+  var saveTimerId = null;
+  var pendingSave = null;
+
+  function flushSave() {
+    if (!pendingSave) return;
+    clearTimeout(saveTimerId);
+    var p = pendingSave;
+    pendingSave = null;
+    var ok = store.saveDay(p.key, p.day);
+    showSaveStatus(ok);
+  }
+
+  function showSaveStatus(ok) {
+    var el = document.getElementById("save-status");
+    if (!el) return;
+    el.classList.remove("is-error");
+    el.textContent = ok ? t("planner.saved") : t("planner.saveFailed");
+    if (!ok) el.classList.add("is-error");
+    el.classList.add("is-visible");
+    clearTimeout(el._hide);
+    if (ok) el._hide = setTimeout(function () { el.classList.remove("is-visible"); }, 1600);
+  }
+
+  function field(id, labelKey, opts) {
+    opts = opts || {};
+    var input = opts.multiline
+      ? h("textarea", { id: id, class: "textarea", rows: opts.rows || 4, maxlength: opts.max || 4000, placeholder: opts.placeholder, autocomplete: "off" })
+      : h("input", { id: id, class: "input", type: "text", maxlength: opts.max || 4000, placeholder: opts.placeholder, autocomplete: "off", enterkeyhint: "next" });
+    return h("div", { class: "field" }, [h("label", { for: id, text: opts.label || t(labelKey) }), input]);
+  }
+
+  function checkbox(id, label) {
+    return h("label", { class: "check", for: id }, [
+      h("input", { type: "checkbox", id: id }),
+      h("span", { class: "check__box", "aria-hidden": "true", html: ICON_CHECK }),
+      h("span", { class: "visually-hidden", text: label }),
+    ]);
+  }
+
+  function card(id, titleKey, hintKey, body) {
+    return h("section", { class: "card", id: id, "aria-labelledby": id + "-title" }, [
+      h("div", { class: "card__head" }, [
+        h("h2", { id: id + "-title", text: t(titleKey) }),
+        hintKey ? h("p", { class: "card__hint", text: t(hintKey) }) : null,
+      ]),
+    ].concat(body));
+  }
+
+  function renderPlanner(dateKey, openedAsToday) {
+    var today = STORE.dateKey();
+    var isPast = dateKey < today;
+    state.planDate = dateKey;
+    state.planOpenedAsToday = !!openedAsToday;
+
+    var head = h("div", { class: "planner-head" }, [
+      h("p", { class: "planner-date", id: "plan-date", text: formatDate(dateKey) }),
+      h("h1", { text: isPast ? t("planner.titlePast") : t("planner.titleToday") }),
+      h("p", { class: "muted", text: t("planner.intro") }),
+    ]);
+
+    var banners = h("div", { class: "stack", id: "plan-banners" });
+    if (!store.available) banners.appendChild(h("div", { class: "banner", role: "alert", text: t("planner.storageWarning") }));
+    if (isPast) {
+      banners.appendChild(h("div", { class: "banner banner--info" }, [
+        h("p", { text: t("planner.pastBanner") }),
+        h("button", { type: "button", class: "btn btn--secondary", text: t("planner.backToToday"), onclick: function () { navigate("planla"); } }),
+      ]));
+    }
+    if (state.cameFromBook) {
+      var back = state.cameFromBook;
+      banners.appendChild(h("div", { class: "banner banner--info" }, [
+        h("button", { type: "button", class: "btn btn--secondary", id: "back-to-book", text: t("planner.backToBook"), onclick: function () {
+          state.cameFromBook = null;
+          state.resume = back.blockId;
+          navigate("oku-" + back.chapterId);
+        } }),
+      ]));
+    }
+
+    var mainTask = h("div", { class: "task", id: "task-main" }, [
+      checkbox("f-main-done", t("planner.mainDoneLabel")),
+      h("div", { class: "stack", style: "gap:.75rem" }, [
+        field("f-main", "planner.mainLabel", { placeholder: t("planner.mainPlaceholder"), max: 300 }),
+        field("f-step", "planner.stepLabel", { placeholder: t("planner.stepPlaceholder"), max: 300 }),
+      ]),
+    ]);
+
+    function extra(n) {
+      return h("div", { class: "task", id: "task-extra" + n }, [
+        checkbox("f-extra" + n + "-done", t("planner.extraDoneLabel", { n: n })),
+        field("f-extra" + n, null, { label: t("planner.extraLabel", { n: n }), placeholder: t("planner.extraPlaceholder"), max: 300 }),
+      ]);
+    }
+
+    var preview = h("p", { class: "start-preview", id: "start-preview", "aria-live": "polite", hidden: true });
+
+    var form = h("form", { class: "stack-lg", id: "planner-form", novalidate: true, onsubmit: function (e) { e.preventDefault(); } }, [
+      card("card-brain", "planner.brainTitle", "planner.brainHint", [
+        field("f-brain", null, { label: t("planner.brainLabel"), multiline: true, rows: 5, max: 10000, placeholder: t("planner.brainPlaceholder") }),
+      ]),
+      card("card-main", "planner.mainTitle", "planner.mainHint", [mainTask]),
+      card("card-extras", "planner.extrasTitle", "planner.extrasHint", [extra(1), extra(2)]),
+      card("card-start", "planner.startTitle", "planner.startHint", [
+        h("div", { class: "start-grid" }, [
+          field("f-when", "planner.whenLabel", { placeholder: t("planner.whenPlaceholder"), max: 200 }),
+          field("f-where", "planner.whereLabel", { placeholder: t("planner.wherePlaceholder"), max: 200 }),
+          field("f-what", "planner.whatLabel", { placeholder: t("planner.whatPlaceholder"), max: 300 }),
+        ]),
+        preview,
+      ]),
+      card("card-evening", "planner.eveningTitle", "planner.eveningHint", [
+        field("f-worked", "planner.workedLabel", { multiline: true, rows: 3, max: 2000, placeholder: t("planner.workedPlaceholder") }),
+        field("f-easier", "planner.easierLabel", { multiline: true, rows: 3, max: 2000, placeholder: t("planner.easierPlaceholder") }),
+      ]),
+    ]);
+
+    viewEl.appendChild(h("section", { class: "stack-lg", "aria-labelledby": "plan-date" }, [
+      head,
+      banners,
+      form,
+      h("p", { class: "save-status", id: "save-status", role: "status", "aria-live": "polite" }),
+    ]));
+
+    // Kayıtlı veriyi forma yerleştir
+    var day = store.getDay(dateKey);
+    var $ = function (id) { return document.getElementById(id); };
+    $("f-brain").value = day.brain;
+    $("f-main").value = day.main.text;
+    $("f-step").value = day.main.step;
+    $("f-main-done").checked = day.main.done;
+    $("f-extra1").value = day.extras[0].text;
+    $("f-extra1-done").checked = day.extras[0].done;
+    $("f-extra2").value = day.extras[1].text;
+    $("f-extra2-done").checked = day.extras[1].done;
+    $("f-when").value = day.start.when;
+    $("f-where").value = day.start.where;
+    $("f-what").value = day.start.what;
+    $("f-worked").value = day.evening.worked;
+    $("f-easier").value = day.evening.easier;
+
+    function collect() {
+      return {
+        brain: $("f-brain").value,
+        main: { text: $("f-main").value, step: $("f-step").value, done: $("f-main-done").checked },
+        extras: [
+          { text: $("f-extra1").value, done: $("f-extra1-done").checked },
+          { text: $("f-extra2").value, done: $("f-extra2-done").checked },
+        ],
+        start: { when: $("f-when").value, where: $("f-where").value, what: $("f-what").value },
+        evening: { worked: $("f-worked").value, easier: $("f-easier").value },
+      };
+    }
+
+    function updateDoneStyles() {
+      $("task-main").classList.toggle("is-done", $("f-main-done").checked);
+      $("task-extra1").classList.toggle("is-done", $("f-extra1-done").checked);
+      $("task-extra2").classList.toggle("is-done", $("f-extra2-done").checked);
+    }
+
+    function updatePreview() {
+      var w = $("f-when").value.trim(), wh = $("f-where").value.trim(), wt = $("f-what").value.trim();
+      if (w && wh && wt) {
+        preview.textContent = t("planner.startPreview", { when: w, where: wh, what: wt });
+        preview.hidden = false;
+      } else {
+        preview.hidden = true;
+      }
+    }
+
+    function autosize(el) {
+      if (el.tagName !== "TEXTAREA") return;
+      el.style.height = "auto";
+      el.style.height = Math.max(el.scrollHeight + 4, 0) + "px";
+    }
+
+    // Tarih, form çizildiği anda sabitlenir: gece yarısından sonra yazılanlar yine bu güne gider.
+    var key = dateKey;
+    function scheduleSave(immediate) {
+      pendingSave = { key: key, day: collect() };
+      clearTimeout(saveTimerId);
+      if (immediate) flushSave();
+      else saveTimerId = setTimeout(flushSave, 400);
+    }
+
+    form.addEventListener("input", function (e) {
+      if (e.target.type === "checkbox") return;
+      autosize(e.target);
+      updatePreview();
+      scheduleSave(false);
+    });
+    form.addEventListener("change", function (e) {
+      if (e.target.type !== "checkbox") return;
+      updateDoneStyles();
+      var label = e.target.closest(".check");
+      if (label && e.target.checked && motionAllowed()) {
+        label.classList.remove("is-pop");
+        void label.offsetWidth;
+        label.classList.add("is-pop");
+      }
+      scheduleSave(true);
+      toast(e.target.checked ? t("planner.doneFeedback") : t("planner.undoneFeedback"));
+    });
+
+    // Ekran klavyesi açıldığında yazılan alanı görünür tut
+    function keepVisible(el) {
+      var vv = window.visualViewport;
+      if (!vv) return;
+      var r = el.getBoundingClientRect();
+      if (r.bottom > vv.height - 8 || r.top < 60) el.scrollIntoView({ block: "center", behavior: "auto" });
+    }
+    form.addEventListener("focusin", function (e) {
+      if (!/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.type === "checkbox") return;
+      var el = e.target;
+      setTimeout(function () { if (document.activeElement === el) keepVisible(el); }, 350);
+    });
+    if (window.visualViewport) {
+      var onVV = function () {
+        var a = document.activeElement;
+        if (a && form.contains(a) && /^(INPUT|TEXTAREA)$/.test(a.tagName)) keepVisible(a);
+      };
+      window.visualViewport.addEventListener("resize", onVV);
+      cleanupFns.push(function () { window.visualViewport.removeEventListener("resize", onVV); });
+    }
+
+    updateDoneStyles();
+    updatePreview();
+    Array.prototype.forEach.call(form.querySelectorAll("textarea"), autosize);
+
+    if (state.focusField === "brain") {
+      state.focusField = null;
+      var c = $("card-brain");
+      c.classList.add("is-highlight");
+      state.pendingScroll = true;
+      requestAnimationFrame(function () {
+        scrollToEl(c, "start");
+        $("f-brain").focus({ preventScroll: true });
+      });
+    }
+  }
+
+  /** Uygulama açıkken gün değişirse: eski kayıt korunur, yeni gün için bir uyarı gösterilir. */
+  function checkDayChange() {
+    if (state.view !== "plan" || !state.planOpenedAsToday) return;
+    if (STORE.dateKey() === state.planDate) return;
+    if (document.getElementById("new-day-banner")) return;
+    flushSave();
+    var banners = document.getElementById("plan-banners");
+    if (!banners) return;
+    banners.insertBefore(h("div", { class: "banner", id: "new-day-banner", role: "status" }, [
+      h("p", { text: t("planner.newDayBanner") }),
+      h("button", { type: "button", class: "btn btn--primary", text: t("planner.openNewDay"), onclick: function () { navigate("planla"); } }),
+    ]), banners.firstChild);
+  }
+
+  /* ---------------- Geçmiş günler ---------------- */
+
+  function renderHistory() {
+    var days = store.getDays();
+    var keys = Object.keys(days).sort().reverse();
+    var today = STORE.dateKey();
+
+    var section = h("section", { class: "stack-lg", "aria-labelledby": "history-title" }, [
+      h("div", { class: "stack" }, [
+        h("h1", { id: "history-title", text: t("history.title") }),
+        h("p", { class: "muted", text: t("history.lead") }),
+      ]),
+    ]);
+
+    if (!keys.length) {
+      section.appendChild(h("div", { class: "empty" }, [
+        h("p", { text: t("history.empty") }),
+        h("button", { type: "button", class: "btn btn--primary", text: t("history.emptyAction"), onclick: function () { navigate("planla"); } }),
+      ]));
+    } else {
+      section.appendChild(h("ul", { class: "days" }, keys.map(function (k) {
+        var d = days[k];
+        var tasks = [d.main].concat(d.extras).filter(function (x) { return x.text.trim(); });
+        var done = tasks.filter(function (x) { return x.done; }).length;
+        return h("li", { class: "day", "data-day": k }, [
+          h("p", { class: "day__date" }, [formatDate(k), k === today ? h("span", { class: "badge", text: t("history.today") }) : null]),
+          h("p", { class: "day__main", text: d.main.text.trim() || t("history.noMain") }),
+          tasks.length ? h("p", { class: "day__meta", text: t("history.doneCount", { done: done, total: tasks.length }) }) : null,
+          h("div", { class: "btn-row" }, [
+            h("button", { type: "button", class: "btn btn--secondary", "data-open-day": k, text: t("history.open"), onclick: function () { navigate("gun-" + k); } }),
+            h("button", { type: "button", class: "btn btn--danger-outline", "data-delete-day": k, text: t("history.delete"), onclick: function () {
+              confirmDialog({
+                title: t("history.deleteTitle"),
+                body: t("history.deleteBody", { date: formatDate(k) }),
+                confirm: t("history.deleteConfirm"),
+              }).then(function (yes) {
+                if (!yes) return;
+                store.deleteDay(k);
+                toast(t("history.deleted", { date: formatDate(k) }));
+                route();
+              });
+            } }),
+          ]),
+        ]);
+      })));
+    }
+    viewEl.appendChild(section);
+  }
+
+  /* ---------------- Ayarlar ve veriler ---------------- */
+
+  function openSettings() {
+    flushSave();
+    var dlg = document.getElementById("settings");
+    dlg.textContent = "";
+    var dayCount = Object.keys(store.getDays()).length;
+
+    // Animasyon ayarı
+    var mode = motionMode();
+    var seg = h("fieldset", { class: "segmented" }, [h("legend", { class: "visually-hidden", text: t("settings.motionTitle") })].concat(
+      [["system", "settings.motionSystem"], ["on", "settings.motionOn"], ["off", "settings.motionOff"]].map(function (o) {
+        return h("label", null, [
+          h("input", { type: "radio", name: "motion", value: o[0], id: "motion-" + o[0], checked: mode === o[0], onchange: function () {
+            store.setSettings({ motion: o[0] });
+            applyMotion();
+            reducedNote.hidden = !(o[0] === "system" && reduceMQ.matches);
+          } }),
+          h("span", { text: t(o[1]) }),
+        ]);
+      })
+    ));
+    var reducedNote = h("p", { class: "card__hint", text: t("settings.motionSystemReduced"), hidden: !(mode === "system" && reduceMQ.matches) });
+
+    // Yedek alma
+    var exportMsg = h("div", { "aria-live": "polite" });
+    var exportText = h("div", { hidden: true, class: "stack" });
+    function doExport() {
+      exportMsg.textContent = "";
+      if (!Object.keys(store.getDays()).length) {
+        exportMsg.appendChild(h("p", { class: "msg msg--ok", text: t("settings.exportEmpty") }));
+        return;
+      }
+      var text = store.exportText();
+      var file = "kucuk-adimlar-yedek-" + STORE.dateKey() + ".json";
+      try {
+        var blob = new Blob([text], { type: "application/json" });
+        var url = URL.createObjectURL(blob);
+        var a = h("a", { href: url, download: file });
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+        exportMsg.appendChild(h("p", { class: "msg msg--ok", text: t("settings.exportDone", { file: file }) }));
+      } catch (e) {
+        showExportText();
+      }
+    }
+    function showExportText() {
+      var text = store.exportText();
+      exportText.textContent = "";
+      var ta = h("textarea", { class: "textarea code-out", id: "export-text", readonly: true, rows: 8, "aria-label": t("settings.exportCopyButton") });
+      ta.value = text;
+      var copyMsg = h("p", { class: "card__hint", "aria-live": "polite" });
+      exportText.appendChild(h("p", { class: "card__hint", text: t("settings.exportCopyHint") }));
+      exportText.appendChild(ta);
+      exportText.appendChild(h("button", { type: "button", class: "btn btn--secondary", text: t("settings.copy"), onclick: function () {
+        function fallback() {
+          ta.focus();
+          ta.select();
+          copyMsg.textContent = t("settings.copyFailed");
+        }
+        try {
+          navigator.clipboard.writeText(text).then(function () { copyMsg.textContent = t("settings.copied"); }, fallback);
+        } catch (e) {
+          fallback();
+        }
+      } }));
+      exportText.appendChild(copyMsg);
+      exportText.hidden = false;
+    }
+
+    // Geri yükleme
+    var importMsg = h("div", { "aria-live": "polite", class: "stack" });
+    function showImportError(code, params) {
+      importMsg.textContent = "";
+      importMsg.appendChild(h("div", { class: "msg msg--error", role: "alert" }, [
+        h("strong", { text: t("settings.importErrorTitle") }),
+        h("p", { text: t("settings.importErrors." + code, params) }),
+        h("p", { text: t("settings.importErrorKept") }),
+      ]));
+    }
+    function handleImportText(text) {
+      importMsg.textContent = "";
+      var res = STORE.parseBackup(text);
+      if (!res.ok) return showImportError(res.code, res.params);
+      var existing = store.getDays();
+      var keys = Object.keys(res.days);
+      var overlap = keys.filter(function (k) { return existing[k]; }).length;
+      importMsg.appendChild(h("div", { class: "msg msg--check" }, [
+        h("strong", { text: t("settings.importCheckTitle") }),
+        h("p", { text: t("settings.importSummary", { n: keys.length, overlap: overlap }) }),
+        h("div", { class: "btn-row" }, [
+          h("button", { type: "button", class: "btn btn--secondary", text: t("dialog.cancel"), onclick: function () { importMsg.textContent = ""; } }),
+          h("button", { type: "button", class: "btn btn--primary", id: "import-confirm", text: t("settings.importConfirm"), onclick: function () {
+            var ok = store.mergeDays(res.days);
+            importMsg.textContent = "";
+            importMsg.appendChild(h("p", { class: ok ? "msg msg--ok" : "msg msg--error", text: ok ? t("settings.importDone", { n: keys.length }) : t("planner.saveFailed") }));
+            countEl.textContent = t("settings.dayCount", { n: Object.keys(store.getDays()).length });
+            if (state.view === "history" || state.view === "plan") route();
+          } }),
+        ]),
+      ]));
+    }
+    var fileInput = h("input", { type: "file", id: "import-file", "aria-label": t("settings.importFileLabel"), onchange: function () {
+      var f = fileInput.files && fileInput.files[0];
+      fileInput.value = "";
+      if (!f) return;
+      if (f.size > 2 * 1024 * 1024) return showImportError("tooLarge", {});
+      var reader = new FileReader();
+      reader.onload = function () { handleImportText(String(reader.result)); };
+      reader.onerror = function () { showImportError("readFailed", {}); };
+      reader.readAsText(f, "utf-8");
+    } });
+    var pasteArea = h("div", { class: "stack", hidden: true }, [
+      h("div", { class: "field" }, [
+        h("label", { for: "import-paste", text: t("settings.importPasteLabel") }),
+        h("textarea", { id: "import-paste", class: "textarea code-out", rows: 6 }),
+      ]),
+      h("button", { type: "button", class: "btn btn--secondary", id: "import-paste-check", text: t("settings.importPasteButton"), onclick: function () {
+        handleImportText(document.getElementById("import-paste").value);
+      } }),
+    ]);
+
+    var countEl = h("p", { class: "card__hint", id: "day-count", text: t("settings.dayCount", { n: dayCount }) });
+
+    dlg.appendChild(h("div", { class: "dialog__body" }, [
+      h("div", { class: "dialog__head" }, [
+        h("h2", { id: "settings-title", text: t("settings.title") }),
+        h("button", { type: "button", class: "btn btn--secondary", id: "close-settings", text: t("settings.close"), onclick: function () { dlg.close(); } }),
+      ]),
+
+      h("section", { class: "panel-section" }, [
+        h("h3", { text: t("settings.motionTitle") }),
+        h("p", { class: "card__hint", text: t("settings.motionHint") }),
+        seg,
+        reducedNote,
+      ]),
+
+      h("section", { class: "panel-section" }, [
+        h("h3", { text: t("settings.dataTitle") }),
+        h("ul", null, S.settings.dataPoints.map(function (p) { return h("li", { text: p }); })),
+        countEl,
+      ]),
+
+      h("section", { class: "panel-section" }, [
+        h("h3", { text: t("settings.exportTitle") }),
+        h("p", { class: "card__hint", text: t("settings.exportHint") }),
+        h("div", { class: "btn-row" }, [
+          h("button", { type: "button", class: "btn btn--primary", id: "export-file", text: t("settings.exportButton"), onclick: doExport }),
+          h("button", { type: "button", class: "btn btn--secondary", id: "export-show", text: t("settings.exportCopyButton"), onclick: showExportText }),
+        ]),
+        exportMsg,
+        exportText,
+      ]),
+
+      h("section", { class: "panel-section" }, [
+        h("h3", { text: t("settings.importTitle") }),
+        h("p", { class: "card__hint", text: t("settings.importHint") }),
+        h("div", { class: "btn-row" }, [
+          h("span", { class: "btn btn--secondary file-pick" }, [t("settings.importFileLabel"), fileInput]),
+          h("button", { type: "button", class: "btn btn--quiet", text: t("settings.importPasteToggle"), onclick: function () { pasteArea.hidden = !pasteArea.hidden; } }),
+        ]),
+        pasteArea,
+        importMsg,
+      ]),
+
+      h("section", { class: "panel-section" }, [
+        h("h3", { text: t("settings.resetTitle") }),
+        h("p", { class: "card__hint", text: t("settings.resetHint") }),
+        h("button", { type: "button", class: "btn btn--danger-outline", id: "reset-all", text: t("settings.resetButton"), onclick: function () {
+          var n = Object.keys(store.getDays()).length;
+          confirmDialog({
+            title: t("settings.resetConfirmTitle"),
+            body: t("settings.resetConfirmBody", { n: n }),
+            confirm: t("settings.resetConfirm"),
+          }).then(function (yes) {
+            if (!yes) return;
+            store.deleteAll();
+            countEl.textContent = t("settings.dayCount", { n: 0 });
+            toast(t("settings.resetDone"));
+            if (state.view === "history" || state.view === "plan") route();
+          });
+        } }),
+      ]),
+
+      h("section", { class: "panel-section" }, [
+        h("h3", { text: t("settings.aboutTitle") }),
+        h("p", { class: "card__hint", text: t("settings.aboutBody") }),
+      ]),
+    ]));
+    dlg.showModal();
+    document.getElementById("close-settings").focus();
+  }
+
+  /* ---------------- Başlangıç ---------------- */
+
+  function applyStaticText() {
+    document.documentElement.lang = S.htmlLang;
+    document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
+    document.querySelectorAll("[data-t-label]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-label"))); });
+  }
+
+  function init() {
+    viewEl = document.getElementById("view");
+    applyStaticText();
+    applyMotion();
+    if (reduceMQ.addEventListener) reduceMQ.addEventListener("change", applyMotion);
+
+    document.querySelectorAll("[data-nav]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var target = b.getAttribute("data-nav");
+        if (target !== "planla") state.cameFromBook = null;
+        store.setSettings({ welcomed: true });
+        navigate(target);
+      });
+    });
+    document.getElementById("open-settings").addEventListener("click", openSettings);
+    document.querySelector(".skip").addEventListener("click", function (e) {
+      e.preventDefault();
+      document.getElementById("main").focus();
+    });
+
+    window.addEventListener("hashchange", route);
+    window.addEventListener("pagehide", flushSave);
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") flushSave();
+      else checkDayChange();
+    });
+    setInterval(checkDayChange, 60 * 1000);
+
+    // Aynı uygulama başka bir sekmede değiştirildiyse görünümü tazele (yazılan alan odaktayken dokunma)
+    window.addEventListener("storage", function (e) {
+      if (e.key !== store.DAYS_KEY) return;
+      var a = document.activeElement;
+      var typing = a && /^(INPUT|TEXTAREA)$/.test(a.tagName) && viewEl.contains(a);
+      if (state.view === "history" || (state.view === "plan" && !typing)) route();
+    });
+
+    route();
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+
+</script>
+<!-- @artifact-body-end -->
+</body>
+</html>
