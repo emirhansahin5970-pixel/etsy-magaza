@@ -43,10 +43,14 @@ app/src/content/book.tr.js Kitap içeriği ve kaynakça → window.GX_BOOK
 app/src/illustrations.js   SVG görseller → window.GX_ART
 app/src/storage.js         Veri katmanı, şema 2, geçiş ve yedek → window.GX_STORE (Node'da require edilebilir)
 app/src/app.js             Yönlendirme ve ekranlar
-app/build.mjs              → app/dist/index.html ve app/dist/artifact.html
+app/src/pwa/                Uygulama tanımı (manifest), service worker (sw.js) ve ana ekran simgeleri
+app/build.mjs              → app/dist/ (web klasörü: index.html, manifest, sw.js, icons/) ve app/dist-artifact/artifact.html
+tools/make-icons.mjs       Simgeleri SVG'den yeniden üretir
+.github/workflows/pages.yml main'e gönderimde derler ve GitHub Pages'te yayınlar
 tests/storage.test.mjs     Birim testleri
 tests/e2e.mjs              Chromium uçtan uca testleri (17 senaryo)
 tests/boot.mjs             Açılış testleri (13): HTTPS, yerel dosya, JavaScript kapalı, başlangıç hataları, eksik API'ler
+tests/pwa.mjs              Barındırılan klasör testleri (4): alt yol, manifest/simgeler, service worker, internetsiz yeniden açılış
 tests/fixtures/            Önceki sürüm (v1) uygulaması, localStorage içeriği ve yedeği: geriye uyumluluk testleri için
 docs/telefon-test-listesi.md  Açılış teşhisi + sahibin gerçek cihazda uygulayacağı test listesi
 docs/barindirma.md         Web bağlantısında yayınlama adımları
@@ -68,16 +72,20 @@ npm run build                          # dist/ dosyalarını üret (src değişi
 node --test tests/storage.test.mjs     # birim testleri
 node tests/e2e.mjs                     # tarayıcı testleri (önce build)
 node tests/boot.mjs                    # açılış testleri (önce build; openssl gerekir)
+node tests/pwa.mjs                     # web uygulaması testleri (önce build)
 npm test                               # hepsi
 ```
 
 ## Yayın
 
-- Prototip, özel bir claude.ai Artifact'ı olarak yayında: https://claude.ai/artifact/AQwSnF55f1uGJsMyNjYy4Z
-  - Güncellemek için `app/dist/artifact.html` dosyasını Artifact aracıyla bu URL'ye yeniden yayınla.
+- **Asıl kullanım yolu: web adresi.** iOS dosya önizlemeleri JavaScript çalıştırmaz; HTML dosyası telefonda uygulama olarak açılmaz. Ürün telefona/tablete her zaman bir HTTPS bağlantısıyla ulaştırılır.
+- GitHub Pages: `.github/workflows/pages.yml` main'e her gönderimde `app/dist` klasörünü yayınlar. Adres: https://emirhansahin5970-pixel.github.io/etsy-magaza/ (depo ayarlarında Pages kaynağı "GitHub Actions" olmalı).
+- Web sürümü PWA: "Ana Ekrana Ekle" ile tam ekran açılır; bir kez internetle açıldıktan sonra service worker sayfayı önbellekten de açabilir (Chromium'da test edildi; iPhone'da doğrulanmadı).
+- Prototip ayrıca özel bir claude.ai Artifact'ı olarak yayında: https://claude.ai/artifact/AQwSnF55f1uGJsMyNjYy4Z
+  - Güncellemek için `app/dist-artifact/artifact.html` dosyasını Artifact aracıyla bu URL'ye yeniden yayınla.
   - Sayfa yalnızca sahibine açık. Müşteri erişimi için uygun değil.
   - Artifact ortamında dosya indirme engelli. Bu yüzden "Yedeği metin olarak göster ve kopyala" seçeneği ile metin yapıştırarak geri yükleme eklendi.
-- `app/dist/index.html` herhangi bir HTTPS statik barındırmaya (GitHub Pages, Netlify vb.) konabilir. **Henüz bir barındırma yapılmadı.**
+- `app/dist/` klasörü başka bir HTTPS statik barındırmaya (Netlify, Cloudflare Pages) da olduğu gibi konabilir.
 
 ## Kaynaklar (doğrulandı: arama motoru ve üniversite/akademik kayıtlarla eşleştirildi)
 
@@ -97,6 +105,8 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 
 - [x] Sürüm 2.1 (2026-10-03): telefonda boş ekran bildirimi üzerine açılış güvenliği. JavaScript'siz başlangıç ekranı + noscript, başlangıç hata ve zaman aşımı ekranı, font yüklemesi engellemez, Intl/showModal/localStorage yedekleri. Açılış testleri 13/13, birim 16/16, uçtan uca 17/17. Gerçek cihazda henüz doğrulanmadı.
 
+- [x] Sürüm 2.2 (2026-10-03): iPhone'da yalnızca başlık görünmesi üzerine web uygulaması (PWA) + GitHub Pages yayını. Web uygulaması testleri 4/4.
+
 ### Sıradaki Adımlar (sahibin prototip değerlendirmesinden SONRA)
 - [ ] Sahibin açılış teşhisi sonucunu al (`docs/telefon-test-listesi.md` üstteki tablo): önizleme mi, tarayıcı mı, hata ayrıntısı ne?
 - [ ] Barındırma seçimi (`docs/barindirma.md`) ve gerçek HTTPS adresinde telefon testi
@@ -114,3 +124,4 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 - 2026-10-02: Geri yükleme bir birleştirmedir. Aynı tarihli günlerde yedekteki kayıt kullanılır, diğer günler korunur. Hatalı dosyada hiçbir şey değişmez.
 - 2026-10-03: Sürüm 2. Geçmiş günler, Günüm'ün ikincil ekranı oldu. Açılış ekranı her açılışta gösterilir. Özet cümleler yalnızca yer bulunma ekiyle (-de/-da) bittiğinde kurulur, aksi hâlde etiketli özet gösterilir. Cümle ortasındaki alanların ilk harfi Türkçe kurallarıyla küçültülür.
 - 2026-10-03: Telefonda boş ekran bildirimi. Kanıtlar: (1) JavaScript çalışmazsa eski HTML'de bütün metinler boş kalıyordu; (2) Google Fonts isteği yanıtsız kalırsa sayfa en az 8 sn başlamıyordu (Chromium ölçümü). Cihazdaki asıl neden henüz doğrulanmadı.
+- 2026-10-03: Sahip iPhone 17 Pro'da indirilen HTML dosyasında yalnızca başlığı gördü. Neden: iOS dosya önizlemesi JavaScript çalıştırmıyor (Apple forumu, iOS 13+). Çözüm: dosya yerine GitHub Pages adresi + Ana Ekrana Ekle.

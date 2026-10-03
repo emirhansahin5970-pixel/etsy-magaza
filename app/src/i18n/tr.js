@@ -391,6 +391,6 @@ window.GX_STRINGS = {
     resetDone: "Bütün kayıtlar silindi.",
 
     aboutTitle: "Bu sürüm hakkında",
-    aboutBody: "Deneme sürümü. Kitabın giriş ve ilk bölümü hazır; ikinci ve üçüncü bölüm henüz yazılmadı. Uygulama web bağlantısıyla açılır; çevrimdışı kullanım desteklenmiyor.",
+    aboutBody: "Deneme sürümü. Kitabın giriş ve ilk bölümü hazır; ikinci ve üçüncü bölüm henüz yazılmadı. Uygulama web bağlantısıyla açılır ve ilk açılışta internet gerektirir; internetsiz kullanım henüz telefonda doğrulanmadı.",
   },
 };

@@ -1726,13 +1726,27 @@
     route();
   }
 
+  /**
+   * Barındırılan sürümde (manifest varsa, HTTPS ya da localhost) service worker'ı kaydet.
+   * Desteklenmezse ya da başarısız olursa uygulama etkilenmez.
+   */
+  function registerServiceWorker() {
+    try {
+      var secure = location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+      if (!secure || !("serviceWorker" in navigator) || !document.querySelector('link[rel="manifest"]')) return;
+      navigator.serviceWorker.register("sw.js").catch(function () { /* önbellek olmadan da çalışır */ });
+    } catch (e) { /* yok say */ }
+  }
+
   function start() {
     try {
       init();
       BOOT.ready();
     } catch (err) {
       BOOT.fail(err, "başlatma");
+      return;
     }
+    registerServiceWorker();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);

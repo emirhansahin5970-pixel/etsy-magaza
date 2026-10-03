@@ -1113,7 +1113,7 @@ window.GX_STRINGS = {
     resetDone: "Bütün kayıtlar silindi.",
 
     aboutTitle: "Bu sürüm hakkında",
-    aboutBody: "Deneme sürümü. Kitabın giriş ve ilk bölümü hazır; ikinci ve üçüncü bölüm henüz yazılmadı. Uygulama web bağlantısıyla açılır; çevrimdışı kullanım desteklenmiyor.",
+    aboutBody: "Deneme sürümü. Kitabın giriş ve ilk bölümü hazır; ikinci ve üçüncü bölüm henüz yazılmadı. Uygulama web bağlantısıyla açılır ve ilk açılışta internet gerektirir; internetsiz kullanım henüz telefonda doğrulanmadı.",
   },
 };
 
@@ -3746,13 +3746,27 @@ window.GX_ART = {
     route();
   }
 
+  /**
+   * Barındırılan sürümde (manifest varsa, HTTPS ya da localhost) service worker'ı kaydet.
+   * Desteklenmezse ya da başarısız olursa uygulama etkilenmez.
+   */
+  function registerServiceWorker() {
+    try {
+      var secure = location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+      if (!secure || !("serviceWorker" in navigator) || !document.querySelector('link[rel="manifest"]')) return;
+      navigator.serviceWorker.register("sw.js").catch(function () { /* önbellek olmadan da çalışır */ });
+    } catch (e) { /* yok say */ }
+  }
+
   function start() {
     try {
       init();
       BOOT.ready();
     } catch (err) {
       BOOT.fail(err, "başlatma");
+      return;
     }
+    registerServiceWorker();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
