@@ -1,0 +1,63 @@
+{
+  "app": "genix-small-steps-clear-days",
+  "version": 1,
+  "exportedAt": "2026-10-03T08:39:57.896Z",
+  "days": {
+    "2026-09-30": {
+      "brain": "Kira mesajı\nÖdev",
+      "main": {
+        "text": "Eski sürümdeki ana iş",
+        "step": "Dosyayı açmak",
+        "done": true
+      },
+      "extras": [
+        {
+          "text": "Annemi ara",
+          "done": false
+        },
+        {
+          "text": "",
+          "done": false
+        }
+      ],
+      "start": {
+        "when": "Öğleden sonra",
+        "where": "kütüphanede",
+        "what": "Farklı bir başlangıç metni"
+      },
+      "evening": {
+        "worked": "Telefonu kapatmak işe yaradı",
+        "easier": "Çantayı akşamdan hazırlamak"
+      },
+      "updatedAt": "2026-10-03T08:39:57.890Z"
+    },
+    "2026-10-01": {
+      "brain": "",
+      "main": {
+        "text": "Eşleşen başlama",
+        "step": "Üç başlık yaz",
+        "done": false
+      },
+      "extras": [
+        {
+          "text": "",
+          "done": false
+        },
+        {
+          "text": "",
+          "done": false
+        }
+      ],
+      "start": {
+        "when": "Sabah",
+        "where": "evde",
+        "what": "Üç başlık yaz"
+      },
+      "evening": {
+        "worked": "",
+        "easier": ""
+      },
+      "updatedAt": "2026-10-03T08:39:57.895Z"
+    }
+  }
+}

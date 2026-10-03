@@ -1,31 +1,32 @@
-# Telefon ve tablet test listesi
+# Açılış sorunu teşhisi (sürüm 2.1)
 
-Bu testleri kendi telefonunda ve tabletinde yap. Bu ortamda yapılan testler yalnızca bilgisayardaki Chromium tarayıcısında, ekran boyutu taklit edilerek yapıldı. Gerçek iPhone, Android ya da iPad üzerinde henüz test yapılmadı.
+Bu ortamda gerçek telefon veya tablet testi yapılmadı. Aşağıdaki adımlar boş ekran sorununun nereden kaynaklandığını ayırmak içindir. Gördüğün sonucu bana yaz.
 
-Bağlantı: https://claude.ai/artifact/AQwSnF55f1uGJsMyNjYy4Z (claude.ai hesabınla giriş yapman gerekir).
+| # | Nasıl açıyorsun? | Görürsen | Anlamı |
+|---|---|---|---|
+| 1 | İndirilen HTML dosyasına Dosyalar / dosya yöneticisi / mesaj önizlemesinden dokun | Ürün adı, açıklama ve turuncu kutuda "Bu görünüm uygulamanın kodunu çalıştıramıyor…" | Önizleme JavaScript çalıştırmıyor. Beklenen durum; ürün bu yolla kullanılamaz. |
+| 2 | Aynı dosyayı tarayıcıda aç (iPhone: Paylaş › Safari'de aç ya da Chrome'da "Dosyalar"dan aç) | Uygulama açılır | Kod çalışıyor; sorun önizlemedeydi. Asıl kullanım için yine web bağlantısı öner. |
+| 3 | Web bağlantısını Safari / Chrome'da aç | Uygulama açılır | Web kullanımı sorunsuz. |
+| 4 | 2. veya 3. yolda | "Uygulama başlatılamadı" ya da "beklenenden uzun sürede açılıyor" | Kod çalıştı ama başlarken sorun oldu. "Teknik ayrıntılar"ı aç, "Ayrıntıları kopyala"ya dokun ve metni bana gönder. |
+| 5 | Herhangi bir yolda | Tamamen boş ekran | Beklenmeyen durum: cihaz modeli, iOS/Android sürümü, uygulama (Safari, Chrome, Dosyalar, WhatsApp…) ve ekran görüntüsünü gönder. |
+
+# Beş dakikalık telefon ve tablet kontrolü (sürüm 2)
+
+Bu ortamdaki testler bilgisayarda Chromium ile, ekran boyutu taklit edilerek yapıldı. Gerçek iPhone, Android ya da iPad üzerinde test yapılmadı. Aşağıdaki kontrolleri kendi cihazlarında **tarayıcıdan** yap (Safari / Chrome). HTML dosyasını telefonun dosya önizlemesinde açmak bu testin yerini tutmaz.
+
+Bağlantı: https://claude.ai/artifact/AQwSnF55f1uGJsMyNjYy4Z
 
 | # | Ne yapacaksın | Beklenen sonuç |
 |---|---|---|
-| 1 | Bağlantıyı ilk kez aç. | Karşılama ekranı, görsel, "Okumaya başla" ve "Doğrudan bugünü planla" düğmeleri görünür. Ekran yana kaymaz. |
-| 2 | "Okumaya başla"ya dokun. Sonra "Kitabı Oku" sekmesinden 1. bölümü aç ve sonuna kadar kaydır. | Metin rahat okunur, görsel ve renkli kutular (Araştırma ne diyor?, Önerim) görünür. Türkçe karakterler (ç, ğ, ı, İ, ö, ş, ü) düzgündür. |
-| 3 | Bölümün ortasına kadar oku, "Günümü Planla"ya geç, sonra "Kitabı Oku"ya dön. | İçindekilerde "Kaldığın yerden devam et" görünür. Dokununca bıraktığın yere yakın bir yere döner. |
-| 4 | Bölüm 1'deki "3 dakikalık sayacı başlat" düğmesine dokun. | Çubuk dolmaya başlar, kalan süre yazar. "Sayacı durdur" ile durur. |
-| 5 | "Bunu planlayıcıda yap"a dokun. | Planlayıcı açılır, "Aklımdakiler" alanı turuncu çerçeveyle vurgulanır ve klavye açılır. Yazdığın satır klavyenin altında kalmaz. |
-| 6 | Birkaç satır yaz, sonra "Kitapta kaldığın yere dön"e dokun. | Bölüm 1'deki uygulama kutusuna geri dönersin. |
-| 7 | Planlayıcıda ana iş, ilk adım, bir ek iş ve başlama planının üç alanını doldur. | Başlama planının altında "…, …, … başlayacağım." cümlesi oluşur. Altta kısa bir "Kaydedildi" yazısı görünür. |
-| 8 | Ana işin yanındaki kutuya dokun. | Kutu turuncu olur ve tik işareti çıkar. Metnin üstü çizilir. Kısa bir "İşaretlendi" bildirimi çıkar. |
-| 9 | Sayfayı yenile ya da tarayıcıyı tamamen kapatıp yeniden aç. | Yazdığın her şey ve işaretlerin yerinde durur. |
-| 10 | Telefonu yatay çevir, sonra tekrar dikey çevir. | Hiçbir ekranda yatay kaydırma olmaz. Sekmeler ve düğmeler kullanılabilir kalır. |
-| 11 | Telefonun yazı boyutunu en büyüğe yakın bir değere getir (iPhone: Ayarlar › Ekran ve Parlaklık › Metin Boyutu; Android: Ayarlar › Ekran › Yazı tipi boyutu) ve uygulamayı yeniden aç. | Yazılar büyür. Metin kesilmez ve ekran yana kaymaz. Uzun kelimeler gerekirse alt satıra bölünür. |
-| 12 | Ertesi gün uygulamayı aç ve "Günümü Planla"ya gir. | Yeni ve boş bir gün açılır. "Geçmiş Günler"de dünkü kayıt ayrı olarak görünür. |
-| 13 | "Geçmiş Günler"de dünkü güne "Aç ve düzenle" ile gir, bir şeyi değiştir. | Üstte "Bu gün geçmişte kaldı" uyarısı görünür. Değişiklik dünkü güne kaydedilir. Bugünün kaydı değişmez. |
-| 14 | "Geçmiş Günler"de bir günü "Sil". | Önce onay penceresi çıkar. "Vazgeç" derse hiçbir şey silinmez. "Evet, sil" derse yalnızca o gün silinir. |
-| 15 | Sağ üstteki ayarlar düğmesinden "Yedek dosyasını indir"e dokun. | **Not:** claude.ai bağlantısında indirme engellenebilir. Bu durumda dosya inmez. Bu bilinen bir kısıtlama. |
-| 16 | Aynı yerde "Yedeği metin olarak göster" ve "Metni kopyala"ya dokun. Metni bir nota yapıştır. | "Kopyalandı" yazar. Notta `"app": "genix-small-steps-clear-days"` ile başlayan bir metin görünür. |
-| 17 | "Dosya yerine metin yapıştır"a dokun, notundaki metni yapıştır, "Metni kontrol et" ve sonra "Geri yükle"ye dokun. | "Yedek kontrol edildi" özeti ve ardından "… gün geri yüklendi." mesajı çıkar. |
-| 18 | Aynı alana rastgele bir metin (ör. "deneme") yapıştırıp kontrol et. | "Bu yedek geri yüklenemedi" ve "Mevcut kayıtlarında hiçbir değişiklik yapılmadı." mesajları çıkar. Kayıtların aynen durur. |
-| 19 | Ayarlar'da Animasyonlar › "Kapalı" seç, sonra 7–9. adımları tekrarla. | Geçişler ve tik animasyonu olmadan her şey aynı şekilde çalışır. |
-| 20 | Telefonun "Hareketi azalt" ayarını aç (iPhone: Erişilebilirlik › Hareket; Android: Erişilebilirlik › Animasyonları kaldır), Ayarlar'da "Cihaz ayarına uy"u seç. | Ayarlar'da "Cihazın azaltılmış hareket tercihi açık…" notu görünür. Animasyonlar kapalıdır. |
-| 21 | Aynı bağlantıyı tablette aç. | Telefondaki kayıtlar tablette **görünmez**. Bu beklenen bir durum, çünkü kayıtlar cihazlar arasında eşitlenmez. Tablette 1–14 arasını tekrar dene. |
+| 1 | Bağlantıyı aç. | Kitap kapağı, "Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi." cümlesi, "Okumaya başla" ve "Bugünümü planla" düğmeleri görünür. Ekran yana kaymaz. Önceki sürümde kayıt girdiysen "Kaldığın yerden devam et" de görünür. |
+| 2 | Önceki sürümde bir gün kaydettiysen **Günüm › Geçmiş günler**'e gir. | Eski günlerin listede görünür. Bir güne dokununca ayrıntılar açılır. Hiçbir kayıt kaybolmamıştır. |
+| 3 | **Günüm**'de ana işi ve ilk küçük adımı yaz. "Başlama zamanımı belirle"yi aç, zaman ve yer yaz (ör. "kütüphanede"), "15 dakika"yı seç. | Ekranda yalnızca ana iş ve ilk adım açık görünür, diğer bölümler kapalıdır. Başlama planı cümlesi ilk adımı kendiliğinden kullanır. Seçimin altında kısa bir ipucu çıkar. "Kaydedildi" yazısı görünür. |
+| 4 | Yer alanına dokununca klavye açılır. Sayfayı yenile. | Yazdığın alan klavyenin altında kalmaz. Yenilemeden sonra her şey yerindedir. |
+| 5 | **Alışkanlığım** › "Planımı kur". İlk adımı boş bırakıp "Devam"a dokun, sonra adımları doldur. "Örneği kullan"ı bir kez dene. | Boş geçerken anlaşılır bir uyarı çıkar. Örnek yalnızca düğmeye dokununca dolar ve düzenlenebilir. Sonunda okunabilir bir özet görünür. |
+| 6 | "Küçük adımımı yaptım."ı seç, not yaz. Sonra "Daha küçük seçeneğimi yaptım." ile değiştir. Son yedi günden dünkü güne dokunup "Bugün yapmadım." seç. | Seçim değişir. Yedi günlük görünümde günler nötr işaretlerle görünür; kırmızı işaret, puan ya da seri sayacı yoktur. |
+| 7 | **Oku** › Bölüm 1. Biraz kaydır, "Yazı boyutu"ndan "Daha büyük"ü seç. | Üstte bölüm adı ve yaklaşık yüzde ilerler. Yazı büyür ve sayfa yana kaymaz. Başka bir sekmeye gidip dönünce kaldığın yer ve yazı boyutu korunur. |
+| 8 | Telefonu yatay çevir, sonra geri çevir. | Üç sekme ve düğmeler kullanılabilir kalır. Okuma çubuğu metni kapatmaz. |
+| 9 | **Ayarlar** › "Yedeği metin olarak göster" › "Metni kopyala". Notlar uygulamasına yapıştır. Sonra "Dosya yerine metin yapıştır" ile aynı metni yapıştırıp "Metni kontrol et"e dokun. | Geri yüklemeden önce neyin değişeceğini gösteren bir özet çıkar ("… gün bu cihazdakiyle aynı" gibi). "Vazgeç" dersen hiçbir şey değişmez. |
+| 10 | Aynı alana "deneme" yazıp kontrol et. Ardından Ayarlar'da Animasyonlar › "Kapalı" seç ve 3. adımı tekrarla. | Önce "Bu yedek geri yüklenemedi" ve "Mevcut kayıtlarında hiçbir değişiklik yapılmadı." mesajları çıkar. Animasyonlar kapalıyken her şey aynı şekilde çalışır. |
 
-Bir test beklenen sonucu vermezse cihazı, tarayıcıyı ve adım numarasını not et. Mümkünse bir ekran görüntüsü de al.
+**Not:** claude.ai bağlantısında "Yedek dosyasını indir" düğmesi engellenebilir; bu bilinen bir kısıtlama. Metinle yedek alma yolu her yerde çalışır. Tablette telefonun kayıtları görünmez, çünkü otomatik eşitleme yoktur. Bu beklenen bir durum.

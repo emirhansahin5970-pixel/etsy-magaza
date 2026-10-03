@@ -3,28 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Web uygulaması (yalnızca barındırılan sürümde; claude.ai Artifact sürümüne girmez) -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Küçük Adımlar">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <!-- @artifact-head-start -->
 <title>Küçük Adımlar, Daha Net Günler</title>
-<meta name="description" content="Genix Studio: kısa bir okuma ve sakin bir günlük planlayıcı.">
+<meta name="description" content="Genix Studio: kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.">
 <meta name="theme-color" content="#fbf6ec">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
+<!-- Yazı tipleri çizimi ENGELLEMEZ: media="print" ile indirilir, boot.js yüklenince etkinleştirir.
+     Google Fonts'a ulaşılamazsa (ya da istek askıda kalırsa) sayfa sistem fontlarıyla açılır. -->
+<link id="gx-fonts" rel="stylesheet" media="print" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
 <link rel="stylesheet" href="styles.css">
 <!-- @artifact-head-end -->
 </head>
 <body>
 <!-- @artifact-body-start -->
+<!-- data-t ile işaretli metinler derleme sırasında i18n/tr.js'ten doldurulur; JavaScript çalışmasa da görünürler. -->
+<div id="app-root" class="is-booting">
 <a class="skip" href="#main" data-t="app.skipToContent"></a>
 
 <header class="topbar">
   <div class="topbar__inner">
-    <div class="brand">
+    <a class="brand" href="#hosgeldin">
       <span class="brand__studio" data-t="app.brand"></span>
       <span class="brand__title" data-t="app.title"></span>
-    </div>
-    <button type="button" class="icon-btn" id="open-settings" data-t-label="app.settingsButton">
+    </a>
+    <button type="button" class="settings-btn" id="open-settings" aria-haspopup="dialog">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.8 12h2.4M18.8 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
+      <span data-t="app.settingsButton"></span>
     </button>
   </div>
 </header>
@@ -32,21 +44,36 @@
 <nav class="tabs" data-t-label="nav.label">
   <ul class="tabs__list">
     <li><button type="button" class="tab" data-nav="oku" data-t="nav.read"></button></li>
-    <li><button type="button" class="tab" data-nav="planla" data-t="nav.plan"></button></li>
-    <li><button type="button" class="tab" data-nav="gecmis" data-t="nav.history"></button></li>
+    <li><button type="button" class="tab" data-nav="gunum" data-t="nav.day"></button></li>
+    <li><button type="button" class="tab" data-nav="aliskanlik" data-t="nav.habit"></button></li>
   </ul>
 </nav>
 
 <main id="main" tabindex="-1">
-  <div id="view" class="view"></div>
-  <noscript><p>Bu uygulama JavaScript gerektirir. Tarayıcında JavaScript'i açıp sayfayı yenile.</p></noscript>
+  <div id="view" class="view">
+    <!-- Başlangıç ekranı: JavaScript gerektirmez. Uygulama başlayınca yerine uygulama ekranı gelir. -->
+    <section class="boot-screen" id="boot-screen" aria-labelledby="boot-title">
+      <p class="eyebrow" data-t="app.brand"></p>
+      <h1 id="boot-title" data-t="app.title"></h1>
+      <p class="lead" data-t="boot.description"></p>
+      <p class="boot-status" id="boot-status" role="status"><span class="boot-dot" aria-hidden="true"></span><span data-t="boot.loading"></span></p>
+      <noscript>
+        <p class="boot-noscript" data-t="boot.noscript"></p>
+        <style>.boot-status, .boot-hint { display: none !important; }</style>
+      </noscript>
+      <p class="hint boot-hint" data-t="boot.slowHint"></p>
+    </section>
+  </div>
 </main>
 
 <dialog id="settings" aria-labelledby="settings-title"></dialog>
 <dialog id="confirm" aria-labelledby="confirm-title"></dialog>
 
 <div class="toast-region" aria-live="polite" aria-atomic="true" id="toast-region"></div>
+</div>
 
+<!-- Önce güvenlik ağı: sonraki betiklerdeki hataları yakalar. -->
+<script src="boot.js"></script>
 <script src="i18n/tr.js"></script>
 <script src="content/book.tr.js"></script>
 <script src="illustrations.js"></script>
