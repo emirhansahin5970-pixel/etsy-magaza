@@ -122,6 +122,30 @@
     if (m === "system") document.documentElement.removeAttribute("data-motion");
     else document.documentElement.setAttribute("data-motion", m);
   }
+  /** Tema: "system" (cihaz ayarı, varsayılan), "light" ya da "dark". Açık seçim kaydedilir. */
+  var darkMQ = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : { matches: false };
+  function themeMode() {
+    var m = store.getSettings().theme;
+    return m === "light" || m === "dark" ? m : "system";
+  }
+  function applyTheme() {
+    var m = themeMode();
+    if (m === "system") document.documentElement.removeAttribute("data-theme");
+    else document.documentElement.setAttribute("data-theme", m);
+    // Tarayıcı çubuğu rengi: açık seçimde seçilen temaya, cihaz ayarında medya sorgusuna göre
+    var metas = document.querySelectorAll('meta[name="theme-color"]');
+    for (var i = 0; i < metas.length; i++) {
+      var meta = metas[i];
+      if (!meta.getAttribute("data-media")) meta.setAttribute("data-media", meta.getAttribute("media") || "");
+      if (m === "system") {
+        if (meta.getAttribute("data-media")) meta.setAttribute("media", meta.getAttribute("data-media"));
+      } else {
+        meta.removeAttribute("media");
+        meta.setAttribute("content", m === "dark" ? "#191b1a" : "#fbf6ec");
+      }
+    }
+  }
+
   function textSize() {
     return store.getSettings().textSize || "standard";
   }
@@ -225,7 +249,9 @@
     if (!pendingSave) return;
     var fn = pendingSave;
     pendingSave = null;
-    showSaveStatus(fn() !== false);
+    var ok = fn() !== false;
+    showSaveStatus(ok);
+    if (ok && state.calRedraw) state.calRedraw();
   }
 
   function showSaveStatus(ok) {
@@ -765,11 +791,164 @@
 
   /* ================= Günüm ================= */
 
+  /** Puan dışındaki herhangi bir plan içeriği var mı? (takvimde "plan var" işareti için) */
+  function hasPlanContent(d) {
+    if (!d) return false;
+    var c = JSON.parse(JSON.stringify(d));
+    c.rating = null;
+    c.ratingNote = "";
+    return !STORE.isDayEmpty(c);
+  }
+
+  function ratingText(n) {
+    return t("day.ratingOptions." + n);
+  }
+
+  /* ---------- Aylık takvim (Günüm'ün üstünde, açılıp kapanır) ---------- */
+
+  function calendarPanel(openKey) {
+    var today = STORE.dateKey();
+    var open = !!store.getSettings().calendarOpen;
+    var region = h("div", { id: "cal-region", class: "cal-panel", hidden: !open });
+
+    var toggle = h("button", { type: "button", class: "cal-toggle", id: "cal-toggle", "aria-expanded": open ? "true" : "false", "aria-controls": "cal-region", onclick: function () {
+      open = !open;
+      store.setSettings({ calendarOpen: open });
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      region.hidden = !open;
+      if (open) draw();
+    } }, [
+      h("span", { class: "chev", "aria-hidden": "true", html: ICON_CHEV }),
+      h("span", { class: "cal-toggle__text" }, [h("strong", { text: t("calendar.toggle") }), h("span", { class: "hint", text: t("calendar.toggleHint") })]),
+    ]);
+
+    function draw(focusSel) {
+      var days = store.getDays();
+      var habit = store.getHabit();
+      var y = state.calMonth.y, m = state.calMonth.m;
+      var sel = state.calSelected;
+      region.textContent = "";
+
+      var title = h("h2", { class: "cal__title", id: "cal-title", "aria-live": "polite", text: t("calendar.monthTitle", { month: S.dates.months[m], year: y }) });
+      function shift(delta, btnId) {
+        var d = new Date(y, m + delta, 1);
+        state.calMonth = { y: d.getFullYear(), m: d.getMonth() };
+        draw(btnId);
+      }
+      var head = h("div", { class: "cal__head" }, [
+        h("button", { type: "button", class: "icon-btn", id: "cal-prev", "aria-label": t("calendar.prevMonth"), html: ICON_BACK, onclick: function () { shift(-1, "cal-prev"); } }),
+        title,
+        h("button", { type: "button", class: "icon-btn", id: "cal-next", "aria-label": t("calendar.nextMonth"), html: ICON_CHEV, onclick: function () { shift(1, "cal-next"); } }),
+      ]);
+      var todayBtn = h("button", { type: "button", class: "btn btn--quiet", id: "cal-today", text: t("calendar.today"), onclick: function () {
+        var d = STORE.keyToDate(today);
+        state.calMonth = { y: d.getFullYear(), m: d.getMonth() };
+        state.calSelected = today;
+        draw("cal-day-" + today);
+      } });
+
+      var grid = h("div", { class: "cal__grid", role: "group", "aria-labelledby": "cal-title" });
+      S.dates.weekdaysMondayFirst.forEach(function (w) { grid.appendChild(h("span", { class: "cal__wd", "aria-hidden": "true", text: w })); });
+      STORE.monthGrid(y, m).forEach(function (k) {
+        if (!k) { grid.appendChild(h("span", { class: "cal__blank", "aria-hidden": "true" })); return; }
+        var d = days[k], e = habit.log[k];
+        var marks = [];
+        var label = [formatDate(k)];
+        if (k === today) label.push(t("calendar.cellToday"));
+        if (k === sel) label.push(t("calendar.cellSelected"));
+        if (hasPlanContent(d)) { marks.push(h("i", { class: "mk mk-plan", "aria-hidden": "true" })); label.push(t("calendar.cellPlan")); }
+        if (e && k <= today) { marks.push(h("i", { class: "mk mk-habit", "aria-hidden": "true" })); label.push(t("calendar.cellHabit", { status: t("habit.statusShort." + e.status) })); }
+        if (d && d.rating) { marks.push(h("b", { class: "mk-rating", "aria-hidden": "true", text: String(d.rating) })); label.push(t("calendar.cellRating", { n: d.rating })); }
+        if (!marks.length) label.push(t("calendar.cellEmpty"));
+        grid.appendChild(h("button", {
+          type: "button", class: "cal__day" + (k === today ? " is-today" : "") + (k > today ? " is-future" : ""),
+          id: "cal-day-" + k, "data-cal": k, "aria-pressed": k === sel ? "true" : "false",
+          "aria-current": k === today ? "date" : null, "aria-label": label.join(", "),
+          onclick: function () { state.calSelected = k; draw("cal-day-" + k); },
+        }, [h("span", { class: "cal__num", text: String(STORE.keyToDate(k).getDate()) }), h("span", { class: "cal__marks", "aria-hidden": "true" }, marks)]));
+      });
+
+      var legend = h("div", { class: "cal__legend" }, [
+        h("p", { class: "label", text: t("calendar.legendTitle") }),
+        h("ul", { class: "legend" }, [
+          h("li", null, [h("span", { class: "lg lg-today", "aria-hidden": "true" }), t("calendar.legendToday")]),
+          h("li", null, [h("span", { class: "lg lg-selected", "aria-hidden": "true" }), t("calendar.legendSelected")]),
+          h("li", null, [h("i", { class: "mk mk-plan", "aria-hidden": "true" }), t("calendar.legendPlan")]),
+          h("li", null, [h("i", { class: "mk mk-habit", "aria-hidden": "true" }), t("calendar.legendHabit")]),
+          h("li", null, [h("b", { class: "mk-rating", "aria-hidden": "true", text: "3" }), t("calendar.legendRating")]),
+        ]),
+        h("p", { class: "hint", text: t("calendar.legendNote") }),
+      ]);
+
+      region.appendChild(h("div", { class: "cal" }, [head, todayBtn, grid, legend]));
+      region.appendChild(daySummary(sel, openKey, days[sel], habit));
+      if (focusSel && $(focusSel)) $(focusSel).focus({ preventScroll: true });
+    }
+
+    if (open) draw();
+    // Kayıt yapılınca işaretler ve özet tazelenir (odak yerinde kalır)
+    state.calRedraw = function () { if (open) draw(); };
+    cleanupFns.push(function () { state.calRedraw = null; });
+    return h("section", { class: "cal-wrap", "aria-label": t("calendar.toggle") }, [toggle, region]);
+  }
+
+  /** Takvimde seçilen günün özeti */
+  function daySummary(k, openKey, d, habit) {
+    var today = STORE.dateKey();
+    var e = k <= today ? habit.log[k] : null;
+    var box = h("section", { class: "box box--action cal-summary", id: "cal-summary", "aria-labelledby": "cal-summary-title", "aria-live": "polite" }, [
+      h("h3", { id: "cal-summary-title", text: formatDate(k) }),
+    ]);
+    function go() {
+      state.scrollToDay = true;
+      navigate(k === today ? "gunum" : "gun-" + k);
+    }
+    if (k === openKey) box.appendChild(h("p", { class: "hint", id: "cal-open-here", text: t("calendar.openHere") }));
+    if (!d && !e) {
+      if (k > today) {
+        box.appendChild(h("p", { text: t("calendar.emptyFuture") }));
+        if (k !== openKey) box.appendChild(h("button", { type: "button", class: "btn btn--secondary", id: "cal-create", text: t("calendar.createFuture"), onclick: go }));
+      } else {
+        box.appendChild(h("p", { text: k === today ? t("calendar.emptyToday") : t("calendar.emptyPast") }));
+        if (k !== openKey) box.appendChild(h("button", { type: "button", class: "btn btn--secondary", id: "cal-create", text: t("calendar.createPast"), onclick: go }));
+      }
+      return box;
+    }
+    var rows = [];
+    function row(label, value) {
+      if (!value) return;
+      rows.push(h("div", null, [h("dt", { text: label }), h("dd", { text: value })]));
+    }
+    if (d) {
+      row(t("calendar.mainLabel"), d.main.text.trim() || "—");
+      var done = [d.main].concat(d.extras).filter(function (x) { return x.done && x.text.trim(); }).map(function (x) { return x.text.trim(); });
+      row(t("calendar.doneLabel"), done.length ? done.join("\n") : t("calendar.noneDone"));
+    }
+    if (e) {
+      var plan = habit.plans[e.planId];
+      row(t("calendar.habitLabel"), t("calendar.habitLine", { status: t("habit.statuses." + e.status), goal: plan ? plan.goal : "" }) + (e.note ? "\n" + e.note : ""));
+    }
+    if (d && d.rating) row(t("calendar.ratingLabel"), ratingText(d.rating));
+    if (d && d.ratingNote.trim()) row(t("calendar.ratingNoteLabel"), d.ratingNote.trim());
+    if (d) row(t("calendar.eveningLabel"), [d.evening.worked.trim(), d.evening.easier.trim()].filter(Boolean).join("\n"));
+    box.appendChild(h("dl", { class: "day-detail" }, rows));
+    if (k !== openKey) box.appendChild(h("button", { type: "button", class: "btn btn--primary", id: "cal-open-day", text: t("calendar.openDay"), onclick: go }));
+    return box;
+  }
+
   function renderDay(dateKey, openedAsToday) {
     var today = STORE.dateKey();
     var isPast = dateKey < today;
+    var isFuture = dateKey > today;
     state.planDate = dateKey;
     state.planOpenedAsToday = !!openedAsToday;
+    // Takvim: açık olan gün seçili ve görünür ay olur
+    if (state.calFor !== dateKey) {
+      var od = STORE.keyToDate(dateKey);
+      state.calFor = dateKey;
+      state.calSelected = dateKey;
+      state.calMonth = { y: od.getFullYear(), m: od.getMonth() };
+    }
 
     var day = store.getDay(dateKey);
     var legacyWhat = day.start.what.trim() && day.start.what.trim() !== day.main.step.trim() ? day.start.what : "";
@@ -778,9 +957,9 @@
 
     var banners = h("div", { class: "stack-sm", id: "day-banners" });
     if (!store.available) banners.appendChild(h("div", { class: "banner banner--warn", role: "alert", text: t("save.storageWarning") }));
-    if (isPast) {
-      banners.appendChild(h("div", { class: "banner" }, [
-        h("p", { text: t("day.pastBanner") }),
+    if (isPast || isFuture) {
+      banners.appendChild(h("div", { class: "banner", id: isFuture ? "future-banner" : "past-banner" }, [
+        h("p", { text: isFuture ? t("day.futureBanner") : t("day.pastBanner") }),
         h("button", { type: "button", class: "btn btn--secondary", text: t("day.backToToday"), onclick: function () { navigate("gunum"); } }),
       ]));
     }
@@ -859,9 +1038,30 @@
       timeClear,
     ], startFilled, startFilled ? t("day.filled") : null);
 
-    var eveningFilled = !!(day.evening.worked.trim() || day.evening.easier.trim());
+    // Gün değerlendirmesi (1–5, isteğe bağlı; varsayılan seçim yok; gelecek günde kapalı)
+    var ratingGroup = choiceGroup("rating", isPast ? t("day.ratingLegendPast") : t("day.ratingLegend"), ["1", "2", "3", "4", "5"].map(function (v) {
+      return { value: v, label: t("day.ratingOptions." + v) };
+    }), day.rating ? String(day.rating) : null, { marks: true, id: "rating-group" });
+    ratingGroup.insertBefore(h("p", { class: "hint", id: "rating-hint", text: t("day.ratingHint") }), ratingGroup.children[1]);
+    var ratingClear = h("button", { type: "button", class: "btn btn--quiet", id: "rating-clear", text: t("day.ratingClear"), hidden: !day.rating, onclick: function () {
+      ratingGroup.querySelectorAll("input").forEach(function (i) { i.checked = false; });
+      ratingClear.hidden = true;
+      save(true);
+      $("rating-1").focus();
+    } });
+    var ratingNote = field("f-rating-note", t("day.ratingNoteLabel"), { multiline: true, rows: 2, max: 2000, placeholder: t("day.ratingNotePlaceholder"), value: day.ratingNote });
+    if (isFuture) {
+      ratingGroup.disabled = true;
+      ratingNote.querySelector("textarea").disabled = true;
+      ratingGroup.appendChild(h("p", { class: "hint", id: "rating-future", text: t("day.ratingFuture") }));
+    }
+
+    var eveningFilled = !!(day.evening.worked.trim() || day.evening.easier.trim() || day.rating || day.ratingNote.trim());
     var evening = disclosure("d-evening", t("day.eveningToggle"), [
       h("p", { class: "hint", text: t("day.eveningHint") }),
+      ratingGroup,
+      ratingClear,
+      ratingNote,
       field("f-worked", t("day.workedLabel"), { multiline: true, rows: 3, placeholder: t("day.workedPlaceholder"), value: day.evening.worked }),
       field("f-easier", t("day.easierLabel"), { multiline: true, rows: 3, placeholder: t("day.easierPlaceholder"), value: day.evening.easier }),
     ], eveningFilled, eveningFilled ? t("day.filled") : null);
@@ -875,10 +1075,11 @@
     brain.style.borderTop = "1px solid var(--line)";
 
     viewEl.appendChild(h("section", { class: "stack-lg", "aria-labelledby": "day-title" }, [
-      h("div", { class: "day-head" }, [
+      calendarPanel(dateKey),
+      h("div", { class: "day-head", id: "day-head" }, [
         h("div", { class: "page-head" }, [
           h("p", { class: "date-line", id: "day-date", text: formatDate(dateKey) }),
-          h("h1", { id: "day-title", text: isPast ? t("day.titlePast") : t("day.titleToday") }),
+          h("h1", { id: "day-title", text: isPast ? t("day.titlePast") : isFuture ? t("day.titleFuture") : t("day.titleToday") }),
         ]),
         h("button", { type: "button", class: "btn btn--quiet", id: "open-history", text: t("day.historyLink"), onclick: function () { navigate("gecmis"); } }),
       ]),
@@ -901,7 +1102,14 @@
         start: { when: $("f-when").value, where: $("f-where").value, what: keepWhat },
         time: { budget: budget, custom: budget === "custom" ? $("f-time-custom").value : "" },
         evening: { worked: $("f-worked").value, easier: $("f-easier").value },
+        rating: isFuture ? null : ratingValue(),
+        ratingNote: isFuture ? day.ratingNote : $("f-rating-note").value,
       };
+    }
+
+    function ratingValue() {
+      var c = ratingGroup.querySelector("input:checked");
+      return c ? parseInt(c.value, 10) : null;
     }
 
     function save(immediate) {
@@ -963,6 +1171,11 @@
       save(false);
     });
     form.addEventListener("change", function (e) {
+      if (e.target.type === "radio" && e.target.name === "rating") {
+        ratingClear.hidden = false;
+        save(true);
+        return;
+      }
       if (e.target.type === "radio") {
         updateTime();
         save(true);
@@ -988,6 +1201,13 @@
     updateStart();
     updateTime();
     Array.prototype.forEach.call(form.querySelectorAll("textarea"), autosize);
+
+    // Takvimden bir gün açıldıysa: takvim yerinde kalır, düzenleme alanına inilir
+    if (state.scrollToDay) {
+      state.scrollToDay = false;
+      state.pendingScroll = true;
+      requestAnimationFrame(function () { $("day-head").scrollIntoView({ block: "start" }); $("day-title").setAttribute("tabindex", "-1"); $("day-title").focus({ preventScroll: true }); });
+    }
 
     if (state.focusField === "brain") {
       state.focusField = null;
@@ -1059,6 +1279,8 @@
       row(t("history.detailTime"), d.time.budget ? (d.time.budget === "custom" ? d.time.custom : t("day.timeOptions." + d.time.budget)) : "");
       row(t("history.detailWorked"), d.evening.worked.trim());
       row(t("history.detailEasier"), d.evening.easier.trim());
+      row(t("history.detailRating"), d.rating ? ratingText(d.rating) : "");
+      row(t("history.detailRatingNote"), d.ratingNote.trim());
 
       var det = h("details", { class: "disclosure", "data-day": k }, [
         h("summary", null, [
@@ -1446,6 +1668,22 @@
       reducedNote.hidden = !(e.target.value === "system" && reduceMQ.matches);
     });
 
+    var theme = themeMode();
+    var themeGroup = choiceGroup("theme", t("settings.themeTitle"), [
+      { value: "light", label: t("settings.themeLight") },
+      { value: "dark", label: t("settings.themeDark") },
+      { value: "system", label: t("settings.themeSystem") },
+    ], theme, { cls: "choices--seg", hideLegend: true });
+    function systemNote() {
+      return t("settings.themeSystemNow", { mode: darkMQ.matches ? t("settings.themeModeDark") : t("settings.themeModeLight") });
+    }
+    var themeNote = h("p", { class: "hint", id: "theme-system-note", text: systemNote(), hidden: theme !== "system" });
+    themeGroup.addEventListener("change", function (e) {
+      store.setSettings({ theme: e.target.value });
+      applyTheme();
+      themeNote.hidden = e.target.value !== "system";
+    });
+
     var sizes = textSizeControl(function (v) {
       var r = document.querySelector(".reader");
       if (r) r.setAttribute("data-size", v);
@@ -1520,6 +1758,17 @@
     function statusText(e) {
       return t("habit.statusShort." + e.status);
     }
+    function describeDay(d) {
+      var parts = [];
+      if (d.main.text.trim()) parts.push(clip(d.main.text, 40));
+      if (d.rating) parts.push(t("settings.importRatingShort", { n: d.rating }));
+      return parts.length ? parts.join(" · ") : "—";
+    }
+    function fieldValue(v) {
+      if (v === true) return "evet";
+      if (v === false) return "hayır";
+      return v ? clip(v, 40) : t("settings.importEmptyValue");
+    }
     function handleImportText(text) {
       importMsg.textContent = "";
       var res = STORE.parseBackup(text);
@@ -1527,15 +1776,32 @@
       var plan = store.planRestore(res);
       var lines = [];
       if (plan.version < 2) lines.push(h("p", { text: t("settings.importOldVersion") }));
+      if (plan.version < 3) lines.push(h("p", { id: "import-old-fields", text: t("settings.importOldFields") }));
       if (plan.daysAdded.length) lines.push(h("p", { text: t("settings.importDaysAdded", { n: plan.daysAdded.length }) }));
       if (plan.daysChanged.length) {
         lines.push(h("p", { text: t("settings.importDaysChanged", { n: plan.daysChanged.length }) }));
         lines.push(changeList(plan.daysChanged, function (c) {
-          return t("settings.importChangeLine", { date: formatShort(c.key), before: clip(c.before.main.text || "—", 40), after: clip(c.after.main.text || "—", 40) });
+          return t("settings.importChangeLine", { date: formatShort(c.key), before: describeDay(c.before), after: describeDay(c.after) });
         }));
       }
       if (plan.daysSame.length) lines.push(h("p", { class: "hint", text: t("settings.importDaysSame", { n: plan.daysSame.length }) }));
       if (plan.plansAdded.length) lines.push(h("p", { text: t("settings.importHabitPlans", { n: plan.plansAdded.length }) }));
+      if (plan.plansChanged.length) {
+        lines.push(h("p", { text: t("settings.importPlansChanged", { n: plan.plansChanged.length }) }));
+        var planDiffs = [];
+        plan.plansChanged.forEach(function (c) { c.diffs.forEach(function (d) { planDiffs.push({ goal: c.goal, d: d }); }); });
+        lines.push(changeList(planDiffs, function (x) {
+          return t("settings.importPlanDiff", { goal: clip(x.goal, 30), field: t("settings.importFieldNames." + x.d.field), before: fieldValue(x.d.before), after: fieldValue(x.d.after) });
+        }));
+      }
+      if (plan.reviewsChanged.length) {
+        lines.push(h("p", { text: t("settings.importReviewsChanged", { n: plan.reviewsChanged.length }) }));
+        var revDiffs = [];
+        plan.reviewsChanged.forEach(function (c) { c.diffs.forEach(function (d) { revDiffs.push({ goal: c.goal, d: d }); }); });
+        lines.push(changeList(revDiffs, function (x) {
+          return t("settings.importReviewDiff", { goal: clip(x.goal, 30), field: t("settings.importFieldNames." + x.d.field), before: fieldValue(x.d.before), after: fieldValue(x.d.after) });
+        }));
+      }
       if (plan.logAdded.length) lines.push(h("p", { text: t("settings.importHabitLogAdded", { n: plan.logAdded.length }) }));
       if (plan.logChanged.length) {
         lines.push(h("p", { text: t("settings.importHabitLogChanged", { n: plan.logChanged.length }) }));
@@ -1547,7 +1813,7 @@
       if (plan.adoptsActivePlan) lines.push(h("p", { text: t("settings.importHabitAdoptsActive") }));
       if (plan.settings) lines.push(h("p", { text: t("settings.importSettings") }));
 
-      var nothing = !plan.daysAdded.length && !plan.daysChanged.length && !plan.plansAdded.length && !plan.logAdded.length && !plan.logChanged.length && !plan.adoptsActivePlan;
+      var nothing = !plan.daysAdded.length && !plan.daysChanged.length && !plan.plansAdded.length && !plan.plansChanged.length && !plan.reviewsChanged.length && !plan.logAdded.length && !plan.logChanged.length && !plan.adoptsActivePlan && !plan.settings;
       if (nothing) {
         importMsg.appendChild(h("div", { class: "box box--research" }, [h("p", { text: t("settings.importNothing") })]));
         return;
@@ -1564,6 +1830,8 @@
             importMsg.appendChild(h("p", { class: ok ? "banner" : "box box--error", role: ok ? "status" : "alert", text: ok ? t("settings.importDone") : t("save.failed") }));
             countEl.textContent = counts();
             applyMotion();
+            applyTheme();
+            themeGroup.querySelectorAll("input").forEach(function (i) { i.checked = i.value === themeMode(); });
             if (state.view !== "home") route();
           } }),
         ]),
@@ -1622,14 +1890,16 @@
         pasteArea,
         importMsg,
       ]),
-      h("section", { class: "panel-section" }, [
-        h("h3", { text: t("settings.motionTitle") }),
+      h("section", { class: "panel-section", id: "appearance-section" }, [
+        h("h3", { text: t("settings.appearanceTitle") }),
+        h("p", { class: "label", text: t("settings.themeTitle") }),
+        themeGroup,
+        themeNote,
+        h("p", { class: "label", text: t("settings.motionTitle") }),
         h("p", { class: "hint", text: t("settings.motionHint") }),
         motion,
         reducedNote,
-      ]),
-      h("section", { class: "panel-section" }, [
-        h("h3", { text: t("settings.textSizeTitle") }),
+        h("p", { class: "label", text: t("settings.textSizeTitle") }),
         sizes,
       ]),
       h("section", { class: "panel-section" }, [
@@ -1679,7 +1949,12 @@
     document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
     document.querySelectorAll("[data-t-label]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-label"))); });
     applyMotion();
+    applyTheme();
     if (reduceMQ.addEventListener) reduceMQ.addEventListener("change", applyMotion);
+    if (darkMQ.addEventListener) darkMQ.addEventListener("change", function () {
+      var note = $("theme-system-note");
+      if (note) note.textContent = t("settings.themeSystemNow", { mode: darkMQ.matches ? t("settings.themeModeDark") : t("settings.themeModeLight") });
+    });
 
     document.querySelectorAll("[data-nav]").forEach(function (b) {
       b.addEventListener("click", function () {

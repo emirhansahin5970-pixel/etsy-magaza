@@ -5,6 +5,11 @@
  *   1 – Yalnızca günlük kayıtlar (gx.ssc.days.v1) ve tercihler (gx.ssc.settings.v1).
  *   2 – Günlük kayda isteğe bağlı zaman seçimi (time) eklendi; alışkanlık verisi (gx.ssc.habit.v1) eklendi;
  *       yedek paketi alışkanlık ve tercihleri de içeriyor.
+ *   3 – Günlük kayda gün değerlendirmesi eklendi: rating (null ya da 1–5 tam sayı) ve ratingNote (metin).
+ *       Tercihlere tema (system | light | dark) eklendi ve yedeğe dahil edildi.
+ *
+ * Geri yüklemede "alan yok" ile "alan boş" farklıdır: eski bir yedekte hiç bulunmayan alan (ör. v2 yedeğinde rating)
+ * mevcut veriyi SİLMEZ; yeni yedekte açıkça boş/null olan alan ise boş olarak geri yüklenir (bkz. absentFields).
  *
  * Geçiş (1 → 2): Günlük kayıtların anahtarı ve biçimi değişmedi. Eski kayıtlar okunurken eksik alanlara
  * varsayılan değer atanır (migrateDay). Eski "start.what" metni silinmez; arayüz bu metni gösterir ve
@@ -16,8 +21,8 @@
   "use strict";
 
   var APP_ID = "genix-small-steps-clear-days";
-  var SCHEMA_VERSION = 2;
-  var SUPPORTED_BACKUP_VERSIONS = [1, 2];
+  var SCHEMA_VERSION = 3;
+  var SUPPORTED_BACKUP_VERSIONS = [1, 2, 3];
 
   var DAYS_KEY = "gx.ssc.days.v1"; // şema 2'de de aynı anahtar: eski kayıtlar yerinde okunur
   var SETTINGS_KEY = "gx.ssc.settings.v1";
@@ -32,6 +37,9 @@
   var TIME_BUDGETS = ["", "5", "15", "30", "custom"];
   var HABIT_STATUSES = ["done", "smaller", "skipped"];
   var TEXT_SIZES = ["standard", "large", "larger"];
+  var THEMES = ["system", "light", "dark"];
+  // Eski yedeklerde bulunmayabilen gün alanları: yoksa geri yüklemede mevcut değer korunur
+  var OPTIONAL_DAY_FIELDS = ["time", "rating", "ratingNote"];
   var MOTION_MODES = ["system", "on", "off"];
 
   var DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -84,6 +92,8 @@
       start: { when: "", where: "", what: "" }, // what: şema 1'den kalan alan, yalnızca eski kayıtlarda dolu olabilir
       time: { budget: "", custom: "" },
       evening: { worked: "", easier: "" },
+      rating: null, // gün değerlendirmesi: null ya da 1–5; varsayılan seçim yok
+      ratingNote: "",
       updatedAt: null,
     };
   }
@@ -95,8 +105,9 @@
       day.extras[0].text, day.extras[1].text,
       day.start.when, day.start.where, day.start.what,
       day.time.budget, day.time.custom,
-      day.evening.worked, day.evening.easier,
+      day.evening.worked, day.evening.easier, day.ratingNote,
     ];
+    if (day.rating !== null && day.rating !== undefined) return false; // yalnızca puan girilmiş gün de geçerli kayıttır
     for (var i = 0; i < texts.length; i++) if (texts[i] && String(texts[i]).trim()) return false;
     return !(day.main.done || day.extras[0].done || day.extras[1].done);
   }
@@ -173,8 +184,30 @@
     day.time.custom = checkText(time.custom, key, "time.custom", 40);
     day.evening.worked = checkText(evening.worked, key, "evening.worked");
     day.evening.easier = checkText(evening.easier, key, "evening.easier");
+    if (raw.rating !== undefined && raw.rating !== null) {
+      if (typeof raw.rating !== "number" || raw.rating % 1 !== 0 || raw.rating < 1 || raw.rating > 5) throw new ValidationError("badField", { key: key, field: "rating" });
+      day.rating = raw.rating;
+    }
+    day.ratingNote = checkText(raw.ratingNote, key, "ratingNote", 2000);
     day.updatedAt = checkStamp(raw.updatedAt, key, "updatedAt");
     return day;
+  }
+
+  /** Ham kayıtta hiç bulunmayan isteğe bağlı alanlar (eski şema). Geri yüklemede bunlar mevcut veriyi ezmez. */
+  function absentDayFields(raw) {
+    var out = [];
+    for (var i = 0; i < OPTIONAL_DAY_FIELDS.length; i++) {
+      if (!raw || !Object.prototype.hasOwnProperty.call(raw, OPTIONAL_DAY_FIELDS[i])) out.push(OPTIONAL_DAY_FIELDS[i]);
+    }
+    return out;
+  }
+
+  /** Yedekteki günü, yedekte bulunmayan alanlar için mevcut değerle tamamlar. */
+  function effectiveIncomingDay(current, incoming, absent) {
+    if (!current || !absent || !absent.length) return incoming;
+    var d = JSON.parse(JSON.stringify(incoming));
+    absent.forEach(function (f) { d[f] = JSON.parse(JSON.stringify(current[f])); });
+    return d;
   }
 
   /* ---------------- Alışkanlık ---------------- */
@@ -302,6 +335,8 @@
     var out = {};
     if (MOTION_MODES.indexOf(s.motion) >= 0) out.motion = s.motion;
     if (TEXT_SIZES.indexOf(s.textSize) >= 0) out.textSize = s.textSize;
+    if (THEMES.indexOf(s.theme) >= 0) out.theme = s.theme;
+    if (s.calendarOpen === true) out.calendarOpen = true;
     if (s.welcomed === true) out.welcomed = true;
     if (s.reading && typeof s.reading === "object" && typeof s.reading.chapterId === "string") {
       out.reading = { chapterId: s.reading.chapterId.slice(0, 40), blockId: typeof s.reading.blockId === "string" ? s.reading.blockId.slice(0, 40) : null };
@@ -333,10 +368,15 @@
       if (!data.days || typeof data.days !== "object" || Array.isArray(data.days)) throw new ValidationError("badDays");
 
       var days = {};
+      var absent = {};
       Object.keys(data.days).forEach(function (k) {
         if (!isValidDateKey(k)) throw new ValidationError("badDate", { key: k.slice(0, 40) });
         var day = migrateDay(data.days[k], k);
-        if (!isDayEmpty(day)) days[k] = day;
+        if (!isDayEmpty(day)) {
+          days[k] = day;
+          var a = absentDayFields(data.days[k]);
+          if (a.length) absent[k] = a;
+        }
       });
 
       var habit = null, settings = null;
@@ -346,13 +386,13 @@
         if (isHabitEmpty(habit)) habit = null;
         settings = data.settings ? migrateSettings(data.settings) : null;
         if (settings) {
-          // Yalnızca görünüm tercihleri taşınır; okuma konumu cihaza özeldir.
-          settings = { motion: settings.motion, textSize: settings.textSize };
-          if (!settings.motion && !settings.textSize) settings = null;
+          // Yalnızca görünüm tercihleri taşınır; okuma konumu cihaza özeldir. Yedekte olmayan tercih değiştirilmez.
+          settings = { motion: settings.motion, textSize: settings.textSize, theme: settings.theme };
+          if (!settings.motion && !settings.textSize && !settings.theme) settings = null;
         }
       }
       if (!Object.keys(days).length && !habit) throw new ValidationError("empty");
-      return { ok: true, version: data.version, days: days, habit: habit, settings: settings };
+      return { ok: true, version: data.version, days: days, absentFields: absent, habit: habit, settings: settings };
     } catch (err) {
       if (err instanceof ValidationError) return { ok: false, code: err.code, params: err.params };
       return { ok: false, code: "notJson", params: {} };
@@ -369,7 +409,7 @@
         exportedAt: (now || new Date()).toISOString(),
         days: days,
         habit: h,
-        settings: { motion: settings && settings.motion, textSize: settings && settings.textSize },
+        settings: { motion: settings && settings.motion, textSize: settings && settings.textSize, theme: settings && settings.theme },
       },
       null,
       2
@@ -383,20 +423,39 @@
     var r = {
       version: incoming.version,
       daysAdded: [], daysChanged: [], daysSame: [],
-      plansAdded: [], logAdded: [], logChanged: [],
+      plansAdded: [], plansChanged: [], reviewsChanged: [], logAdded: [], logChanged: [],
       keepsActivePlan: false, adoptsActivePlan: false,
       settings: incoming.settings,
       hasHabit: !!incoming.habit,
     };
+    var absent = incoming.absentFields || {};
     Object.keys(incoming.days).sort().forEach(function (k) {
       var cur = current.days[k];
+      var inc = effectiveIncomingDay(cur, incoming.days[k], absent[k]);
       if (!cur) r.daysAdded.push(k);
-      else if (sameDay(cur, incoming.days[k])) r.daysSame.push(k);
-      else r.daysChanged.push({ key: k, before: cur, after: incoming.days[k] });
+      else if (sameDay(cur, inc)) r.daysSame.push(k);
+      else r.daysChanged.push({ key: k, before: cur, after: inc });
     });
     if (incoming.habit) {
       var ch = current.habit, ih = incoming.habit;
-      Object.keys(ih.plans).forEach(function (id) { if (!ch.plans[id]) r.plansAdded.push(ih.plans[id]); });
+      Object.keys(ih.plans).forEach(function (id) {
+        var cp = ch.plans[id], ip = ih.plans[id];
+        if (!cp) { r.plansAdded.push(ip); return; }
+        // Aynı kimlikli plan değişecekse alan alan eski ve yeni değer
+        var diffs = [];
+        PLAN_FIELDS.forEach(function (f) { if ((cp[f] || "") !== (ip[f] || "")) diffs.push({ field: f, before: cp[f] || "", after: ip[f] || "" }); });
+        if (!!cp.archivedAt !== !!ip.archivedAt && id !== ch.activePlanId) diffs.push({ field: "archived", before: !!cp.archivedAt, after: !!ip.archivedAt });
+        if (diffs.length) r.plansChanged.push({ id: id, goal: cp.goal, diffs: diffs });
+      });
+      Object.keys(ih.reviews).forEach(function (id) {
+        var cr = ch.reviews[id], ir = ih.reviews[id];
+        var diffs = [];
+        ["fit", "context", "shrink"].forEach(function (f) {
+          var b = cr ? cr[f] || "" : "", a = ir[f] || "";
+          if (b !== a) diffs.push({ field: f, before: b, after: a });
+        });
+        if (diffs.length) r.reviewsChanged.push({ id: id, goal: (ch.plans[id] || ih.plans[id] || {}).goal || "", diffs: diffs });
+      });
       Object.keys(ih.log).sort().forEach(function (k) {
         var cur = ch.log[k], inc = ih.log[k];
         if (!cur) r.logAdded.push(k);
@@ -411,7 +470,8 @@
   /** Geri yükleme birleştirmesi: yedekteki aynı tarihli kayıtlar kullanılır, diğerleri korunur. */
   function mergeRestore(current, incoming) {
     var days = JSON.parse(JSON.stringify(current.days));
-    Object.keys(incoming.days).forEach(function (k) { days[k] = incoming.days[k]; });
+    var absent = incoming.absentFields || {};
+    Object.keys(incoming.days).forEach(function (k) { days[k] = effectiveIncomingDay(current.days[k], incoming.days[k], absent[k]); });
     var habit = JSON.parse(JSON.stringify(current.habit));
     if (incoming.habit) {
       var ih = incoming.habit;
@@ -522,6 +582,8 @@
       /** Yalnızca verilen tarihin kaydını yazar; diğer günlere dokunmaz. Boş gün kaydedilmez. */
       saveDay: function (key, day) {
         if (!isValidDateKey(key)) return false;
+        // Henüz yaşanmamış güne gün değerlendirmesi kaydedilmez (arayüz de engeller)
+        if (key > dateKey() && (day.rating !== null && day.rating !== undefined)) return false;
         var days = loadDays();
         if (isDayEmpty(day)) {
           delete days[key];
@@ -571,6 +633,7 @@
           var patch = {};
           if (incoming.settings.motion) patch.motion = incoming.settings.motion;
           if (incoming.settings.textSize) patch.textSize = incoming.settings.textSize;
+          if (incoming.settings.theme) patch.theme = incoming.settings.theme;
           api.setSettings(patch);
         }
         return ok;
@@ -596,8 +659,25 @@
     return api;
   }
 
+  /**
+   * Ay takvimi: haftalar pazartesi başlar. Dönen dizi 7'nin katıdır; ay dışındaki hücreler null.
+   * month: 0–11
+   */
+  function monthGrid(year, month) {
+    var first = new Date(year, month, 1);
+    var lead = (first.getDay() + 6) % 7; // pazartesi = 0
+    var count = new Date(year, month + 1, 0).getDate();
+    var cells = [];
+    for (var i = 0; i < lead; i++) cells.push(null);
+    for (var d = 1; d <= count; d++) cells.push(dateKey(new Date(year, month, d)));
+    while (cells.length % 7) cells.push(null);
+    return cells;
+  }
+
   var api = {
     APP_ID: APP_ID,
+    THEMES: THEMES,
+    monthGrid: monthGrid,
     SCHEMA_VERSION: SCHEMA_VERSION,
     TIME_BUDGETS: TIME_BUDGETS,
     HABIT_STATUSES: HABIT_STATUSES,

@@ -13,7 +13,11 @@
 <!-- @artifact-head-start -->
 <title>Küçük Adımlar, Daha Net Günler</title>
 <meta name="description" content="Genix Studio: kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.">
-<meta name="theme-color" content="#fbf6ec">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fbf6ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191b1a" media="(prefers-color-scheme: dark)">
+<!-- Tema, sayfa çizilmeden önce uygulanır (koyu tema seçiliyken beyaz parlamayı önler). Kayıtlı seçim yoksa cihaz teması kullanılır. -->
+<script>(function(){try{var s=JSON.parse(window.localStorage.getItem("gx.ssc.settings.v1")||"{}");if(s&&(s.theme==="dark"||s.theme==="light")){document.documentElement.setAttribute("data-theme",s.theme);}}catch(e){}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Yazı tipleri çizimi ENGELLEMEZ: media="print" ile indirilir, boot.js yüklenince etkinleştirir.

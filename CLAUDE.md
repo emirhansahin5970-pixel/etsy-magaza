@@ -18,11 +18,12 @@ Bu dosya, Claude Code'un bu projede yeni bir oturumda bağlamı hızla kavramas�
 - Üslup samimi ve yetişkine hitap eden bir dil. Öğüt veren, suçlayan ya da aşırı motive eden bir ton yok.
 - Her bölümde şunlar bulunur: gündelik bir sahne, açıklama, özgün bir görsel, küçük bir uygulama ve tek cümlelik bir özet.
 - Araştırma bulgusu (`research` bloğu) ile yazarın önerisi (`suggestion` bloğu) ayrı tutulur. Sınırlı bulgular genelleştirilmez. Kaynak uydurulmaz.
-- Günüm: ilk bakışta yalnızca ana iş ve ilk küçük adım. Açılır bölümler: aklımdakiler, iki ek iş, başlama zamanı (ne zaman, nerede ve isteğe bağlı süre: 5/15/30/kendim), akşam değerlendirmesi. Başlama planı ilk küçük adımı kendiliğinden kullanır; "ne yapacağım?" ayrıca sorulmaz.
+- Günüm: üstte açılıp kapanan aylık takvim (varsayılan kapalı; pazartesi başlar; bugün = çerçeve, seçili = dolgu + alt çizgi; işaretler metinle de anlatılır; boş gün eksiklik gibi gösterilmez). İlk bakışta yalnızca ana iş ve ilk küçük adım. Açılır bölümler: aklımdakiler, iki ek iş, başlama zamanı (ne zaman, nerede ve isteğe bağlı süre: 5/15/30/kendim), akşam değerlendirmesi (isteğe bağlı 1–5 gün değerlendirmesi + "neden" notu; varsayılan seçim yok; otomatik hesaplanmaz; gelecek günde kapalı; toplam/ortalama/seri yok). Başlama planı ilk küçük adımı kendiliğinden kullanır; "ne yapacağım?" ayrıca sorulmaz.
 - Alışkanlığım: aynı anda tek aktif alışkanlık. 6 adımlı kurulum, günlük üç seçenek (yaptım / daha küçüğünü yaptım / yapmadım) ve bir not, nötr yedi günlük görünüm, istenince değerlendirme. Puan, rozet ve seri sayacı yok.
 - Hesap, sosyal paylaşım, bildirim, yapay zekâ sohbeti, ödeme ekranı, puan, rozet, seri sayacı ya da istatistik paneli eklenmez.
 - Animasyonlar yalnızca kısa ve yumuşak geçişlerden oluşur. Cihazın hareket tercihi dikkate alınır ve animasyonlar arayüzden kapatılabilir.
 - Veriler yalnızca tarayıcıda (localStorage) tutulur. Bu durum kullanıcıya açıkça söylenir. Çevrimdışı çalışma gerçekten uygulanıp test edilmeden vaat edilmez.
+- Tema: Açık / Koyu / Cihaz ayarına uy (varsayılan cihaz). Bütün renkler CSS değişkeni; koyu değerler styles.css'te iki blokta (medya sorgusu + [data-theme="dark"]) aynı tutulur, tests/contrast.mjs denetler. Tema <head> içindeki küçük betikle çizimden önce uygulanır.
 - Tasarım: açık krem zemin, koyu metin, adaçayı yeşili. Turuncu yalnızca önemli eylemler (birincil düğme) ve küçük işaretler için. İki yazı ailesi (Fraunces başlık, Figtree metin ve arayüz). Kutular yalnızca uygulama, araştırma ve önemli eylem alanlarında. Dokunma alanları en az 44px. Çocuksu bir görünüm yok.
 
 ## Teknoloji
@@ -51,18 +52,20 @@ tests/storage.test.mjs     Birim testleri
 tests/e2e.mjs              Chromium uçtan uca testleri (17 senaryo)
 tests/boot.mjs             Açılış testleri (13): HTTPS, yerel dosya, JavaScript kapalı, başlangıç hataları, eksik API'ler
 tests/pwa.mjs              Barındırılan klasör testleri (4): alt yol, manifest/simgeler, service worker, internetsiz yeniden açılış
-tests/fixtures/            Önceki sürüm (v1) uygulaması, localStorage içeriği ve yedeği: geriye uyumluluk testleri için
+tests/v3.mjs               Sürüm 3 testleri (15): takvim, değerlendirme, tema, v1/v2 uyumluluğu, yedek
+tests/contrast.mjs         İki temada renk kontrastı denetimi (metin ≥ 4.5:1, kenarlık/odak ≥ 3:1)
+tests/fixtures/            Önceki sürümlerin (v1, v2) uygulaması, localStorage içeriği ve yedeği: geriye uyumluluk testleri için
 docs/telefon-test-listesi.md  Açılış teşhisi + sahibin gerçek cihazda uygulayacağı test listesi
 docs/barindirma.md         Web bağlantısında yayınlama adımları
 ```
 
 Rotalar: `#hosgeldin` (boş adres de açılışa gider), `#oku`, `#oku-<bolumId>`, `#gunum` (eski `#planla` de çalışır), `#gun-YYYY-AA-GG`, `#gecmis`, `#aliskanlik`, `#aliskanlik-kur`.
-Depolama anahtarları: `gx.ssc.days.v1` (günler; şema 2'de de aynı anahtar), `gx.ssc.habit.v1` (alışkanlık), `gx.ssc.settings.v1` (tercihler: motion, textSize, reading, lastPlace), `gx.ssc.meta` (şema sürümü), `gx.ssc.beforeRestore` (geri yüklemeden önceki kopya).
+Depolama anahtarları: `gx.ssc.days.v1` (günler; şema 2'de de aynı anahtar), `gx.ssc.habit.v1` (alışkanlık), `gx.ssc.settings.v1` (tercihler: motion, textSize, theme, calendarOpen, reading, lastPlace), `gx.ssc.meta` (şema sürümü), `gx.ssc.beforeRestore` (geri yüklemeden önceki kopya).
 
 ### Veri şeması ve geçiş (önemli)
-- Şema 2. Geçiş, okuma sırasında `migrateDay` ile yapılır: eksik `time` alanı `{budget:"", custom:""}` olur. Eski `start.what` metni **silinmez**; Günüm ekranı gösterir ve kullanıcı "İlk küçük adımı kullan" ya da "Bu metni ilk küçük adım yap" seçeneklerinden birini seçebilir.
+- Şema 3. Geçiş, okuma sırasında `migrateDay` ile yapılır: eksik `time` alanı `{budget:"", custom:""}`, eksik `rating` null, eksik `ratingNote` "" olur. Yalnızca puan girilmiş gün de geçerli kayıttır. Gelecek güne `rating` kaydedilmez (saveDay reddeder). Eski `start.what` metni **silinmez**; Günüm ekranı gösterir ve kullanıcı "İlk küçük adımı kullan" ya da "Bu metni ilk küçük adım yap" seçeneklerinden birini seçebilir.
 - Alışkanlık planı: hedef (`goal`) değiştiğinde ve eski planın kayıtları varsa `applyPlanEdit` eski planı arşivler ve yeni plan açar. Kayıtlar `planId` ile eski plana bağlı kalır.
-- Yedek: sürüm 2 (günler + alışkanlık + görünüm tercihleri). Sürüm 1 yedekleri de kabul edilir ve alışkanlık verisine dokunmaz. `planRestore`, onaydan önce neyin ekleneceğini, değişeceğini ya da aynı kalacağını hesaplar; `applyRestore` önce bir kopya alır. Hatalı yedekte hiçbir şey yazılmaz.
+- Yedek: sürüm 3 (günler + alışkanlık + görünüm tercihleri: tema, animasyon, yazı boyutu). Sürüm 1 ve 2 yedekleri de kabul edilir. **Alan yok ≠ alan boş:** eski yedekte hiç bulunmayan gün alanı (`time`, `rating`, `ratingNote`; `absentFields`) ve tercih mevcut veriyi ezmez; yeni yedekte açıkça null/boş olan alan boş olarak geri yüklenir. Önizleme aynı kimlikli plan ve değerlendirme cevaplarındaki eski/yeni değerleri de listeler (`plansChanged`, `reviewsChanged`). `planRestore`, onaydan önce neyin ekleneceğini, değişeceğini ya da aynı kalacağını hesaplar; `applyRestore` önce bir kopya alır. Hatalı yedekte hiçbir şey yazılmaz.
 - Yazma başarısız olursa "Kaydedildi" gösterilmez. İçerik ekranda kalır, bellekte tutulur ve yedek metnine dahil edilir.
 
 ## Komutlar
@@ -73,6 +76,8 @@ node --test tests/storage.test.mjs     # birim testleri
 node tests/e2e.mjs                     # tarayıcı testleri (önce build)
 node tests/boot.mjs                    # açılış testleri (önce build; openssl gerekir)
 node tests/pwa.mjs                     # web uygulaması testleri (önce build)
+node tests/v3.mjs                      # sürüm 3 testleri (önce build)
+node tests/contrast.mjs                # renk kontrastı (iki tema)
 npm test                               # hepsi
 ```
 
@@ -107,16 +112,20 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 
 - [x] Sürüm 2.2 (2026-10-03): iPhone'da yalnızca başlık görünmesi üzerine web uygulaması (PWA) + GitHub Pages yayını. Web uygulaması testleri 4/4.
 
+- [x] Sürüm 3 (2026-10-04): aylık takvim + gün özeti, gün değerlendirmesi (1–5), açık/koyu/cihaz teması, şema 3, yedekte alan-yok/alan-boş ayrımı, plan/değerlendirme farkları önizlemede. Form kenarlığı kontrastı düzeltildi (önceden 1.7:1). Testler: kontrast hedefte, birim 25/25, uçtan uca 17/17, açılış 13/13, web 4/4, v3 15/15. Gerçek cihazda doğrulanmadı.
+
 ### Sıradaki Adımlar (sahibin prototip değerlendirmesinden SONRA)
 - [ ] Sahibin açılış teşhisi sonucunu al (`docs/telefon-test-listesi.md` üstteki tablo): önizleme mi, tarayıcı mı, hata ayrıntısı ne?
-- [ ] Barındırma seçimi (`docs/barindirma.md`) ve gerçek HTTPS adresinde telefon testi
+- [x] GitHub Pages yayında (2026-10-03, ilk başarılı yayın): https://emirhansahin5970-pixel.github.io/etsy-magaza/
+- [ ] Gerçek HTTPS adresinde iPhone/iPad testi (sahip yapacak)
 - [ ] Sahibin sürüm 2 telefon/tablet kontrol sonuçlarını al (`docs/telefon-test-listesi.md`, 10 adım) ve geri bildirimlere göre düzelt
 - [ ] Bölüm 2 (~1.000 kelime, Gollwitzer kaynakları, görsel: büyük işin küçük adımlara ayrılması)
 - [ ] Bölüm 3 (~900 kelime, Lally 2010, görsel: esnek günlük plan, 7 günlük deneme)
 - [ ] Kısa bir kapanış ve tam kaynakça
 - [ ] Mobilde okunacak düz PDF mini kitap (Türkçe karakterleri ve görselleri kontrol et; etkileşim varmış gibi tanıtma)
 - [ ] Kullanım belgesi (web sürümüne erişim, web ile PDF arasındaki fark) ve yardım metni (veri saklama, yedekleme, tarayıcı gereksinimleri)
-- [ ] Satış öncesi kararlar: barındırma yeri, bağlantı paylaşımı, müşteri erişim yöntemi, barındırmanın sürekliliği
+- [ ] Teslim PDF'i: uygulama bağlantısı, iPhone/Android'e kurulum adımları, kişisel kullanım şartları ("paylaşılamaz, satılamaz")
+- [ ] Satıştan hemen önce: depoyu gizli yap + yayını gizli depoyla çalışan bir yere taşı (ör. Cloudflare Pages), tahmin edilemez adres (ör. /k7m2x9/). Sahibe ekran ekran tarif et.
 
 ### Notlar / Kararlar
 - 2026-10-02: Prototip, sahibin kendi kullanımı için claude.ai Artifact olarak yayınlandı. Satış için ayrı bir barındırma kararı gerekiyor.
@@ -125,3 +134,6 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 - 2026-10-03: Sürüm 2. Geçmiş günler, Günüm'ün ikincil ekranı oldu. Açılış ekranı her açılışta gösterilir. Özet cümleler yalnızca yer bulunma ekiyle (-de/-da) bittiğinde kurulur, aksi hâlde etiketli özet gösterilir. Cümle ortasındaki alanların ilk harfi Türkçe kurallarıyla küçültülür.
 - 2026-10-03: Telefonda boş ekran bildirimi. Kanıtlar: (1) JavaScript çalışmazsa eski HTML'de bütün metinler boş kalıyordu; (2) Google Fonts isteği yanıtsız kalırsa sayfa en az 8 sn başlamıyordu (Chromium ölçümü). Cihazdaki asıl neden henüz doğrulanmadı.
 - 2026-10-03: Sahip iPhone 17 Pro'da indirilen HTML dosyasında yalnızca başlığı gördü. Neden: iOS dosya önizlemesi JavaScript çalıştırmıyor (Apple forumu, iOS 13+). Çözüm: dosya yerine GitHub Pages adresi + Ana Ekrana Ekle.
+
+- 2026-10-03: SATIŞ MODELİ KARARI (sahip): En kolay yol. Etsy dijital ilan → alıcıya otomatik PDF → PDF içinde uygulama bağlantısı. Sipariş başına iş yok. Kişiye özel kod/hesap YOK (sahip zahmetli buldu). Paylaşım yayılırsa: adres yolunu değiştir (aynı alan adında kalınca kullanıcı kayıtları korunur), Etsy'deki PDF'i güncelle. Kopyalayıp satan olursa Etsy IP bildirim formu. Değer stratejisi: güncellemeler (yeni bölümler aynı bağlantıda), marka, PDF kitap.
+- 2026-10-04: Sahip kararı: V3 ve sonraki değişiklikler çalışma dalında birikir; sahip "bitti" deyince TEK SEFERDE main'e alınır (GitHub Pages o zaman güncellenir). Ara sürümler claude.ai Artifact bağlantısında güncellenir.

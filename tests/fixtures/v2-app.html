@@ -13,11 +13,7 @@
 <!-- @artifact-head-start -->
 <title>Küçük Adımlar, Daha Net Günler</title>
 <meta name="description" content="Genix Studio: kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#fbf6ec" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#191b1a" media="(prefers-color-scheme: dark)">
-<!-- Tema, sayfa çizilmeden önce uygulanır (koyu tema seçiliyken beyaz parlamayı önler). Kayıtlı seçim yoksa cihaz teması kullanılır. -->
-<script>(function(){try{var s=JSON.parse(window.localStorage.getItem("gx.ssc.settings.v1")||"{}");if(s&&(s.theme==="dark"||s.theme==="light")){document.documentElement.setAttribute("data-theme",s.theme);}}catch(e){}})();</script>
+<meta name="theme-color" content="#fbf6ec">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Yazı tipleri çizimi ENGELLEMEZ: media="print" ile indirilir, boot.js yüklenince etkinleştirir.
@@ -33,7 +29,6 @@
   --ink-soft: #4d554f;
   --line: #e2d9c6;
   --line-strong: #cbc1ab;
-  --field-border: #7f8780; /* form alanı ve seçenek kenarlığı: ≥ 3:1 */
   --sage: #4b6a54;        /* metin/ikon: kremde ~5.6:1 */
   --sage-deep: #34503d;   /* koyu yüzey: krem yazıyla ~8:1 */
   --sage-soft: #dde7da;
@@ -42,20 +37,9 @@
   --accent-ink: #9a4417;  /* turuncu metin: kremde ~6:1 */
   --accent-mark: #d9692c; /* yalnızca küçük işaretler (tik, nokta) */
   --accent-soft: #f6e3d4;
-  --danger: #9e2f22;       /* hata metni ve kenarlığı */
-  --danger-solid: #9e2f22; /* hata düğmesi zemini (beyaz yazı) */
+  --danger: #9e2f22;
   --danger-soft: #f7dcd6;
-  --danger-ink: #5c1a12;   /* hata kutusu metni */
   --focus: #1f5fbf;
-  --field: #ffffff;        /* form alanı ve açık yüzeyler */
-  --placeholder: #6c736d;
-  --on-accent: #ffffff;    /* turuncu/kırmızı düğme üstündeki yazı */
-  --cover-bg: #34503d;
-  --cover-ink: #fffaf0;
-  --cover-muted: #dde7da;
-  --shadow: rgb(29 35 31 / 0.14);
-  --shadow-strong: rgb(29 35 31 / 0.25);
-  --backdrop: rgb(29 35 31 / 0.45);
 
   /* Yazı: iki aile. Başlık: karakterli serif. Metin ve arayüz: okunaklı sans. */
   --font-display: "Fraunces", "Iowan Old Style", Georgia, "Times New Roman", serif;
@@ -77,75 +61,6 @@
   --dur: 200ms;
 
   color-scheme: light;
-}
-
-/* Koyu tema: cihaz koyu temadaysa (kullanıcı "Açık" seçmediyse) ya da kullanıcı "Koyu" seçtiyse.
-   İki blok aynı değerleri taşır; tests/contrast.mjs ikisinin eşit olduğunu ve kontrastları denetler. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-  --cream: #191b1a;
-  --paper: #222523;
-  --ink: #ece7dc;
-  --ink-soft: #bcb6a9;
-  --line: #3a3f3b;
-  --line-strong: #5b625d;
-  --field-border: #8a928c;
-  --sage: #9cc0a4;
-  --sage-deep: #b5d3bb;
-  --sage-soft: #32453a;
-  --sage-wash: #232c26;
-  --accent: #b4501c;
-  --accent-ink: #f2a679;
-  --accent-mark: #e8834a;
-  --accent-soft: #3a2a20;
-  --danger: #ff9a8b;
-  --danger-solid: #b0392b;
-  --danger-soft: #3d2320;
-  --danger-ink: #ffc3b9;
-  --focus: #8ab4ff;
-  --field: #2a2e2b;
-  --placeholder: #9aa09a;
-  --on-accent: #ffffff;
-  --cover-bg: #2b4033;
-  --cover-ink: #f6f1e6;
-  --cover-muted: #c4d6c8;
-  --shadow: rgb(0 0 0 / 0.35);
-  --shadow-strong: rgb(0 0 0 / 0.55);
-  --backdrop: rgb(0 0 0 / 0.6);
-  color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --cream: #191b1a;
-  --paper: #222523;
-  --ink: #ece7dc;
-  --ink-soft: #bcb6a9;
-  --line: #3a3f3b;
-  --line-strong: #5b625d;
-  --field-border: #8a928c;
-  --sage: #9cc0a4;
-  --sage-deep: #b5d3bb;
-  --sage-soft: #32453a;
-  --sage-wash: #232c26;
-  --accent: #b4501c;
-  --accent-ink: #f2a679;
-  --accent-mark: #e8834a;
-  --accent-soft: #3a2a20;
-  --danger: #ff9a8b;
-  --danger-solid: #b0392b;
-  --danger-soft: #3d2320;
-  --danger-ink: #ffc3b9;
-  --focus: #8ab4ff;
-  --field: #2a2e2b;
-  --placeholder: #9aa09a;
-  --on-accent: #ffffff;
-  --cover-bg: #2b4033;
-  --cover-ink: #f6f1e6;
-  --cover-muted: #c4d6c8;
-  --shadow: rgb(0 0 0 / 0.35);
-  --shadow-strong: rgb(0 0 0 / 0.55);
-  --backdrop: rgb(0 0 0 / 0.6);
-  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -223,7 +138,7 @@ main:focus { outline: none; }
 .page-head { display: grid; gap: 0.35rem; }
 .crumb {
   display: inline-flex; align-items: center; gap: 0.35rem; justify-self: start;
-  min-height: var(--tap); padding: 0.25rem 0.5rem 0.25rem 0.25rem; margin-left: -0.25rem;
+  min-height: 2.75rem; padding: 0.25rem 0.5rem 0.25rem 0.25rem; margin-left: -0.25rem;
   border: 0; background: none; cursor: pointer; color: var(--sage-deep); font-weight: 600;
 }
 .crumb svg { width: 1.1rem; height: 1.1rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
@@ -237,13 +152,13 @@ main:focus { outline: none; }
   transition: background-color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .btn:active { transform: scale(0.98); }
-.btn--primary { background: var(--accent); color: var(--on-accent); }
+.btn--primary { background: var(--accent); color: #fff; }
 .btn--secondary { background: var(--paper); color: var(--ink); border-color: var(--sage); }
 .btn--quiet {
   background: transparent; color: var(--sage-deep); padding-inline: 0.25rem; min-height: 2.75rem;
   text-decoration: underline; text-underline-offset: 3px; justify-content: flex-start; text-align: left;
 }
-.btn--danger { background: var(--danger-solid); color: var(--on-accent); }
+.btn--danger { background: var(--danger); color: #fff; }
 .btn--danger-outline { background: var(--paper); color: var(--danger); border-color: var(--danger); }
 .btn--block { width: 100%; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
@@ -254,13 +169,13 @@ main:focus { outline: none; }
 .field > label, .label { font-weight: 650; font-size: 1rem; }
 .input, .textarea {
   width: 100%; min-height: var(--tap);
-  border: 1.5px solid var(--field-border); border-radius: 10px; background: var(--field);
+  border: 1.5px solid var(--line-strong); border-radius: 10px; background: #fff;
   padding: 0.65rem 0.75rem; font-size: 1.0625rem; line-height: 1.45; /* 16px üstü: iOS yakınlaştırmasını önler */
 }
 .textarea { resize: vertical; min-height: 6rem; }
 .input:focus, .textarea:focus { border-color: var(--sage); outline: 3px solid var(--sage-soft); outline-offset: 0; }
 .input:focus-visible, .textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
-.input::placeholder, .textarea::placeholder { color: var(--placeholder); opacity: 1; }
+.input::placeholder, .textarea::placeholder { color: #80867f; }
 .input[aria-invalid="true"], .textarea[aria-invalid="true"] { border-color: var(--danger); }
 .field-error { color: var(--danger); font-weight: 600; font-size: 0.95rem; }
 
@@ -271,10 +186,10 @@ main:focus { outline: none; }
 .check input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
 .check__box {
   width: 1.75rem; height: 1.75rem; border-radius: 8px; border: 2px solid var(--sage);
-  display: grid; place-items: center; background: var(--field);
+  display: grid; place-items: center; background: #fff;
   transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
-.check__box svg { width: 1.1rem; height: 1.1rem; stroke: var(--on-accent); fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+.check__box svg { width: 1.1rem; height: 1.1rem; stroke: #fff; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
 .check input:checked + .check__box { background: var(--accent-mark); border-color: var(--accent-mark); }
 .check input:checked + .check__box svg { opacity: 1; }
 .check input:focus-visible + .check__box { outline: 3px solid var(--focus); outline-offset: 2px; }
@@ -297,15 +212,15 @@ main:focus { outline: none; }
 .choice input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .choice span {
   display: flex; align-items: center; gap: 0.6rem; min-height: var(--tap);
-  padding: 0.55rem 0.8rem; border: 1.5px solid var(--field-border); border-radius: 12px; background: var(--paper);
+  padding: 0.55rem 0.8rem; border: 1.5px solid var(--line-strong); border-radius: 12px; background: var(--paper);
   font-weight: 600; line-height: 1.3; cursor: pointer;
   transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 .choices--seg .choice span { justify-content: center; text-align: center; padding-inline: 0.35rem; font-size: 0.95rem; }
 .choice input:checked + span { background: var(--sage-soft); border-color: var(--sage); }
 .choice input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
-.choice .mark { flex: none; width: 1.1rem; height: 1.1rem; border-radius: 50%; border: 2px solid var(--sage); background: var(--field); }
-.choice input:checked + span .mark { background: var(--sage-deep); box-shadow: inset 0 0 0 3px var(--field); }
+.choice .mark { flex: none; width: 1.1rem; height: 1.1rem; border-radius: 50%; border: 2px solid var(--sage); background: #fff; }
+.choice input:checked + span .mark { background: var(--sage-deep); box-shadow: inset 0 0 0 3px #fff; }
 
 /* ---------- Kutular: yalnızca uygulama, araştırma ve önemli eylem alanları ---------- */
 .box { border-radius: var(--radius); padding: 1.1rem; display: grid; gap: 0.75rem; }
@@ -314,7 +229,7 @@ main:focus { outline: none; }
 .box--exercise { background: var(--paper); border: 1.5px solid var(--sage); }
 .box--research { background: var(--sage-wash); }
 .box--note { background: var(--accent-soft); }
-.box--error { background: var(--danger-soft); color: var(--danger-ink); }
+.box--error { background: var(--danger-soft); color: #5c1a12; }
 .box__label { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--sage-deep); }
 
 /* Açılır bölümler: kart değil, çizgiyle ayrılmış satırlar */
@@ -353,19 +268,19 @@ main:focus { outline: none; }
 .home { display: grid; gap: 1.75rem; align-items: start; }
 .cover {
   position: relative; overflow: hidden;
-  background: var(--cover-bg); color: var(--cover-ink);
+  background: var(--sage-deep); color: var(--cream);
   border-radius: 6px 18px 18px 6px;
   padding: 1.5rem 1.4rem 1.25rem 1.9rem;
   display: grid; gap: 0.75rem; max-width: 26rem; width: 100%;
-  box-shadow: inset 6px 0 0 rgb(0 0 0 / 0.18), 0 10px 24px var(--shadow);
+  box-shadow: inset 6px 0 0 rgb(0 0 0 / 0.18), 0 10px 24px rgb(29 35 31 / 0.14);
 }
-.cover__brand { font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--cover-muted); }
-.cover__title { font-family: var(--font-display); font-size: clamp(1.75rem, 7vw, 2.4rem); line-height: 1.08; font-weight: 600; color: var(--cover-ink); }
-.cover__subtitle { color: var(--cover-muted); font-size: 0.98rem; }
+.cover__brand { font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--sage-soft); }
+.cover__title { font-family: var(--font-display); font-size: clamp(1.75rem, 7vw, 2.4rem); line-height: 1.08; font-weight: 600; color: #fffaf0; }
+.cover__subtitle { color: var(--sage-soft); font-size: 0.98rem; }
 .cover__art svg { display: block; width: 100%; height: auto; }
-.cv-scribble { stroke: var(--cover-muted); stroke-width: 3; stroke-linecap: round; fill: none; opacity: 0.75; }
-.cv-path { stroke: var(--cover-muted); stroke-width: 2.5; stroke-dasharray: 2 7; stroke-linecap: round; fill: none; }
-.cv-step { fill: var(--cover-muted); }
+.cv-scribble { stroke: var(--sage-soft); stroke-width: 3; stroke-linecap: round; fill: none; opacity: 0.75; }
+.cv-path { stroke: var(--sage-soft); stroke-width: 2.5; stroke-dasharray: 2 7; stroke-linecap: round; fill: none; }
+.cv-step { fill: var(--sage-soft); }
 .cv-step--far { opacity: 0.5; }
 .cv-dot { fill: var(--accent-mark); }
 .cv-sun { fill: none; stroke: var(--accent-mark); stroke-width: 3; }
@@ -419,7 +334,7 @@ main:focus { outline: none; }
 .research__limits strong { color: var(--ink); }
 .more > summary { cursor: pointer; font-weight: 650; color: var(--sage-deep); min-height: 2.75rem; display: flex; align-items: center; gap: 0.5rem; list-style: none; }
 .more > summary::-webkit-details-marker { display: none; }
-.more > summary::before { content: "+"; display: grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--field); font-weight: 700; flex: none; }
+.more > summary::before { content: "+"; display: grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: #fff; font-weight: 700; flex: none; }
 .more[open] > summary::before { content: "−"; }
 .more__body { display: grid; gap: 0.5rem; padding-bottom: 0.25rem; }
 .cite { font-size: 0.9em; color: var(--ink-soft); }
@@ -448,7 +363,7 @@ main:focus { outline: none; }
 .start-out dt { font-weight: 650; color: var(--ink-soft); }
 .start-out dd { margin: 0; }
 .legacy { display: grid; gap: 0.6rem; }
-.legacy blockquote { margin: 0; padding: 0.6rem 0.8rem; background: var(--field); border-radius: 8px; border: 1px solid var(--line); }
+.legacy blockquote { margin: 0; padding: 0.6rem 0.8rem; background: #fff; border-radius: 8px; border: 1px solid var(--line); }
 
 /* ---------- Geçmiş ---------- */
 .days { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
@@ -468,8 +383,8 @@ main:focus { outline: none; }
 .illus svg { display: block; width: 100%; max-width: 22rem; height: auto; }
 .il-loop { stroke: var(--sage); stroke-width: 2.5; stroke-dasharray: 3 6; stroke-linecap: round; fill: none; }
 .il-node { fill: var(--sage-wash); stroke: var(--sage); stroke-width: 2; }
-.il-node--main { fill: var(--field); }
-.il-clock { fill: var(--field); stroke: var(--ink); stroke-width: 2; }
+.il-node--main { fill: #fff; }
+.il-clock { fill: #fff; stroke: var(--ink); stroke-width: 2; }
 .il-clock-hand { stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; fill: none; }
 .wizard__progress { display: flex; gap: 0.3rem; }
 .wizard__progress span { flex: 1; height: 4px; border-radius: 99px; background: var(--sage-soft); }
@@ -504,9 +419,9 @@ main:focus { outline: none; }
 dialog {
   border: 0; padding: 0; background: var(--cream); color: var(--ink);
   width: min(36rem, calc(100vw - 1.5rem)); max-height: calc(100dvh - 1.5rem);
-  border-radius: 18px; box-shadow: 0 20px 60px var(--shadow-strong);
+  border-radius: 18px; box-shadow: 0 20px 60px rgb(29 35 31 / 0.25);
 }
-dialog::backdrop { background: var(--backdrop); }
+dialog::backdrop { background: rgb(29 35 31 / 0.45); }
 dialog[open] { animation: dialog-in var(--dur) var(--ease); }
 @keyframes dialog-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 .dialog__body { padding: 1.25rem; display: grid; gap: 1.25rem; overflow-y: auto; max-height: calc(100dvh - 1.5rem); }
@@ -538,7 +453,7 @@ dialog[open] { animation: dialog-in var(--dur) var(--ease); }
 .il-ground { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; opacity: 0.25; }
 .il-scribble { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; fill: none; opacity: 0.7; }
 .il-ring { stroke: var(--sage-deep); stroke-width: 2.5; fill: none; }
-.il-paper { fill: var(--field); stroke: var(--ink); stroke-width: 2; }
+.il-paper { fill: #fff; stroke: var(--ink); stroke-width: 2; }
 .il-rule { stroke: var(--sage); stroke-width: 4; stroke-linecap: round; fill: none; }
 .il-box { fill: none; stroke: var(--sage-deep); stroke-width: 2; }
 .il-check { stroke: var(--accent-mark); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; }
@@ -571,72 +486,7 @@ dialog[open] { animation: dialog-in var(--dur) var(--ease); }
 /* dialog.showModal desteklenmeyen tarayıcılar için yedek görünüm */
 dialog.is-fallback[open] {
   position: fixed; inset: 0; margin: auto; z-index: 100; height: fit-content;
-  box-shadow: 0 0 0 100vmax var(--backdrop), 0 20px 60px var(--shadow-strong);
-}
-
-/* ---------- Aylık takvim (Günüm'ün üstünde) ---------- */
-.icon-btn {
-  flex: none; width: var(--tap); height: var(--tap); display: inline-grid; place-items: center;
-  border: 1.5px solid var(--field-border); border-radius: 50%; background: var(--paper); color: var(--ink); cursor: pointer;
-}
-.icon-btn svg { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.cal-wrap { container: calwrap / inline-size; display: grid; gap: 1rem; border-bottom: 1px solid var(--line); padding-bottom: 0.25rem; }
-/* Geniş ekran: takvim alanı günlük plan sütunundan taşarak ortalanır; takvim ve gün özeti yan yana durur */
-@media (min-width: 60rem) {
-  .cal-wrap { --calw: min(var(--page-wide), calc(100vw - 2 * var(--gutter) - 2rem)); width: var(--calw); margin-inline: calc((100% - var(--calw)) / 2); }
-}
-.cal-toggle {
-  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 3.25rem; padding: 0.4rem 0;
-  border: 0; border-top: 1px solid var(--line); background: transparent; color: var(--ink); text-align: left; cursor: pointer;
-}
-.cal-toggle .chev { flex: none; width: 1.75rem; height: 1.75rem; border-radius: 50%; display: grid; place-items: center; background: var(--sage-wash); transition: transform var(--dur) var(--ease); }
-.cal-toggle .chev svg { width: 0.95rem; height: 0.95rem; stroke: var(--sage-deep); fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.cal-toggle[aria-expanded="true"] .chev { transform: rotate(90deg); }
-.cal-toggle__text { display: grid; gap: 0.05rem; font-size: 1.05rem; }
-.cal-panel { container: calpanel / inline-size; display: grid; gap: 1.25rem; padding-bottom: 1rem; }
-.cal-panel > * { min-width: 0; }
-@container calwrap (min-width: 600px) {
-  .cal-panel { grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); align-items: start; column-gap: 2rem; }
-}
-.cal { display: grid; gap: 0.6rem; }
-.cal > * { min-width: 0; }
-.cal__head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.5rem; }
-.cal__title { text-align: center; font-size: var(--step-1); }
-.cal > .btn--quiet { justify-self: center; }
-.cal__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
-/* 320 px gibi dar ekranlarda takvim kenar boşluğunu kullanır: her gün düğmesi ≥ 44 px kalır */
-@container calpanel (max-width: 330px) {
-  .cal__grid { margin-inline: calc(var(--gutter) * -1 + 2px); gap: 1px; }
-}
-.cal__wd { text-align: center; font-size: 0.78rem; font-weight: 650; color: var(--ink-soft); padding-block: 0.2rem; }
-.cal__blank { min-height: 3.25rem; }
-.cal__day {
-  min-width: 0; min-height: 3.25rem; padding: 0.3rem 0 0.25rem;
-  display: grid; grid-template-rows: auto auto; align-content: start; justify-items: center; gap: 0.15rem;
-  border: 2px solid transparent; border-radius: 10px; background: var(--paper); color: var(--ink); cursor: pointer;
-  font-variant-numeric: tabular-nums;
-}
-.cal__num { font-weight: 650; font-size: 1rem; line-height: 1.15; }
-.cal__marks { display: flex; align-items: center; justify-content: center; gap: 3px; min-height: 0.85rem; }
-/* Bugün: belirgin çerçeve. Seçili gün: dolgu + alt çizgi (bugünden farklı işaret). */
-.cal__day.is-today { border-color: var(--ink); }
-.cal__day[aria-pressed="true"] { background: var(--sage-soft); box-shadow: inset 0 -4px 0 var(--sage-deep); }
-.mk { display: inline-block; flex: none; }
-.mk-plan { width: 0.5rem; height: 0.5rem; border-radius: 2px; background: var(--sage); }
-.mk-habit { width: 0.55rem; height: 0.55rem; border-radius: 50%; border: 2px solid var(--accent-mark); }
-.mk-rating { font-size: 0.75rem; font-weight: 750; line-height: 1; color: var(--ink-soft); }
-.cal__legend { display: grid; gap: 0.4rem; }
-.cal__legend .legend { gap: 0.35rem 1rem; }
-.lg { display: inline-block; width: 1.1rem; height: 1.1rem; border-radius: 4px; background: var(--paper); flex: none; }
-.lg-today { border: 2px solid var(--ink); }
-.lg-selected { background: var(--sage-soft); box-shadow: inset 0 -3px 0 var(--sage-deep); }
-.cal-summary h3 { font-family: var(--font-text); font-size: 1.05rem; font-weight: 700; }
-.cal-summary .btn { justify-self: start; }
-
-/* Dar ekranda sekme adları tek satırda kalsın ("Alışkanlığım" bölünmesin) */
-@media (max-width: 360px) {
-  .tabs { padding-inline: 0.25rem; }
-  .tab { font-size: 0.875rem; padding-inline: 0.1rem; }
+  box-shadow: 0 0 0 100vmax rgb(29 35 31 / 0.45), 0 20px 60px rgb(29 35 31 / 0.25);
 }
 
 </style>
@@ -925,8 +775,6 @@ window.GX_STRINGS = {
     months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
     weekdays: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
     weekdaysShort: ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
-    // Takvim başlığı pazartesiden başlar
-    weekdaysMondayFirst: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
   },
 
   app: {
@@ -1016,8 +864,6 @@ window.GX_STRINGS = {
   day: {
     titleToday: "Bugünüm",
     titlePast: "Geçmiş bir gün",
-    titleFuture: "Gelecek bir gün",
-    futureBanner: "Bu gün henüz gelmedi. Plan yazabilirsin; gün değerlendirmesi o gün geldiğinde açılır.",
     pastBanner: "Bu gün geçmişte kaldı. Değişikliklerin yine bu tarihe kaydedilir.",
     backToToday: "Bugüne dön",
     backToBook: "Kitapta kaldığın yere dön",
@@ -1076,14 +922,6 @@ window.GX_STRINGS = {
     },
 
     eveningToggle: "Akşam kısa bir değerlendirme yap.",
-    ratingLegend: "Bugün senin için nasıl geçti?",
-    ratingLegendPast: "Bu gün senin için nasıl geçti?",
-    ratingHint: "Bu bir başarı puanı değil; gününü kendi gözünden değerlendirmen için.",
-    ratingOptions: { "1": "1 — Zor geçti", "2": "2 — Biraz zorlandım", "3": "3 — Orta karar", "4": "4 — İyi geçti", "5": "5 — Çok iyi geçti" },
-    ratingClear: "Seçimi kaldır",
-    ratingFuture: "Bu gün geldiğinde değerlendirebilirsin.",
-    ratingNoteLabel: "Bu puanı neden verdim?",
-    ratingNotePlaceholder: "İsteğe bağlı, tek cümle yeterli",
     eveningHint: "Kısa ve yargılamadan.",
     workedLabel: "Bugün ne işe yaradı?",
     workedPlaceholder: "Ör. Telefonu başka odaya koymak",
@@ -1093,44 +931,6 @@ window.GX_STRINGS = {
     filled: "dolu",
     doneFeedback: "İşaretlendi",
     undoneFeedback: "İşaret kaldırıldı",
-  },
-
-  calendar: {
-    toggle: "Takvim",
-    toggleHint: "Ay görünümünde önceki ve sonraki günler",
-    prevMonth: "Önceki ay",
-    nextMonth: "Sonraki ay",
-    today: "Bugüne dön",
-    monthTitle: "{month} {year}",
-    legendTitle: "İşaretler",
-    legendToday: "Bugün",
-    legendSelected: "Seçili gün",
-    legendPlan: "Plan var",
-    legendHabit: "Alışkanlık kaydı var",
-    legendRating: "Gün değerlendirmesi (1–5)",
-    legendNote: "Boş günler bir eksiklik değildir; yalnızca kayıt girilmemiştir.",
-    cellToday: "bugün",
-    cellSelected: "seçili",
-    cellPlan: "plan var",
-    cellHabit: "alışkanlık: {status}",
-    cellRating: "değerlendirme {n}/5",
-    cellEmpty: "kayıt yok",
-    summaryTitle: "{date}",
-    openHere: "Bu gün aşağıda açık.",
-    openDay: "Günü aç ve düzenle",
-    emptyPast: "Bu gün için henüz kayıt yok.",
-    emptyToday: "Bugün için henüz kayıt yok.",
-    createPast: "Bu gün için kayıt oluştur",
-    emptyFuture: "Bu gün henüz gelmedi. İstersen önceden plan yazabilirsin.",
-    createFuture: "Bu gün için plan yaz",
-    mainLabel: "Ana iş",
-    doneLabel: "Tamamlanan görevler",
-    noneDone: "İşaretlenmiş görev yok",
-    habitLabel: "Alışkanlık",
-    habitLine: "{status} · {goal}",
-    ratingLabel: "Gün değerlendirmesi",
-    ratingNoteLabel: "Neden bu puan",
-    eveningLabel: "Akşam notu",
   },
 
   history: {
@@ -1151,8 +951,6 @@ window.GX_STRINGS = {
     detailTime: "Ayrılan zaman",
     detailWorked: "Ne işe yaradı?",
     detailEasier: "Yarın neyi kolaylaştırabilirim?",
-    detailRating: "Gün değerlendirmesi",
-    detailRatingNote: "Neden bu puan",
     detailDone: "tamamlandı",
     deleteTitle: "Bu günü silmek istiyor musun?",
     deleteBody: "{date} tarihli kayıt bu cihazdan kalıcı olarak silinecek. Bu işlem geri alınamaz.",
@@ -1264,14 +1062,6 @@ window.GX_STRINGS = {
     motionOff: "Kapalı",
     motionSystemReduced: "Cihazın azaltılmış hareket tercihi açık, bu yüzden animasyonlar şu an kapalı.",
     textSizeTitle: "Kitap yazı boyutu",
-    appearanceTitle: "Görünüm",
-    themeTitle: "Tema",
-    themeLight: "Açık",
-    themeDark: "Koyu",
-    themeSystem: "Cihaz ayarına uy",
-    themeSystemNow: "Cihazın şu an {mode} temada.",
-    themeModeLight: "açık",
-    themeModeDark: "koyu",
 
     dataTitle: "Kayıtların nerede?",
     dataPoints: [
@@ -1283,7 +1073,7 @@ window.GX_STRINGS = {
     dataCount: "Bu cihazda {days} günlük kayıt ve {habitDays} günlük alışkanlık kaydı var.",
 
     exportTitle: "Yedek al",
-    exportHint: "Günlük kayıtların, gün değerlendirmelerin, alışkanlık planın ve görünüm tercihlerin tek bir dosyada. Dosyayı güvendiğin bir yerde sakla.",
+    exportHint: "Günlük kayıtların, alışkanlık planın ve görünüm tercihlerin tek bir dosyada. Dosyayı güvendiğin bir yerde sakla.",
     exportButton: "Yedek dosyasını indir",
     exportCopyButton: "Yedeği metin olarak göster",
     exportCopyHint: "İndirme çalışmazsa bu metni kopyalayıp bir nota yapıştırabilirsin. Geri yüklerken aynı metni kullanırsın.",
@@ -1302,7 +1092,6 @@ window.GX_STRINGS = {
     importPasteButton: "Metni kontrol et",
     importCheckTitle: "Geri yüklemeden önce",
     importOldVersion: "Bu yedek önceki sürümden ve yalnızca günlük kayıtları içeriyor. Alışkanlık planın ve kayıtların olduğu gibi kalacak.",
-    importOldFields: "Bu yedek daha eski bir sürümden. Yedekte bulunmayan bilgiler (ör. gün değerlendirmesi, tema) bu cihazdaki hâliyle korunacak.",
     importDaysAdded: "{n} gün eklenecek.",
     importDaysSame: "{n} gün bu cihazdakiyle aynı; değişmeyecek.",
     importDaysChanged: "{n} günün kaydı yedektekiyle değiştirilecek:",
@@ -1311,19 +1100,9 @@ window.GX_STRINGS = {
     importHabitPlans: "{n} alışkanlık planı eklenecek.",
     importHabitLogAdded: "{n} günlük alışkanlık kaydı eklenecek.",
     importHabitLogChanged: "{n} günlük alışkanlık kaydı değiştirilecek:",
-    importPlansChanged: "{n} alışkanlık planı yedektekiyle değiştirilecek:",
-    importPlanDiff: "\"{goal}\" planı · {field}: \"{before}\" yerine \"{after}\"",
-    importReviewsChanged: "{n} planın değerlendirme cevapları değiştirilecek:",
-    importReviewDiff: "\"{goal}\" · {field}: \"{before}\" yerine \"{after}\"",
-    importFieldNames: {
-      goal: "Hedef", start: "Küçük başlangıç", anchor: "Ne zaman", place: "Nerede", ease: "Kolaylaştırmak için", smaller: "Zor günde",
-      archived: "Arşivde", fit: "Hangi başlangıç uydu", context: "Hangi zaman/ortam", shrink: "Neyi küçültebilirim",
-    },
-    importEmptyValue: "boş",
-    importRatingShort: "değerlendirme {n}",
     importHabitKeepsActive: "Bu cihazdaki aktif alışkanlık planın değişmeyecek.",
     importHabitAdoptsActive: "Yedekteki alışkanlık planı aktif plan olacak.",
-    importSettings: "Görünüm tercihlerin (tema, animasyon, yazı boyutu) yedekte bulunanlarla güncellenecek.",
+    importSettings: "Görünüm tercihlerin (animasyon, yazı boyutu) yedektekiyle güncellenecek.",
     importKept: "Bu listede olmayan bütün kayıtların olduğu gibi kalacak.",
     importNothing: "Yedekteki her şey bu cihazdakiyle aynı. Geri yüklenecek yeni bir şey yok.",
     importConfirm: "Geri yükle",
@@ -1634,11 +1413,6 @@ window.GX_ART = {
  *   1 – Yalnızca günlük kayıtlar (gx.ssc.days.v1) ve tercihler (gx.ssc.settings.v1).
  *   2 – Günlük kayda isteğe bağlı zaman seçimi (time) eklendi; alışkanlık verisi (gx.ssc.habit.v1) eklendi;
  *       yedek paketi alışkanlık ve tercihleri de içeriyor.
- *   3 – Günlük kayda gün değerlendirmesi eklendi: rating (null ya da 1–5 tam sayı) ve ratingNote (metin).
- *       Tercihlere tema (system | light | dark) eklendi ve yedeğe dahil edildi.
- *
- * Geri yüklemede "alan yok" ile "alan boş" farklıdır: eski bir yedekte hiç bulunmayan alan (ör. v2 yedeğinde rating)
- * mevcut veriyi SİLMEZ; yeni yedekte açıkça boş/null olan alan ise boş olarak geri yüklenir (bkz. absentFields).
  *
  * Geçiş (1 → 2): Günlük kayıtların anahtarı ve biçimi değişmedi. Eski kayıtlar okunurken eksik alanlara
  * varsayılan değer atanır (migrateDay). Eski "start.what" metni silinmez; arayüz bu metni gösterir ve
@@ -1650,8 +1424,8 @@ window.GX_ART = {
   "use strict";
 
   var APP_ID = "genix-small-steps-clear-days";
-  var SCHEMA_VERSION = 3;
-  var SUPPORTED_BACKUP_VERSIONS = [1, 2, 3];
+  var SCHEMA_VERSION = 2;
+  var SUPPORTED_BACKUP_VERSIONS = [1, 2];
 
   var DAYS_KEY = "gx.ssc.days.v1"; // şema 2'de de aynı anahtar: eski kayıtlar yerinde okunur
   var SETTINGS_KEY = "gx.ssc.settings.v1";
@@ -1666,9 +1440,6 @@ window.GX_ART = {
   var TIME_BUDGETS = ["", "5", "15", "30", "custom"];
   var HABIT_STATUSES = ["done", "smaller", "skipped"];
   var TEXT_SIZES = ["standard", "large", "larger"];
-  var THEMES = ["system", "light", "dark"];
-  // Eski yedeklerde bulunmayabilen gün alanları: yoksa geri yüklemede mevcut değer korunur
-  var OPTIONAL_DAY_FIELDS = ["time", "rating", "ratingNote"];
   var MOTION_MODES = ["system", "on", "off"];
 
   var DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -1721,8 +1492,6 @@ window.GX_ART = {
       start: { when: "", where: "", what: "" }, // what: şema 1'den kalan alan, yalnızca eski kayıtlarda dolu olabilir
       time: { budget: "", custom: "" },
       evening: { worked: "", easier: "" },
-      rating: null, // gün değerlendirmesi: null ya da 1–5; varsayılan seçim yok
-      ratingNote: "",
       updatedAt: null,
     };
   }
@@ -1734,9 +1503,8 @@ window.GX_ART = {
       day.extras[0].text, day.extras[1].text,
       day.start.when, day.start.where, day.start.what,
       day.time.budget, day.time.custom,
-      day.evening.worked, day.evening.easier, day.ratingNote,
+      day.evening.worked, day.evening.easier,
     ];
-    if (day.rating !== null && day.rating !== undefined) return false; // yalnızca puan girilmiş gün de geçerli kayıttır
     for (var i = 0; i < texts.length; i++) if (texts[i] && String(texts[i]).trim()) return false;
     return !(day.main.done || day.extras[0].done || day.extras[1].done);
   }
@@ -1813,30 +1581,8 @@ window.GX_ART = {
     day.time.custom = checkText(time.custom, key, "time.custom", 40);
     day.evening.worked = checkText(evening.worked, key, "evening.worked");
     day.evening.easier = checkText(evening.easier, key, "evening.easier");
-    if (raw.rating !== undefined && raw.rating !== null) {
-      if (typeof raw.rating !== "number" || raw.rating % 1 !== 0 || raw.rating < 1 || raw.rating > 5) throw new ValidationError("badField", { key: key, field: "rating" });
-      day.rating = raw.rating;
-    }
-    day.ratingNote = checkText(raw.ratingNote, key, "ratingNote", 2000);
     day.updatedAt = checkStamp(raw.updatedAt, key, "updatedAt");
     return day;
-  }
-
-  /** Ham kayıtta hiç bulunmayan isteğe bağlı alanlar (eski şema). Geri yüklemede bunlar mevcut veriyi ezmez. */
-  function absentDayFields(raw) {
-    var out = [];
-    for (var i = 0; i < OPTIONAL_DAY_FIELDS.length; i++) {
-      if (!raw || !Object.prototype.hasOwnProperty.call(raw, OPTIONAL_DAY_FIELDS[i])) out.push(OPTIONAL_DAY_FIELDS[i]);
-    }
-    return out;
-  }
-
-  /** Yedekteki günü, yedekte bulunmayan alanlar için mevcut değerle tamamlar. */
-  function effectiveIncomingDay(current, incoming, absent) {
-    if (!current || !absent || !absent.length) return incoming;
-    var d = JSON.parse(JSON.stringify(incoming));
-    absent.forEach(function (f) { d[f] = JSON.parse(JSON.stringify(current[f])); });
-    return d;
   }
 
   /* ---------------- Alışkanlık ---------------- */
@@ -1964,8 +1710,6 @@ window.GX_ART = {
     var out = {};
     if (MOTION_MODES.indexOf(s.motion) >= 0) out.motion = s.motion;
     if (TEXT_SIZES.indexOf(s.textSize) >= 0) out.textSize = s.textSize;
-    if (THEMES.indexOf(s.theme) >= 0) out.theme = s.theme;
-    if (s.calendarOpen === true) out.calendarOpen = true;
     if (s.welcomed === true) out.welcomed = true;
     if (s.reading && typeof s.reading === "object" && typeof s.reading.chapterId === "string") {
       out.reading = { chapterId: s.reading.chapterId.slice(0, 40), blockId: typeof s.reading.blockId === "string" ? s.reading.blockId.slice(0, 40) : null };
@@ -1997,15 +1741,10 @@ window.GX_ART = {
       if (!data.days || typeof data.days !== "object" || Array.isArray(data.days)) throw new ValidationError("badDays");
 
       var days = {};
-      var absent = {};
       Object.keys(data.days).forEach(function (k) {
         if (!isValidDateKey(k)) throw new ValidationError("badDate", { key: k.slice(0, 40) });
         var day = migrateDay(data.days[k], k);
-        if (!isDayEmpty(day)) {
-          days[k] = day;
-          var a = absentDayFields(data.days[k]);
-          if (a.length) absent[k] = a;
-        }
+        if (!isDayEmpty(day)) days[k] = day;
       });
 
       var habit = null, settings = null;
@@ -2015,13 +1754,13 @@ window.GX_ART = {
         if (isHabitEmpty(habit)) habit = null;
         settings = data.settings ? migrateSettings(data.settings) : null;
         if (settings) {
-          // Yalnızca görünüm tercihleri taşınır; okuma konumu cihaza özeldir. Yedekte olmayan tercih değiştirilmez.
-          settings = { motion: settings.motion, textSize: settings.textSize, theme: settings.theme };
-          if (!settings.motion && !settings.textSize && !settings.theme) settings = null;
+          // Yalnızca görünüm tercihleri taşınır; okuma konumu cihaza özeldir.
+          settings = { motion: settings.motion, textSize: settings.textSize };
+          if (!settings.motion && !settings.textSize) settings = null;
         }
       }
       if (!Object.keys(days).length && !habit) throw new ValidationError("empty");
-      return { ok: true, version: data.version, days: days, absentFields: absent, habit: habit, settings: settings };
+      return { ok: true, version: data.version, days: days, habit: habit, settings: settings };
     } catch (err) {
       if (err instanceof ValidationError) return { ok: false, code: err.code, params: err.params };
       return { ok: false, code: "notJson", params: {} };
@@ -2038,7 +1777,7 @@ window.GX_ART = {
         exportedAt: (now || new Date()).toISOString(),
         days: days,
         habit: h,
-        settings: { motion: settings && settings.motion, textSize: settings && settings.textSize, theme: settings && settings.theme },
+        settings: { motion: settings && settings.motion, textSize: settings && settings.textSize },
       },
       null,
       2
@@ -2052,39 +1791,20 @@ window.GX_ART = {
     var r = {
       version: incoming.version,
       daysAdded: [], daysChanged: [], daysSame: [],
-      plansAdded: [], plansChanged: [], reviewsChanged: [], logAdded: [], logChanged: [],
+      plansAdded: [], logAdded: [], logChanged: [],
       keepsActivePlan: false, adoptsActivePlan: false,
       settings: incoming.settings,
       hasHabit: !!incoming.habit,
     };
-    var absent = incoming.absentFields || {};
     Object.keys(incoming.days).sort().forEach(function (k) {
       var cur = current.days[k];
-      var inc = effectiveIncomingDay(cur, incoming.days[k], absent[k]);
       if (!cur) r.daysAdded.push(k);
-      else if (sameDay(cur, inc)) r.daysSame.push(k);
-      else r.daysChanged.push({ key: k, before: cur, after: inc });
+      else if (sameDay(cur, incoming.days[k])) r.daysSame.push(k);
+      else r.daysChanged.push({ key: k, before: cur, after: incoming.days[k] });
     });
     if (incoming.habit) {
       var ch = current.habit, ih = incoming.habit;
-      Object.keys(ih.plans).forEach(function (id) {
-        var cp = ch.plans[id], ip = ih.plans[id];
-        if (!cp) { r.plansAdded.push(ip); return; }
-        // Aynı kimlikli plan değişecekse alan alan eski ve yeni değer
-        var diffs = [];
-        PLAN_FIELDS.forEach(function (f) { if ((cp[f] || "") !== (ip[f] || "")) diffs.push({ field: f, before: cp[f] || "", after: ip[f] || "" }); });
-        if (!!cp.archivedAt !== !!ip.archivedAt && id !== ch.activePlanId) diffs.push({ field: "archived", before: !!cp.archivedAt, after: !!ip.archivedAt });
-        if (diffs.length) r.plansChanged.push({ id: id, goal: cp.goal, diffs: diffs });
-      });
-      Object.keys(ih.reviews).forEach(function (id) {
-        var cr = ch.reviews[id], ir = ih.reviews[id];
-        var diffs = [];
-        ["fit", "context", "shrink"].forEach(function (f) {
-          var b = cr ? cr[f] || "" : "", a = ir[f] || "";
-          if (b !== a) diffs.push({ field: f, before: b, after: a });
-        });
-        if (diffs.length) r.reviewsChanged.push({ id: id, goal: (ch.plans[id] || ih.plans[id] || {}).goal || "", diffs: diffs });
-      });
+      Object.keys(ih.plans).forEach(function (id) { if (!ch.plans[id]) r.plansAdded.push(ih.plans[id]); });
       Object.keys(ih.log).sort().forEach(function (k) {
         var cur = ch.log[k], inc = ih.log[k];
         if (!cur) r.logAdded.push(k);
@@ -2099,8 +1819,7 @@ window.GX_ART = {
   /** Geri yükleme birleştirmesi: yedekteki aynı tarihli kayıtlar kullanılır, diğerleri korunur. */
   function mergeRestore(current, incoming) {
     var days = JSON.parse(JSON.stringify(current.days));
-    var absent = incoming.absentFields || {};
-    Object.keys(incoming.days).forEach(function (k) { days[k] = effectiveIncomingDay(current.days[k], incoming.days[k], absent[k]); });
+    Object.keys(incoming.days).forEach(function (k) { days[k] = incoming.days[k]; });
     var habit = JSON.parse(JSON.stringify(current.habit));
     if (incoming.habit) {
       var ih = incoming.habit;
@@ -2211,8 +1930,6 @@ window.GX_ART = {
       /** Yalnızca verilen tarihin kaydını yazar; diğer günlere dokunmaz. Boş gün kaydedilmez. */
       saveDay: function (key, day) {
         if (!isValidDateKey(key)) return false;
-        // Henüz yaşanmamış güne gün değerlendirmesi kaydedilmez (arayüz de engeller)
-        if (key > dateKey() && (day.rating !== null && day.rating !== undefined)) return false;
         var days = loadDays();
         if (isDayEmpty(day)) {
           delete days[key];
@@ -2262,7 +1979,6 @@ window.GX_ART = {
           var patch = {};
           if (incoming.settings.motion) patch.motion = incoming.settings.motion;
           if (incoming.settings.textSize) patch.textSize = incoming.settings.textSize;
-          if (incoming.settings.theme) patch.theme = incoming.settings.theme;
           api.setSettings(patch);
         }
         return ok;
@@ -2288,25 +2004,8 @@ window.GX_ART = {
     return api;
   }
 
-  /**
-   * Ay takvimi: haftalar pazartesi başlar. Dönen dizi 7'nin katıdır; ay dışındaki hücreler null.
-   * month: 0–11
-   */
-  function monthGrid(year, month) {
-    var first = new Date(year, month, 1);
-    var lead = (first.getDay() + 6) % 7; // pazartesi = 0
-    var count = new Date(year, month + 1, 0).getDate();
-    var cells = [];
-    for (var i = 0; i < lead; i++) cells.push(null);
-    for (var d = 1; d <= count; d++) cells.push(dateKey(new Date(year, month, d)));
-    while (cells.length % 7) cells.push(null);
-    return cells;
-  }
-
   var api = {
     APP_ID: APP_ID,
-    THEMES: THEMES,
-    monthGrid: monthGrid,
     SCHEMA_VERSION: SCHEMA_VERSION,
     TIME_BUDGETS: TIME_BUDGETS,
     HABIT_STATUSES: HABIT_STATUSES,
@@ -2460,30 +2159,6 @@ window.GX_ART = {
     if (m === "system") document.documentElement.removeAttribute("data-motion");
     else document.documentElement.setAttribute("data-motion", m);
   }
-  /** Tema: "system" (cihaz ayarı, varsayılan), "light" ya da "dark". Açık seçim kaydedilir. */
-  var darkMQ = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : { matches: false };
-  function themeMode() {
-    var m = store.getSettings().theme;
-    return m === "light" || m === "dark" ? m : "system";
-  }
-  function applyTheme() {
-    var m = themeMode();
-    if (m === "system") document.documentElement.removeAttribute("data-theme");
-    else document.documentElement.setAttribute("data-theme", m);
-    // Tarayıcı çubuğu rengi: açık seçimde seçilen temaya, cihaz ayarında medya sorgusuna göre
-    var metas = document.querySelectorAll('meta[name="theme-color"]');
-    for (var i = 0; i < metas.length; i++) {
-      var meta = metas[i];
-      if (!meta.getAttribute("data-media")) meta.setAttribute("data-media", meta.getAttribute("media") || "");
-      if (m === "system") {
-        if (meta.getAttribute("data-media")) meta.setAttribute("media", meta.getAttribute("data-media"));
-      } else {
-        meta.removeAttribute("media");
-        meta.setAttribute("content", m === "dark" ? "#191b1a" : "#fbf6ec");
-      }
-    }
-  }
-
   function textSize() {
     return store.getSettings().textSize || "standard";
   }
@@ -2587,9 +2262,7 @@ window.GX_ART = {
     if (!pendingSave) return;
     var fn = pendingSave;
     pendingSave = null;
-    var ok = fn() !== false;
-    showSaveStatus(ok);
-    if (ok && state.calRedraw) state.calRedraw();
+    showSaveStatus(fn() !== false);
   }
 
   function showSaveStatus(ok) {
@@ -3129,164 +2802,11 @@ window.GX_ART = {
 
   /* ================= Günüm ================= */
 
-  /** Puan dışındaki herhangi bir plan içeriği var mı? (takvimde "plan var" işareti için) */
-  function hasPlanContent(d) {
-    if (!d) return false;
-    var c = JSON.parse(JSON.stringify(d));
-    c.rating = null;
-    c.ratingNote = "";
-    return !STORE.isDayEmpty(c);
-  }
-
-  function ratingText(n) {
-    return t("day.ratingOptions." + n);
-  }
-
-  /* ---------- Aylık takvim (Günüm'ün üstünde, açılıp kapanır) ---------- */
-
-  function calendarPanel(openKey) {
-    var today = STORE.dateKey();
-    var open = !!store.getSettings().calendarOpen;
-    var region = h("div", { id: "cal-region", class: "cal-panel", hidden: !open });
-
-    var toggle = h("button", { type: "button", class: "cal-toggle", id: "cal-toggle", "aria-expanded": open ? "true" : "false", "aria-controls": "cal-region", onclick: function () {
-      open = !open;
-      store.setSettings({ calendarOpen: open });
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      region.hidden = !open;
-      if (open) draw();
-    } }, [
-      h("span", { class: "chev", "aria-hidden": "true", html: ICON_CHEV }),
-      h("span", { class: "cal-toggle__text" }, [h("strong", { text: t("calendar.toggle") }), h("span", { class: "hint", text: t("calendar.toggleHint") })]),
-    ]);
-
-    function draw(focusSel) {
-      var days = store.getDays();
-      var habit = store.getHabit();
-      var y = state.calMonth.y, m = state.calMonth.m;
-      var sel = state.calSelected;
-      region.textContent = "";
-
-      var title = h("h2", { class: "cal__title", id: "cal-title", "aria-live": "polite", text: t("calendar.monthTitle", { month: S.dates.months[m], year: y }) });
-      function shift(delta, btnId) {
-        var d = new Date(y, m + delta, 1);
-        state.calMonth = { y: d.getFullYear(), m: d.getMonth() };
-        draw(btnId);
-      }
-      var head = h("div", { class: "cal__head" }, [
-        h("button", { type: "button", class: "icon-btn", id: "cal-prev", "aria-label": t("calendar.prevMonth"), html: ICON_BACK, onclick: function () { shift(-1, "cal-prev"); } }),
-        title,
-        h("button", { type: "button", class: "icon-btn", id: "cal-next", "aria-label": t("calendar.nextMonth"), html: ICON_CHEV, onclick: function () { shift(1, "cal-next"); } }),
-      ]);
-      var todayBtn = h("button", { type: "button", class: "btn btn--quiet", id: "cal-today", text: t("calendar.today"), onclick: function () {
-        var d = STORE.keyToDate(today);
-        state.calMonth = { y: d.getFullYear(), m: d.getMonth() };
-        state.calSelected = today;
-        draw("cal-day-" + today);
-      } });
-
-      var grid = h("div", { class: "cal__grid", role: "group", "aria-labelledby": "cal-title" });
-      S.dates.weekdaysMondayFirst.forEach(function (w) { grid.appendChild(h("span", { class: "cal__wd", "aria-hidden": "true", text: w })); });
-      STORE.monthGrid(y, m).forEach(function (k) {
-        if (!k) { grid.appendChild(h("span", { class: "cal__blank", "aria-hidden": "true" })); return; }
-        var d = days[k], e = habit.log[k];
-        var marks = [];
-        var label = [formatDate(k)];
-        if (k === today) label.push(t("calendar.cellToday"));
-        if (k === sel) label.push(t("calendar.cellSelected"));
-        if (hasPlanContent(d)) { marks.push(h("i", { class: "mk mk-plan", "aria-hidden": "true" })); label.push(t("calendar.cellPlan")); }
-        if (e && k <= today) { marks.push(h("i", { class: "mk mk-habit", "aria-hidden": "true" })); label.push(t("calendar.cellHabit", { status: t("habit.statusShort." + e.status) })); }
-        if (d && d.rating) { marks.push(h("b", { class: "mk-rating", "aria-hidden": "true", text: String(d.rating) })); label.push(t("calendar.cellRating", { n: d.rating })); }
-        if (!marks.length) label.push(t("calendar.cellEmpty"));
-        grid.appendChild(h("button", {
-          type: "button", class: "cal__day" + (k === today ? " is-today" : "") + (k > today ? " is-future" : ""),
-          id: "cal-day-" + k, "data-cal": k, "aria-pressed": k === sel ? "true" : "false",
-          "aria-current": k === today ? "date" : null, "aria-label": label.join(", "),
-          onclick: function () { state.calSelected = k; draw("cal-day-" + k); },
-        }, [h("span", { class: "cal__num", text: String(STORE.keyToDate(k).getDate()) }), h("span", { class: "cal__marks", "aria-hidden": "true" }, marks)]));
-      });
-
-      var legend = h("div", { class: "cal__legend" }, [
-        h("p", { class: "label", text: t("calendar.legendTitle") }),
-        h("ul", { class: "legend" }, [
-          h("li", null, [h("span", { class: "lg lg-today", "aria-hidden": "true" }), t("calendar.legendToday")]),
-          h("li", null, [h("span", { class: "lg lg-selected", "aria-hidden": "true" }), t("calendar.legendSelected")]),
-          h("li", null, [h("i", { class: "mk mk-plan", "aria-hidden": "true" }), t("calendar.legendPlan")]),
-          h("li", null, [h("i", { class: "mk mk-habit", "aria-hidden": "true" }), t("calendar.legendHabit")]),
-          h("li", null, [h("b", { class: "mk-rating", "aria-hidden": "true", text: "3" }), t("calendar.legendRating")]),
-        ]),
-        h("p", { class: "hint", text: t("calendar.legendNote") }),
-      ]);
-
-      region.appendChild(h("div", { class: "cal" }, [head, todayBtn, grid, legend]));
-      region.appendChild(daySummary(sel, openKey, days[sel], habit));
-      if (focusSel && $(focusSel)) $(focusSel).focus({ preventScroll: true });
-    }
-
-    if (open) draw();
-    // Kayıt yapılınca işaretler ve özet tazelenir (odak yerinde kalır)
-    state.calRedraw = function () { if (open) draw(); };
-    cleanupFns.push(function () { state.calRedraw = null; });
-    return h("section", { class: "cal-wrap", "aria-label": t("calendar.toggle") }, [toggle, region]);
-  }
-
-  /** Takvimde seçilen günün özeti */
-  function daySummary(k, openKey, d, habit) {
-    var today = STORE.dateKey();
-    var e = k <= today ? habit.log[k] : null;
-    var box = h("section", { class: "box box--action cal-summary", id: "cal-summary", "aria-labelledby": "cal-summary-title", "aria-live": "polite" }, [
-      h("h3", { id: "cal-summary-title", text: formatDate(k) }),
-    ]);
-    function go() {
-      state.scrollToDay = true;
-      navigate(k === today ? "gunum" : "gun-" + k);
-    }
-    if (k === openKey) box.appendChild(h("p", { class: "hint", id: "cal-open-here", text: t("calendar.openHere") }));
-    if (!d && !e) {
-      if (k > today) {
-        box.appendChild(h("p", { text: t("calendar.emptyFuture") }));
-        if (k !== openKey) box.appendChild(h("button", { type: "button", class: "btn btn--secondary", id: "cal-create", text: t("calendar.createFuture"), onclick: go }));
-      } else {
-        box.appendChild(h("p", { text: k === today ? t("calendar.emptyToday") : t("calendar.emptyPast") }));
-        if (k !== openKey) box.appendChild(h("button", { type: "button", class: "btn btn--secondary", id: "cal-create", text: t("calendar.createPast"), onclick: go }));
-      }
-      return box;
-    }
-    var rows = [];
-    function row(label, value) {
-      if (!value) return;
-      rows.push(h("div", null, [h("dt", { text: label }), h("dd", { text: value })]));
-    }
-    if (d) {
-      row(t("calendar.mainLabel"), d.main.text.trim() || "—");
-      var done = [d.main].concat(d.extras).filter(function (x) { return x.done && x.text.trim(); }).map(function (x) { return x.text.trim(); });
-      row(t("calendar.doneLabel"), done.length ? done.join("\n") : t("calendar.noneDone"));
-    }
-    if (e) {
-      var plan = habit.plans[e.planId];
-      row(t("calendar.habitLabel"), t("calendar.habitLine", { status: t("habit.statuses." + e.status), goal: plan ? plan.goal : "" }) + (e.note ? "\n" + e.note : ""));
-    }
-    if (d && d.rating) row(t("calendar.ratingLabel"), ratingText(d.rating));
-    if (d && d.ratingNote.trim()) row(t("calendar.ratingNoteLabel"), d.ratingNote.trim());
-    if (d) row(t("calendar.eveningLabel"), [d.evening.worked.trim(), d.evening.easier.trim()].filter(Boolean).join("\n"));
-    box.appendChild(h("dl", { class: "day-detail" }, rows));
-    if (k !== openKey) box.appendChild(h("button", { type: "button", class: "btn btn--primary", id: "cal-open-day", text: t("calendar.openDay"), onclick: go }));
-    return box;
-  }
-
   function renderDay(dateKey, openedAsToday) {
     var today = STORE.dateKey();
     var isPast = dateKey < today;
-    var isFuture = dateKey > today;
     state.planDate = dateKey;
     state.planOpenedAsToday = !!openedAsToday;
-    // Takvim: açık olan gün seçili ve görünür ay olur
-    if (state.calFor !== dateKey) {
-      var od = STORE.keyToDate(dateKey);
-      state.calFor = dateKey;
-      state.calSelected = dateKey;
-      state.calMonth = { y: od.getFullYear(), m: od.getMonth() };
-    }
 
     var day = store.getDay(dateKey);
     var legacyWhat = day.start.what.trim() && day.start.what.trim() !== day.main.step.trim() ? day.start.what : "";
@@ -3295,9 +2815,9 @@ window.GX_ART = {
 
     var banners = h("div", { class: "stack-sm", id: "day-banners" });
     if (!store.available) banners.appendChild(h("div", { class: "banner banner--warn", role: "alert", text: t("save.storageWarning") }));
-    if (isPast || isFuture) {
-      banners.appendChild(h("div", { class: "banner", id: isFuture ? "future-banner" : "past-banner" }, [
-        h("p", { text: isFuture ? t("day.futureBanner") : t("day.pastBanner") }),
+    if (isPast) {
+      banners.appendChild(h("div", { class: "banner" }, [
+        h("p", { text: t("day.pastBanner") }),
         h("button", { type: "button", class: "btn btn--secondary", text: t("day.backToToday"), onclick: function () { navigate("gunum"); } }),
       ]));
     }
@@ -3376,30 +2896,9 @@ window.GX_ART = {
       timeClear,
     ], startFilled, startFilled ? t("day.filled") : null);
 
-    // Gün değerlendirmesi (1–5, isteğe bağlı; varsayılan seçim yok; gelecek günde kapalı)
-    var ratingGroup = choiceGroup("rating", isPast ? t("day.ratingLegendPast") : t("day.ratingLegend"), ["1", "2", "3", "4", "5"].map(function (v) {
-      return { value: v, label: t("day.ratingOptions." + v) };
-    }), day.rating ? String(day.rating) : null, { marks: true, id: "rating-group" });
-    ratingGroup.insertBefore(h("p", { class: "hint", id: "rating-hint", text: t("day.ratingHint") }), ratingGroup.children[1]);
-    var ratingClear = h("button", { type: "button", class: "btn btn--quiet", id: "rating-clear", text: t("day.ratingClear"), hidden: !day.rating, onclick: function () {
-      ratingGroup.querySelectorAll("input").forEach(function (i) { i.checked = false; });
-      ratingClear.hidden = true;
-      save(true);
-      $("rating-1").focus();
-    } });
-    var ratingNote = field("f-rating-note", t("day.ratingNoteLabel"), { multiline: true, rows: 2, max: 2000, placeholder: t("day.ratingNotePlaceholder"), value: day.ratingNote });
-    if (isFuture) {
-      ratingGroup.disabled = true;
-      ratingNote.querySelector("textarea").disabled = true;
-      ratingGroup.appendChild(h("p", { class: "hint", id: "rating-future", text: t("day.ratingFuture") }));
-    }
-
-    var eveningFilled = !!(day.evening.worked.trim() || day.evening.easier.trim() || day.rating || day.ratingNote.trim());
+    var eveningFilled = !!(day.evening.worked.trim() || day.evening.easier.trim());
     var evening = disclosure("d-evening", t("day.eveningToggle"), [
       h("p", { class: "hint", text: t("day.eveningHint") }),
-      ratingGroup,
-      ratingClear,
-      ratingNote,
       field("f-worked", t("day.workedLabel"), { multiline: true, rows: 3, placeholder: t("day.workedPlaceholder"), value: day.evening.worked }),
       field("f-easier", t("day.easierLabel"), { multiline: true, rows: 3, placeholder: t("day.easierPlaceholder"), value: day.evening.easier }),
     ], eveningFilled, eveningFilled ? t("day.filled") : null);
@@ -3413,11 +2912,10 @@ window.GX_ART = {
     brain.style.borderTop = "1px solid var(--line)";
 
     viewEl.appendChild(h("section", { class: "stack-lg", "aria-labelledby": "day-title" }, [
-      calendarPanel(dateKey),
-      h("div", { class: "day-head", id: "day-head" }, [
+      h("div", { class: "day-head" }, [
         h("div", { class: "page-head" }, [
           h("p", { class: "date-line", id: "day-date", text: formatDate(dateKey) }),
-          h("h1", { id: "day-title", text: isPast ? t("day.titlePast") : isFuture ? t("day.titleFuture") : t("day.titleToday") }),
+          h("h1", { id: "day-title", text: isPast ? t("day.titlePast") : t("day.titleToday") }),
         ]),
         h("button", { type: "button", class: "btn btn--quiet", id: "open-history", text: t("day.historyLink"), onclick: function () { navigate("gecmis"); } }),
       ]),
@@ -3440,14 +2938,7 @@ window.GX_ART = {
         start: { when: $("f-when").value, where: $("f-where").value, what: keepWhat },
         time: { budget: budget, custom: budget === "custom" ? $("f-time-custom").value : "" },
         evening: { worked: $("f-worked").value, easier: $("f-easier").value },
-        rating: isFuture ? null : ratingValue(),
-        ratingNote: isFuture ? day.ratingNote : $("f-rating-note").value,
       };
-    }
-
-    function ratingValue() {
-      var c = ratingGroup.querySelector("input:checked");
-      return c ? parseInt(c.value, 10) : null;
     }
 
     function save(immediate) {
@@ -3509,11 +3000,6 @@ window.GX_ART = {
       save(false);
     });
     form.addEventListener("change", function (e) {
-      if (e.target.type === "radio" && e.target.name === "rating") {
-        ratingClear.hidden = false;
-        save(true);
-        return;
-      }
       if (e.target.type === "radio") {
         updateTime();
         save(true);
@@ -3539,13 +3025,6 @@ window.GX_ART = {
     updateStart();
     updateTime();
     Array.prototype.forEach.call(form.querySelectorAll("textarea"), autosize);
-
-    // Takvimden bir gün açıldıysa: takvim yerinde kalır, düzenleme alanına inilir
-    if (state.scrollToDay) {
-      state.scrollToDay = false;
-      state.pendingScroll = true;
-      requestAnimationFrame(function () { $("day-head").scrollIntoView({ block: "start" }); $("day-title").setAttribute("tabindex", "-1"); $("day-title").focus({ preventScroll: true }); });
-    }
 
     if (state.focusField === "brain") {
       state.focusField = null;
@@ -3617,8 +3096,6 @@ window.GX_ART = {
       row(t("history.detailTime"), d.time.budget ? (d.time.budget === "custom" ? d.time.custom : t("day.timeOptions." + d.time.budget)) : "");
       row(t("history.detailWorked"), d.evening.worked.trim());
       row(t("history.detailEasier"), d.evening.easier.trim());
-      row(t("history.detailRating"), d.rating ? ratingText(d.rating) : "");
-      row(t("history.detailRatingNote"), d.ratingNote.trim());
 
       var det = h("details", { class: "disclosure", "data-day": k }, [
         h("summary", null, [
@@ -4006,22 +3483,6 @@ window.GX_ART = {
       reducedNote.hidden = !(e.target.value === "system" && reduceMQ.matches);
     });
 
-    var theme = themeMode();
-    var themeGroup = choiceGroup("theme", t("settings.themeTitle"), [
-      { value: "light", label: t("settings.themeLight") },
-      { value: "dark", label: t("settings.themeDark") },
-      { value: "system", label: t("settings.themeSystem") },
-    ], theme, { cls: "choices--seg", hideLegend: true });
-    function systemNote() {
-      return t("settings.themeSystemNow", { mode: darkMQ.matches ? t("settings.themeModeDark") : t("settings.themeModeLight") });
-    }
-    var themeNote = h("p", { class: "hint", id: "theme-system-note", text: systemNote(), hidden: theme !== "system" });
-    themeGroup.addEventListener("change", function (e) {
-      store.setSettings({ theme: e.target.value });
-      applyTheme();
-      themeNote.hidden = e.target.value !== "system";
-    });
-
     var sizes = textSizeControl(function (v) {
       var r = document.querySelector(".reader");
       if (r) r.setAttribute("data-size", v);
@@ -4096,17 +3557,6 @@ window.GX_ART = {
     function statusText(e) {
       return t("habit.statusShort." + e.status);
     }
-    function describeDay(d) {
-      var parts = [];
-      if (d.main.text.trim()) parts.push(clip(d.main.text, 40));
-      if (d.rating) parts.push(t("settings.importRatingShort", { n: d.rating }));
-      return parts.length ? parts.join(" · ") : "—";
-    }
-    function fieldValue(v) {
-      if (v === true) return "evet";
-      if (v === false) return "hayır";
-      return v ? clip(v, 40) : t("settings.importEmptyValue");
-    }
     function handleImportText(text) {
       importMsg.textContent = "";
       var res = STORE.parseBackup(text);
@@ -4114,32 +3564,15 @@ window.GX_ART = {
       var plan = store.planRestore(res);
       var lines = [];
       if (plan.version < 2) lines.push(h("p", { text: t("settings.importOldVersion") }));
-      if (plan.version < 3) lines.push(h("p", { id: "import-old-fields", text: t("settings.importOldFields") }));
       if (plan.daysAdded.length) lines.push(h("p", { text: t("settings.importDaysAdded", { n: plan.daysAdded.length }) }));
       if (plan.daysChanged.length) {
         lines.push(h("p", { text: t("settings.importDaysChanged", { n: plan.daysChanged.length }) }));
         lines.push(changeList(plan.daysChanged, function (c) {
-          return t("settings.importChangeLine", { date: formatShort(c.key), before: describeDay(c.before), after: describeDay(c.after) });
+          return t("settings.importChangeLine", { date: formatShort(c.key), before: clip(c.before.main.text || "—", 40), after: clip(c.after.main.text || "—", 40) });
         }));
       }
       if (plan.daysSame.length) lines.push(h("p", { class: "hint", text: t("settings.importDaysSame", { n: plan.daysSame.length }) }));
       if (plan.plansAdded.length) lines.push(h("p", { text: t("settings.importHabitPlans", { n: plan.plansAdded.length }) }));
-      if (plan.plansChanged.length) {
-        lines.push(h("p", { text: t("settings.importPlansChanged", { n: plan.plansChanged.length }) }));
-        var planDiffs = [];
-        plan.plansChanged.forEach(function (c) { c.diffs.forEach(function (d) { planDiffs.push({ goal: c.goal, d: d }); }); });
-        lines.push(changeList(planDiffs, function (x) {
-          return t("settings.importPlanDiff", { goal: clip(x.goal, 30), field: t("settings.importFieldNames." + x.d.field), before: fieldValue(x.d.before), after: fieldValue(x.d.after) });
-        }));
-      }
-      if (plan.reviewsChanged.length) {
-        lines.push(h("p", { text: t("settings.importReviewsChanged", { n: plan.reviewsChanged.length }) }));
-        var revDiffs = [];
-        plan.reviewsChanged.forEach(function (c) { c.diffs.forEach(function (d) { revDiffs.push({ goal: c.goal, d: d }); }); });
-        lines.push(changeList(revDiffs, function (x) {
-          return t("settings.importReviewDiff", { goal: clip(x.goal, 30), field: t("settings.importFieldNames." + x.d.field), before: fieldValue(x.d.before), after: fieldValue(x.d.after) });
-        }));
-      }
       if (plan.logAdded.length) lines.push(h("p", { text: t("settings.importHabitLogAdded", { n: plan.logAdded.length }) }));
       if (plan.logChanged.length) {
         lines.push(h("p", { text: t("settings.importHabitLogChanged", { n: plan.logChanged.length }) }));
@@ -4151,7 +3584,7 @@ window.GX_ART = {
       if (plan.adoptsActivePlan) lines.push(h("p", { text: t("settings.importHabitAdoptsActive") }));
       if (plan.settings) lines.push(h("p", { text: t("settings.importSettings") }));
 
-      var nothing = !plan.daysAdded.length && !plan.daysChanged.length && !plan.plansAdded.length && !plan.plansChanged.length && !plan.reviewsChanged.length && !plan.logAdded.length && !plan.logChanged.length && !plan.adoptsActivePlan && !plan.settings;
+      var nothing = !plan.daysAdded.length && !plan.daysChanged.length && !plan.plansAdded.length && !plan.logAdded.length && !plan.logChanged.length && !plan.adoptsActivePlan;
       if (nothing) {
         importMsg.appendChild(h("div", { class: "box box--research" }, [h("p", { text: t("settings.importNothing") })]));
         return;
@@ -4168,8 +3601,6 @@ window.GX_ART = {
             importMsg.appendChild(h("p", { class: ok ? "banner" : "box box--error", role: ok ? "status" : "alert", text: ok ? t("settings.importDone") : t("save.failed") }));
             countEl.textContent = counts();
             applyMotion();
-            applyTheme();
-            themeGroup.querySelectorAll("input").forEach(function (i) { i.checked = i.value === themeMode(); });
             if (state.view !== "home") route();
           } }),
         ]),
@@ -4228,16 +3659,14 @@ window.GX_ART = {
         pasteArea,
         importMsg,
       ]),
-      h("section", { class: "panel-section", id: "appearance-section" }, [
-        h("h3", { text: t("settings.appearanceTitle") }),
-        h("p", { class: "label", text: t("settings.themeTitle") }),
-        themeGroup,
-        themeNote,
-        h("p", { class: "label", text: t("settings.motionTitle") }),
+      h("section", { class: "panel-section" }, [
+        h("h3", { text: t("settings.motionTitle") }),
         h("p", { class: "hint", text: t("settings.motionHint") }),
         motion,
         reducedNote,
-        h("p", { class: "label", text: t("settings.textSizeTitle") }),
+      ]),
+      h("section", { class: "panel-section" }, [
+        h("h3", { text: t("settings.textSizeTitle") }),
         sizes,
       ]),
       h("section", { class: "panel-section" }, [
@@ -4287,12 +3716,7 @@ window.GX_ART = {
     document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
     document.querySelectorAll("[data-t-label]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-label"))); });
     applyMotion();
-    applyTheme();
     if (reduceMQ.addEventListener) reduceMQ.addEventListener("change", applyMotion);
-    if (darkMQ.addEventListener) darkMQ.addEventListener("change", function () {
-      var note = $("theme-system-note");
-      if (note) note.textContent = t("settings.themeSystemNow", { mode: darkMQ.matches ? t("settings.themeModeDark") : t("settings.themeModeLight") });
-    });
 
     document.querySelectorAll("[data-nav]").forEach(function (b) {
       b.addEventListener("click", function () {
