@@ -354,7 +354,7 @@ await run("Yeni yedek (günler + alışkanlık + tercihler) indirilir ve başka 
   const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#export-file")]);
   const file = join(shots, "yedek-v2.json");
   await dl.saveAs(file);
-  assert.equal(JSON.parse(readFileSync(file, "utf8")).version, 2);
+  assert.equal(JSON.parse(readFileSync(file, "utf8")).version, 3);
   await ctx.close();
 
   const b = await newPage({ hash: "#gunum", time: new Date("2026-10-02T12:00:00+03:00") });

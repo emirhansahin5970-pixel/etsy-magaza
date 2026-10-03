@@ -1,0 +1,77 @@
+{
+  "app": "genix-small-steps-clear-days",
+  "version": 2,
+  "exportedAt": "2026-10-03T10:33:31.418Z",
+  "days": {
+    "2026-09-28": {
+      "brain": "",
+      "main": {
+        "text": "V2 ana iş",
+        "step": "V2 ilk adım",
+        "done": true
+      },
+      "extras": [
+        {
+          "text": "",
+          "done": false
+        },
+        {
+          "text": "",
+          "done": false
+        }
+      ],
+      "start": {
+        "when": "",
+        "where": "",
+        "what": ""
+      },
+      "time": {
+        "budget": "15",
+        "custom": ""
+      },
+      "evening": {
+        "worked": "V2 akşam notu",
+        "easier": "Erken yatmak"
+      },
+      "updatedAt": "2026-10-03T10:33:31.414Z"
+    }
+  },
+  "habit": {
+    "activePlanId": "pmus97r4ouvlzv",
+    "plans": {
+      "pmus97r4ouvlzv": {
+        "id": "pmus97r4ouvlzv",
+        "goal": "V2 matematik",
+        "start": "Bir soru",
+        "anchor": "Akşam yemeğinden sonra",
+        "place": "Masamda",
+        "ease": "",
+        "smaller": "Soruyu okumak",
+        "createdAt": "2026-09-27T10:00:00.000Z",
+        "updatedAt": "2026-09-27T10:00:00.000Z",
+        "archivedAt": null
+      }
+    },
+    "log": {
+      "2026-09-28": {
+        "status": "smaller",
+        "note": "Yorgundum",
+        "planId": "pmus97r4ouvlzv",
+        "updatedAt": null
+      }
+    },
+    "reviews": {
+      "pmus97r4ouvlzv": {
+        "fit": "Bir soru",
+        "context": "Akşam",
+        "shrink": "Yarım soru",
+        "updatedAt": null
+      }
+    },
+    "draft": null
+  },
+  "settings": {
+    "motion": "off",
+    "textSize": "large"
+  }
+}

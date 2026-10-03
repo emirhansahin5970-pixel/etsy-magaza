@@ -170,7 +170,7 @@ test("yeni yedek: günler + alışkanlık + tercihler dışa aktarılır ve geri
   const text = a.exportText();
   const res = STORE.parseBackup(text);
   assert.equal(res.ok, true);
-  assert.equal(res.version, 2);
+  assert.equal(res.version, STORE.SCHEMA_VERSION);
 
   const b = STORE.createStore(memoryStorage());
   b.saveDay("2026-09-30", sampleDay("Eski"));
@@ -256,4 +256,143 @@ test("depolama hiç kullanılamıyorsa uygulama çökmez", () => {
   assert.equal(s.available, false);
   assert.equal(s.saveDay("2026-10-01", sampleDay("a")), false);
   assert.equal(s.getDay("2026-10-01").main.text, "a", "oturum boyunca bellekte tutulur");
+});
+
+/* ================= Sürüm 3 ================= */
+
+test("takvim: pazartesi başlangıç, ay uzunlukları, şubat ve yıl geçişi", () => {
+  const oct = STORE.monthGrid(2026, 9);
+  assert.equal(oct.indexOf("2026-10-01"), 3, "1 Ekim 2026 perşembe → 4. sütun");
+  assert.equal(oct.filter(Boolean).length, 31);
+  assert.equal(oct.length % 7, 0);
+  assert.equal(STORE.monthGrid(2026, 1).filter(Boolean).length, 28, "Şubat 2026");
+  assert.equal(STORE.monthGrid(2028, 1).filter(Boolean).length, 29, "Şubat 2028 (artık yıl)");
+  assert.equal(STORE.monthGrid(2100, 1).filter(Boolean).length, 28, "2100 artık yıl değil");
+  const jan = STORE.monthGrid(2027, 0);
+  assert.equal(jan.indexOf("2027-01-01"), 4, "1 Ocak 2027 cuma");
+  const feb2027 = STORE.monthGrid(2027, 1);
+  assert.equal(feb2027[0], "2027-02-01", "1 Şubat 2027 pazartesi → ilk hücre");
+});
+
+test("gün değerlendirmesi: yalnızca 1–5 tam sayı ya da null kabul edilir", () => {
+  for (const bad of [0, 6, 2.5, "3", true]) {
+    assert.throws(() => STORE.migrateDay({ rating: bad }, "2026-10-01"), undefined, String(bad));
+  }
+  assert.equal(STORE.migrateDay({ rating: null }, "2026-10-01").rating, null);
+  assert.equal(STORE.migrateDay({ rating: 5, ratingNote: "Güzel" }, "2026-10-01").rating, 5);
+});
+
+test("yalnızca puan girilmiş gün geçerli kayıttır; puan değişir ve kaldırılabilir", () => {
+  const s = STORE.createStore(memoryStorage());
+  const d = STORE.emptyDay();
+  d.rating = 3;
+  assert.equal(s.saveDay("2000-01-03", d), true);
+  assert.equal(s.getDay("2000-01-03").rating, 3);
+  d.rating = 4;
+  s.saveDay("2000-01-03", d);
+  assert.equal(s.getDay("2000-01-03").rating, 4);
+  d.rating = null;
+  s.saveDay("2000-01-03", d);
+  assert.deepEqual(Object.keys(s.getDays()), [], "başka içerik yoksa gün silinir");
+});
+
+test("gelecek güne plan yazılır ama gün değerlendirmesi kaydedilmez", () => {
+  const s = STORE.createStore(memoryStorage());
+  const future = STORE.addDays(STORE.dateKey(), 3);
+  const d = sampleDay("Gelecek plan");
+  assert.equal(s.saveDay(future, d), true);
+  d.rating = 5;
+  assert.equal(s.saveDay(future, d), false);
+  assert.equal(s.getDay(future).rating, null);
+  assert.equal(s.getDay(future).main.text, "Gelecek plan");
+});
+
+test("v2 localStorage kayıtları okunur; yeni alanlar güvenli varsayılan alır", () => {
+  const ls = JSON.parse(fixture("v2-localstorage.json"));
+  const s = STORE.createStore(memoryStorage(ls));
+  const d = s.getDay("2026-09-28");
+  assert.equal(d.main.text, "V2 ana iş");
+  assert.equal(d.time.budget, "15");
+  assert.equal(d.rating, null);
+  assert.equal(d.ratingNote, "");
+  const h = s.getHabit();
+  assert.equal(h.plans[h.activePlanId].goal, "V2 matematik");
+  assert.equal(h.log["2026-09-28"].status, "smaller");
+  assert.equal(s.getSettings().textSize, "large");
+  assert.equal(s.getSettings().theme, undefined, "tema seçilmemiş → cihaz ayarı");
+});
+
+test("eski (v2) yedek: yedekte olmayan puan ve not mevcut kayıttan silinmez", () => {
+  const s = STORE.createStore(memoryStorage());
+  const d = sampleDay("Bu cihazdaki iş");
+  d.rating = 4;
+  d.ratingNote = "Sakin bir gündü";
+  s.saveDay("2026-09-28", d);
+  s.setSettings({ theme: "dark" });
+  const res = STORE.parseBackup(fixture("v2-backup.json"));
+  assert.equal(res.ok, true);
+  assert.equal(res.version, 2);
+  assert.deepEqual(res.absentFields["2026-09-28"], ["rating", "ratingNote"]);
+  const plan = s.planRestore(res);
+  assert.equal(plan.daysChanged[0].after.rating, 4, "önizleme de puanı korur");
+  s.applyRestore(res);
+  const after = s.getDay("2026-09-28");
+  assert.equal(after.main.text, "V2 ana iş", "yedekteki alanlar gelir");
+  assert.equal(after.rating, 4, "yedekte olmayan puan korunur");
+  assert.equal(after.ratingNote, "Sakin bir gündü");
+  assert.equal(s.getSettings().theme, "dark", "yedekte olmayan tema korunur");
+});
+
+test("yeni (v3) yedek: açıkça boşaltılmış puan boş olarak geri yüklenir", () => {
+  const a = STORE.createStore(memoryStorage());
+  a.saveDay("2026-09-28", sampleDay("Aynı gün"));
+  a.setSettings({ theme: "light" });
+  const text = a.exportText();
+  const res = STORE.parseBackup(text);
+  assert.equal(res.version, 3);
+  assert.equal(res.absentFields["2026-09-28"], undefined);
+  assert.equal(res.settings.theme, "light");
+
+  const b = STORE.createStore(memoryStorage());
+  const d = sampleDay("Aynı gün");
+  d.rating = 2;
+  b.saveDay("2026-09-28", d);
+  b.applyRestore(res);
+  assert.equal(b.getDay("2026-09-28").rating, null, "yedekte rating:null → boşaltılır");
+  assert.equal(b.getSettings().theme, "light");
+});
+
+test("v3 yedek: puan, puan notu ve tema gidip gelir", () => {
+  const a = STORE.createStore(memoryStorage());
+  const d = sampleDay("İş");
+  d.rating = 5;
+  d.ratingNote = "Uzun yürüyüş";
+  a.saveDay("2026-10-01", d);
+  a.setSettings({ theme: "dark" });
+  const res = STORE.parseBackup(a.exportText());
+  const b = STORE.createStore(memoryStorage());
+  b.applyRestore(res);
+  assert.equal(b.getDay("2026-10-01").rating, 5);
+  assert.equal(b.getDay("2026-10-01").ratingNote, "Uzun yürüyüş");
+  assert.equal(b.getSettings().theme, "dark");
+});
+
+test("aynı kimlikli plan ve değerlendirme değişecekse eski/yeni değerler önizlemede listelenir", () => {
+  const dev = STORE.createStore(memoryStorage());
+  const r = habitWithPlan("Matematik");
+  r.habit.reviews[r.planId] = { fit: "Bir soru", context: "", shrink: "", updatedAt: null };
+  dev.saveHabit(r.habit);
+  const other = JSON.parse(JSON.stringify(r.habit));
+  other.plans[r.planId].place = "Kütüphanede";
+  other.reviews[r.planId].fit = "İki soru";
+  other.reviews[r.planId].context = "Sabah";
+  const res = STORE.parseBackup(STORE.buildBackup({}, other, {}));
+  const plan = dev.planRestore(res);
+  assert.equal(plan.plansChanged.length, 1);
+  assert.deepEqual(plan.plansChanged[0].diffs, [{ field: "place", before: "Masamda", after: "Kütüphanede" }]);
+  assert.equal(plan.reviewsChanged.length, 1);
+  assert.deepEqual(plan.reviewsChanged[0].diffs, [
+    { field: "fit", before: "Bir soru", after: "İki soru" },
+    { field: "context", before: "", after: "Sabah" },
+  ]);
 });
