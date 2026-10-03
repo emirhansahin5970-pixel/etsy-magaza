@@ -9,12 +9,16 @@
 <meta name="theme-color" content="#fbf6ec">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<!-- Yazı tipleri çizimi ENGELLEMEZ: media="print" ile indirilir, boot.js yüklenince etkinleştirir.
+     Google Fonts'a ulaşılamazsa (ya da istek askıda kalırsa) sayfa sistem fontlarıyla açılır. -->
+<link id="gx-fonts" rel="stylesheet" media="print" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
 <link rel="stylesheet" href="styles.css">
 <!-- @artifact-head-end -->
 </head>
 <body>
 <!-- @artifact-body-start -->
+<!-- data-t ile işaretli metinler derleme sırasında i18n/tr.js'ten doldurulur; JavaScript çalışmasa da görünürler. -->
+<div id="app-root" class="is-booting">
 <a class="skip" href="#main" data-t="app.skipToContent"></a>
 
 <header class="topbar">
@@ -39,15 +43,30 @@
 </nav>
 
 <main id="main" tabindex="-1">
-  <div id="view" class="view"></div>
-  <noscript><p>Bu uygulama JavaScript gerektirir. Tarayıcında JavaScript'i açıp sayfayı yenile.</p></noscript>
+  <div id="view" class="view">
+    <!-- Başlangıç ekranı: JavaScript gerektirmez. Uygulama başlayınca yerine uygulama ekranı gelir. -->
+    <section class="boot-screen" id="boot-screen" aria-labelledby="boot-title">
+      <p class="eyebrow" data-t="app.brand"></p>
+      <h1 id="boot-title" data-t="app.title"></h1>
+      <p class="lead" data-t="boot.description"></p>
+      <p class="boot-status" id="boot-status" role="status"><span class="boot-dot" aria-hidden="true"></span><span data-t="boot.loading"></span></p>
+      <noscript>
+        <p class="boot-noscript" data-t="boot.noscript"></p>
+        <style>.boot-status, .boot-hint { display: none !important; }</style>
+      </noscript>
+      <p class="hint boot-hint" data-t="boot.slowHint"></p>
+    </section>
+  </div>
 </main>
 
 <dialog id="settings" aria-labelledby="settings-title"></dialog>
 <dialog id="confirm" aria-labelledby="confirm-title"></dialog>
 
 <div class="toast-region" aria-live="polite" aria-atomic="true" id="toast-region"></div>
+</div>
 
+<!-- Önce güvenlik ağı: sonraki betiklerdeki hataları yakalar. -->
+<script src="boot.js"></script>
 <script src="i18n/tr.js"></script>
 <script src="content/book.tr.js"></script>
 <script src="illustrations.js"></script>

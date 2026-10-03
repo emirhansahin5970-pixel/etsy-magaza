@@ -11,6 +11,14 @@
   var BOOK = window.GX_BOOK;
   var ART = window.GX_ART;
   var STORE = window.GX_STORE;
+  var BOOT = window.GX_BOOT || { ready: function () {}, fail: function (e) { throw e; }, details: function () { return ""; } };
+
+  if (!S || !BOOK || !ART || !STORE) {
+    var missing = [["i18n/tr.js", S], ["content/book.tr.js", BOOK], ["illustrations.js", ART], ["storage.js", STORE]]
+      .filter(function (x) { return !x[1]; }).map(function (x) { return x[0]; });
+    BOOT.fail(new Error("Uygulama dosyaları eksik yüklendi: " + missing.join(", ")), "yükleme");
+    return;
+  }
 
   var storage = null;
   try {
@@ -65,9 +73,21 @@
   var ICON_CHEV = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
   var ICON_BACK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
 
-  var dateFmt = new Intl.DateTimeFormat(S.locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  var shortFmt = new Intl.DateTimeFormat(S.locale, { day: "numeric", month: "long" });
-  var wdFmt = new Intl.DateTimeFormat(S.locale, { weekday: "short" });
+  /** Intl desteklenmez ya da hata verirse tarihleri tr.js'teki ay/gün adlarıyla biçimlendir; açılış engellenmez. */
+  function makeFormatter(opts, fallback) {
+    try {
+      var f = new Intl.DateTimeFormat(S.locale, opts);
+      f.format(new Date());
+      return { format: function (d) { return f.format(d); } };
+    } catch (e) {
+      return { format: fallback };
+    }
+  }
+  var dateFmt = makeFormatter({ weekday: "long", day: "numeric", month: "long", year: "numeric" }, function (d) {
+    return d.getDate() + " " + S.dates.months[d.getMonth()] + " " + d.getFullYear() + " " + S.dates.weekdays[d.getDay()];
+  });
+  var shortFmt = makeFormatter({ day: "numeric", month: "long" }, function (d) { return d.getDate() + " " + S.dates.months[d.getMonth()]; });
+  var wdFmt = makeFormatter({ weekday: "short" }, function (d) { return S.dates.weekdaysShort[d.getDay()]; });
   function formatDate(key) { return dateFmt.format(STORE.keyToDate(key)); }
   function formatShort(key) { return shortFmt.format(STORE.keyToDate(key)); }
 
@@ -232,6 +252,28 @@
     return h("div", { class: "save-status", id: "save-status", role: "status", "aria-live": "polite" });
   }
 
+  /* ---------- Pencereler: showModal yoksa basit yedek görünüm ---------- */
+
+  function openDialog(dlg) {
+    if (typeof dlg.showModal === "function") {
+      try {
+        dlg.showModal();
+        return;
+      } catch (e) { /* aşağıdaki yedeğe düş */ }
+    }
+    dlg.classList.add("is-fallback");
+    dlg.setAttribute("open", "");
+  }
+  function closeDialog(dlg) {
+    if (typeof dlg.close === "function" && !dlg.classList.contains("is-fallback")) {
+      try { dlg.close(); } catch (e) { dlg.removeAttribute("open"); }
+    } else {
+      dlg.removeAttribute("open");
+      dlg.classList.remove("is-fallback");
+      try { dlg.dispatchEvent(new Event("close")); } catch (e) { /* eski tarayıcı */ }
+    }
+  }
+
   /* ---------- Onay penceresi (tarayıcının confirm() penceresi yerine) ---------- */
 
   function confirmDialog(opts) {
@@ -241,7 +283,7 @@
       function finish(v) {
         if (done) return;
         done = true;
-        if (dlg.open) dlg.close();
+        if (dlg.hasAttribute("open")) closeDialog(dlg);
         resolve(v);
       }
       var cancelBtn = h("button", { type: "button", class: "btn btn--secondary", text: t("common.cancel"), onclick: function () { finish(false); } });
@@ -255,7 +297,7 @@
         ]),
       ]));
       dlg.addEventListener("close", function () { finish(false); }, { once: true });
-      dlg.showModal();
+      openDialog(dlg);
       cancelBtn.focus();
     });
   }
@@ -313,13 +355,18 @@
       else b.removeAttribute("aria-current");
     });
 
-    if (r.view === "home") renderHome();
-    else if (r.view === "contents") renderContents();
-    else if (r.view === "chapter") renderChapter(r.id);
-    else if (r.view === "day") renderDay(r.date, r.today);
-    else if (r.view === "history") renderHistory();
-    else if (r.view === "habit") renderHabit();
-    else if (r.view === "wizard") renderWizard();
+    try {
+      if (r.view === "home") renderHome();
+      else if (r.view === "contents") renderContents();
+      else if (r.view === "chapter") renderChapter(r.id);
+      else if (r.view === "day") renderDay(r.date, r.today);
+      else if (r.view === "history") renderHistory();
+      else if (r.view === "habit") renderHabit();
+      else if (r.view === "wizard") renderWizard();
+    } catch (err) {
+      if (!BOOT.isStarted || !BOOT.isStarted()) throw err; // ilk açılışta init yakalar
+      renderViewError(err, r.view);
+    }
 
     // Açılıştaki "Kaldığın yerden devam et" için son bölüm
     var place = { chapter: "oku-" + (r.id || ""), day: r.today ? "gunum" : null, habit: "aliskanlik" }[r.view];
@@ -331,6 +378,19 @@
     }
     if (!state.pendingScroll) window.scrollTo(0, 0);
     state.pendingScroll = false;
+  }
+
+  /** Bir ekran çizilemezse: anlaşılır mesaj + ayrı alanda teknik ayrıntı. Gezinme kullanılmaya devam eder. */
+  function renderViewError(err, view) {
+    viewEl.textContent = "";
+    var ta = h("textarea", { class: "textarea code-out", readonly: true, rows: 7, id: "view-error-details", "aria-label": t("boot.details") });
+    ta.value = BOOT.details(err, "ekran: " + view);
+    viewEl.appendChild(h("section", { class: "boot-screen boot-screen--error", role: "alert", id: "view-error" }, [
+      h("h1", { text: t("boot.viewErrorTitle") }),
+      h("p", { text: t("boot.viewErrorBody") }),
+      h("button", { type: "button", class: "btn btn--primary", text: t("boot.goHome"), onclick: function () { navigate("hosgeldin"); } }),
+      h("details", { class: "boot-details" }, [h("summary", { text: t("boot.details") }), ta]),
+    ]));
   }
 
   /* ================= Açılış ================= */
@@ -1535,7 +1595,7 @@
     dlg.appendChild(h("div", { class: "dialog__body" }, [
       h("div", { class: "dialog__head" }, [
         h("h2", { id: "settings-title", text: t("settings.title") }),
-        h("button", { type: "button", class: "btn btn--secondary", id: "close-settings", text: t("settings.close"), onclick: function () { dlg.close(); } }),
+        h("button", { type: "button", class: "btn btn--secondary", id: "close-settings", text: t("settings.close"), onclick: function () { closeDialog(dlg); } }),
       ]),
       h("section", { class: "panel-section" }, [
         h("h3", { text: t("settings.dataTitle") }),
@@ -1593,7 +1653,7 @@
         h("p", { class: "hint", text: t("settings.aboutBody") }),
       ]),
     ]));
-    dlg.showModal();
+    openDialog(dlg);
     if (opts.showExport) {
       showExportText();
       $("export-section").scrollIntoView({ block: "start" });
@@ -1666,6 +1726,15 @@
     route();
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
+  function start() {
+    try {
+      init();
+      BOOT.ready();
+    } catch (err) {
+      BOOT.fail(err, "başlatma");
+    }
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
 })();

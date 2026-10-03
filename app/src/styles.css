@@ -447,3 +447,22 @@ dialog[open] { animation: dialog-in var(--dur) var(--ease); }
 :root[data-motion="off"] *, :root[data-motion="off"] *::before, :root[data-motion="off"] *::after {
   animation: none !important; transition: none !important; scroll-behavior: auto !important;
 }
+
+/* ---------- Başlangıç ekranı ve açılış hataları (JavaScript gerektirmez) ---------- */
+.is-booting .tabs, .is-booting .settings-btn,
+.is-failed .tabs, .is-failed .settings-btn { display: none; }
+.boot-screen { display: grid; gap: 1rem; max-width: var(--measure); padding-block: 1rem 2rem; }
+.boot-screen > * { min-width: 0; }
+.boot-status { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; color: var(--sage-deep); }
+.boot-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--accent-mark); flex: none; }
+.boot-noscript { background: var(--accent-soft); border-radius: var(--radius); padding: 1rem 1.1rem; font-weight: 600; }
+.boot-screen--error .btn { justify-self: start; }
+.boot-details { display: grid; gap: 0.6rem; }
+.boot-details > summary { cursor: pointer; font-weight: 650; color: var(--sage-deep); min-height: 2.75rem; display: flex; align-items: center; }
+.boot-details .btn { justify-self: start; }
+
+/* dialog.showModal desteklenmeyen tarayıcılar için yedek görünüm */
+dialog.is-fallback[open] {
+  position: fixed; inset: 0; margin: auto; z-index: 100; height: fit-content;
+  box-shadow: 0 0 0 100vmax rgb(29 35 31 / 0.45), 0 20px 60px rgb(29 35 31 / 0.25);
+}

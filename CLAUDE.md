@@ -27,14 +27,16 @@ Bu dosya, Claude Code'un bu projede yeni bir oturumda bağlamı hızla kavramas�
 
 ## Teknoloji
 
-- Bağımlılığı olmayan, düz HTML, CSS ve JavaScript (ES5 uyumlu IIFE). Derleme adımı yalnızca dosyaları tek HTML dosyasında birleştirir.
+- Bağımlılığı olmayan, düz HTML, CSS ve JavaScript (ES5 uyumlu IIFE; boot.js ES3). Derleme dosyaları tek HTML'de birleştirir ve `data-t` metinlerini tr.js'ten HTML'e yazar (JavaScript'siz görünüm için).
+- Açılış kuralları: Google Fonts çizimi engellememeli (`media="print"` + boot.js). Başlangıçta kullanılan her tarayıcı API'si korumalı olmalı (Intl, localStorage, showModal yedekleri var). Hata durumunda boş ekran değil, mesaj ve ayrı teknik ayrıntı gösterilir.
 - Yazı tipleri Google Fonts'tan geliyor (Fraunces, Figtree). Yüklenmezse sistem yazı tiplerine düşer; testler fontlar engellenmiş hâlde çalışır.
 - Testler için Node 22'nin `node:test` modülü ve sistemdeki Playwright (Chromium, `/opt/node-tools/node_modules/playwright`) kullanılıyor. Bu ortamda WebKit/Safari motoru yok.
 
 ## Klasör Yapısı
 
 ```
-app/src/index.html         İskelet (@artifact-* işaretçileri derleme için)
+app/src/index.html         İskelet + JavaScript'siz başlangıç ekranı ve noscript (@artifact-* işaretçileri derleme için)
+app/src/boot.js            Başlangıç güvenlik ağı (ES3): font yükleme, hata/zaman aşımı ekranı, GX_BOOT.ready()/fail()
 app/src/styles.css         Tasarım tokenleri en üstte
 app/src/i18n/tr.js         BÜTÜN arayüz metinleri → window.GX_STRINGS
 app/src/content/book.tr.js Kitap içeriği ve kaynakça → window.GX_BOOK
@@ -44,8 +46,10 @@ app/src/app.js             Yönlendirme ve ekranlar
 app/build.mjs              → app/dist/index.html ve app/dist/artifact.html
 tests/storage.test.mjs     Birim testleri
 tests/e2e.mjs              Chromium uçtan uca testleri (17 senaryo)
+tests/boot.mjs             Açılış testleri (13): HTTPS, yerel dosya, JavaScript kapalı, başlangıç hataları, eksik API'ler
 tests/fixtures/            Önceki sürüm (v1) uygulaması, localStorage içeriği ve yedeği: geriye uyumluluk testleri için
-docs/telefon-test-listesi.md  Sahibin gerçek cihazda uygulayacağı test listesi
+docs/telefon-test-listesi.md  Açılış teşhisi + sahibin gerçek cihazda uygulayacağı test listesi
+docs/barindirma.md         Web bağlantısında yayınlama adımları
 ```
 
 Rotalar: `#hosgeldin` (boş adres de açılışa gider), `#oku`, `#oku-<bolumId>`, `#gunum` (eski `#planla` de çalışır), `#gun-YYYY-AA-GG`, `#gecmis`, `#aliskanlik`, `#aliskanlik-kur`.
@@ -63,6 +67,7 @@ Depolama anahtarları: `gx.ssc.days.v1` (günler; şema 2'de de aynı anahtar), 
 npm run build                          # dist/ dosyalarını üret (src değişince her seferinde)
 node --test tests/storage.test.mjs     # birim testleri
 node tests/e2e.mjs                     # tarayıcı testleri (önce build)
+node tests/boot.mjs                    # açılış testleri (önce build; openssl gerekir)
 npm test                               # hepsi
 ```
 
@@ -90,7 +95,11 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 ### Kelime sayıları (kaynakça hariç)
 - Başlarken: 133 · Bölüm 1: 806 · Toplam: yaklaşık 940 (hedef 2.500–3.500)
 
+- [x] Sürüm 2.1 (2026-10-03): telefonda boş ekran bildirimi üzerine açılış güvenliği. JavaScript'siz başlangıç ekranı + noscript, başlangıç hata ve zaman aşımı ekranı, font yüklemesi engellemez, Intl/showModal/localStorage yedekleri. Açılış testleri 13/13, birim 16/16, uçtan uca 17/17. Gerçek cihazda henüz doğrulanmadı.
+
 ### Sıradaki Adımlar (sahibin prototip değerlendirmesinden SONRA)
+- [ ] Sahibin açılış teşhisi sonucunu al (`docs/telefon-test-listesi.md` üstteki tablo): önizleme mi, tarayıcı mı, hata ayrıntısı ne?
+- [ ] Barındırma seçimi (`docs/barindirma.md`) ve gerçek HTTPS adresinde telefon testi
 - [ ] Sahibin sürüm 2 telefon/tablet kontrol sonuçlarını al (`docs/telefon-test-listesi.md`, 10 adım) ve geri bildirimlere göre düzelt
 - [ ] Bölüm 2 (~1.000 kelime, Gollwitzer kaynakları, görsel: büyük işin küçük adımlara ayrılması)
 - [ ] Bölüm 3 (~900 kelime, Lally 2010, görsel: esnek günlük plan, 7 günlük deneme)
@@ -104,3 +113,4 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 - 2026-10-02: Geçmiş bir gün düzenlenebilir. Form, açıldığı tarihe sabitlenir; gece yarısı geçse bile yazılanlar o güne gider ve "Yeni bir gün başladı" uyarısı çıkar.
 - 2026-10-02: Geri yükleme bir birleştirmedir. Aynı tarihli günlerde yedekteki kayıt kullanılır, diğer günler korunur. Hatalı dosyada hiçbir şey değişmez.
 - 2026-10-03: Sürüm 2. Geçmiş günler, Günüm'ün ikincil ekranı oldu. Açılış ekranı her açılışta gösterilir. Özet cümleler yalnızca yer bulunma ekiyle (-de/-da) bittiğinde kurulur, aksi hâlde etiketli özet gösterilir. Cümle ortasındaki alanların ilk harfi Türkçe kurallarıyla küçültülür.
+- 2026-10-03: Telefonda boş ekran bildirimi. Kanıtlar: (1) JavaScript çalışmazsa eski HTML'de bütün metinler boş kalıyordu; (2) Google Fonts isteği yanıtsız kalırsa sayfa en az 8 sn başlamıyordu (Chromium ölçümü). Cihazdaki asıl neden henüz doğrulanmadı.

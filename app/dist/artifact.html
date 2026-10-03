@@ -3,7 +3,9 @@
 <meta name="theme-color" content="#fbf6ec">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<!-- Yazı tipleri çizimi ENGELLEMEZ: media="print" ile indirilir, boot.js yüklenince etkinleştirir.
+     Google Fonts'a ulaşılamazsa (ya da istek askıda kalırsa) sayfa sistem fontlarıyla açılır. -->
+<link id="gx-fonts" rel="stylesheet" media="print" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
 <style>
 /* Düzen: mobilde tek sütun, en az 16px kenar boşluğu; okuma metni ~34rem; geniş ekranda açılış ve alışkanlık iki sütun. */
 :root {
@@ -455,40 +457,268 @@ dialog[open] { animation: dialog-in var(--dur) var(--ease); }
   animation: none !important; transition: none !important; scroll-behavior: auto !important;
 }
 
+/* ---------- Başlangıç ekranı ve açılış hataları (JavaScript gerektirmez) ---------- */
+.is-booting .tabs, .is-booting .settings-btn,
+.is-failed .tabs, .is-failed .settings-btn { display: none; }
+.boot-screen { display: grid; gap: 1rem; max-width: var(--measure); padding-block: 1rem 2rem; }
+.boot-screen > * { min-width: 0; }
+.boot-status { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; color: var(--sage-deep); }
+.boot-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--accent-mark); flex: none; }
+.boot-noscript { background: var(--accent-soft); border-radius: var(--radius); padding: 1rem 1.1rem; font-weight: 600; }
+.boot-screen--error .btn { justify-self: start; }
+.boot-details { display: grid; gap: 0.6rem; }
+.boot-details > summary { cursor: pointer; font-weight: 650; color: var(--sage-deep); min-height: 2.75rem; display: flex; align-items: center; }
+.boot-details .btn { justify-self: start; }
+
+/* dialog.showModal desteklenmeyen tarayıcılar için yedek görünüm */
+dialog.is-fallback[open] {
+  position: fixed; inset: 0; margin: auto; z-index: 100; height: fit-content;
+  box-shadow: 0 0 0 100vmax rgb(29 35 31 / 0.45), 0 20px 60px rgb(29 35 31 / 0.25);
+}
+
 </style>
-<a class="skip" href="#main" data-t="app.skipToContent"></a>
+<!-- data-t ile işaretli metinler derleme sırasında i18n/tr.js'ten doldurulur; JavaScript çalışmasa da görünürler. -->
+<div id="app-root" class="is-booting">
+<a class="skip" href="#main" data-t="app.skipToContent">İçeriğe geç</a>
 
 <header class="topbar">
   <div class="topbar__inner">
     <a class="brand" href="#hosgeldin">
-      <span class="brand__studio" data-t="app.brand"></span>
-      <span class="brand__title" data-t="app.title"></span>
+      <span class="brand__studio" data-t="app.brand">Genix Studio</span>
+      <span class="brand__title" data-t="app.title">Küçük Adımlar, Daha Net Günler</span>
     </a>
     <button type="button" class="settings-btn" id="open-settings" aria-haspopup="dialog">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.8 12h2.4M18.8 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
-      <span data-t="app.settingsButton"></span>
+      <span data-t="app.settingsButton">Ayarlar</span>
     </button>
   </div>
 </header>
 
-<nav class="tabs" data-t-label="nav.label">
+<nav class="tabs" data-t-label="nav.label" aria-label="Ana bölümler">
   <ul class="tabs__list">
-    <li><button type="button" class="tab" data-nav="oku" data-t="nav.read"></button></li>
-    <li><button type="button" class="tab" data-nav="gunum" data-t="nav.day"></button></li>
-    <li><button type="button" class="tab" data-nav="aliskanlik" data-t="nav.habit"></button></li>
+    <li><button type="button" class="tab" data-nav="oku" data-t="nav.read">Oku</button></li>
+    <li><button type="button" class="tab" data-nav="gunum" data-t="nav.day">Günüm</button></li>
+    <li><button type="button" class="tab" data-nav="aliskanlik" data-t="nav.habit">Alışkanlığım</button></li>
   </ul>
 </nav>
 
 <main id="main" tabindex="-1">
-  <div id="view" class="view"></div>
-  <noscript><p>Bu uygulama JavaScript gerektirir. Tarayıcında JavaScript'i açıp sayfayı yenile.</p></noscript>
+  <div id="view" class="view">
+    <!-- Başlangıç ekranı: JavaScript gerektirmez. Uygulama başlayınca yerine uygulama ekranı gelir. -->
+    <section class="boot-screen" id="boot-screen" aria-labelledby="boot-title">
+      <p class="eyebrow" data-t="app.brand">Genix Studio</p>
+      <h1 id="boot-title" data-t="app.title">Küçük Adımlar, Daha Net Günler</h1>
+      <p class="lead" data-t="boot.description">Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.</p>
+      <p class="boot-status" id="boot-status" role="status"><span class="boot-dot" aria-hidden="true"></span><span data-t="boot.loading">Uygulama hazırlanıyor…</span></p>
+      <noscript>
+        <p class="boot-noscript" data-t="boot.noscript">Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.</p>
+        <style>.boot-status, .boot-hint { display: none !important; }</style>
+      </noscript>
+      <p class="hint boot-hint" data-t="boot.slowHint">Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.</p>
+    </section>
+  </div>
 </main>
 
 <dialog id="settings" aria-labelledby="settings-title"></dialog>
 <dialog id="confirm" aria-labelledby="confirm-title"></dialog>
 
 <div class="toast-region" aria-live="polite" aria-atomic="true" id="toast-region"></div>
+</div>
 
+<!-- Önce güvenlik ağı: sonraki betiklerdeki hataları yakalar. -->
+<script>
+/*
+ * Başlangıç güvenlik ağı. Uygulama kodundan ÖNCE çalışır ve bilerek çok sade (ES3) yazılmıştır:
+ * eski ya da kısıtlı bir tarayıcıda bile ayrıştırılabilmeli.
+ *
+ * Görevleri:
+ *   1. Yazı tiplerini çizimi engellemeden etkinleştirmek (Google Fonts yüklenmezse sistem fontları kalır).
+ *   2. Eksik küçük API'leri tamamlamak (NodeList.forEach).
+ *   3. Başlangıç sırasında oluşan hatayı yakalayıp boş ekran yerine anlaşılır bir mesaj ve teknik ayrıntı göstermek.
+ *   4. Uygulama belirli bir sürede başlamazsa bunu söylemek.
+ * Uygulama başarıyla başlayınca app.js, GX_BOOT.ready() çağırır ve başlangıç ekranı uygulama ekranıyla değişir.
+ *
+ * Metinler i18n/tr.js içindeki "boot" bölümünden derleme sırasında buraya yazılır.
+ */
+(function (w, d) {
+  var STR = {"description":"Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.","loading":"Uygulama hazırlanıyor…","slowHint":"Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.","noscript":"Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.","errorTitle":"Uygulama başlatılamadı","errorBody":"Sayfa açıldı ama uygulama başlarken bir sorun oluştu. Kayıtların bu tarayıcıda duruyorsa silinmedi.","errorSteps":"Sayfayı yenilemeyi dene. Sorun sürerse aşağıdaki teknik ayrıntıları kopyalayıp gönder.","timeoutTitle":"Uygulama beklenenden uzun sürede açılıyor","timeoutBody":"Uygulama {sec} saniyedir başlatılamadı. Bağlantı yavaş olabilir ya da bu görünüm uygulamanın kodunu tam çalıştıramıyor olabilir.","unsupportedTitle":"Bu tarayıcı desteklenmiyor","unsupportedBody":"Bu tarayıcı uygulamanın ihtiyaç duyduğu temel özellikleri sunmuyor. Güncel Safari veya Chrome kullan.","reload":"Sayfayı yenile","details":"Teknik ayrıntılar","copyDetails":"Ayrıntıları kopyala","copied":"Kopyalandı","viewErrorTitle":"Bu ekran açılamadı","viewErrorBody":"Bu bölüm gösterilirken bir sorun oluştu. Diğer bölümleri kullanmaya devam edebilirsin; kayıtların değişmedi.","goHome":"Açılış ekranına dön"};
+  var TIMEOUT_MS = 12000;
+  var started = false;
+  var errors = [];
+  var t0 = new Date().getTime();
+
+  function s(key) {
+    if (STR[key]) return STR[key];
+    try {
+      if (w.GX_STRINGS && w.GX_STRINGS.boot && w.GX_STRINGS.boot[key]) return w.GX_STRINGS.boot[key];
+    } catch (e) {}
+    return key;
+  }
+
+  // Eski tarayıcılar için küçük tamamlayıcı
+  try {
+    if (w.NodeList && w.NodeList.prototype && !w.NodeList.prototype.forEach) w.NodeList.prototype.forEach = Array.prototype.forEach;
+  } catch (e) {}
+
+  // Yazı tipleri: media="print" ile engellemeden indirilir, yüklenince etkinleşir.
+  try {
+    var fonts = d.getElementById("gx-fonts");
+    if (fonts) {
+      var enable = function () { fonts.media = "all"; };
+      if (fonts.sheet) enable();
+      else if (fonts.addEventListener) fonts.addEventListener("load", enable, false);
+    }
+  } catch (e) {}
+
+  function root() {
+    return d.getElementById("app-root");
+  }
+
+  function setRootState(state) {
+    var r = root();
+    if (!r) return;
+    r.className = r.className.replace(/\bis-(booting|failed)\b/g, "").replace(/\s+/g, " ") + (state ? " " + state : "");
+  }
+
+  function features() {
+    var out = [];
+    function check(name, fn) {
+      var ok;
+      try { ok = !!fn(); } catch (e) { ok = false; }
+      out.push(name + ": " + (ok ? "var" : "YOK"));
+    }
+    check("JSON", function () { return w.JSON && w.JSON.parse; });
+    check("querySelector", function () { return d.querySelector; });
+    check("localStorage", function () {
+      var k = "gx.ssc.bootprobe";
+      w.localStorage.setItem(k, "1");
+      w.localStorage.removeItem(k);
+      return true;
+    });
+    check("Intl.DateTimeFormat", function () { return new w.Intl.DateTimeFormat("tr-TR").format(new Date()); });
+    check("Promise", function () { return w.Promise; });
+    check("dialog.showModal", function () { return d.createElement("dialog").showModal; });
+    check("matchMedia", function () { return w.matchMedia; });
+    return out;
+  }
+
+  function describe(err, stage) {
+    if (!err) return stage ? "[" + stage + "]" : "";
+    var msg = (err.name ? err.name + ": " : "") + (err.message || String(err));
+    if (err.stack) msg += "\n" + String(err.stack).split("\n").slice(0, 4).join("\n");
+    return (stage ? "[" + stage + "] " : "") + msg;
+  }
+
+  function detailsText(kind) {
+    var lines = [];
+    lines.push("Durum: " + kind);
+    lines.push("Süre: " + (new Date().getTime() - t0) + " ms");
+    lines.push("Adres türü: " + (w.location ? w.location.protocol : "?"));
+    lines.push("Tarayıcı: " + (w.navigator ? w.navigator.userAgent : "?"));
+    var files = ["GX_STRINGS", "GX_BOOK", "GX_ART", "GX_STORE"], loaded = [];
+    for (var i = 0; i < files.length; i++) loaded.push(files[i] + (w[files[i]] ? " var" : " YOK"));
+    lines.push("Uygulama dosyaları: " + loaded.join(", "));
+    lines.push("Özellikler: " + features().join(", "));
+    lines.push("Hatalar:" + (errors.length ? "\n" + errors.join("\n---\n") : " kayıt yok"));
+    return lines.join("\n");
+  }
+
+  function el(tag, cls, text) {
+    var e = d.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.appendChild(d.createTextNode(text));
+    return e;
+  }
+
+  /** Boş ekran yerine mesaj + teknik ayrıntı gösterir. kind: error | timeout | unsupported */
+  function show(kind) {
+    var view = d.getElementById("view");
+    if (!view) return;
+    var title = kind === "timeout" ? s("timeoutTitle") : kind === "unsupported" ? s("unsupportedTitle") : s("errorTitle");
+    var body = kind === "timeout"
+      ? s("timeoutBody").replace("{sec}", String(Math.round(TIMEOUT_MS / 1000)))
+      : kind === "unsupported" ? s("unsupportedBody") : s("errorBody");
+
+    var panel = el("section", "boot-screen boot-screen--error");
+    panel.setAttribute("role", "alert");
+    panel.setAttribute("id", "boot-error");
+    panel.appendChild(el("p", "eyebrow", "Genix Studio"));
+    panel.appendChild(el("h1", null, title));
+    panel.appendChild(el("p", null, body));
+    panel.appendChild(el("p", "hint", s("errorSteps")));
+
+    var reload = el("button", "btn btn--primary", s("reload"));
+    reload.setAttribute("type", "button");
+    reload.onclick = function () { w.location.reload(); };
+    panel.appendChild(reload);
+
+    var det = el("details", "boot-details");
+    det.appendChild(el("summary", null, s("details")));
+    var ta = el("textarea", "textarea code-out");
+    ta.setAttribute("readonly", "readonly");
+    ta.setAttribute("rows", "8");
+    ta.setAttribute("id", "boot-error-details");
+    ta.setAttribute("aria-label", s("details"));
+    ta.value = detailsText(kind);
+    det.appendChild(ta);
+    var copy = el("button", "btn btn--secondary", s("copyDetails"));
+    copy.setAttribute("type", "button");
+    copy.onclick = function () {
+      ta.focus();
+      ta.select();
+      try {
+        if (w.navigator.clipboard && w.navigator.clipboard.writeText) {
+          w.navigator.clipboard.writeText(ta.value).then(function () { copy.firstChild.nodeValue = s("copied"); }, function () {});
+        } else if (d.execCommand && d.execCommand("copy")) {
+          copy.firstChild.nodeValue = s("copied");
+        }
+      } catch (e) {}
+    };
+    det.appendChild(copy);
+    panel.appendChild(det);
+
+    while (view.firstChild) view.removeChild(view.firstChild);
+    view.appendChild(panel);
+    setRootState("is-failed");
+  }
+
+  w.onerror = function (message, source, line, col, err) {
+    errors.push(err ? describe(err) : String(message) + " (" + (source || "satır içi") + ":" + line + ":" + col + ")");
+    if (!started) show("error");
+    return false;
+  };
+
+  if (!d.querySelector || !w.JSON || !d.addEventListener) {
+    errors.push("Temel tarayıcı özellikleri eksik.");
+    // Belge tamamen yüklendiğinde göster (view öğesi henüz oluşmamış olabilir)
+    setTimeout(function () { show("unsupported"); }, 0);
+  }
+
+  setTimeout(function () {
+    if (!started) show("timeout");
+  }, TIMEOUT_MS);
+
+  w.GX_BOOT = {
+    /** Uygulama ekranı başarıyla çizildi. */
+    ready: function () {
+      started = true;
+      setRootState("");
+    },
+    /** Başlangıç sırasında yakalanan hata (app.js içinden). */
+    fail: function (err, stage) {
+      errors.push(describe(err, stage));
+      show("error");
+    },
+    isStarted: function () { return started; },
+    /** Uygulama çalışırken bir ekran çizilemezse o ekranda gösterilecek ayrıntılar. */
+    details: function (err, stage) {
+      errors.push(describe(err, stage));
+      return detailsText("ekran hatası");
+    }
+  };
+})(window, document);
+
+</script>
 <script>
 /*
  * Arayüz metinleri (Türkçe).
@@ -499,6 +729,36 @@ dialog[open] { animation: dialog-in var(--dur) var(--ease); }
 window.GX_STRINGS = {
   locale: "tr-TR",
   htmlLang: "tr",
+
+  // Başlangıç ekranı ve açılış hataları. Bu metinler derleme sırasında HTML'e ve başlangıç betiğine yazılır,
+  // böylece JavaScript hiç çalışmasa ya da uygulama başlatılamasa da görünür.
+  boot: {
+    description: "Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.",
+    loading: "Uygulama hazırlanıyor…",
+    slowHint: "Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.",
+    noscript: "Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.",
+    errorTitle: "Uygulama başlatılamadı",
+    errorBody: "Sayfa açıldı ama uygulama başlarken bir sorun oluştu. Kayıtların bu tarayıcıda duruyorsa silinmedi.",
+    errorSteps: "Sayfayı yenilemeyi dene. Sorun sürerse aşağıdaki teknik ayrıntıları kopyalayıp gönder.",
+    timeoutTitle: "Uygulama beklenenden uzun sürede açılıyor",
+    timeoutBody: "Uygulama {sec} saniyedir başlatılamadı. Bağlantı yavaş olabilir ya da bu görünüm uygulamanın kodunu tam çalıştıramıyor olabilir.",
+    unsupportedTitle: "Bu tarayıcı desteklenmiyor",
+    unsupportedBody: "Bu tarayıcı uygulamanın ihtiyaç duyduğu temel özellikleri sunmuyor. Güncel Safari veya Chrome kullan.",
+    reload: "Sayfayı yenile",
+    details: "Teknik ayrıntılar",
+    copyDetails: "Ayrıntıları kopyala",
+    copied: "Kopyalandı",
+    viewErrorTitle: "Bu ekran açılamadı",
+    viewErrorBody: "Bu bölüm gösterilirken bir sorun oluştu. Diğer bölümleri kullanmaya devam edebilirsin; kayıtların değişmedi.",
+    goHome: "Açılış ekranına dön",
+  },
+
+  // Intl.DateTimeFormat kullanılamayan tarayıcılar için yedek tarih adları
+  dates: {
+    months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+    weekdays: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
+    weekdaysShort: ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
+  },
 
   app: {
     brand: "Genix Studio",
@@ -1771,6 +2031,14 @@ window.GX_ART = {
   var BOOK = window.GX_BOOK;
   var ART = window.GX_ART;
   var STORE = window.GX_STORE;
+  var BOOT = window.GX_BOOT || { ready: function () {}, fail: function (e) { throw e; }, details: function () { return ""; } };
+
+  if (!S || !BOOK || !ART || !STORE) {
+    var missing = [["i18n/tr.js", S], ["content/book.tr.js", BOOK], ["illustrations.js", ART], ["storage.js", STORE]]
+      .filter(function (x) { return !x[1]; }).map(function (x) { return x[0]; });
+    BOOT.fail(new Error("Uygulama dosyaları eksik yüklendi: " + missing.join(", ")), "yükleme");
+    return;
+  }
 
   var storage = null;
   try {
@@ -1825,9 +2093,21 @@ window.GX_ART = {
   var ICON_CHEV = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
   var ICON_BACK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
 
-  var dateFmt = new Intl.DateTimeFormat(S.locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  var shortFmt = new Intl.DateTimeFormat(S.locale, { day: "numeric", month: "long" });
-  var wdFmt = new Intl.DateTimeFormat(S.locale, { weekday: "short" });
+  /** Intl desteklenmez ya da hata verirse tarihleri tr.js'teki ay/gün adlarıyla biçimlendir; açılış engellenmez. */
+  function makeFormatter(opts, fallback) {
+    try {
+      var f = new Intl.DateTimeFormat(S.locale, opts);
+      f.format(new Date());
+      return { format: function (d) { return f.format(d); } };
+    } catch (e) {
+      return { format: fallback };
+    }
+  }
+  var dateFmt = makeFormatter({ weekday: "long", day: "numeric", month: "long", year: "numeric" }, function (d) {
+    return d.getDate() + " " + S.dates.months[d.getMonth()] + " " + d.getFullYear() + " " + S.dates.weekdays[d.getDay()];
+  });
+  var shortFmt = makeFormatter({ day: "numeric", month: "long" }, function (d) { return d.getDate() + " " + S.dates.months[d.getMonth()]; });
+  var wdFmt = makeFormatter({ weekday: "short" }, function (d) { return S.dates.weekdaysShort[d.getDay()]; });
   function formatDate(key) { return dateFmt.format(STORE.keyToDate(key)); }
   function formatShort(key) { return shortFmt.format(STORE.keyToDate(key)); }
 
@@ -1992,6 +2272,28 @@ window.GX_ART = {
     return h("div", { class: "save-status", id: "save-status", role: "status", "aria-live": "polite" });
   }
 
+  /* ---------- Pencereler: showModal yoksa basit yedek görünüm ---------- */
+
+  function openDialog(dlg) {
+    if (typeof dlg.showModal === "function") {
+      try {
+        dlg.showModal();
+        return;
+      } catch (e) { /* aşağıdaki yedeğe düş */ }
+    }
+    dlg.classList.add("is-fallback");
+    dlg.setAttribute("open", "");
+  }
+  function closeDialog(dlg) {
+    if (typeof dlg.close === "function" && !dlg.classList.contains("is-fallback")) {
+      try { dlg.close(); } catch (e) { dlg.removeAttribute("open"); }
+    } else {
+      dlg.removeAttribute("open");
+      dlg.classList.remove("is-fallback");
+      try { dlg.dispatchEvent(new Event("close")); } catch (e) { /* eski tarayıcı */ }
+    }
+  }
+
   /* ---------- Onay penceresi (tarayıcının confirm() penceresi yerine) ---------- */
 
   function confirmDialog(opts) {
@@ -2001,7 +2303,7 @@ window.GX_ART = {
       function finish(v) {
         if (done) return;
         done = true;
-        if (dlg.open) dlg.close();
+        if (dlg.hasAttribute("open")) closeDialog(dlg);
         resolve(v);
       }
       var cancelBtn = h("button", { type: "button", class: "btn btn--secondary", text: t("common.cancel"), onclick: function () { finish(false); } });
@@ -2015,7 +2317,7 @@ window.GX_ART = {
         ]),
       ]));
       dlg.addEventListener("close", function () { finish(false); }, { once: true });
-      dlg.showModal();
+      openDialog(dlg);
       cancelBtn.focus();
     });
   }
@@ -2073,13 +2375,18 @@ window.GX_ART = {
       else b.removeAttribute("aria-current");
     });
 
-    if (r.view === "home") renderHome();
-    else if (r.view === "contents") renderContents();
-    else if (r.view === "chapter") renderChapter(r.id);
-    else if (r.view === "day") renderDay(r.date, r.today);
-    else if (r.view === "history") renderHistory();
-    else if (r.view === "habit") renderHabit();
-    else if (r.view === "wizard") renderWizard();
+    try {
+      if (r.view === "home") renderHome();
+      else if (r.view === "contents") renderContents();
+      else if (r.view === "chapter") renderChapter(r.id);
+      else if (r.view === "day") renderDay(r.date, r.today);
+      else if (r.view === "history") renderHistory();
+      else if (r.view === "habit") renderHabit();
+      else if (r.view === "wizard") renderWizard();
+    } catch (err) {
+      if (!BOOT.isStarted || !BOOT.isStarted()) throw err; // ilk açılışta init yakalar
+      renderViewError(err, r.view);
+    }
 
     // Açılıştaki "Kaldığın yerden devam et" için son bölüm
     var place = { chapter: "oku-" + (r.id || ""), day: r.today ? "gunum" : null, habit: "aliskanlik" }[r.view];
@@ -2091,6 +2398,19 @@ window.GX_ART = {
     }
     if (!state.pendingScroll) window.scrollTo(0, 0);
     state.pendingScroll = false;
+  }
+
+  /** Bir ekran çizilemezse: anlaşılır mesaj + ayrı alanda teknik ayrıntı. Gezinme kullanılmaya devam eder. */
+  function renderViewError(err, view) {
+    viewEl.textContent = "";
+    var ta = h("textarea", { class: "textarea code-out", readonly: true, rows: 7, id: "view-error-details", "aria-label": t("boot.details") });
+    ta.value = BOOT.details(err, "ekran: " + view);
+    viewEl.appendChild(h("section", { class: "boot-screen boot-screen--error", role: "alert", id: "view-error" }, [
+      h("h1", { text: t("boot.viewErrorTitle") }),
+      h("p", { text: t("boot.viewErrorBody") }),
+      h("button", { type: "button", class: "btn btn--primary", text: t("boot.goHome"), onclick: function () { navigate("hosgeldin"); } }),
+      h("details", { class: "boot-details" }, [h("summary", { text: t("boot.details") }), ta]),
+    ]));
   }
 
   /* ================= Açılış ================= */
@@ -3295,7 +3615,7 @@ window.GX_ART = {
     dlg.appendChild(h("div", { class: "dialog__body" }, [
       h("div", { class: "dialog__head" }, [
         h("h2", { id: "settings-title", text: t("settings.title") }),
-        h("button", { type: "button", class: "btn btn--secondary", id: "close-settings", text: t("settings.close"), onclick: function () { dlg.close(); } }),
+        h("button", { type: "button", class: "btn btn--secondary", id: "close-settings", text: t("settings.close"), onclick: function () { closeDialog(dlg); } }),
       ]),
       h("section", { class: "panel-section" }, [
         h("h3", { text: t("settings.dataTitle") }),
@@ -3353,7 +3673,7 @@ window.GX_ART = {
         h("p", { class: "hint", text: t("settings.aboutBody") }),
       ]),
     ]));
-    dlg.showModal();
+    openDialog(dlg);
     if (opts.showExport) {
       showExportText();
       $("export-section").scrollIntoView({ block: "start" });
@@ -3426,8 +3746,17 @@ window.GX_ART = {
     route();
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
+  function start() {
+    try {
+      init();
+      BOOT.ready();
+    } catch (err) {
+      BOOT.fail(err, "başlatma");
+    }
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
 })();
 
 </script>

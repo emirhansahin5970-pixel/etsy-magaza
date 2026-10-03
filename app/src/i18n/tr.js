@@ -8,6 +8,36 @@ window.GX_STRINGS = {
   locale: "tr-TR",
   htmlLang: "tr",
 
+  // Başlangıç ekranı ve açılış hataları. Bu metinler derleme sırasında HTML'e ve başlangıç betiğine yazılır,
+  // böylece JavaScript hiç çalışmasa ya da uygulama başlatılamasa da görünür.
+  boot: {
+    description: "Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.",
+    loading: "Uygulama hazırlanıyor…",
+    slowHint: "Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.",
+    noscript: "Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.",
+    errorTitle: "Uygulama başlatılamadı",
+    errorBody: "Sayfa açıldı ama uygulama başlarken bir sorun oluştu. Kayıtların bu tarayıcıda duruyorsa silinmedi.",
+    errorSteps: "Sayfayı yenilemeyi dene. Sorun sürerse aşağıdaki teknik ayrıntıları kopyalayıp gönder.",
+    timeoutTitle: "Uygulama beklenenden uzun sürede açılıyor",
+    timeoutBody: "Uygulama {sec} saniyedir başlatılamadı. Bağlantı yavaş olabilir ya da bu görünüm uygulamanın kodunu tam çalıştıramıyor olabilir.",
+    unsupportedTitle: "Bu tarayıcı desteklenmiyor",
+    unsupportedBody: "Bu tarayıcı uygulamanın ihtiyaç duyduğu temel özellikleri sunmuyor. Güncel Safari veya Chrome kullan.",
+    reload: "Sayfayı yenile",
+    details: "Teknik ayrıntılar",
+    copyDetails: "Ayrıntıları kopyala",
+    copied: "Kopyalandı",
+    viewErrorTitle: "Bu ekran açılamadı",
+    viewErrorBody: "Bu bölüm gösterilirken bir sorun oluştu. Diğer bölümleri kullanmaya devam edebilirsin; kayıtların değişmedi.",
+    goHome: "Açılış ekranına dön",
+  },
+
+  // Intl.DateTimeFormat kullanılamayan tarayıcılar için yedek tarih adları
+  dates: {
+    months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+    weekdays: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
+    weekdaysShort: ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
+  },
+
   app: {
     brand: "Genix Studio",
     title: "Küçük Adımlar, Daha Net Günler",

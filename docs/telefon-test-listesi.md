@@ -1,3 +1,15 @@
+# Açılış sorunu teşhisi (sürüm 2.1)
+
+Bu ortamda gerçek telefon veya tablet testi yapılmadı. Aşağıdaki adımlar boş ekran sorununun nereden kaynaklandığını ayırmak içindir. Gördüğün sonucu bana yaz.
+
+| # | Nasıl açıyorsun? | Görürsen | Anlamı |
+|---|---|---|---|
+| 1 | İndirilen HTML dosyasına Dosyalar / dosya yöneticisi / mesaj önizlemesinden dokun | Ürün adı, açıklama ve turuncu kutuda "Bu görünüm uygulamanın kodunu çalıştıramıyor…" | Önizleme JavaScript çalıştırmıyor. Beklenen durum; ürün bu yolla kullanılamaz. |
+| 2 | Aynı dosyayı tarayıcıda aç (iPhone: Paylaş › Safari'de aç ya da Chrome'da "Dosyalar"dan aç) | Uygulama açılır | Kod çalışıyor; sorun önizlemedeydi. Asıl kullanım için yine web bağlantısı öner. |
+| 3 | Web bağlantısını Safari / Chrome'da aç | Uygulama açılır | Web kullanımı sorunsuz. |
+| 4 | 2. veya 3. yolda | "Uygulama başlatılamadı" ya da "beklenenden uzun sürede açılıyor" | Kod çalıştı ama başlarken sorun oldu. "Teknik ayrıntılar"ı aç, "Ayrıntıları kopyala"ya dokun ve metni bana gönder. |
+| 5 | Herhangi bir yolda | Tamamen boş ekran | Beklenmeyen durum: cihaz modeli, iOS/Android sürümü, uygulama (Safari, Chrome, Dosyalar, WhatsApp…) ve ekran görüntüsünü gönder. |
+
 # Beş dakikalık telefon ve tablet kontrolü (sürüm 2)
 
 Bu ortamdaki testler bilgisayarda Chromium ile, ekran boyutu taklit edilerek yapıldı. Gerçek iPhone, Android ya da iPad üzerinde test yapılmadı. Aşağıdaki kontrolleri kendi cihazlarında **tarayıcıdan** yap (Safari / Chrome). HTML dosyasını telefonun dosya önizlemesinde açmak bu testin yerini tutmaz.
