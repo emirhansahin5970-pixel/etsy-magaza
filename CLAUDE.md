@@ -117,7 +117,8 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 - [ ] Kısa bir kapanış ve tam kaynakça
 - [ ] Mobilde okunacak düz PDF mini kitap (Türkçe karakterleri ve görselleri kontrol et; etkileşim varmış gibi tanıtma)
 - [ ] Kullanım belgesi (web sürümüne erişim, web ile PDF arasındaki fark) ve yardım metni (veri saklama, yedekleme, tarayıcı gereksinimleri)
-- [ ] Satış öncesi kararlar: barındırma yeri, bağlantı paylaşımı, müşteri erişim yöntemi, barındırmanın sürekliliği
+- [ ] Teslim PDF'i: uygulama bağlantısı, iPhone/Android'e kurulum adımları, kişisel kullanım şartları ("paylaşılamaz, satılamaz")
+- [ ] Satıştan hemen önce: depoyu gizli yap + yayını gizli depoyla çalışan bir yere taşı (ör. Cloudflare Pages), tahmin edilemez adres (ör. /k7m2x9/). Sahibe ekran ekran tarif et.
 
 ### Notlar / Kararlar
 - 2026-10-02: Prototip, sahibin kendi kullanımı için claude.ai Artifact olarak yayınlandı. Satış için ayrı bir barındırma kararı gerekiyor.
@@ -126,3 +127,5 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 - 2026-10-03: Sürüm 2. Geçmiş günler, Günüm'ün ikincil ekranı oldu. Açılış ekranı her açılışta gösterilir. Özet cümleler yalnızca yer bulunma ekiyle (-de/-da) bittiğinde kurulur, aksi hâlde etiketli özet gösterilir. Cümle ortasındaki alanların ilk harfi Türkçe kurallarıyla küçültülür.
 - 2026-10-03: Telefonda boş ekran bildirimi. Kanıtlar: (1) JavaScript çalışmazsa eski HTML'de bütün metinler boş kalıyordu; (2) Google Fonts isteği yanıtsız kalırsa sayfa en az 8 sn başlamıyordu (Chromium ölçümü). Cihazdaki asıl neden henüz doğrulanmadı.
 - 2026-10-03: Sahip iPhone 17 Pro'da indirilen HTML dosyasında yalnızca başlığı gördü. Neden: iOS dosya önizlemesi JavaScript çalıştırmıyor (Apple forumu, iOS 13+). Çözüm: dosya yerine GitHub Pages adresi + Ana Ekrana Ekle.
+
+- 2026-10-03: SATIŞ MODELİ KARARI (sahip): En kolay yol. Etsy dijital ilan → alıcıya otomatik PDF → PDF içinde uygulama bağlantısı. Sipariş başına iş yok. Kişiye özel kod/hesap YOK (sahip zahmetli buldu). Paylaşım yayılırsa: adres yolunu değiştir (aynı alan adında kalınca kullanıcı kayıtları korunur), Etsy'deki PDF'i güncelle. Kopyalayıp satan olursa Etsy IP bildirim formu. Değer stratejisi: güncellemeler (yeni bölümler aynı bağlantıda), marka, PDF kitap.
