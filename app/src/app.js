@@ -2,19 +2,22 @@
  * Küçük Adımlar, Daha Net Günler — uygulama mantığı.
  * Ana bölümler: Oku (#oku, #oku-<bolum>), Günüm (#gunum, #gun-YYYY-AA-GG, #gecmis), Alışkanlığım (#aliskanlik, #aliskanlik-kur).
  * Açılış: #hosgeldin (adres boşken de açılış gösterilir).
- * Metinler: i18n/tr.js (GX_STRINGS), kitap: content/book.tr.js (GX_BOOK), veri: storage.js (GX_STORE).
+ * Metinler: i18n/<dil>.js (GX_I18N; Türkçe, English, Deutsch, Français, Español, Italiano, Nederlands),
+ * kitap: content/book.tr.js (GX_BOOK, şimdilik yalnızca Türkçe), veri: storage.js (GX_STORE).
  */
 (function () {
   "use strict";
 
-  var S = window.GX_STRINGS;
+  var I18N = window.GX_I18N || (window.GX_STRINGS ? { tr: window.GX_STRINGS } : null);
+  var LANG_ORDER = ["tr", "en", "de", "fr", "es", "it", "nl"];
+  var S = I18N && (I18N.tr || I18N.en);
   var BOOK = window.GX_BOOK;
   var ART = window.GX_ART;
   var STORE = window.GX_STORE;
   var BOOT = window.GX_BOOT || { ready: function () {}, fail: function (e) { throw e; }, details: function () { return ""; } };
 
   if (!S || !BOOK || !ART || !STORE) {
-    var missing = [["i18n/tr.js", S], ["content/book.tr.js", BOOK], ["illustrations.js", ART], ["storage.js", STORE]]
+    var missing = [["i18n/*.js", S], ["content/book.tr.js", BOOK], ["illustrations.js", ART], ["storage.js", STORE]]
       .filter(function (x) { return !x[1]; }).map(function (x) { return x[0]; });
     BOOT.fail(new Error("Uygulama dosyaları eksik yüklendi: " + missing.join(", ")), "yükleme");
     return;
@@ -28,10 +31,44 @@
   }
   var store = STORE.createStore(storage || { getItem: function () { throw 0; }, setItem: function () { throw 0; }, removeItem: function () {} });
 
+  /* ================= Dil ================= */
+
+  /** Kullanılabilir diller, sabit sırayla (yalnızca dosyası yüklenmiş olanlar). */
+  function languages() {
+    return LANG_ORDER.filter(function (l) { return I18N[l]; });
+  }
+
+  /**
+   * Dil seçimi: kayıtlı tercih → cihazın dil listesindeki ilk desteklenen dil → İngilizce.
+   * Tercih yalnızca bu cihazda tutulur ve yedeğe girmez.
+   */
+  function pickLanguage() {
+    var saved = store.getSettings().lang;
+    if (saved && I18N[saved]) return saved;
+    var list = [];
+    try {
+      list = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""]);
+    } catch (e) { list = []; }
+    for (var i = 0; i < list.length; i++) {
+      var code = String(list[i] || "").toLowerCase().split(/[-_]/)[0];
+      if (I18N[code]) return code;
+    }
+    return I18N.en ? "en" : languages()[0];
+  }
+  var lang = pickLanguage();
+  S = I18N[lang];
+
   /* ================= Yardımcılar ================= */
 
+  function lookupIn(obj, path) {
+    return path.split(".").reduce(function (o, k) { return o == null ? o : o[k]; }, obj);
+  }
+  /** Seçili dilde yoksa İngilizce, o da yoksa Türkçe metin kullanılır (testler eksik anahtara izin vermez). */
   function get(path) {
-    return path.split(".").reduce(function (o, k) { return o == null ? o : o[k]; }, S);
+    var v = lookupIn(S, path);
+    if (v == null && I18N.en) v = lookupIn(I18N.en, path);
+    if (v == null && I18N.tr) v = lookupIn(I18N.tr, path);
+    return v;
   }
 
   /** Metin anahtarını bulur ve {yer tutucuları} doldurur. */
@@ -71,6 +108,7 @@
   var ICON_INFO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5" stroke-linecap="round"/></svg>';
   var ICON_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   var ICON_CHEV = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  var ICON_GLOBE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
   var ICON_BACK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
 
   /** Intl desteklenmez ya da hata verirse tarihleri tr.js'teki ay/gün adlarıyla biçimlendir; açılış engellenmez. */
@@ -83,11 +121,16 @@
       return { format: fallback };
     }
   }
-  var dateFmt = makeFormatter({ weekday: "long", day: "numeric", month: "long", year: "numeric" }, function (d) {
-    return d.getDate() + " " + S.dates.months[d.getMonth()] + " " + d.getFullYear() + " " + S.dates.weekdays[d.getDay()];
-  });
-  var shortFmt = makeFormatter({ day: "numeric", month: "long" }, function (d) { return d.getDate() + " " + S.dates.months[d.getMonth()]; });
-  var wdFmt = makeFormatter({ weekday: "short" }, function (d) { return S.dates.weekdaysShort[d.getDay()]; });
+  var dateFmt, shortFmt, wdFmt;
+  /** Dil değişince tarih biçimleri de yeniden kurulur. */
+  function buildFormatters() {
+    dateFmt = makeFormatter({ weekday: "long", day: "numeric", month: "long", year: "numeric" }, function (d) {
+      return d.getDate() + " " + S.dates.months[d.getMonth()] + " " + d.getFullYear() + " " + S.dates.weekdays[d.getDay()];
+    });
+    shortFmt = makeFormatter({ day: "numeric", month: "long" }, function (d) { return d.getDate() + " " + S.dates.months[d.getMonth()]; });
+    wdFmt = makeFormatter({ weekday: "short" }, function (d) { return S.dates.weekdaysShort[d.getDay()]; });
+  }
+  buildFormatters();
   function formatDate(key) { return dateFmt.format(STORE.keyToDate(key)); }
   function formatShort(key) { return shortFmt.format(STORE.keyToDate(key)); }
 
@@ -201,7 +244,7 @@
       input.checked = value === o.value;
       return h("label", { class: "choice", for: name + "-" + o.value }, [
         input,
-        h("span", null, [opts.marks ? h("i", { class: "mark", "aria-hidden": "true" }) : null, o.label]),
+        h("span", { lang: o.lang || null }, [opts.marks ? h("i", { class: "mark", "aria-hidden": "true" }) : null, o.label]),
       ]);
     })));
   }
@@ -281,6 +324,7 @@
   /* ---------- Pencereler: showModal yoksa basit yedek görünüm ---------- */
 
   function openDialog(dlg) {
+    if (dlg.open) return; // zaten açık (ör. dil değişince içerik yeniden çizildi)
     if (typeof dlg.showModal === "function") {
       try {
         dlg.showModal();
@@ -473,11 +517,25 @@
         h("button", { type: "button", class: "btn btn--quiet", id: "habit-link", text: t("home.habitLink"), onclick: function () { navigate("aliskanlik"); } }),
         continueBtn ? h("div", { class: "home__continue" }, [h("p", { class: "label", text: t("home.continueTitle") }), continueBtn]) : null,
         h("p", { class: "note-line" }, [h("span", { html: ICON_INFO }), h("span", { text: t("home.privacyNote") })]),
+        h("button", { type: "button", class: "btn btn--quiet lang-btn", id: "home-language", "aria-haspopup": "dialog", onclick: function () { openSettings({ focusLanguage: true }); } }, [
+          h("span", { "aria-hidden": "true", html: ICON_GLOBE }),
+          h("span", { text: t("home.languageButton", { name: S.name }) }),
+        ]),
       ]),
     ]));
   }
 
   /* ================= Kitap ================= */
+
+  /** Kitap metninin dili (kitap şimdilik yalnızca Türkçe). Arayüz başka dildeyse kitap öğeleri lang ile işaretlenir. */
+  var BOOK_LANG = BOOK.lang || "tr";
+  function bookLangAttr() {
+    return S.htmlLang === BOOK_LANG ? null : BOOK_LANG;
+  }
+  function bookLanguageNote() {
+    if (S.htmlLang === BOOK_LANG) return null;
+    return h("p", { class: "note-line", id: "book-lang-note" }, [h("span", { html: ICON_INFO }), h("span", { text: t("reader.bookLanguageNote") })]);
+  }
 
   function renderContents() {
     var reading = store.getSettings().reading;
@@ -486,12 +544,13 @@
 
     viewEl.appendChild(h("section", { class: "stack-lg", "aria-labelledby": "toc-title" }, [
       h("div", { class: "page-head" }, [
-        h("p", { class: "eyebrow", text: BOOK.title }),
+        h("p", { class: "eyebrow", lang: bookLangAttr(), text: BOOK.title }),
         h("h1", { id: "toc-title", text: t("reader.contentsTitle") }),
         h("p", { class: "muted", text: t("reader.contentsLead") }),
+        bookLanguageNote(),
       ]),
       resumeCh ? h("div", { class: "box box--action" }, [
-        h("p", { text: (chapterLabel(resumeCh) ? chapterLabel(resumeCh) + " · " : "") + resumeCh.title }),
+        h("p", null, [chapterLabel(resumeCh) ? chapterLabel(resumeCh) + " · " : "", h("span", { lang: bookLangAttr(), text: resumeCh.title })]),
         h("button", { type: "button", class: "btn btn--primary", id: "resume-reading", text: t("reader.continueReading"), onclick: function () {
           state.resume = reading.blockId;
           navigate("oku-" + resumeCh.id);
@@ -503,7 +562,7 @@
             chapterLabel(ch) ? h("span", { text: chapterLabel(ch) }) : null,
             h("span", { text: ch.available ? t("reader.readingTime", { min: ch.minutes }) : t("reader.notWritten") }),
           ]),
-          h("span", { class: "toc__title", text: ch.title }),
+          h("span", { class: "toc__title", lang: bookLangAttr(), text: ch.title }),
           ch.available
             ? h("button", { type: "button", class: "btn btn--secondary", "data-open-chapter": ch.id, text: t("reader.startChapter"), onclick: function () { state.resume = "top"; navigate("oku-" + ch.id); } })
             : h("p", { class: "hint", text: t("reader.notWrittenHint") }),
@@ -664,9 +723,10 @@
 
     var article = h("article", { class: "reader", "data-size": textSize(), "aria-labelledby": "chapter-title" }, [
       h("header", { class: "reader__head" }, [
-        h("p", { class: "eyebrow", text: chapterLabel(ch) || BOOK.title }),
-        h("h1", { id: "chapter-title", text: ch.title }),
+        chapterLabel(ch) ? h("p", { class: "eyebrow", text: chapterLabel(ch) }) : h("p", { class: "eyebrow", lang: bookLangAttr(), text: BOOK.title }),
+        h("h1", { id: "chapter-title", lang: bookLangAttr(), text: ch.title }),
         h("p", { class: "hint", text: t("reader.readingTime", { min: ch.minutes }) }),
+        bookLanguageNote(),
         h("div", { class: "reader__tools" }, [textSizeControl(function (v) {
           var anchorBlock = currentBlock();
           article.setAttribute("data-size", v);
@@ -683,6 +743,7 @@
       ]);
       blocks.forEach(function (b) {
         var el = renderBlock(b, ch);
+        if (el && bookLangAttr()) el.setAttribute("lang", bookLangAttr());
         if (el) sec.appendChild(el);
       });
       article.appendChild(sec);
@@ -1138,7 +1199,7 @@
       }
       if (!w && !wh) return;
       var box = h("div", { class: "start-out" }, [h("span", { class: "label", text: t("day.startLabelled") })]);
-      if (w && wh && isLocative(wh)) {
+      if (w && wh && S.features.sentenceSummary && isLocative(wh)) {
         box.appendChild(h("p", { id: "start-sentence", text: t("day.startSentence", { when: w, where: midSentence(wh), step: midSentence(st) }) }));
       } else {
         box.appendChild(h("dl", null, [
@@ -1322,7 +1383,7 @@
 
   function planSummary(plan) {
     var nodes = [];
-    if (plan.anchor && plan.place && plan.start && isLocative(plan.place)) {
+    if (plan.anchor && plan.place && plan.start && S.features.sentenceSummary && isLocative(plan.place)) {
       nodes.push(h("p", { class: "plan-sentence", id: "plan-sentence", text: t("habit.summarySentence", { anchor: plan.anchor, place: midSentence(plan.place), start: midSentence(plan.start) }) }));
     }
     nodes.push(h("dl", { class: "plan-sum" }, ["goal", "anchor", "place", "start", "ease", "smaller"].filter(function (f) { return plan[f]; }).map(function (f) {
@@ -1684,6 +1745,15 @@
       themeNote.hidden = e.target.value !== "system";
     });
 
+    // Dil: seçenekler her dilin kendi adıyla gösterilir; seçim yalnızca bu cihazda saklanır (yedeğe girmez).
+    var langGroup = choiceGroup("lang", t("settings.languageTitle"), languages().map(function (l) {
+      return { value: l, label: I18N[l].name, lang: I18N[l].htmlLang };
+    }), lang, { cls: "choices--row", hideLegend: true, id: "lang-choices" });
+    langGroup.addEventListener("change", function (e) {
+      setLanguage(e.target.value);
+      openSettings({ focusLanguage: true });
+    });
+
     var sizes = textSizeControl(function (v) {
       var r = document.querySelector(".reader");
       if (r) r.setAttribute("data-size", v);
@@ -1765,8 +1835,8 @@
       return parts.length ? parts.join(" · ") : "—";
     }
     function fieldValue(v) {
-      if (v === true) return "evet";
-      if (v === false) return "hayır";
+      if (v === true) return t("common.yes");
+      if (v === false) return t("common.no");
       return v ? clip(v, 40) : t("settings.importEmptyValue");
     }
     function handleImportText(text) {
@@ -1865,6 +1935,11 @@
         h("h2", { id: "settings-title", text: t("settings.title") }),
         h("button", { type: "button", class: "btn btn--secondary", id: "close-settings", text: t("settings.close"), onclick: function () { closeDialog(dlg); } }),
       ]),
+      h("section", { class: "panel-section", id: "language-section" }, [
+        h("h3", { text: t("settings.languageTitle") }),
+        h("p", { class: "hint", text: t("settings.languageHint") }),
+        langGroup,
+      ]),
       h("section", { class: "panel-section" }, [
         h("h3", { text: t("settings.dataTitle") }),
         h("ul", null, S.settings.dataPoints.map(function (p) { return h("li", { text: p }); })),
@@ -1928,6 +2003,9 @@
       showExportText();
       $("export-section").scrollIntoView({ block: "start" });
       $("export-text").focus();
+    } else if (opts.focusLanguage) {
+      var checked = document.querySelector('input[name="lang"]:checked');
+      if (checked) checked.focus();
     } else {
       $("close-settings").focus();
     }
@@ -1943,11 +2021,34 @@
     if (r.bottom > vv.height - 8 || r.top < 8) el.scrollIntoView({ block: "center", behavior: "auto" });
   }
 
-  function init() {
-    viewEl = $("view");
+  /** Sayfadaki sabit metinler (üst çubuk, sekmeler), belge dili ve başlık. */
+  function applyStaticTexts() {
     document.documentElement.lang = S.htmlLang;
     document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
     document.querySelectorAll("[data-t-label]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-label"))); });
+    document.title = t("app.title");
+    var desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute("content", t("home.description"));
+    // Ana ekrana eklerken önerilen ad (iOS bu etiketi okur)
+    var appTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+    if (appTitle) appTitle.setAttribute("content", t("app.title").split(",")[0]);
+  }
+
+  /** Arayüz dilini değiştirir: tercih kaydedilir, metinler ve açık ekran yeniden çizilir. Kayıtlar değişmez. */
+  function setLanguage(code) {
+    if (!I18N[code] || code === lang) return;
+    flushSave();
+    lang = code;
+    S = I18N[code];
+    store.setSettings({ lang: code });
+    buildFormatters();
+    applyStaticTexts();
+    route();
+  }
+
+  function init() {
+    viewEl = $("view");
+    applyStaticTexts();
     applyMotion();
     applyTheme();
     if (reduceMQ.addEventListener) reduceMQ.addEventListener("change", applyMotion);

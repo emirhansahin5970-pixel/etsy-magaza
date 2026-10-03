@@ -28,7 +28,8 @@
 </head>
 <body>
 <!-- @artifact-body-start -->
-<!-- data-t ile işaretli metinler derleme sırasında i18n/tr.js'ten doldurulur; JavaScript çalışmasa da görünürler. -->
+<!-- data-t ile işaretli metinler derleme sırasında i18n/tr.js'ten doldurulur (data-t-lang varsa o dilden); JavaScript çalışmasa da görünürler.
+     Cihazın dili başkaysa boot.js bu metinleri hemen o dile çevirir. -->
 <div id="app-root" class="is-booting">
 <a class="skip" href="#main" data-t="app.skipToContent"></a>
 
@@ -63,6 +64,7 @@
       <p class="boot-status" id="boot-status" role="status"><span class="boot-dot" aria-hidden="true"></span><span data-t="boot.loading"></span></p>
       <noscript>
         <p class="boot-noscript" data-t="boot.noscript"></p>
+        <p class="boot-noscript" lang="en" data-t-lang="en" data-t="boot.noscript"></p>
         <style>.boot-status, .boot-hint { display: none !important; }</style>
       </noscript>
       <p class="hint boot-hint" data-t="boot.slowHint"></p>
@@ -79,6 +81,12 @@
 <!-- Önce güvenlik ağı: sonraki betiklerdeki hataları yakalar. -->
 <script src="boot.js"></script>
 <script src="i18n/tr.js"></script>
+<script src="i18n/en.js"></script>
+<script src="i18n/de.js"></script>
+<script src="i18n/fr.js"></script>
+<script src="i18n/es.js"></script>
+<script src="i18n/it.js"></script>
+<script src="i18n/nl.js"></script>
 <script src="content/book.tr.js"></script>
 <script src="illustrations.js"></script>
 <script src="storage.js"></script>

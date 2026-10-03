@@ -196,11 +196,11 @@ p { margin: 0; }
 .brand__studio { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sage); font-weight: 700; }
 .brand__title { font-family: var(--font-display); font-weight: 600; font-size: 1rem; line-height: 1.25; }
 .settings-btn {
-  flex: none; min-height: 2.75rem; padding: 0.35rem 0.85rem 0.35rem 0.6rem;
+  flex: 0 1 auto; max-width: 100%; min-width: 0; overflow-wrap: anywhere; text-align: left; min-height: 2.75rem; padding: 0.35rem 0.85rem 0.35rem 0.6rem;
   display: inline-flex; align-items: center; gap: 0.4rem;
   border: 1.5px solid var(--line-strong); background: var(--paper); border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 0.95rem;
 }
-.settings-btn svg { width: 1.25rem; height: 1.25rem; stroke: var(--ink); fill: none; stroke-width: 1.8; stroke-linecap: round; }
+.settings-btn svg { flex: none; width: 1.25rem; height: 1.25rem; stroke: var(--ink); fill: none; stroke-width: 1.8; stroke-linecap: round; }
 
 .tabs { padding-inline: var(--gutter); border-bottom: 1px solid var(--line); }
 .tabs__list { list-style: none; margin-block: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -374,6 +374,8 @@ main:focus { outline: none; }
 .home__continue { border-top: 1px solid var(--line); padding-top: 1rem; display: grid; gap: 0.5rem; }
 .note-line { display: flex; gap: 0.55rem; align-items: flex-start; font-size: var(--step--1); color: var(--ink-soft); }
 .note-line svg { flex: none; width: 1.15rem; height: 1.15rem; margin-top: 0.15rem; stroke: var(--sage); fill: none; stroke-width: 1.8; }
+.lang-btn { gap: 0.45rem; justify-self: start; font-weight: 600; }
+.lang-btn svg { flex: none; width: 1.15rem; height: 1.15rem; stroke: currentColor; fill: none; stroke-width: 1.6; }
 @media (min-width: 56rem) {
   .home { grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); gap: 3rem; align-items: center; }
 }
@@ -644,7 +646,8 @@ dialog.is-fallback[open] {
 </head>
 <body>
 <!-- @artifact-body-start -->
-<!-- data-t ile işaretli metinler derleme sırasında i18n/tr.js'ten doldurulur; JavaScript çalışmasa da görünürler. -->
+<!-- data-t ile işaretli metinler derleme sırasında i18n/tr.js'ten doldurulur (data-t-lang varsa o dilden); JavaScript çalışmasa da görünürler.
+     Cihazın dili başkaysa boot.js bu metinleri hemen o dile çevirir. -->
 <div id="app-root" class="is-booting">
 <a class="skip" href="#main" data-t="app.skipToContent">İçeriğe geç</a>
 
@@ -679,6 +682,7 @@ dialog.is-fallback[open] {
       <p class="boot-status" id="boot-status" role="status"><span class="boot-dot" aria-hidden="true"></span><span data-t="boot.loading">Uygulama hazırlanıyor…</span></p>
       <noscript>
         <p class="boot-noscript" data-t="boot.noscript">Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.</p>
+        <p class="boot-noscript" lang="en" data-t-lang="en" data-t="boot.noscript">This view can't run the app's code. Open the product from its web link in Safari or Chrome.</p>
         <style>.boot-status, .boot-hint { display: none !important; }</style>
       </noscript>
       <p class="hint boot-hint" data-t="boot.slowHint">Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.</p>
@@ -705,22 +709,65 @@ dialog.is-fallback[open] {
  *   4. Uygulama belirli bir sürede başlamazsa bunu söylemek.
  * Uygulama başarıyla başlayınca app.js, GX_BOOT.ready() çağırır ve başlangıç ekranı uygulama ekranıyla değişir.
  *
- * Metinler i18n/tr.js içindeki "boot" bölümünden derleme sırasında buraya yazılır.
+ * Metinler i18n/<dil>.js dosyalarındaki "boot" bölümünden derleme sırasında buraya yazılır (her dil için:
+ * { boot: {...}, ui: { "app.title": ... } }). HTML Türkçe derlenir; cihazın ya da kayıtlı tercihin dili
+ * başkaysa başlangıç ekranının sabit metinleri burada o dile çevrilir.
  */
 (function (w, d) {
-  var STR = {"description":"Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.","loading":"Uygulama hazırlanıyor…","slowHint":"Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.","noscript":"Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.","errorTitle":"Uygulama başlatılamadı","errorBody":"Sayfa açıldı ama uygulama başlarken bir sorun oluştu. Kayıtların bu tarayıcıda duruyorsa silinmedi.","errorSteps":"Sayfayı yenilemeyi dene. Sorun sürerse aşağıdaki teknik ayrıntıları kopyalayıp gönder.","timeoutTitle":"Uygulama beklenenden uzun sürede açılıyor","timeoutBody":"Uygulama {sec} saniyedir başlatılamadı. Bağlantı yavaş olabilir ya da bu görünüm uygulamanın kodunu tam çalıştıramıyor olabilir.","unsupportedTitle":"Bu tarayıcı desteklenmiyor","unsupportedBody":"Bu tarayıcı uygulamanın ihtiyaç duyduğu temel özellikleri sunmuyor. Güncel Safari veya Chrome kullan.","reload":"Sayfayı yenile","details":"Teknik ayrıntılar","copyDetails":"Ayrıntıları kopyala","copied":"Kopyalandı","viewErrorTitle":"Bu ekran açılamadı","viewErrorBody":"Bu bölüm gösterilirken bir sorun oluştu. Diğer bölümleri kullanmaya devam edebilirsin; kayıtların değişmedi.","goHome":"Açılış ekranına dön"};
+  var ALL = {"tr":{"boot":{"description":"Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.","loading":"Uygulama hazırlanıyor…","slowHint":"Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.","noscript":"Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.","errorTitle":"Uygulama başlatılamadı","errorBody":"Sayfa açıldı ama uygulama başlarken bir sorun oluştu. Kayıtların bu tarayıcıda duruyorsa silinmedi.","errorSteps":"Sayfayı yenilemeyi dene. Sorun sürerse aşağıdaki teknik ayrıntıları kopyalayıp gönder.","timeoutTitle":"Uygulama beklenenden uzun sürede açılıyor","timeoutBody":"Uygulama {sec} saniyedir başlatılamadı. Bağlantı yavaş olabilir ya da bu görünüm uygulamanın kodunu tam çalıştıramıyor olabilir.","unsupportedTitle":"Bu tarayıcı desteklenmiyor","unsupportedBody":"Bu tarayıcı uygulamanın ihtiyaç duyduğu temel özellikleri sunmuyor. Güncel Safari veya Chrome kullan.","reload":"Sayfayı yenile","details":"Teknik ayrıntılar","copyDetails":"Ayrıntıları kopyala","copied":"Kopyalandı","viewErrorTitle":"Bu ekran açılamadı","viewErrorBody":"Bu bölüm gösterilirken bir sorun oluştu. Diğer bölümleri kullanmaya devam edebilirsin; kayıtların değişmedi.","goHome":"Açılış ekranına dön"},"ui":{"app.title":"Küçük Adımlar, Daha Net Günler","app.skipToContent":"İçeriğe geç","app.brand":"Genix Studio","app.settingsButton":"Ayarlar","nav.label":"Ana bölümler","nav.read":"Oku","nav.day":"Günüm","nav.habit":"Alışkanlığım","boot.description":"Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.","boot.loading":"Uygulama hazırlanıyor…","boot.noscript":"Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.","boot.slowHint":"Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın."}},"en":{"boot":{"description":"A short read, a clearer daily plan and a small habit trial.","loading":"Getting the app ready…","slowHint":"If this screen stays up for more than a few seconds, open the product from its web link in Safari or Chrome.","noscript":"This view can't run the app's code. Open the product from its web link in Safari or Chrome.","errorTitle":"The app couldn't start","errorBody":"The page opened, but something went wrong while the app was starting. If your entries are stored in this browser, they haven't been deleted.","errorSteps":"Try reloading the page. If the problem continues, copy the technical details below and send them.","timeoutTitle":"The app is taking longer than expected to open","timeoutBody":"The app hasn't started for {sec} seconds. The connection may be slow, or this view may not be able to fully run the app's code.","unsupportedTitle":"This browser isn't supported","unsupportedBody":"This browser doesn't offer some basic features the app needs. Please use an up-to-date version of Safari or Chrome.","reload":"Reload page","details":"Technical details","copyDetails":"Copy details","copied":"Copied","viewErrorTitle":"This screen couldn't open","viewErrorBody":"Something went wrong while showing this section. You can keep using the other sections; your entries haven't changed.","goHome":"Back to the start screen"},"ui":{"app.title":"Small Steps, Clear Days","app.skipToContent":"Skip to content","app.brand":"Genix Studio","app.settingsButton":"Settings","nav.label":"Main sections","nav.read":"Read","nav.day":"My Day","nav.habit":"My Habit","boot.description":"A short read, a clearer daily plan and a small habit trial.","boot.loading":"Getting the app ready…","boot.noscript":"This view can't run the app's code. Open the product from its web link in Safari or Chrome.","boot.slowHint":"If this screen stays up for more than a few seconds, open the product from its web link in Safari or Chrome."}},"de":{"boot":{"description":"Eine kurze Lektüre, ein klarerer Tagesplan und ein kleiner Gewohnheitsversuch.","loading":"App wird vorbereitet …","slowHint":"Wenn dieser Bildschirm länger als ein paar Sekunden bleibt, öffne das Produkt über den Weblink in Safari oder Chrome.","noscript":"Diese Ansicht kann den Code der App nicht ausführen. Öffne das Produkt über den Weblink in Safari oder Chrome.","errorTitle":"Die App konnte nicht starten","errorBody":"Die Seite wurde geöffnet, aber beim Start der App ist ein Problem aufgetreten. Wenn deine Einträge in diesem Browser gespeichert sind, wurden sie nicht gelöscht.","errorSteps":"Lade die Seite neu. Wenn das Problem bleibt, kopiere die technischen Details unten und schick sie uns.","timeoutTitle":"Die App braucht länger als erwartet","timeoutBody":"Die App konnte seit {sec} Sekunden nicht starten. Vielleicht ist die Verbindung langsam, oder diese Ansicht kann den Code der App nicht vollständig ausführen.","unsupportedTitle":"Dieser Browser wird nicht unterstützt","unsupportedBody":"Diesem Browser fehlen grundlegende Funktionen, die die App braucht. Nutze eine aktuelle Version von Safari oder Chrome.","reload":"Seite neu laden","details":"Technische Details","copyDetails":"Details kopieren","copied":"Kopiert","viewErrorTitle":"Diese Ansicht konnte nicht geöffnet werden","viewErrorBody":"Beim Anzeigen dieses Bereichs ist ein Problem aufgetreten. Die anderen Bereiche kannst du weiter nutzen; deine Einträge sind unverändert.","goHome":"Zum Startbildschirm"},"ui":{"app.title":"Kleine Schritte, klarere Tage","app.skipToContent":"Zum Inhalt springen","app.brand":"Genix Studio","app.settingsButton":"Einstellungen","nav.label":"Hauptbereiche","nav.read":"Lesen","nav.day":"Mein Tag","nav.habit":"Gewohnheit","boot.description":"Eine kurze Lektüre, ein klarerer Tagesplan und ein kleiner Gewohnheitsversuch.","boot.loading":"App wird vorbereitet …","boot.noscript":"Diese Ansicht kann den Code der App nicht ausführen. Öffne das Produkt über den Weblink in Safari oder Chrome.","boot.slowHint":"Wenn dieser Bildschirm länger als ein paar Sekunden bleibt, öffne das Produkt über den Weblink in Safari oder Chrome."}},"fr":{"boot":{"description":"Une courte lecture, un plan de journée plus clair et un petit essai d’habitude.","loading":"Préparation de l’application…","slowHint":"Si cet écran reste affiché plus de quelques secondes, ouvre le produit via le lien web dans Safari ou Chrome.","noscript":"Cet affichage ne peut pas exécuter le code de l’application. Ouvre le produit via le lien web dans Safari ou Chrome.","errorTitle":"Impossible de démarrer l’application","errorBody":"La page s’est ouverte, mais un problème est survenu au démarrage de l’application. Si tes données sont enregistrées dans ce navigateur, elles n’ont pas été supprimées.","errorSteps":"Essaie d’actualiser la page. Si le problème persiste, copie les détails techniques ci-dessous et envoie-les.","timeoutTitle":"L’application met plus de temps que prévu à s’ouvrir","timeoutBody":"L’application n’a pas pu démarrer depuis {sec} secondes. La connexion est peut-être lente, ou cet affichage ne peut pas exécuter entièrement le code de l’application.","unsupportedTitle":"Ce navigateur n’est pas pris en charge","unsupportedBody":"Ce navigateur ne propose pas les fonctions de base dont l’application a besoin. Utilise une version récente de Safari ou de Chrome.","reload":"Actualiser la page","details":"Détails techniques","copyDetails":"Copier les détails","copied":"Copié","viewErrorTitle":"Impossible d’ouvrir cet écran","viewErrorBody":"Un problème est survenu en affichant cette partie. Tu peux continuer à utiliser les autres parties ; tes données n’ont pas changé.","goHome":"Revenir à l’écran d’accueil"},"ui":{"app.title":"Petits pas, journées plus claires","app.skipToContent":"Aller au contenu","app.brand":"Genix Studio","app.settingsButton":"Réglages","nav.label":"Sections principales","nav.read":"Lire","nav.day":"Ma journée","nav.habit":"Mon habitude","boot.description":"Une courte lecture, un plan de journée plus clair et un petit essai d’habitude.","boot.loading":"Préparation de l’application…","boot.noscript":"Cet affichage ne peut pas exécuter le code de l’application. Ouvre le produit via le lien web dans Safari ou Chrome.","boot.slowHint":"Si cet écran reste affiché plus de quelques secondes, ouvre le produit via le lien web dans Safari ou Chrome."}},"es":{"boot":{"description":"Una lectura breve, un plan diario más claro y una pequeña prueba de hábito.","loading":"Preparando la aplicación…","slowHint":"Si esta pantalla tarda más de unos segundos, abre el producto en Safari o Chrome desde el enlace web.","noscript":"Esta vista no puede ejecutar el código de la aplicación. Abre el producto en Safari o Chrome desde el enlace web.","errorTitle":"No se pudo iniciar la aplicación","errorBody":"La página se abrió, pero hubo un problema al iniciar la aplicación. Si tus registros están en este navegador, no se han borrado.","errorSteps":"Prueba a recargar la página. Si el problema continúa, copia los detalles técnicos de abajo y envíalos.","timeoutTitle":"La aplicación está tardando más de lo esperado","timeoutBody":"La aplicación lleva {sec} segundos sin poder iniciarse. Puede que la conexión sea lenta o que esta vista no pueda ejecutar del todo el código de la aplicación.","unsupportedTitle":"Este navegador no es compatible","unsupportedBody":"Este navegador no ofrece funciones básicas que la aplicación necesita. Usa una versión actual de Safari o Chrome.","reload":"Recargar la página","details":"Detalles técnicos","copyDetails":"Copiar detalles","copied":"Copiado","viewErrorTitle":"No se pudo abrir esta pantalla","viewErrorBody":"Hubo un problema al mostrar esta sección. Puedes seguir usando las demás secciones; tus registros no han cambiado.","goHome":"Volver a la pantalla de inicio"},"ui":{"app.title":"Pequeños pasos, días más claros","app.skipToContent":"Ir al contenido","app.brand":"Genix Studio","app.settingsButton":"Ajustes","nav.label":"Secciones principales","nav.read":"Leer","nav.day":"Mi día","nav.habit":"Mi hábito","boot.description":"Una lectura breve, un plan diario más claro y una pequeña prueba de hábito.","boot.loading":"Preparando la aplicación…","boot.noscript":"Esta vista no puede ejecutar el código de la aplicación. Abre el producto en Safari o Chrome desde el enlace web.","boot.slowHint":"Si esta pantalla tarda más de unos segundos, abre el producto en Safari o Chrome desde el enlace web."}},"it":{"boot":{"description":"Una breve lettura, un piano giornaliero più chiaro e una piccola prova di abitudine.","loading":"Preparazione dell'app…","slowHint":"Se questa schermata resta visibile per più di qualche secondo, apri il prodotto dal link web in Safari o Chrome.","noscript":"Questa visualizzazione non riesce a eseguire il codice dell'app. Apri il prodotto dal link web in Safari o Chrome.","errorTitle":"Impossibile avviare l'app","errorBody":"La pagina si è aperta, ma c'è stato un problema durante l'avvio dell'app. Se i tuoi dati sono salvati in questo browser, non sono stati cancellati.","errorSteps":"Prova a ricaricare la pagina. Se il problema continua, copia i dettagli tecnici qui sotto e inviali.","timeoutTitle":"L'app ci sta mettendo più del previsto ad aprirsi","timeoutBody":"L'app non è riuscita ad avviarsi da {sec} secondi. La connessione potrebbe essere lenta, oppure questa visualizzazione potrebbe non riuscire a eseguire del tutto il codice dell'app.","unsupportedTitle":"Questo browser non è supportato","unsupportedBody":"Questo browser non offre le funzioni di base di cui l'app ha bisogno. Usa una versione aggiornata di Safari o Chrome.","reload":"Ricarica la pagina","details":"Dettagli tecnici","copyDetails":"Copia i dettagli","copied":"Copiato","viewErrorTitle":"Impossibile aprire questa schermata","viewErrorBody":"C'è stato un problema nel mostrare questa sezione. Puoi continuare a usare le altre sezioni; i tuoi dati non sono cambiati.","goHome":"Torna alla schermata iniziale"},"ui":{"app.title":"Piccoli passi, giornate più chiare","app.skipToContent":"Vai al contenuto","app.brand":"Genix Studio","app.settingsButton":"Impostazioni","nav.label":"Sezioni principali","nav.read":"Leggi","nav.day":"Giornata","nav.habit":"Abitudine","boot.description":"Una breve lettura, un piano giornaliero più chiaro e una piccola prova di abitudine.","boot.loading":"Preparazione dell'app…","boot.noscript":"Questa visualizzazione non riesce a eseguire il codice dell'app. Apri il prodotto dal link web in Safari o Chrome.","boot.slowHint":"Se questa schermata resta visibile per più di qualche secondo, apri il prodotto dal link web in Safari o Chrome."}},"nl":{"boot":{"description":"Een korte leestekst, een helderder dagplan en een kleine gewoonte om uit te proberen.","loading":"De app wordt klaargezet…","slowHint":"Blijft dit scherm langer dan een paar seconden staan? Open de app dan via de weblink in Safari of Chrome.","noscript":"In deze weergave kan de code van de app niet worden uitgevoerd. Open de app via de weblink in Safari of Chrome.","errorTitle":"De app kon niet starten","errorBody":"De pagina is geopend, maar er ging iets mis bij het starten van de app. Als je gegevens in deze browser staan, zijn ze niet verwijderd.","errorSteps":"Probeer de pagina te vernieuwen. Blijft het probleem bestaan, kopieer dan de technische details hieronder en stuur ze op.","timeoutTitle":"Het openen van de app duurt langer dan verwacht","timeoutBody":"De app is na {sec} seconden nog niet gestart. Misschien is de verbinding traag, of kan deze weergave de code van de app niet volledig uitvoeren.","unsupportedTitle":"Deze browser wordt niet ondersteund","unsupportedBody":"Deze browser biedt niet de basisfuncties die de app nodig heeft. Gebruik een recente versie van Safari of Chrome.","reload":"Pagina vernieuwen","details":"Technische details","copyDetails":"Details kopiëren","copied":"Gekopieerd","viewErrorTitle":"Dit scherm kon niet worden geopend","viewErrorBody":"Er ging iets mis bij het tonen van dit onderdeel. Je kunt de andere onderdelen gewoon blijven gebruiken; je gegevens zijn niet veranderd.","goHome":"Terug naar het beginscherm"},"ui":{"app.title":"Kleine stappen, heldere dagen","app.skipToContent":"Naar de inhoud","app.brand":"Genix Studio","app.settingsButton":"Instellingen","nav.label":"Hoofdonderdelen","nav.read":"Lezen","nav.day":"Mijn dag","nav.habit":"Gewoonte","boot.description":"Een korte leestekst, een helderder dagplan en een kleine gewoonte om uit te proberen.","boot.loading":"De app wordt klaargezet…","boot.noscript":"In deze weergave kan de code van de app niet worden uitgevoerd. Open de app via de weblink in Safari of Chrome.","boot.slowHint":"Blijft dit scherm langer dan een paar seconden staan? Open de app dan via de weblink in Safari of Chrome."}}};
+  var LANG = pickLang();
+  var STR = (ALL[LANG] && ALL[LANG].boot) || {};
   var TIMEOUT_MS = 12000;
   var started = false;
   var errors = [];
   var t0 = new Date().getTime();
 
+  /** Kayıtlı dil tercihi → cihazın dil listesi → İngilizce (app.js ile aynı kural). */
+  function pickLang() {
+    var i, code, list = [];
+    try {
+      var st = w.JSON.parse(w.localStorage.getItem("gx.ssc.settings.v1") || "{}");
+      if (st && typeof st.lang === "string" && ALL[st.lang]) return st.lang;
+    } catch (e) {}
+    try {
+      var n = w.navigator;
+      list = n.languages && n.languages.length ? n.languages : [n.language || n.userLanguage || ""];
+    } catch (e) {}
+    for (i = 0; i < list.length; i++) {
+      code = String(list[i] || "").toLowerCase().split("-")[0].split("_")[0];
+      if (ALL[code]) return code;
+    }
+    return ALL.en ? "en" : "tr";
+  }
+
   function s(key) {
     if (STR[key]) return STR[key];
     try {
-      if (w.GX_STRINGS && w.GX_STRINGS.boot && w.GX_STRINGS.boot[key]) return w.GX_STRINGS.boot[key];
+      var all = w.GX_I18N || {};
+      var src = all[LANG] || all.en || w.GX_STRINGS;
+      if (src && src.boot && src.boot[key]) return src.boot[key];
     } catch (e) {}
     return key;
   }
+
+  // Başlangıç ekranının sabit metinleri (HTML'de Türkçe) seçilen dile çevrilir.
+  try {
+    var ui = ALL[LANG] && ALL[LANG].ui;
+    if (ui && d.querySelectorAll && d.documentElement.getAttribute("lang") !== LANG) {
+      var els = d.querySelectorAll("[data-t]"), j, key;
+      for (j = 0; j < els.length; j++) {
+        key = els[j].getAttribute("data-t");
+        if (ui[key] != null && !els[j].getAttribute("data-t-lang")) els[j].textContent = ui[key];
+      }
+      els = d.querySelectorAll("[data-t-label]");
+      for (j = 0; j < els.length; j++) {
+        key = els[j].getAttribute("data-t-label");
+        if (ui[key] != null) els[j].setAttribute("aria-label", ui[key]);
+      }
+      d.documentElement.setAttribute("lang", LANG);
+      if (ui["app.title"]) d.title = ui["app.title"];
+    }
+  } catch (e) {}
 
   // Eski tarayıcılar için küçük tamamlayıcı
   try {
@@ -779,10 +826,11 @@ dialog.is-fallback[open] {
   function detailsText(kind) {
     var lines = [];
     lines.push("Durum: " + kind);
+    lines.push("Dil: " + LANG);
     lines.push("Süre: " + (new Date().getTime() - t0) + " ms");
     lines.push("Adres türü: " + (w.location ? w.location.protocol : "?"));
     lines.push("Tarayıcı: " + (w.navigator ? w.navigator.userAgent : "?"));
-    var files = ["GX_STRINGS", "GX_BOOK", "GX_ART", "GX_STORE"], loaded = [];
+    var files = ["GX_I18N", "GX_BOOK", "GX_ART", "GX_STORE"], loaded = [];
     for (var i = 0; i < files.length; i++) loaded.push(files[i] + (w[files[i]] ? " var" : " YOK"));
     lines.push("Uygulama dosyaları: " + loaded.join(", "));
     lines.push("Özellikler: " + features().join(", "));
@@ -888,14 +936,19 @@ dialog.is-fallback[open] {
 </script>
 <script>
 /*
- * Arayüz metinleri (Türkçe).
- * Kitap içeriği burada değil: content/book.tr.js
- * İngilizce sürüm için bu dosyanın aynı anahtarlarla bir kopyası (en.js) hazırlanır.
+ * Arayüz metinleri (Türkçe). Diğer diller aynı anahtarlarla: en.js, de.js, fr.js, es.js, it.js, nl.js
+ * (tests/i18n.test.mjs anahtarların, yer tutucuların ve dizi uzunluklarının aynı olduğunu denetler).
+ * Kitap içeriği burada değil: content/book.tr.js (kitap şimdilik yalnızca Türkçe).
  * {degisken} biçimindeki yer tutucular app.js içindeki t() fonksiyonu ile doldurulur.
  */
-window.GX_STRINGS = {
+window.GX_I18N = window.GX_I18N || {};
+window.GX_I18N.tr = {
+  name: "Türkçe",
   locale: "tr-TR",
   htmlLang: "tr",
+  // Türkçeye özgü dil bilgisi: yer bulunma ekiyle (-de/-da) bittiğinde özet cümle kurulur.
+  // Diğer dillerde false: özet her zaman etiketli satırlar olarak gösterilir.
+  features: { sentenceSummary: true },
 
   // Başlangıç ekranı ve açılış hataları. Bu metinler derleme sırasında HTML'e ve başlangıç betiğine yazılır,
   // böylece JavaScript hiç çalışmasa ya da uygulama başlatılamasa da görünür.
@@ -958,6 +1011,8 @@ window.GX_STRINGS = {
     example: "Örnek: {text}",
     requiredError: "Devam etmek için bu alanı kısaca doldur.",
     optional: "İsteğe bağlı",
+    yes: "evet",
+    no: "hayır",
   },
 
   save: {
@@ -979,6 +1034,7 @@ window.GX_STRINGS = {
     continueDay: "Bugünün planına dön",
     continueHabit: "Alışkanlık denemene dön",
     privacyNote: "Kayıtların yalnızca bu cihazdaki bu tarayıcıda tutulur. Hesap açman gerekmez.",
+    languageButton: "Dil: {name}",
   },
 
   reader: {
@@ -1011,6 +1067,8 @@ window.GX_STRINGS = {
     nextChapterSoon: "Sonraki bölümler henüz yazılmadı. Bu arada Günüm'de bugünün ana işini seçebilirsin.",
     goToDay: "Günüm'e geç",
     readingTime: "Yaklaşık {min} dakikalık okuma",
+    // Arayüz Türkçe değilken kitap ekranlarında gösterilir (Türkçede kullanılmaz)
+    bookLanguageNote: "Kitap metni şimdilik yalnızca Türkçe. Çevirisi hazırlanıyor; Günüm ve Alışkanlığım bölümleri seçtiğin dilde.",
   },
 
   day: {
@@ -1272,6 +1330,8 @@ window.GX_STRINGS = {
     themeSystemNow: "Cihazın şu an {mode} temada.",
     themeModeLight: "açık",
     themeModeDark: "koyu",
+    languageTitle: "Dil (Language)",
+    languageHint: "Arayüzün dilini değiştirir. Kayıtların değişmez. Kitap metni şimdilik yalnızca Türkçe.",
 
     dataTitle: "Kayıtların nerede?",
     dataPoints: [
@@ -1352,6 +1412,2848 @@ window.GX_STRINGS = {
 
     aboutTitle: "Bu sürüm hakkında",
     aboutBody: "Deneme sürümü. Kitabın giriş ve ilk bölümü hazır; ikinci ve üçüncü bölüm henüz yazılmadı. Uygulama web bağlantısıyla açılır ve ilk açılışta internet gerektirir; internetsiz kullanım henüz telefonda doğrulanmadı.",
+  },
+};
+
+// Eski adla erişim (Türkçe); uygulama dili app.js'te seçilir.
+window.GX_STRINGS = window.GX_I18N.tr;
+
+</script>
+<script>
+/*
+ * UI strings (English, US). Same keys, placeholders and array lengths as tr.js
+ * (checked by tests/i18n.test.mjs). The book content stays in Turkish for now.
+ */
+window.GX_I18N = window.GX_I18N || {};
+window.GX_I18N.en = {
+  name: "English",
+  locale: "en-US",
+  htmlLang: "en",
+  features: { sentenceSummary: false },
+
+  boot: {
+    description: "A short read, a clearer daily plan and a small habit trial.",
+    loading: "Getting the app ready…",
+    slowHint: "If this screen stays up for more than a few seconds, open the product from its web link in Safari or Chrome.",
+    noscript: "This view can't run the app's code. Open the product from its web link in Safari or Chrome.",
+    errorTitle: "The app couldn't start",
+    errorBody: "The page opened, but something went wrong while the app was starting. If your entries are stored in this browser, they haven't been deleted.",
+    errorSteps: "Try reloading the page. If the problem continues, copy the technical details below and send them.",
+    timeoutTitle: "The app is taking longer than expected to open",
+    timeoutBody: "The app hasn't started for {sec} seconds. The connection may be slow, or this view may not be able to fully run the app's code.",
+    unsupportedTitle: "This browser isn't supported",
+    unsupportedBody: "This browser doesn't offer some basic features the app needs. Please use an up-to-date version of Safari or Chrome.",
+    reload: "Reload page",
+    details: "Technical details",
+    copyDetails: "Copy details",
+    copied: "Copied",
+    viewErrorTitle: "This screen couldn't open",
+    viewErrorBody: "Something went wrong while showing this section. You can keep using the other sections; your entries haven't changed.",
+    goHome: "Back to the start screen",
+  },
+
+  dates: {
+    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    weekdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    weekdaysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    weekdaysMondayFirst: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  },
+
+  app: {
+    brand: "Genix Studio",
+    title: "Small Steps, Clear Days",
+    skipToContent: "Skip to content",
+    settingsButton: "Settings",
+    settingsLabel: "Settings and data",
+  },
+
+  nav: {
+    label: "Main sections",
+    read: "Read",
+    day: "My Day",
+    habit: "My Habit",
+  },
+
+  common: {
+    cancel: "Cancel",
+    back: "Back",
+    next: "Continue",
+    skip: "Skip this step",
+    save: "Save",
+    edit: "Edit",
+    delete: "Delete",
+    close: "Close",
+    saved: "Saved",
+    useExample: "Use the example",
+    example: "Example: {text}",
+    requiredError: "Fill in this field briefly to continue.",
+    optional: "Optional",
+    yes: "yes",
+    no: "no",
+  },
+
+  save: {
+    failed: "Couldn't save. The browser isn't letting this page store data right now (for example, a private tab or full storage). What you wrote is still on the screen; make a backup so you don't lose it.",
+    failedAction: "Get a backup as text",
+    storageWarning: "This browser doesn't allow data storage. What you write may be lost when the page closes. You can get a backup as text in Settings.",
+  },
+
+  home: {
+    coverBrand: "Genix Studio",
+    coverTitle: "Small Steps, Clear Days",
+    coverSubtitle: "A short read and a gentle daily planner",
+    description: "A short read, a clearer daily plan and a small habit trial.",
+    startReading: "Start reading",
+    planToday: "Plan my day",
+    habitLink: "Want to try a small habit?",
+    continueTitle: "Pick up where you left off",
+    continueReading: "Back to {chapter}",
+    continueDay: "Back to today's plan",
+    continueHabit: "Back to your habit trial",
+    privacyNote: "Your entries are kept only in this browser on this device. No account needed.",
+    languageButton: "Language: {name}",
+  },
+
+  reader: {
+    contentsTitle: "Read the book",
+    contentsLead: "Each chapter is made of short parts you can read on the go or during a break.",
+    chapterLabel: "Chapter {n}",
+    continueReading: "Pick up where you left off",
+    startChapter: "Read chapter",
+    notWritten: "Not written yet",
+    notWrittenHint: "This chapter will be added in a later version.",
+    backToContents: "Contents",
+    partLabel: "Part {n}/{total}",
+    progress: "About {p}% read",
+    progressShort: "{p}%",
+    textSizeLabel: "Text size",
+    textSizes: { standard: "Standard", large: "Large", larger: "Larger" },
+    researchLabel: "What does research say?",
+    limitsLabel: "Limitation",
+    researchMore: "Details and source",
+    suggestionLabel: "My suggestion",
+    exerciseLabel: "Small exercise",
+    summaryLabel: "Chapter summary",
+    sourcesTitle: "Sources used in this chapter",
+    exerciseToPlanner: "Do this in My Day",
+    timerStart: "Start a 3-minute timer",
+    timerStop: "Stop timer",
+    timerDone: "Three minutes are up. You can stop writing; the list doesn't have to be complete.",
+    timerRemaining: "Time left: {time}",
+    nextChapter: "Next chapter: {title}",
+    nextChapterSoon: "The next chapters aren't written yet. In the meantime, you can choose today's main task in My Day.",
+    goToDay: "Go to My Day",
+    readingTime: "About a {min}-minute read",
+    bookLanguageNote: "The book text is currently available in Turkish only. A translation is in preparation; My Day and My Habit are fully in English.",
+  },
+
+  day: {
+    titleToday: "My day today",
+    titlePast: "A past day",
+    titleFuture: "A future day",
+    futureBanner: "This day hasn't come yet. You can write a plan; the day check-in opens once the day arrives.",
+    pastBanner: "This day is in the past. Your changes will still be saved to this date.",
+    backToToday: "Back to today",
+    backToBook: "Back to where you left off in the book",
+    historyLink: "Past days",
+    newDayBanner: "A new day has started. Yesterday's entry was saved as it was.",
+    openNewDay: "Open today's plan",
+
+    mainLabel: "Today's main task",
+    mainHint: "The one task that would bring you relief if it got done today.",
+    mainPlaceholder: "e.g., First draft of the presentation",
+    stepLabel: "First small step",
+    stepHint: "Keep it small enough to start in a few minutes.",
+    stepPlaceholder: "e.g., Open the file and write three headings",
+    mainDoneLabel: "Mark the main task as done",
+
+    brainToggle: "I'd like to write down what's on my mind first.",
+    brainLabel: "On my mind",
+    brainHint: "Jot down whatever comes to mind, briefly and in any order.",
+    brainPlaceholder: "Pay the bill, call Mom, draft the report…",
+
+    extrasToggle: "Add two small extra tasks.",
+    extrasHint: "Two at most. If there's no room, that's a sign: leave it for tomorrow.",
+    extraLabel: "Extra task {n}",
+    extraPlaceholder: "e.g., Write the address for the package",
+    extraDoneLabel: "Mark extra task {n} as done",
+
+    startToggle: "Set my start time.",
+    startHint: "Your first small step is used in the start plan; just write the time and place.",
+    whenLabel: "When?",
+    whenPlaceholder: "e.g., Right after lunch",
+    whereLabel: "Where?",
+    wherePlaceholder: "e.g., On the top floor of the library",
+    startNeedsStep: "For a start plan, first write your first small step above.",
+    startSentence: "{when}, {where}, I'll start with this step: {step}",
+    startLabelled: "My start plan",
+    startWhen: "Time",
+    startWhere: "Place",
+    startStep: "First step",
+    legacyTitle: "This entry has an older \"What will I do?\" note",
+    legacyBody: "In the previous version, you wrote this in your start plan:",
+    legacyUseStep: "Use the first small step",
+    legacyUseStepHint: "The old text is removed; your first small step appears in the start plan.",
+    legacyMoveToStep: "Make this text the first small step",
+    legacyResolved: "The start plan now uses your first small step.",
+
+    timeLabel: "How much time can I give this today?",
+    timeOptions: { "5": "5 minutes", "15": "15 minutes", "30": "30 minutes", custom: "I'll decide myself" },
+    timeClear: "Clear selection",
+    timeCustomLabel: "Time you can set aside",
+    timeCustomPlaceholder: "e.g., 45 minutes",
+    timeTips: {
+      "5": "Five minutes can be enough to get into a task. Try keeping the first step small enough to fit in that time.",
+      "15": "In fifteen minutes you can take the first step and glance at the next one. If it isn't finished, note where you stopped in one line.",
+      "30": "For thirty minutes, it can help to decide in advance what comes after the first step. A short break counts as part of the plan, too.",
+      custom: "Just write the amount of time. It's an estimate, not a limit; the task may take longer or shorter.",
+    },
+
+    eveningToggle: "Do a short evening check-in.",
+    ratingLegend: "How was today for you?",
+    ratingLegendPast: "How was this day for you?",
+    ratingHint: "This isn't a success score; it's for looking at your day through your own eyes.",
+    ratingOptions: { "1": "1 — Hard day", "2": "2 — A bit of a struggle", "3": "3 — So-so", "4": "4 — Went well", "5": "5 — Went very well" },
+    ratingClear: "Clear selection",
+    ratingFuture: "You can rate this day once it arrives.",
+    ratingNoteLabel: "Why did I choose this rating?",
+    ratingNotePlaceholder: "Optional; one sentence is enough",
+    eveningHint: "Brief and without judgment.",
+    workedLabel: "What helped today?",
+    workedPlaceholder: "e.g., Putting my phone in another room",
+    easierLabel: "What can I make easier tomorrow?",
+    easierPlaceholder: "e.g., Packing my bag the night before",
+
+    filled: "filled in",
+    doneFeedback: "Checked",
+    undoneFeedback: "Unchecked",
+  },
+
+  calendar: {
+    toggle: "Calendar",
+    toggleHint: "Earlier and later days in a month view",
+    prevMonth: "Previous month",
+    nextMonth: "Next month",
+    today: "Back to today",
+    monthTitle: "{month} {year}",
+    legendTitle: "Markers",
+    legendToday: "Today",
+    legendSelected: "Selected day",
+    legendPlan: "Has a plan",
+    legendHabit: "Has a habit entry",
+    legendRating: "Day rating (1–5)",
+    legendNote: "Empty days aren't a shortcoming; it just means nothing was entered.",
+    cellToday: "today",
+    cellSelected: "selected",
+    cellPlan: "has a plan",
+    cellHabit: "habit: {status}",
+    cellRating: "rating {n}/5",
+    cellEmpty: "no entry",
+    summaryTitle: "{date}",
+    openHere: "This day is open below.",
+    openDay: "Open and edit the day",
+    emptyPast: "No entry for this day yet.",
+    emptyToday: "No entry for today yet.",
+    createPast: "Create an entry for this day",
+    emptyFuture: "This day hasn't come yet. You can write a plan ahead of time if you like.",
+    createFuture: "Write a plan for this day",
+    mainLabel: "Main task",
+    doneLabel: "Completed tasks",
+    noneDone: "No tasks checked off",
+    habitLabel: "Habit",
+    habitLine: "{status} · {goal}",
+    ratingLabel: "Day rating",
+    ratingNoteLabel: "Why this rating",
+    eveningLabel: "Evening note",
+  },
+
+  history: {
+    title: "Past days",
+    crumb: "My Day",
+    lead: "Entries from earlier days. Tap a day to see its details.",
+    empty: "No saved days yet. Once you write today's main task, it will show up here.",
+    emptyAction: "Plan my day",
+    today: "Today",
+    noMain: "No main task written",
+    eveningSnippet: "Evening note: {text}",
+    open: "Edit",
+    delete: "Delete",
+    detailBrain: "On my mind",
+    detailStep: "First small step",
+    detailExtras: "Extra tasks",
+    detailStart: "Start plan",
+    detailTime: "Time set aside",
+    detailWorked: "What helped?",
+    detailEasier: "What can I make easier tomorrow?",
+    detailRating: "Day rating",
+    detailRatingNote: "Why this rating",
+    detailDone: "done",
+    deleteTitle: "Delete this day?",
+    deleteBody: "The entry for {date} will be permanently deleted from this device. This can't be undone.",
+    deleteConfirm: "Yes, delete",
+    deleted: "The entry for {date} was deleted.",
+  },
+
+  habit: {
+    title: "My Habit",
+    introTitle: "One small habit",
+    introBody: "Here you work on just one habit at a time. First you turn it into the smallest possible start, then you see how it goes for a few days.",
+    introTrial: "For a first trial, we suggest a seven-day window. This isn't how long it takes to form a habit; it's a short window to see whether the plan suits you.",
+    startSetup: "Set up my plan",
+    continueSetup: "Continue setup",
+
+    setupTitle: "Habit plan",
+    editTitle: "Edit plan",
+    stepOf: "Step {n}/{total}",
+    finish: "Save plan",
+    summaryStepTitle: "Is your plan ready?",
+    summaryStepLead: "A summary of your answers. If you'd like to change something, you can go back.",
+
+    steps: {
+      goal: {
+        label: "What do I want to do?",
+        hint: "A general direction is enough. We'll make it smaller in the next steps.",
+        example: "Study math regularly",
+      },
+      start: {
+        label: "What's the smallest start I can actually do?",
+        hint: "Pick something small enough to do even on a bad day.",
+        example: "Study for five minutes or solve one problem",
+      },
+      anchor: {
+        label: "What moment will I link it to?",
+        hint: "Pick a moment that already happens every day: a meal, a commute, a routine.",
+        example: "After dinner",
+      },
+      place: {
+        label: "Where will I start?",
+        hint: "Name one specific place, like your desk or the kitchen table.",
+        example: "At my desk",
+      },
+      ease: {
+        label: "How will I make starting easier?",
+        hint: "One bit of preparation that clears the way before you start.",
+        example: "Put the book and a pen on the desk ahead of time",
+      },
+      smaller: {
+        label: "What's my smaller option for a hard day?",
+        hint: "A backup start for days when you're tired or busy.",
+        example: "Just read one problem",
+      },
+    },
+
+    summarySentence: "{anchor}, {place}, I'll try this: {start}",
+    summaryLabels: {
+      goal: "My goal",
+      anchor: "When",
+      place: "Where",
+      start: "Small start",
+      ease: "To make it easier",
+      smaller: "On a hard day",
+    },
+    planTitle: "My plan",
+    editPlan: "Edit plan",
+    versionNotice: "You changed your goal. Your earlier entries will stay linked to the old plan; new entries will belong to this new plan.",
+    savedPlan: "Plan saved.",
+
+    todayTitle: "Today",
+    dayTitle: "{date}",
+    statusQuestion: "How did it go today?",
+    statusLegend: "Entry for {date}",
+    statuses: {
+      done: "I did my small step.",
+      smaller: "I did my smaller option.",
+      skipped: "I didn't do it today.",
+    },
+    statusShort: { done: "Did it", smaller: "Did the smaller one", skipped: "Didn't do it", none: "No entry" },
+    clearStatus: "Clear entry",
+    noteLabel: "What made it easier or harder to start today?",
+    notePlaceholder: "Optional; one sentence is enough",
+    noteNeedsStatus: "The note is saved once you make a choice for that day.",
+    olderPlan: "This entry belongs to an earlier plan: {goal}",
+
+    weekTitle: "Last seven days",
+    weekHint: "Tap a day to change its entry.",
+    weekTrialNote: "Seven days isn't how long it takes to form a habit; it's a short window to look back on your first trial.",
+    legend: "Key",
+
+    reviewTitle: "Review",
+    reviewLead: "You can answer whenever you like. Your answers are saved to this plan.",
+    reviewOpen: "Open the review",
+    reviewFit: "Which starting step suited me?",
+    reviewContext: "Which time or setting made it easier?",
+    reviewShrink: "What could I make smaller in the next trial?",
+
+    previousPlans: "Previous plans",
+    previousPlanItem: "{goal} · {count} days of entries",
+  },
+
+  settings: {
+    title: "Settings and data",
+    close: "Close",
+    motionTitle: "Animations",
+    motionHint: "With animations off, every feature works the same way.",
+    motionSystem: "Follow device setting",
+    motionOn: "On",
+    motionOff: "Off",
+    motionSystemReduced: "Your device's reduced motion setting is on, so animations are off right now.",
+    textSizeTitle: "Book text size",
+    appearanceTitle: "Appearance",
+    themeTitle: "Theme",
+    themeLight: "Light",
+    themeDark: "Dark",
+    themeSystem: "Follow device setting",
+    themeSystemNow: "Your device is currently using the {mode} theme.",
+    themeModeLight: "light",
+    themeModeDark: "dark",
+    languageTitle: "Language",
+    languageHint: "Changes the language of the app. Your entries stay as they are. The book text is currently available in Turkish only.",
+
+    dataTitle: "Where are your entries?",
+    dataPoints: [
+      "Your entries are kept only on this device, in this browser.",
+      "There's no automatic syncing between your phone, tablet and computer.",
+      "If you clear your browser data (history, site data), your entries may be deleted too.",
+      "We recommend making a backup regularly.",
+    ],
+    dataCount: "This device has {days} days of entries and {habitDays} days of habit entries.",
+
+    exportTitle: "Make a backup",
+    exportHint: "Your daily entries, day ratings, habit plan and appearance preferences in a single file. Keep the file somewhere you trust.",
+    exportButton: "Download backup file",
+    exportCopyButton: "Show backup as text",
+    exportCopyHint: "If downloading doesn't work, you can copy this text and paste it into a note. Use the same text when restoring.",
+    exportTextLabel: "Backup text",
+    copy: "Copy text",
+    copied: "Copied",
+    copyFailed: "Couldn't copy. The text is selected; you can copy it manually.",
+    exportDone: "Download started: {file}. If the file didn't download, use the \"Show backup as text\" button.",
+    exportEmpty: "There are no entries to back up yet.",
+
+    importTitle: "Restore from backup",
+    importHint: "Choose a backup file you made earlier. Backups from older versions are accepted too. The file is checked first, and you'll see what will change.",
+    importFileLabel: "Choose backup file",
+    importPasteToggle: "Paste text instead of a file",
+    importPasteLabel: "Backup text",
+    importPasteButton: "Check text",
+    importCheckTitle: "Before restoring",
+    importOldVersion: "This backup is from a previous version and only contains daily entries. Your habit plan and entries will stay as they are.",
+    importOldFields: "This backup is from an older version. Information not in the backup (for example, day ratings or theme) will be kept as it is on this device.",
+    importDaysAdded: "{n} days will be added.",
+    importDaysSame: "{n} days match this device and won't change.",
+    importDaysChanged: "{n} days will be replaced with the backup's entries:",
+    importChangeLine: "{date}: \"{after}\" instead of \"{before}\"",
+    importMore: "and {n} more days",
+    importHabitPlans: "{n} habit plans will be added.",
+    importHabitLogAdded: "{n} days of habit entries will be added.",
+    importHabitLogChanged: "{n} days of habit entries will be changed:",
+    importPlansChanged: "{n} habit plans will be replaced with the backup's version:",
+    importPlanDiff: "Plan \"{goal}\" · {field}: \"{after}\" instead of \"{before}\"",
+    importReviewsChanged: "Review answers for {n} plans will be changed:",
+    importReviewDiff: "\"{goal}\" · {field}: \"{after}\" instead of \"{before}\"",
+    importFieldNames: {
+      goal: "Goal", start: "Small start", anchor: "When", place: "Where", ease: "To make it easier", smaller: "On a hard day",
+      archived: "Archived", fit: "Which start suited me", context: "Which time/setting", shrink: "What could be smaller",
+    },
+    importEmptyValue: "empty",
+    importRatingShort: "rating {n}",
+    importHabitKeepsActive: "The active habit plan on this device won't change.",
+    importHabitAdoptsActive: "The habit plan from the backup will become the active plan.",
+    importSettings: "Your appearance preferences (theme, animations, text size) will be updated to match the backup.",
+    importKept: "All entries not in this list will stay as they are.",
+    importNothing: "Everything in the backup matches this device. There's nothing new to restore.",
+    importConfirm: "Restore",
+    importDone: "Restore complete.",
+    importErrorTitle: "This backup couldn't be restored",
+    importErrorKept: "No changes were made to your current entries.",
+    importErrors: {
+      tooLarge: "The file is too large. Backups from this app usually don't go over a few hundred kilobytes.",
+      notJson: "The file couldn't be read. Make sure you chose a backup file (.json) made with this app.",
+      wrongApp: "This file doesn't look like a Small Steps, Clear Days backup.",
+      wrongVersion: "This backup is from a version the app doesn't recognize.",
+      badDays: "The day entries in the backup aren't in the expected format.",
+      badDate: "The backup contains an invalid date: {key}",
+      badField: "The backup contains an unexpected value ({key}: {field}).",
+      empty: "There are no entries to restore in the backup.",
+      readFailed: "Something went wrong while reading the file. Please try again.",
+    },
+
+    resetTitle: "Delete all entries",
+    resetHint: "Deletes all your daily entries and habit data on this device. We recommend making a backup first.",
+    resetButton: "Delete all entries",
+    resetConfirmTitle: "Delete all entries?",
+    resetConfirmBody: "{days} days of entries and your habit data on this device will be permanently deleted. This can't be undone.",
+    resetConfirm: "Yes, delete everything",
+    resetDone: "All entries were deleted.",
+
+    aboutTitle: "About this version",
+    aboutBody: "Trial version. The book's introduction and first chapter are ready; the second and third chapters aren't written yet. The app opens from a web link and needs internet the first time it opens; offline use hasn't been verified on phones yet.",
+  },
+};
+
+</script>
+<script>
+/*
+ * UI strings (German). Same keys as tr.js (checked by tests/i18n.test.mjs).
+ * Informal address ("du"). The book text itself is Turkish only for now.
+ */
+window.GX_I18N = window.GX_I18N || {};
+window.GX_I18N.de = {
+  name: "Deutsch",
+  locale: "de-DE",
+  htmlLang: "de",
+  features: { sentenceSummary: false },
+
+  boot: {
+    description: "Eine kurze Lektüre, ein klarerer Tagesplan und ein kleiner Gewohnheitsversuch.",
+    loading: "App wird vorbereitet …",
+    slowHint: "Wenn dieser Bildschirm länger als ein paar Sekunden bleibt, öffne das Produkt über den Weblink in Safari oder Chrome.",
+    noscript: "Diese Ansicht kann den Code der App nicht ausführen. Öffne das Produkt über den Weblink in Safari oder Chrome.",
+    errorTitle: "Die App konnte nicht starten",
+    errorBody: "Die Seite wurde geöffnet, aber beim Start der App ist ein Problem aufgetreten. Wenn deine Einträge in diesem Browser gespeichert sind, wurden sie nicht gelöscht.",
+    errorSteps: "Lade die Seite neu. Wenn das Problem bleibt, kopiere die technischen Details unten und schick sie uns.",
+    timeoutTitle: "Die App braucht länger als erwartet",
+    timeoutBody: "Die App konnte seit {sec} Sekunden nicht starten. Vielleicht ist die Verbindung langsam, oder diese Ansicht kann den Code der App nicht vollständig ausführen.",
+    unsupportedTitle: "Dieser Browser wird nicht unterstützt",
+    unsupportedBody: "Diesem Browser fehlen grundlegende Funktionen, die die App braucht. Nutze eine aktuelle Version von Safari oder Chrome.",
+    reload: "Seite neu laden",
+    details: "Technische Details",
+    copyDetails: "Details kopieren",
+    copied: "Kopiert",
+    viewErrorTitle: "Diese Ansicht konnte nicht geöffnet werden",
+    viewErrorBody: "Beim Anzeigen dieses Bereichs ist ein Problem aufgetreten. Die anderen Bereiche kannst du weiter nutzen; deine Einträge sind unverändert.",
+    goHome: "Zum Startbildschirm",
+  },
+
+  dates: {
+    months: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+    weekdays: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+    weekdaysShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    weekdaysMondayFirst: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+  },
+
+  app: {
+    brand: "Genix Studio",
+    title: "Kleine Schritte, klarere Tage",
+    skipToContent: "Zum Inhalt springen",
+    settingsButton: "Einstellungen",
+    settingsLabel: "Einstellungen und Daten",
+  },
+
+  nav: {
+    label: "Hauptbereiche",
+    read: "Lesen",
+    day: "Mein Tag",
+    habit: "Gewohnheit",
+  },
+
+  common: {
+    cancel: "Abbrechen",
+    back: "Zurück",
+    next: "Weiter",
+    skip: "Diesen Schritt überspringen",
+    save: "Speichern",
+    edit: "Bearbeiten",
+    delete: "Löschen",
+    close: "Schließen",
+    saved: "Gespeichert",
+    useExample: "Beispiel übernehmen",
+    example: "Beispiel: {text}",
+    requiredError: "Füll dieses Feld kurz aus, um weiterzumachen.",
+    optional: "Optional",
+    yes: "ja",
+    no: "nein",
+  },
+
+  save: {
+    failed: "Speichern nicht möglich. Der Browser erlaubt dieser Seite gerade nicht, Daten zu speichern (z. B. privates Fenster oder voller Speicher). Dein Text bleibt auf dem Bildschirm; mach ein Backup, damit er nicht verloren geht.",
+    failedAction: "Backup als Text holen",
+    storageWarning: "Dieser Browser erlaubt kein Speichern von Daten. Deine Einträge können verloren gehen, wenn du die Seite schließt. In den Einstellungen kannst du ein Backup als Text holen.",
+  },
+
+  home: {
+    coverBrand: "Genix Studio",
+    coverTitle: "Kleine Schritte, klarere Tage",
+    coverSubtitle: "Eine kurze Lektüre und ein ruhiger Tagesplaner",
+    description: "Eine kurze Lektüre, ein klarerer Tagesplan und ein kleiner Gewohnheitsversuch.",
+    startReading: "Lesen beginnen",
+    planToday: "Meinen Tag planen",
+    habitLink: "Lust, eine kleine Gewohnheit auszuprobieren?",
+    continueTitle: "Da weitermachen, wo du warst",
+    continueReading: "Zurück zu {chapter}",
+    continueDay: "Zurück zum heutigen Plan",
+    continueHabit: "Zurück zu deinem Gewohnheitsversuch",
+    privacyNote: "Deine Einträge bleiben nur in diesem Browser auf diesem Gerät. Du brauchst kein Konto.",
+    languageButton: "Sprache: {name}",
+  },
+
+  reader: {
+    contentsTitle: "Das Buch lesen",
+    contentsLead: "Jedes Kapitel besteht aus kurzen Abschnitten – gut für unterwegs oder eine Pause.",
+    chapterLabel: "Kapitel {n}",
+    continueReading: "Weiterlesen",
+    startChapter: "Kapitel lesen",
+    notWritten: "Noch nicht geschrieben",
+    notWrittenHint: "Dieses Kapitel kommt in einer späteren Version.",
+    backToContents: "Inhalt",
+    partLabel: "Teil {n}/{total}",
+    progress: "Etwa {p} % gelesen",
+    progressShort: "{p} %",
+    textSizeLabel: "Schriftgröße",
+    textSizes: { standard: "Standard", large: "Groß", larger: "Größer" },
+    researchLabel: "Was sagt die Forschung?",
+    limitsLabel: "Einschränkung",
+    researchMore: "Details und Quelle",
+    suggestionLabel: "Mein Vorschlag",
+    exerciseLabel: "Kleine Übung",
+    summaryLabel: "Kapitel in einem Satz",
+    sourcesTitle: "Quellen in diesem Kapitel",
+    exerciseToPlanner: "In „Mein Tag“ umsetzen",
+    timerStart: "3-Minuten-Timer starten",
+    timerStop: "Timer stoppen",
+    timerDone: "Drei Minuten sind um. Du kannst aufhören; die Liste muss nicht vollständig sein.",
+    timerRemaining: "Verbleibend: {time}",
+    nextChapter: "Nächstes Kapitel: {title}",
+    nextChapterSoon: "Die nächsten Kapitel sind noch nicht geschrieben. Bis dahin kannst du in „Mein Tag“ die Hauptaufgabe für heute wählen.",
+    goToDay: "Zu „Mein Tag“",
+    readingTime: "Etwa {min} Minuten Lesezeit",
+    bookLanguageNote: "Der Buchtext ist vorerst nur auf Türkisch verfügbar. Eine Übersetzung ist in Arbeit; „Mein Tag“ und „Gewohnheit“ sind vollständig auf Deutsch.",
+  },
+
+  day: {
+    titleToday: "Mein Tag heute",
+    titlePast: "Ein vergangener Tag",
+    titleFuture: "Ein kommender Tag",
+    futureBanner: "Dieser Tag ist noch nicht da. Du kannst schon planen; die Tagesbewertung öffnet sich, wenn der Tag gekommen ist.",
+    pastBanner: "Dieser Tag liegt in der Vergangenheit. Deine Änderungen werden trotzdem unter diesem Datum gespeichert.",
+    backToToday: "Zurück zu heute",
+    backToBook: "Zurück zur Stelle im Buch",
+    historyLink: "Vergangene Tage",
+    newDayBanner: "Ein neuer Tag hat begonnen. Dein Eintrag von gestern ist unverändert gespeichert.",
+    openNewDay: "Heutigen Plan öffnen",
+
+    mainLabel: "Hauptaufgabe für heute",
+    mainHint: "Die eine Sache, die dich erleichtern würde, wenn sie heute erledigt ist.",
+    mainPlaceholder: "z. B. Erster Entwurf der Präsentation",
+    stepLabel: "Erster kleiner Schritt",
+    stepHint: "So klein, dass du in ein paar Minuten anfangen kannst.",
+    stepPlaceholder: "z. B. Datei öffnen und drei Überschriften notieren",
+    mainDoneLabel: "Hauptaufgabe als erledigt markieren",
+
+    brainToggle: "Ich möchte erst aufschreiben, was mir im Kopf herumgeht.",
+    brainLabel: "Was mir im Kopf herumgeht",
+    brainHint: "Schreib auf, was dir einfällt – kurz und ohne Reihenfolge.",
+    brainPlaceholder: "Rechnung bezahlen, Mama anrufen, Berichtsentwurf …",
+
+    extrasToggle: "Zwei kleine Zusatzaufgaben hinzufügen.",
+    extrasHint: "Höchstens zwei. Wenn kein Platz mehr ist, ist das ein Zeichen: Verschieb es auf morgen.",
+    extraLabel: "Zusatzaufgabe {n}",
+    extraPlaceholder: "z. B. Adresse für das Paket aufschreiben",
+    extraDoneLabel: "Zusatzaufgabe {n} als erledigt markieren",
+
+    startToggle: "Meine Startzeit festlegen.",
+    startHint: "Dein erster kleiner Schritt wird für den Startplan übernommen; schreib nur Zeit und Ort dazu.",
+    whenLabel: "Wann?",
+    whenPlaceholder: "z. B. Direkt nach dem Mittagessen",
+    whereLabel: "Wo?",
+    wherePlaceholder: "z. B. Im oberen Stock der Bibliothek",
+    startNeedsStep: "Schreib für den Startplan zuerst oben deinen ersten kleinen Schritt.",
+    startSentence: "{when}, {where}, fange ich so an: {step}",
+    startLabelled: "Mein Startplan",
+    startWhen: "Zeit",
+    startWhere: "Ort",
+    startStep: "Erster Schritt",
+    legacyTitle: "Dieser Eintrag enthält einen alten „Was mache ich?“-Text",
+    legacyBody: "In der früheren Version hattest du in den Startplan geschrieben:",
+    legacyUseStep: "Ersten kleinen Schritt verwenden",
+    legacyUseStepHint: "Der alte Text wird entfernt; im Startplan erscheint dein erster kleiner Schritt.",
+    legacyMoveToStep: "Diesen Text als ersten Schritt nehmen",
+    legacyResolved: "Der Startplan verwendet jetzt deinen ersten kleinen Schritt.",
+
+    timeLabel: "Wie viel Zeit kann ich heute dafür einplanen?",
+    timeOptions: { "5": "5 Minuten", "15": "15 Minuten", "30": "30 Minuten", custom: "Lege ich selbst fest" },
+    timeClear: "Auswahl entfernen",
+    timeCustomLabel: "Verfügbare Zeit",
+    timeCustomPlaceholder: "z. B. 45 Minuten",
+    timeTips: {
+      "5": "Fünf Minuten können reichen, um in eine Aufgabe hineinzukommen. Versuch, den ersten Schritt so klein zu halten, dass er in diese Zeit passt.",
+      "15": "In fünfzehn Minuten kannst du den ersten Schritt machen und einen Blick auf den nächsten werfen. Wirst du nicht fertig, notier in einer Zeile, wo du stehst.",
+      "30": "Bei dreißig Minuten hilft es oft, vorher festzulegen, was nach dem ersten Schritt kommt. Eine kurze Pause zwischendurch gehört zum Plan.",
+      custom: "Schreib einfach die Zeit auf. Sie ist eine Schätzung, keine Grenze; es kann länger oder kürzer dauern.",
+    },
+
+    eveningToggle: "Am Abend kurz zurückblicken.",
+    ratingLegend: "Wie war heute für dich?",
+    ratingLegendPast: "Wie war dieser Tag für dich?",
+    ratingHint: "Das ist keine Leistungsnote, sondern deine eigene Sicht auf den Tag.",
+    ratingOptions: { "1": "1 — Schwerer Tag", "2": "2 — Etwas mühsam", "3": "3 — Mittelmäßig", "4": "4 — Lief gut", "5": "5 — Lief sehr gut" },
+    ratingClear: "Auswahl entfernen",
+    ratingFuture: "Du kannst diesen Tag bewerten, wenn er gekommen ist.",
+    ratingNoteLabel: "Warum diese Bewertung?",
+    ratingNotePlaceholder: "Optional, ein Satz reicht",
+    eveningHint: "Kurz und ohne zu urteilen.",
+    workedLabel: "Was hat heute geholfen?",
+    workedPlaceholder: "z. B. Das Handy in ein anderes Zimmer legen",
+    easierLabel: "Was kann ich mir für morgen leichter machen?",
+    easierPlaceholder: "z. B. Die Tasche schon am Abend packen",
+
+    filled: "ausgefüllt",
+    doneFeedback: "Markiert",
+    undoneFeedback: "Markierung entfernt",
+  },
+
+  calendar: {
+    toggle: "Kalender",
+    toggleHint: "Frühere und kommende Tage in der Monatsansicht",
+    prevMonth: "Voriger Monat",
+    nextMonth: "Nächster Monat",
+    today: "Zurück zu heute",
+    monthTitle: "{month} {year}",
+    legendTitle: "Zeichen",
+    legendToday: "Heute",
+    legendSelected: "Gewählter Tag",
+    legendPlan: "Plan vorhanden",
+    legendHabit: "Gewohnheitseintrag vorhanden",
+    legendRating: "Tagesbewertung (1–5)",
+    legendNote: "Leere Tage sind kein Mangel; es wurde nur nichts eingetragen.",
+    cellToday: "heute",
+    cellSelected: "gewählt",
+    cellPlan: "Plan vorhanden",
+    cellHabit: "Gewohnheit: {status}",
+    cellRating: "Bewertung {n}/5",
+    cellEmpty: "kein Eintrag",
+    summaryTitle: "{date}",
+    openHere: "Dieser Tag ist unten geöffnet.",
+    openDay: "Tag öffnen und bearbeiten",
+    emptyPast: "Für diesen Tag gibt es noch keinen Eintrag.",
+    emptyToday: "Für heute gibt es noch keinen Eintrag.",
+    createPast: "Eintrag für diesen Tag anlegen",
+    emptyFuture: "Dieser Tag ist noch nicht da. Wenn du magst, kannst du schon planen.",
+    createFuture: "Plan für diesen Tag schreiben",
+    mainLabel: "Hauptaufgabe",
+    doneLabel: "Erledigte Aufgaben",
+    noneDone: "Keine Aufgabe markiert",
+    habitLabel: "Gewohnheit",
+    habitLine: "{status} · {goal}",
+    ratingLabel: "Tagesbewertung",
+    ratingNoteLabel: "Warum diese Bewertung",
+    eveningLabel: "Abendnotiz",
+  },
+
+  history: {
+    title: "Vergangene Tage",
+    crumb: "Mein Tag",
+    lead: "Einträge früherer Tage. Tippe auf einen Tag, um die Details zu sehen.",
+    empty: "Noch keine gespeicherten Tage. Sobald du die heutige Hauptaufgabe einträgst, erscheint sie hier.",
+    emptyAction: "Meinen Tag planen",
+    today: "Heute",
+    noMain: "Keine Hauptaufgabe eingetragen",
+    eveningSnippet: "Abendnotiz: {text}",
+    open: "Bearbeiten",
+    delete: "Löschen",
+    detailBrain: "Was mir im Kopf herumging",
+    detailStep: "Erster kleiner Schritt",
+    detailExtras: "Zusatzaufgaben",
+    detailStart: "Startplan",
+    detailTime: "Eingeplante Zeit",
+    detailWorked: "Was hat geholfen?",
+    detailEasier: "Was kann ich mir für morgen leichter machen?",
+    detailRating: "Tagesbewertung",
+    detailRatingNote: "Warum diese Bewertung",
+    detailDone: "erledigt",
+    deleteTitle: "Diesen Tag löschen?",
+    deleteBody: "Der Eintrag vom {date} wird dauerhaft von diesem Gerät gelöscht. Das lässt sich nicht rückgängig machen.",
+    deleteConfirm: "Ja, löschen",
+    deleted: "Der Eintrag vom {date} wurde gelöscht.",
+  },
+
+  habit: {
+    title: "Meine Gewohnheit",
+    introTitle: "Eine einzige kleine Gewohnheit",
+    introBody: "Hier arbeitest du immer nur an einer Gewohnheit. Zuerst machst du daraus einen möglichst kleinen Anfang, dann schaust du ein paar Tage lang, wie es läuft.",
+    introTrial: "Für den ersten Versuch schlagen wir sieben Tage vor. Das ist nicht die Zeit, die es braucht, um eine Gewohnheit aufzubauen – nur ein kurzer Zeitraum, um zu sehen, ob der Plan zu dir passt.",
+    startSetup: "Meinen Plan anlegen",
+    continueSetup: "Einrichtung fortsetzen",
+
+    setupTitle: "Gewohnheitsplan",
+    editTitle: "Plan bearbeiten",
+    stepOf: "Schritt {n}/{total}",
+    finish: "Plan speichern",
+    summaryStepTitle: "Passt dein Plan so?",
+    summaryStepLead: "Eine Zusammenfassung deiner Antworten. Wenn du etwas ändern willst, kannst du zurückgehen.",
+
+    steps: {
+      goal: {
+        label: "Was möchte ich tun?",
+        hint: "Eine grobe Richtung reicht. Die Details machen wir in den nächsten Schritten kleiner.",
+        example: "Regelmäßig Mathe lernen",
+      },
+      start: {
+        label: "Was ist mein kleinster machbarer Anfang?",
+        hint: "Wähl etwas so Kleines, dass du es selbst an einem schlechten Tag schaffst.",
+        example: "Fünf Minuten lernen oder eine Aufgabe lösen",
+      },
+      anchor: {
+        label: "An welchen Moment knüpfe ich an?",
+        hint: "Wähl einen Moment, den es sowieso jeden Tag gibt: eine Mahlzeit, einen Weg, eine Routine.",
+        example: "Nach dem Abendessen",
+      },
+      place: {
+        label: "Wo fange ich an?",
+        hint: "Nenn einen konkreten Ort, zum Beispiel deinen Schreibtisch oder den Küchentisch.",
+        example: "Am Schreibtisch",
+      },
+      ease: {
+        label: "Wie mache ich mir den Anfang leichter?",
+        hint: "Eine einzige Vorbereitung, die dir vorher den Weg frei macht.",
+        example: "Buch und Stift schon vorher auf den Tisch legen",
+      },
+      smaller: {
+        label: "Was ist meine kleinere Variante für schwere Tage?",
+        hint: "Ein Ersatz-Anfang für Tage, an denen du müde oder sehr beschäftigt bist.",
+        example: "Nur eine Aufgabe durchlesen",
+      },
+    },
+
+    summarySentence: "{anchor}, {place}, probiere ich: {start}",
+    summaryLabels: {
+      goal: "Mein Ziel",
+      anchor: "Wann",
+      place: "Wo",
+      start: "Kleiner Anfang",
+      ease: "Zur Erleichterung",
+      smaller: "An schweren Tagen",
+    },
+    planTitle: "Mein Plan",
+    editPlan: "Plan bearbeiten",
+    versionNotice: "Du hast dein Ziel geändert. Frühere Einträge bleiben beim alten Plan; neue Einträge gehören zu diesem neuen Plan.",
+    savedPlan: "Plan gespeichert.",
+
+    todayTitle: "Heute",
+    dayTitle: "{date}",
+    statusQuestion: "Wie lief es heute?",
+    statusLegend: "Eintrag für {date}",
+    statuses: {
+      done: "Ich habe meinen kleinen Schritt gemacht.",
+      smaller: "Ich habe die kleinere Variante gemacht.",
+      skipped: "Heute habe ich es nicht gemacht.",
+    },
+    statusShort: { done: "Gemacht", smaller: "Kleinere Variante", skipped: "Nicht gemacht", none: "Kein Eintrag" },
+    clearStatus: "Eintrag löschen",
+    noteLabel: "Was hat mir den Anfang heute leichter oder schwerer gemacht?",
+    notePlaceholder: "Optional, ein Satz reicht",
+    noteNeedsStatus: "Die Notiz wird gespeichert, sobald du für diesen Tag eine Auswahl triffst.",
+    olderPlan: "Dieser Eintrag gehört zu einem früheren Plan: {goal}",
+
+    weekTitle: "Die letzten sieben Tage",
+    weekHint: "Tippe auf einen Tag, um seinen Eintrag zu ändern.",
+    weekTrialNote: "Sieben Tage sind nicht die Zeit, um eine Gewohnheit aufzubauen – nur ein kurzer Zeitraum, um den ersten Versuch einzuschätzen.",
+    legend: "Legende",
+
+    reviewTitle: "Rückblick",
+    reviewLead: "Du kannst jederzeit antworten. Deine Antworten werden bei diesem Plan gespeichert.",
+    reviewOpen: "Rückblick öffnen",
+    reviewFit: "Welcher Anfangsschritt hat zu mir gepasst?",
+    reviewContext: "Welche Zeit oder Umgebung hat es mir leichter gemacht?",
+    reviewShrink: "Was kann ich beim nächsten Versuch kleiner machen?",
+
+    previousPlans: "Frühere Pläne",
+    previousPlanItem: "{goal} · {count} Tage mit Eintrag",
+  },
+
+  settings: {
+    title: "Einstellungen und Daten",
+    close: "Schließen",
+    motionTitle: "Animationen",
+    motionHint: "Auch ausgeschaltet funktioniert alles genauso.",
+    motionSystem: "Wie auf dem Gerät",
+    motionOn: "An",
+    motionOff: "Aus",
+    motionSystemReduced: "Auf deinem Gerät ist „Bewegung reduzieren“ aktiv, deshalb sind Animationen gerade aus.",
+    textSizeTitle: "Schriftgröße im Buch",
+    appearanceTitle: "Darstellung",
+    themeTitle: "Design",
+    themeLight: "Hell",
+    themeDark: "Dunkel",
+    themeSystem: "Wie auf dem Gerät",
+    themeSystemNow: "Dein Gerät nutzt gerade das {mode} Design.",
+    themeModeLight: "helle",
+    themeModeDark: "dunkle",
+    languageTitle: "Sprache (Language)",
+    languageHint: "Ändert die Sprache der App. Deine Einträge bleiben, wie sie sind. Der Buchtext ist vorerst nur auf Türkisch verfügbar.",
+
+    dataTitle: "Wo sind deine Einträge?",
+    dataPoints: [
+      "Deine Einträge werden nur auf diesem Gerät in diesem Browser gespeichert.",
+      "Zwischen Handy, Tablet und Computer gibt es keine automatische Synchronisierung.",
+      "Wenn du Browserdaten (Verlauf, Websitedaten) löschst, können auch deine Einträge verloren gehen.",
+      "Wir empfehlen, regelmäßig ein Backup zu machen.",
+    ],
+    dataCount: "Auf diesem Gerät gibt es Einträge für {days} Tage und Gewohnheitseinträge für {habitDays} Tage.",
+
+    exportTitle: "Backup erstellen",
+    exportHint: "Deine Tageseinträge, Tagesbewertungen, dein Gewohnheitsplan und deine Darstellungseinstellungen in einer Datei. Bewahre sie an einem sicheren Ort auf.",
+    exportButton: "Backup-Datei herunterladen",
+    exportCopyButton: "Backup als Text zeigen",
+    exportCopyHint: "Wenn der Download nicht klappt, kannst du diesen Text kopieren und in eine Notiz einfügen. Zum Wiederherstellen nutzt du denselben Text.",
+    exportTextLabel: "Backup-Text",
+    copy: "Text kopieren",
+    copied: "Kopiert",
+    copyFailed: "Kopieren nicht möglich. Der Text ist markiert; du kannst ihn selbst kopieren.",
+    exportDone: "Download gestartet: {file}. Falls keine Datei ankommt, nutze „Backup als Text zeigen“.",
+    exportEmpty: "Noch keine Einträge für ein Backup.",
+
+    importTitle: "Aus Backup wiederherstellen",
+    importHint: "Wähl eine Backup-Datei, die du früher erstellt hast. Backups älterer Versionen werden auch angenommen. Die Datei wird zuerst geprüft; du siehst, was sich ändert.",
+    importFileLabel: "Backup-Datei wählen",
+    importPasteToggle: "Text statt Datei einfügen",
+    importPasteLabel: "Backup-Text",
+    importPasteButton: "Text prüfen",
+    importCheckTitle: "Vor dem Wiederherstellen",
+    importOldVersion: "Dieses Backup stammt aus einer früheren Version und enthält nur Tageseinträge. Dein Gewohnheitsplan und deine Gewohnheitseinträge bleiben unverändert.",
+    importOldFields: "Dieses Backup stammt aus einer älteren Version. Was darin fehlt (z. B. Tagesbewertung, Design), bleibt so, wie es auf diesem Gerät ist.",
+    importDaysAdded: "{n} Tage werden hinzugefügt.",
+    importDaysSame: "{n} Tage sind identisch mit diesem Gerät und bleiben unverändert.",
+    importDaysChanged: "{n} Tage werden durch die Einträge im Backup ersetzt:",
+    importChangeLine: "{date}: „{after}“ statt „{before}“",
+    importMore: "und {n} weitere Tage",
+    importHabitPlans: "{n} Gewohnheitspläne werden hinzugefügt.",
+    importHabitLogAdded: "Gewohnheitseinträge für {n} Tage werden hinzugefügt.",
+    importHabitLogChanged: "Gewohnheitseinträge für {n} Tage werden geändert:",
+    importPlansChanged: "{n} Gewohnheitspläne werden durch das Backup ersetzt:",
+    importPlanDiff: "Plan „{goal}“ · {field}: „{after}“ statt „{before}“",
+    importReviewsChanged: "Rückblick-Antworten von {n} Plänen werden geändert:",
+    importReviewDiff: "„{goal}“ · {field}: „{after}“ statt „{before}“",
+    importFieldNames: {
+      goal: "Ziel", start: "Kleiner Anfang", anchor: "Wann", place: "Wo", ease: "Zur Erleichterung", smaller: "An schweren Tagen",
+      archived: "Archiviert", fit: "Welcher Anfang passte", context: "Welche Zeit/Umgebung", shrink: "Was ich verkleinern kann",
+    },
+    importEmptyValue: "leer",
+    importRatingShort: "Bewertung {n}",
+    importHabitKeepsActive: "Dein aktiver Gewohnheitsplan auf diesem Gerät bleibt unverändert.",
+    importHabitAdoptsActive: "Der Gewohnheitsplan aus dem Backup wird zum aktiven Plan.",
+    importSettings: "Deine Darstellungseinstellungen (Design, Animationen, Schriftgröße) werden durch die im Backup ersetzt.",
+    importKept: "Alle Einträge, die nicht in dieser Liste stehen, bleiben unverändert.",
+    importNothing: "Alles im Backup ist identisch mit diesem Gerät. Es gibt nichts Neues wiederherzustellen.",
+    importConfirm: "Wiederherstellen",
+    importDone: "Wiederherstellung abgeschlossen.",
+    importErrorTitle: "Dieses Backup konnte nicht wiederhergestellt werden",
+    importErrorKept: "An deinen vorhandenen Einträgen wurde nichts geändert.",
+    importErrors: {
+      tooLarge: "Die Datei ist zu groß. Backups dieser App sind meist nur ein paar hundert Kilobyte groß.",
+      notJson: "Die Datei konnte nicht gelesen werden. Achte darauf, eine Backup-Datei (.json) aus dieser App zu wählen.",
+      wrongApp: "Diese Datei sieht nicht wie ein Backup von „Kleine Schritte, klarere Tage“ aus.",
+      wrongVersion: "Dieses Backup stammt aus einer Version, die die App nicht kennt.",
+      badDays: "Die Tageseinträge im Backup haben nicht das erwartete Format.",
+      badDate: "Das Backup enthält ein ungültiges Datum: {key}",
+      badField: "Das Backup enthält einen unerwarteten Wert ({key}: {field}).",
+      empty: "Das Backup enthält keine Einträge zum Wiederherstellen.",
+      readFailed: "Beim Lesen der Datei ist ein Problem aufgetreten. Versuch es noch einmal.",
+    },
+
+    resetTitle: "Alle Einträge löschen",
+    resetHint: "Löscht alle Tageseinträge und Gewohnheitsdaten auf diesem Gerät. Mach am besten vorher ein Backup.",
+    resetButton: "Alle Einträge löschen",
+    resetConfirmTitle: "Alle Einträge löschen?",
+    resetConfirmBody: "Deine Einträge für {days} Tage und deine Gewohnheitsdaten auf diesem Gerät werden dauerhaft gelöscht. Das lässt sich nicht rückgängig machen.",
+    resetConfirm: "Ja, alles löschen",
+    resetDone: "Alle Einträge wurden gelöscht.",
+
+    aboutTitle: "Über diese Version",
+    aboutBody: "Testversion. Einleitung und erstes Kapitel des Buches sind fertig; das zweite und dritte Kapitel sind noch nicht geschrieben. Die App wird über einen Weblink geöffnet und braucht beim ersten Öffnen Internet; die Nutzung ohne Internet wurde auf dem Handy noch nicht geprüft.",
+  },
+};
+
+</script>
+<script>
+/*
+ * Textes de l’interface (français). Mêmes clés que tr.js (vérifié par tests/i18n.test.mjs).
+ * Le texte du livre reste pour l’instant en turc uniquement (content/book.tr.js).
+ */
+window.GX_I18N = window.GX_I18N || {};
+window.GX_I18N.fr = {
+  name: "Français",
+  locale: "fr-FR",
+  htmlLang: "fr",
+  features: { sentenceSummary: false },
+
+  boot: {
+    description: "Une courte lecture, un plan de journée plus clair et un petit essai d’habitude.",
+    loading: "Préparation de l’application…",
+    slowHint: "Si cet écran reste affiché plus de quelques secondes, ouvre le produit via le lien web dans Safari ou Chrome.",
+    noscript: "Cet affichage ne peut pas exécuter le code de l’application. Ouvre le produit via le lien web dans Safari ou Chrome.",
+    errorTitle: "Impossible de démarrer l’application",
+    errorBody: "La page s’est ouverte, mais un problème est survenu au démarrage de l’application. Si tes données sont enregistrées dans ce navigateur, elles n’ont pas été supprimées.",
+    errorSteps: "Essaie d’actualiser la page. Si le problème persiste, copie les détails techniques ci-dessous et envoie-les.",
+    timeoutTitle: "L’application met plus de temps que prévu à s’ouvrir",
+    timeoutBody: "L’application n’a pas pu démarrer depuis {sec} secondes. La connexion est peut-être lente, ou cet affichage ne peut pas exécuter entièrement le code de l’application.",
+    unsupportedTitle: "Ce navigateur n’est pas pris en charge",
+    unsupportedBody: "Ce navigateur ne propose pas les fonctions de base dont l’application a besoin. Utilise une version récente de Safari ou de Chrome.",
+    reload: "Actualiser la page",
+    details: "Détails techniques",
+    copyDetails: "Copier les détails",
+    copied: "Copié",
+    viewErrorTitle: "Impossible d’ouvrir cet écran",
+    viewErrorBody: "Un problème est survenu en affichant cette partie. Tu peux continuer à utiliser les autres parties ; tes données n’ont pas changé.",
+    goHome: "Revenir à l’écran d’accueil",
+  },
+
+  dates: {
+    months: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+    weekdays: ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"],
+    weekdaysShort: ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."],
+    weekdaysMondayFirst: ["lu", "ma", "me", "je", "ve", "sa", "di"],
+  },
+
+  app: {
+    brand: "Genix Studio",
+    title: "Petits pas, journées plus claires",
+    skipToContent: "Aller au contenu",
+    settingsButton: "Réglages",
+    settingsLabel: "Réglages et données",
+  },
+
+  nav: {
+    label: "Sections principales",
+    read: "Lire",
+    day: "Ma journée",
+    habit: "Mon habitude",
+  },
+
+  common: {
+    cancel: "Annuler",
+    back: "Retour",
+    next: "Continuer",
+    skip: "Passer cette étape",
+    save: "Enregistrer",
+    edit: "Modifier",
+    delete: "Supprimer",
+    close: "Fermer",
+    saved: "Enregistré",
+    useExample: "Utiliser l’exemple",
+    example: "Exemple : {text}",
+    requiredError: "Remplis brièvement ce champ pour continuer.",
+    optional: "Facultatif",
+    yes: "oui",
+    no: "non",
+  },
+
+  save: {
+    failed: "Impossible d’enregistrer. Le navigateur n’autorise pas cette page à stocker des données pour le moment (par ex. navigation privée ou stockage plein). Ce que tu as écrit reste à l’écran ; fais une sauvegarde pour ne pas le perdre.",
+    failedAction: "Obtenir la sauvegarde en texte",
+    storageWarning: "Ce navigateur n’autorise pas le stockage de données. Ce que tu écris peut disparaître à la fermeture de la page. Tu peux obtenir la sauvegarde en texte dans les Réglages.",
+  },
+
+  home: {
+    coverBrand: "Genix Studio",
+    coverTitle: "Petits pas, journées plus claires",
+    coverSubtitle: "Une courte lecture et un planificateur de journée tranquille",
+    description: "Une courte lecture, un plan de journée plus clair et un petit essai d’habitude.",
+    startReading: "Commencer la lecture",
+    planToday: "Planifier ma journée",
+    habitLink: "Envie d’essayer une petite habitude ?",
+    continueTitle: "Reprendre où tu en étais",
+    continueReading: "Revenir au chapitre {chapter}",
+    continueDay: "Revenir au plan du jour",
+    continueHabit: "Revenir à ton essai d’habitude",
+    privacyNote: "Tes données restent uniquement dans ce navigateur, sur cet appareil. Pas besoin de créer de compte.",
+    languageButton: "Langue : {name}",
+  },
+
+  reader: {
+    contentsTitle: "Lire le livre",
+    contentsLead: "Chaque chapitre est découpé en courtes parties, à lire dans les transports ou pendant une pause.",
+    chapterLabel: "Chapitre {n}",
+    continueReading: "Reprendre où tu en étais",
+    startChapter: "Lire le chapitre",
+    notWritten: "Pas encore écrit",
+    notWrittenHint: "Ce chapitre sera ajouté dans une prochaine version.",
+    backToContents: "Sommaire",
+    partLabel: "Partie {n}/{total}",
+    progress: "Environ {p} % lu",
+    progressShort: "{p} %",
+    textSizeLabel: "Taille du texte",
+    textSizes: { standard: "Standard", large: "Grande", larger: "Plus grande" },
+    researchLabel: "Que dit la recherche ?",
+    limitsLabel: "Limite",
+    researchMore: "Détails et source",
+    suggestionLabel: "Ma suggestion",
+    exerciseLabel: "Petit exercice",
+    summaryLabel: "En résumé",
+    sourcesTitle: "Sources utilisées dans ce chapitre",
+    exerciseToPlanner: "Le faire dans Ma journée",
+    timerStart: "Lancer un minuteur de 3 minutes",
+    timerStop: "Arrêter le minuteur",
+    timerDone: "Les trois minutes sont écoulées. Tu peux t’arrêter là ; la liste n’a pas besoin d’être complète.",
+    timerRemaining: "Temps restant : {time}",
+    nextChapter: "Chapitre suivant : {title}",
+    nextChapterSoon: "Les chapitres suivants ne sont pas encore écrits. En attendant, tu peux choisir la tâche principale du jour dans Ma journée.",
+    goToDay: "Aller à Ma journée",
+    readingTime: "Environ {min} minutes de lecture",
+    bookLanguageNote: "Le texte du livre n’est pour l’instant disponible qu’en turc. Une traduction est en préparation ; « Ma journée » et « Mon habitude » sont entièrement en français.",
+  },
+
+  day: {
+    titleToday: "Ma journée",
+    titlePast: "Un jour passé",
+    titleFuture: "Un jour à venir",
+    futureBanner: "Ce jour n’est pas encore arrivé. Tu peux écrire un plan ; le bilan de la journée s’ouvrira le jour venu.",
+    pastBanner: "Ce jour est passé. Tes modifications sont tout de même enregistrées à cette date.",
+    backToToday: "Revenir à aujourd’hui",
+    backToBook: "Revenir où tu en étais dans le livre",
+    historyLink: "Jours précédents",
+    newDayBanner: "Une nouvelle journée a commencé. Ce que tu as noté hier est conservé tel quel.",
+    openNewDay: "Ouvrir le plan du jour",
+
+    mainLabel: "La tâche principale du jour",
+    mainHint: "La seule tâche qui te soulagerait si elle était faite aujourd’hui.",
+    mainPlaceholder: "Ex. Le premier jet de la présentation",
+    stepLabel: "Premier petit pas",
+    stepHint: "Assez petit pour pouvoir commencer en quelques minutes.",
+    stepPlaceholder: "Ex. Ouvrir le fichier et écrire trois titres",
+    mainDoneLabel: "Marquer la tâche principale comme faite",
+
+    brainToggle: "Je veux d’abord noter ce que j’ai en tête.",
+    brainLabel: "Ce que j’ai en tête",
+    brainHint: "Note ce qui te vient, en vrac et en quelques mots.",
+    brainPlaceholder: "Payer la facture, appeler maman, brouillon du rapport…",
+
+    extrasToggle: "Ajouter deux petites tâches en plus.",
+    extrasHint: "Deux au maximum. S’il n’y a plus de place, c’est un signe : garde-la pour demain.",
+    extraLabel: "Tâche en plus {n}",
+    extraPlaceholder: "Ex. Écrire l’adresse pour le colis",
+    extraDoneLabel: "Marquer la tâche en plus {n} comme faite",
+
+    startToggle: "Choisir quand je commence.",
+    startHint: "Ton premier petit pas sert de plan de départ ; indique seulement le moment et le lieu.",
+    whenLabel: "Quand ?",
+    whenPlaceholder: "Ex. Juste après le déjeuner",
+    whereLabel: "Où ?",
+    wherePlaceholder: "Ex. À l’étage de la bibliothèque",
+    startNeedsStep: "Pour le plan de départ, écris d’abord ton premier petit pas plus haut.",
+    startSentence: "{when}, {where}, je commencerai par ce pas : {step}",
+    startLabelled: "Mon plan de départ",
+    startWhen: "Moment",
+    startWhere: "Lieu",
+    startStep: "Premier pas",
+    legacyTitle: "Cette entrée contient un ancien texte « Que vais-je faire ? »",
+    legacyBody: "Dans la version précédente, tu avais écrit ceci dans le plan de départ :",
+    legacyUseStep: "Utiliser le premier petit pas",
+    legacyUseStepHint: "L’ancien texte est retiré ; ton premier petit pas apparaît dans le plan de départ.",
+    legacyMoveToStep: "Faire de ce texte le premier petit pas",
+    legacyResolved: "Le plan de départ utilise désormais ton premier petit pas.",
+
+    timeLabel: "Combien de temps puis-je y consacrer aujourd’hui ?",
+    timeOptions: { "5": "5 minutes", "15": "15 minutes", "30": "30 minutes", custom: "Je choisis moi-même" },
+    timeClear: "Effacer le choix",
+    timeCustomLabel: "Le temps dont tu disposes",
+    timeCustomPlaceholder: "Ex. 45 minutes",
+    timeTips: {
+      "5": "Cinq minutes peuvent suffire pour se mettre à une tâche. Essaie de garder le premier pas assez petit pour tenir dans ce temps.",
+      "15": "En quinze minutes, tu peux faire le premier pas et jeter un œil au suivant. Si ce n’est pas fini, note en une ligne où tu t’es arrêté·e.",
+      "30": "Pour trente minutes, choisir à l’avance ce que tu feras après le premier pas peut te faciliter la tâche. Une courte pause fait aussi partie du plan.",
+      custom: "Il suffit d’écrire la durée. C’est une estimation, pas une limite ; la tâche peut prendre plus ou moins de temps.",
+    },
+
+    eveningToggle: "Faire un court bilan le soir.",
+    ratingLegend: "Comment s’est passée ta journée ?",
+    ratingLegendPast: "Comment s’est passé ce jour pour toi ?",
+    ratingHint: "Ce n’est pas une note de réussite ; c’est pour regarder ta journée de ton propre point de vue.",
+    ratingOptions: { "1": "1 — Journée difficile", "2": "2 — Un peu compliquée", "3": "3 — Mitigée", "4": "4 — Ça s’est bien passé", "5": "5 — Ça s’est très bien passé" },
+    ratingClear: "Effacer le choix",
+    ratingFuture: "Tu pourras faire le bilan quand ce jour sera arrivé.",
+    ratingNoteLabel: "Pourquoi cette note ?",
+    ratingNotePlaceholder: "Facultatif, une phrase suffit",
+    eveningHint: "Court et sans jugement.",
+    workedLabel: "Qu’est-ce qui a aidé aujourd’hui ?",
+    workedPlaceholder: "Ex. Laisser le téléphone dans une autre pièce",
+    easierLabel: "Qu’est-ce que je peux me faciliter pour demain ?",
+    easierPlaceholder: "Ex. Préparer mon sac la veille au soir",
+
+    filled: "rempli",
+    doneFeedback: "Coché",
+    undoneFeedback: "Décoché",
+  },
+
+  calendar: {
+    toggle: "Calendrier",
+    toggleHint: "Les jours précédents et suivants en vue mensuelle",
+    prevMonth: "Mois précédent",
+    nextMonth: "Mois suivant",
+    today: "Revenir à aujourd’hui",
+    monthTitle: "{month} {year}",
+    legendTitle: "Repères",
+    legendToday: "Aujourd’hui",
+    legendSelected: "Jour sélectionné",
+    legendPlan: "Plan noté",
+    legendHabit: "Habitude notée",
+    legendRating: "Bilan de la journée (1–5)",
+    legendNote: "Un jour vide n’est pas un manque ; simplement, rien n’a été noté.",
+    cellToday: "aujourd’hui",
+    cellSelected: "sélectionné",
+    cellPlan: "plan noté",
+    cellHabit: "habitude : {status}",
+    cellRating: "bilan {n}/5",
+    cellEmpty: "rien de noté",
+    summaryTitle: "{date}",
+    openHere: "Ce jour est ouvert ci-dessous.",
+    openDay: "Ouvrir et modifier le jour",
+    emptyPast: "Rien n’a encore été noté pour ce jour.",
+    emptyToday: "Rien n’a encore été noté pour aujourd’hui.",
+    createPast: "Créer une entrée pour ce jour",
+    emptyFuture: "Ce jour n’est pas encore arrivé. Si tu veux, tu peux écrire un plan à l’avance.",
+    createFuture: "Écrire un plan pour ce jour",
+    mainLabel: "Tâche principale",
+    doneLabel: "Tâches faites",
+    noneDone: "Aucune tâche cochée",
+    habitLabel: "Habitude",
+    habitLine: "{status} · {goal}",
+    ratingLabel: "Bilan de la journée",
+    ratingNoteLabel: "Pourquoi cette note",
+    eveningLabel: "Note du soir",
+  },
+
+  history: {
+    title: "Jours précédents",
+    crumb: "Ma journée",
+    lead: "Ce que tu as noté les jours précédents. Touche un jour pour voir le détail.",
+    empty: "Aucun jour enregistré pour l’instant. Il apparaîtra ici quand tu auras écrit la tâche principale du jour.",
+    emptyAction: "Planifier ma journée",
+    today: "Aujourd’hui",
+    noMain: "Pas de tâche principale notée",
+    eveningSnippet: "Note du soir : {text}",
+    open: "Modifier",
+    delete: "Supprimer",
+    detailBrain: "Ce que j’avais en tête",
+    detailStep: "Premier petit pas",
+    detailExtras: "Tâches en plus",
+    detailStart: "Plan de départ",
+    detailTime: "Temps prévu",
+    detailWorked: "Qu’est-ce qui a aidé ?",
+    detailEasier: "Qu’est-ce que je peux me faciliter pour demain ?",
+    detailRating: "Bilan de la journée",
+    detailRatingNote: "Pourquoi cette note",
+    detailDone: "fait",
+    deleteTitle: "Supprimer ce jour ?",
+    deleteBody: "L’entrée du {date} sera définitivement supprimée de cet appareil. Cette action est irréversible.",
+    deleteConfirm: "Oui, supprimer",
+    deleted: "L’entrée du {date} a été supprimée.",
+  },
+
+  habit: {
+    title: "Mon habitude",
+    introTitle: "Une seule petite habitude",
+    introBody: "Ici, tu travailles sur une seule habitude à la fois. D’abord, tu la réduis à un début aussi petit que possible, puis tu regardes comment ça se passe pendant quelques jours.",
+    introTrial: "Pour un premier essai, nous proposons une période de sept jours. Ce n’est pas le temps nécessaire pour prendre une habitude ; c’est juste une courte période pour voir si le plan te convient.",
+    startSetup: "Créer mon plan",
+    continueSetup: "Continuer la configuration",
+
+    setupTitle: "Plan d’habitude",
+    editTitle: "Modifier le plan",
+    stepOf: "Étape {n}/{total}",
+    finish: "Enregistrer le plan",
+    summaryStepTitle: "Ton plan est prêt ?",
+    summaryStepLead: "Un résumé de tes réponses. Si tu veux changer quelque chose, tu peux revenir en arrière.",
+
+    steps: {
+      goal: {
+        label: "Qu’est-ce que je veux faire ?",
+        hint: "Une direction générale suffit. Nous la réduirons dans les étapes suivantes.",
+        example: "Travailler les maths régulièrement",
+      },
+      start: {
+        label: "Quel est le plus petit début réaliste ?",
+        hint: "Choisis quelque chose d’assez petit pour le faire même un mauvais jour.",
+        example: "Travailler cinq minutes ou résoudre un exercice",
+      },
+      anchor: {
+        label: "À quel moment vais-je le rattacher ?",
+        hint: "Choisis un moment qui existe déjà chaque jour : un repas, un trajet, une routine.",
+        example: "Après le dîner",
+      },
+      place: {
+        label: "Où vais-je commencer ?",
+        hint: "Indique un endroit précis, comme ton bureau ou la table de la cuisine.",
+        example: "À mon bureau",
+      },
+      ease: {
+        label: "Comment vais-je me faciliter le démarrage ?",
+        hint: "Une seule préparation qui te dégage le chemin avant de commencer.",
+        example: "Poser le livre et un stylo sur le bureau à l’avance",
+      },
+      smaller: {
+        label: "Quelle est ma version plus petite pour un jour difficile ?",
+        hint: "Un début de secours pour les jours où tu es fatigué·e ou très occupé·e.",
+        example: "Lire un seul exercice",
+      },
+    },
+
+    summarySentence: "{anchor}, {place}, je vais essayer ceci : {start}",
+    summaryLabels: {
+      goal: "Mon objectif",
+      anchor: "Quand",
+      place: "Où",
+      start: "Petit début",
+      ease: "Pour me faciliter les choses",
+      smaller: "Un jour difficile",
+    },
+    planTitle: "Mon plan",
+    editPlan: "Modifier le plan",
+    versionNotice: "Tu as changé ton objectif. Tes entrées précédentes restent liées à l’ancien plan ; les nouvelles appartiendront à ce nouveau plan.",
+    savedPlan: "Plan enregistré.",
+
+    todayTitle: "Aujourd’hui",
+    dayTitle: "{date}",
+    statusQuestion: "Comment ça s’est passé aujourd’hui ?",
+    statusLegend: "Entrée du {date}",
+    statuses: {
+      done: "J’ai fait mon petit pas.",
+      smaller: "J’ai fait ma version plus petite.",
+      skipped: "Je ne l’ai pas fait aujourd’hui.",
+    },
+    statusShort: { done: "Fait", smaller: "Version plus petite", skipped: "Pas fait", none: "Rien de noté" },
+    clearStatus: "Effacer l’entrée",
+    noteLabel: "Qu’est-ce qui m’a aidé ou freiné pour commencer aujourd’hui ?",
+    notePlaceholder: "Facultatif, une phrase suffit",
+    noteNeedsStatus: "La note est enregistrée quand tu fais un choix pour ce jour.",
+    olderPlan: "Cette entrée appartient à un plan précédent : {goal}",
+
+    weekTitle: "Les sept derniers jours",
+    weekHint: "Touche un jour pour modifier son entrée.",
+    weekTrialNote: "Sept jours, ce n’est pas le temps nécessaire pour prendre une habitude ; c’est une courte période pour faire le point sur le premier essai.",
+    legend: "Légende",
+
+    reviewTitle: "Bilan",
+    reviewLead: "Tu peux répondre quand tu veux. Tes réponses sont enregistrées avec ce plan.",
+    reviewOpen: "Ouvrir le bilan",
+    reviewFit: "Quel premier pas m’a convenu ?",
+    reviewContext: "Quel moment ou quel cadre m’a facilité les choses ?",
+    reviewShrink: "Que puis-je réduire lors du prochain essai ?",
+
+    previousPlans: "Plans précédents",
+    previousPlanItem: "{goal} · {count} jours notés",
+  },
+
+  settings: {
+    title: "Réglages et données",
+    close: "Fermer",
+    motionTitle: "Animations",
+    motionHint: "Désactivées, toutes les fonctions marchent de la même façon.",
+    motionSystem: "Suivre l’appareil",
+    motionOn: "Activées",
+    motionOff: "Désactivées",
+    motionSystemReduced: "La préférence « réduire les animations » de ton appareil est activée, les animations sont donc désactivées pour le moment.",
+    textSizeTitle: "Taille du texte du livre",
+    appearanceTitle: "Apparence",
+    themeTitle: "Thème",
+    themeLight: "Clair",
+    themeDark: "Sombre",
+    themeSystem: "Suivre l’appareil",
+    themeSystemNow: "Ton appareil est actuellement en thème {mode}.",
+    themeModeLight: "clair",
+    themeModeDark: "sombre",
+    languageTitle: "Langue (Language)",
+    languageHint: "Change la langue de l’application. Tes données restent telles quelles. Le texte du livre n’est pour l’instant disponible qu’en turc.",
+
+    dataTitle: "Où sont tes données ?",
+    dataPoints: [
+      "Tes données restent uniquement sur cet appareil, dans ce navigateur.",
+      "Il n’y a pas de synchronisation automatique entre ton téléphone, ta tablette et ton ordinateur.",
+      "Si tu effaces les données du navigateur (historique, données des sites), tes entrées peuvent aussi être supprimées.",
+      "Nous te conseillons de faire régulièrement une sauvegarde.",
+    ],
+    dataCount: "Cet appareil contient {days} jours notés et {habitDays} jours d’habitude notés.",
+
+    exportTitle: "Faire une sauvegarde",
+    exportHint: "Tes entrées quotidiennes, tes bilans de journée, ton plan d’habitude et tes préférences d’affichage dans un seul fichier. Garde-le dans un endroit sûr.",
+    exportButton: "Télécharger le fichier de sauvegarde",
+    exportCopyButton: "Afficher la sauvegarde en texte",
+    exportCopyHint: "Si le téléchargement ne marche pas, tu peux copier ce texte et le coller dans une note. Tu utiliseras ce même texte pour restaurer.",
+    exportTextLabel: "Texte de sauvegarde",
+    copy: "Copier le texte",
+    copied: "Copié",
+    copyFailed: "Impossible de copier. Le texte est sélectionné ; tu peux le copier à la main.",
+    exportDone: "Téléchargement lancé : {file}. Si le fichier n’arrive pas, utilise le bouton « Afficher la sauvegarde en texte ».",
+    exportEmpty: "Il n’y a encore rien à sauvegarder.",
+
+    importTitle: "Restaurer une sauvegarde",
+    importHint: "Choisis un fichier de sauvegarde que tu as fait auparavant. Les sauvegardes d’anciennes versions sont aussi acceptées. Le fichier est d’abord vérifié ; on te montre ce qui va changer.",
+    importFileLabel: "Choisir un fichier de sauvegarde",
+    importPasteToggle: "Coller du texte au lieu d’un fichier",
+    importPasteLabel: "Texte de sauvegarde",
+    importPasteButton: "Vérifier le texte",
+    importCheckTitle: "Avant de restaurer",
+    importOldVersion: "Cette sauvegarde vient d’une version précédente et ne contient que les entrées quotidiennes. Ton plan d’habitude et ses entrées resteront tels quels.",
+    importOldFields: "Cette sauvegarde vient d’une version plus ancienne. Les informations absentes de la sauvegarde (par ex. bilan de la journée, thème) seront conservées telles qu’elles sont sur cet appareil.",
+    importDaysAdded: "{n} jours seront ajoutés.",
+    importDaysSame: "{n} jours sont identiques à ceux de cet appareil ; ils ne changeront pas.",
+    importDaysChanged: "{n} jours seront remplacés par la version de la sauvegarde :",
+    importChangeLine: "{date} : « {after} » au lieu de « {before} »",
+    importMore: "et {n} jours de plus",
+    importHabitPlans: "{n} plans d’habitude seront ajoutés.",
+    importHabitLogAdded: "{n} jours d’habitude notés seront ajoutés.",
+    importHabitLogChanged: "{n} jours d’habitude notés seront modifiés :",
+    importPlansChanged: "{n} plans d’habitude seront remplacés par la version de la sauvegarde :",
+    importPlanDiff: "Plan « {goal} » · {field} : « {after} » au lieu de « {before} »",
+    importReviewsChanged: "Les réponses au bilan de {n} plans seront modifiées :",
+    importReviewDiff: "« {goal} » · {field} : « {after} » au lieu de « {before} »",
+    importFieldNames: {
+      goal: "Objectif", start: "Petit début", anchor: "Quand", place: "Où", ease: "Pour me faciliter les choses", smaller: "Un jour difficile",
+      archived: "Archivé", fit: "Quel début a convenu", context: "Quel moment/cadre", shrink: "Que puis-je réduire",
+    },
+    importEmptyValue: "vide",
+    importRatingShort: "bilan {n}",
+    importHabitKeepsActive: "Ton plan d’habitude actif sur cet appareil ne changera pas.",
+    importHabitAdoptsActive: "Le plan d’habitude de la sauvegarde deviendra le plan actif.",
+    importSettings: "Tes préférences d’affichage (thème, animations, taille du texte) seront mises à jour avec celles de la sauvegarde.",
+    importKept: "Toutes tes entrées qui ne figurent pas dans cette liste resteront telles quelles.",
+    importNothing: "Tout ce qui est dans la sauvegarde est identique à cet appareil. Il n’y a rien de nouveau à restaurer.",
+    importConfirm: "Restaurer",
+    importDone: "Restauration terminée.",
+    importErrorTitle: "Impossible de restaurer cette sauvegarde",
+    importErrorKept: "Aucune modification n’a été apportée à tes données actuelles.",
+    importErrors: {
+      tooLarge: "Le fichier est trop volumineux. Les sauvegardes de cette application dépassent rarement quelques centaines de kilo-octets.",
+      notJson: "Impossible de lire le fichier. Vérifie que tu as choisi un fichier de sauvegarde (.json) créé par cette application.",
+      wrongApp: "Ce fichier ne ressemble pas à une sauvegarde de Petits pas, journées plus claires.",
+      wrongVersion: "Cette sauvegarde vient d’une version que l’application ne reconnaît pas.",
+      badDays: "Les entrées quotidiennes de la sauvegarde n’ont pas le format attendu.",
+      badDate: "La sauvegarde contient une date invalide : {key}",
+      badField: "La sauvegarde contient une valeur inattendue ({key} : {field}).",
+      empty: "La sauvegarde ne contient aucune entrée à restaurer.",
+      readFailed: "Un problème est survenu pendant la lecture du fichier. Réessaie.",
+    },
+
+    resetTitle: "Supprimer toutes les données",
+    resetHint: "Supprime toutes les entrées quotidiennes et les données d’habitude de cet appareil. Nous te conseillons de faire une sauvegarde avant.",
+    resetButton: "Supprimer toutes les données",
+    resetConfirmTitle: "Supprimer toutes les données ?",
+    resetConfirmBody: "Les {days} jours notés et tes données d’habitude seront définitivement supprimés de cet appareil. Cette action est irréversible.",
+    resetConfirm: "Oui, tout supprimer",
+    resetDone: "Toutes les données ont été supprimées.",
+
+    aboutTitle: "À propos de cette version",
+    aboutBody: "Version d’essai. L’introduction et le premier chapitre du livre sont prêts ; les chapitres deux et trois ne sont pas encore écrits. L’application s’ouvre via un lien web et nécessite Internet à la première ouverture ; l’utilisation hors ligne n’a pas encore été vérifiée sur téléphone.",
+  },
+};
+
+</script>
+<script>
+/*
+ * Textos de la interfaz (español). Mismas claves que tr.js
+ * (tests/i18n.test.mjs comprueba claves, marcadores y longitudes de las listas).
+ * El texto del libro está solo en turco por ahora: content/book.tr.js.
+ */
+window.GX_I18N = window.GX_I18N || {};
+window.GX_I18N.es = {
+  name: "Español",
+  locale: "es-ES",
+  htmlLang: "es",
+  features: { sentenceSummary: false },
+
+  boot: {
+    description: "Una lectura breve, un plan diario más claro y una pequeña prueba de hábito.",
+    loading: "Preparando la aplicación…",
+    slowHint: "Si esta pantalla tarda más de unos segundos, abre el producto en Safari o Chrome desde el enlace web.",
+    noscript: "Esta vista no puede ejecutar el código de la aplicación. Abre el producto en Safari o Chrome desde el enlace web.",
+    errorTitle: "No se pudo iniciar la aplicación",
+    errorBody: "La página se abrió, pero hubo un problema al iniciar la aplicación. Si tus registros están en este navegador, no se han borrado.",
+    errorSteps: "Prueba a recargar la página. Si el problema continúa, copia los detalles técnicos de abajo y envíalos.",
+    timeoutTitle: "La aplicación está tardando más de lo esperado",
+    timeoutBody: "La aplicación lleva {sec} segundos sin poder iniciarse. Puede que la conexión sea lenta o que esta vista no pueda ejecutar del todo el código de la aplicación.",
+    unsupportedTitle: "Este navegador no es compatible",
+    unsupportedBody: "Este navegador no ofrece funciones básicas que la aplicación necesita. Usa una versión actual de Safari o Chrome.",
+    reload: "Recargar la página",
+    details: "Detalles técnicos",
+    copyDetails: "Copiar detalles",
+    copied: "Copiado",
+    viewErrorTitle: "No se pudo abrir esta pantalla",
+    viewErrorBody: "Hubo un problema al mostrar esta sección. Puedes seguir usando las demás secciones; tus registros no han cambiado.",
+    goHome: "Volver a la pantalla de inicio",
+  },
+
+  dates: {
+    months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+    weekdays: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+    weekdaysShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+    weekdaysMondayFirst: ["lu", "ma", "mi", "ju", "vi", "sá", "do"],
+  },
+
+  app: {
+    brand: "Genix Studio",
+    title: "Pequeños pasos, días más claros",
+    skipToContent: "Ir al contenido",
+    settingsButton: "Ajustes",
+    settingsLabel: "Ajustes y datos",
+  },
+
+  nav: {
+    label: "Secciones principales",
+    read: "Leer",
+    day: "Mi día",
+    habit: "Mi hábito",
+  },
+
+  common: {
+    cancel: "Cancelar",
+    back: "Atrás",
+    next: "Continuar",
+    skip: "Saltar este paso",
+    save: "Guardar",
+    edit: "Editar",
+    delete: "Borrar",
+    close: "Cerrar",
+    saved: "Guardado",
+    useExample: "Usar el ejemplo",
+    example: "Ejemplo: {text}",
+    requiredError: "Para continuar, rellena este campo brevemente.",
+    optional: "Opcional",
+    yes: "sí",
+    no: "no",
+  },
+
+  save: {
+    failed: "No se pudo guardar. El navegador no permite ahora que esta página guarde datos (p. ej., pestaña privada o almacenamiento lleno). Lo que escribiste sigue en pantalla; haz una copia de seguridad para no perderlo.",
+    failedAction: "Obtener la copia como texto",
+    storageWarning: "Este navegador no permite guardar datos. Lo que escribas puede perderse al cerrar la página. Desde Ajustes puedes obtener una copia de seguridad como texto.",
+  },
+
+  home: {
+    coverBrand: "Genix Studio",
+    coverTitle: "Pequeños pasos, días más claros",
+    coverSubtitle: "Una lectura breve y un planificador diario tranquilo",
+    description: "Una lectura breve, un plan diario más claro y una pequeña prueba de hábito.",
+    startReading: "Empezar a leer",
+    planToday: "Planificar mi día",
+    habitLink: "¿Te apetece probar un hábito pequeño?",
+    continueTitle: "Continúa donde lo dejaste",
+    continueReading: "Volver a {chapter}",
+    continueDay: "Volver al plan de hoy",
+    continueHabit: "Volver a tu prueba de hábito",
+    privacyNote: "Tus registros se guardan solo en este navegador de este dispositivo. No necesitas crear una cuenta.",
+    languageButton: "Idioma: {name}",
+  },
+
+  reader: {
+    contentsTitle: "Leer el libro",
+    contentsLead: "Cada capítulo está hecho de partes cortas; se puede leer en un trayecto o en una pausa.",
+    chapterLabel: "Capítulo {n}",
+    continueReading: "Continúa donde lo dejaste",
+    startChapter: "Leer el capítulo",
+    notWritten: "Aún no está escrito",
+    notWrittenHint: "Este capítulo se añadirá en la próxima versión.",
+    backToContents: "Índice",
+    partLabel: "Parte {n}/{total}",
+    progress: "Leído aproximadamente el {p} %",
+    progressShort: "{p} %",
+    textSizeLabel: "Tamaño del texto",
+    textSizes: { standard: "Estándar", large: "Grande", larger: "Más grande" },
+    researchLabel: "¿Qué dice la investigación?",
+    limitsLabel: "Limitación",
+    researchMore: "Detalles y fuente",
+    suggestionLabel: "Mi sugerencia",
+    exerciseLabel: "Pequeña práctica",
+    summaryLabel: "Resumen del capítulo",
+    sourcesTitle: "Fuentes utilizadas en este capítulo",
+    exerciseToPlanner: "Hacerlo en Mi día",
+    timerStart: "Iniciar un temporizador de 3 minutos",
+    timerStop: "Detener el temporizador",
+    timerDone: "Han pasado los tres minutos. Puedes dejar lo que escribiste; la lista no tiene que estar completa.",
+    timerRemaining: "Tiempo restante: {time}",
+    nextChapter: "Siguiente capítulo: {title}",
+    nextChapterSoon: "Los siguientes capítulos aún no están escritos. Mientras tanto, puedes elegir la tarea principal de hoy en Mi día.",
+    goToDay: "Ir a Mi día",
+    readingTime: "Unos {min} minutos de lectura",
+    bookLanguageNote: "Por ahora, el texto del libro solo está disponible en turco. Estamos preparando la traducción; las secciones «Mi día» y «Mi hábito» están completamente en español.",
+  },
+
+  day: {
+    titleToday: "Mi día de hoy",
+    titlePast: "Un día pasado",
+    titleFuture: "Un día futuro",
+    futureBanner: "Este día aún no ha llegado. Puedes escribir un plan; la valoración del día se abrirá cuando llegue.",
+    pastBanner: "Este día ya pasó. Tus cambios se guardarán igualmente en esta fecha.",
+    backToToday: "Volver a hoy",
+    backToBook: "Volver a donde lo dejaste en el libro",
+    historyLink: "Días anteriores",
+    newDayBanner: "Ha empezado un nuevo día. Lo que guardaste ayer se ha conservado tal cual.",
+    openNewDay: "Abrir el plan de hoy",
+
+    mainLabel: "La tarea principal de hoy",
+    mainHint: "La única tarea que, si la terminas hoy, te dará alivio.",
+    mainPlaceholder: "P. ej., el primer borrador de la presentación",
+    stepLabel: "Primer paso pequeño",
+    stepHint: "Que sea tan pequeño que puedas empezarlo en unos minutos.",
+    stepPlaceholder: "P. ej., abrir el archivo y escribir tres títulos",
+    mainDoneLabel: "Marcar la tarea principal como hecha",
+
+    brainToggle: "Quiero anotar primero lo que tengo en la cabeza.",
+    brainLabel: "Lo que tengo en la cabeza",
+    brainHint: "Escribe lo que se te ocurra, sin orden y en frases cortas.",
+    brainPlaceholder: "Pagar la factura, llamar a mamá, borrador del informe…",
+
+    extrasToggle: "Añadir dos tareas pequeñas más.",
+    extrasHint: "Como máximo dos. Si no caben, es una señal: déjalo para mañana.",
+    extraLabel: "Tarea extra {n}",
+    extraPlaceholder: "P. ej., escribir la dirección para el envío",
+    extraDoneLabel: "Marcar la tarea extra {n} como hecha",
+
+    startToggle: "Decidir cuándo empiezo.",
+    startHint: "Tu primer paso pequeño se usa en el plan para empezar; solo escribe el momento y el lugar.",
+    whenLabel: "¿Cuándo?",
+    whenPlaceholder: "P. ej., justo después de comer",
+    whereLabel: "¿Dónde?",
+    wherePlaceholder: "P. ej., en la planta de arriba de la biblioteca",
+    startNeedsStep: "Para el plan de inicio, primero escribe arriba tu primer paso pequeño.",
+    startSentence: "{when}, en {where}, empezaré con este paso: {step}",
+    startLabelled: "Mi plan para empezar",
+    startWhen: "Momento",
+    startWhere: "Lugar",
+    startStep: "Primer paso",
+    legacyTitle: "Este registro tiene un texto antiguo de \"¿qué voy a hacer?\"",
+    legacyBody: "En la versión anterior escribiste esto en tu plan para empezar:",
+    legacyUseStep: "Usar el primer paso pequeño",
+    legacyUseStepHint: "Se quitará el texto antiguo; en el plan para empezar aparecerá tu primer paso pequeño.",
+    legacyMoveToStep: "Convertir este texto en el primer paso pequeño",
+    legacyResolved: "El plan para empezar ya usa tu primer paso pequeño.",
+
+    timeLabel: "¿Cuánto tiempo puedo dedicarle hoy a esto?",
+    timeOptions: { "5": "5 minutos", "15": "15 minutos", "30": "30 minutos", custom: "Lo decido yo" },
+    timeClear: "Quitar la selección",
+    timeCustomLabel: "Tiempo que puedes dedicarle",
+    timeCustomPlaceholder: "P. ej., 45 minutos",
+    timeTips: {
+      "5": "Cinco minutos pueden bastar para meterte en una tarea. Intenta que el primer paso sea lo bastante pequeño para caber en ese tiempo.",
+      "15": "En quince minutos puedes dar el primer paso y echar un vistazo al siguiente. Si no terminas, anota en una línea dónde lo dejaste.",
+      "30": "Para treinta minutos, puede ayudarte decidir de antemano qué harás después del primer paso. Una pausa corta también cuenta como parte del plan.",
+      custom: "Basta con que escribas el tiempo. Es una estimación, no un límite; la tarea puede durar más o menos.",
+    },
+
+    eveningToggle: "Hacer una breve valoración por la noche.",
+    ratingLegend: "¿Qué tal ha ido hoy para ti?",
+    ratingLegendPast: "¿Qué tal fue este día para ti?",
+    ratingHint: "No es una nota de rendimiento; es para que valores tu día desde tu propia mirada.",
+    ratingOptions: { "1": "1 — Fue un día difícil", "2": "2 — Me costó un poco", "3": "3 — Regular", "4": "4 — Fue bien", "5": "5 — Fue muy bien" },
+    ratingClear: "Quitar la selección",
+    ratingFuture: "Podrás valorarlo cuando llegue este día.",
+    ratingNoteLabel: "¿Por qué le di esta valoración?",
+    ratingNotePlaceholder: "Opcional, basta con una frase",
+    eveningHint: "Breve y sin juzgarte.",
+    workedLabel: "¿Qué me funcionó hoy?",
+    workedPlaceholder: "P. ej., dejar el móvil en otra habitación",
+    easierLabel: "¿Qué puedo hacer más fácil mañana?",
+    easierPlaceholder: "P. ej., preparar la mochila la noche anterior",
+
+    filled: "con contenido",
+    doneFeedback: "Marcado",
+    undoneFeedback: "Marca quitada",
+  },
+
+  calendar: {
+    toggle: "Calendario",
+    toggleHint: "Días anteriores y siguientes en vista mensual",
+    prevMonth: "Mes anterior",
+    nextMonth: "Mes siguiente",
+    today: "Volver a hoy",
+    monthTitle: "{month} de {year}",
+    legendTitle: "Marcas",
+    legendToday: "Hoy",
+    legendSelected: "Día seleccionado",
+    legendPlan: "Hay un plan",
+    legendHabit: "Hay un registro del hábito",
+    legendRating: "Valoración del día (1–5)",
+    legendNote: "Un día vacío no es una falta; simplemente no tiene registros.",
+    cellToday: "hoy",
+    cellSelected: "seleccionado",
+    cellPlan: "hay un plan",
+    cellHabit: "hábito: {status}",
+    cellRating: "valoración {n}/5",
+    cellEmpty: "sin registros",
+    summaryTitle: "{date}",
+    openHere: "Este día está abierto más abajo.",
+    openDay: "Abrir y editar el día",
+    emptyPast: "Todavía no hay registros para este día.",
+    emptyToday: "Todavía no hay registros para hoy.",
+    createPast: "Crear un registro para este día",
+    emptyFuture: "Este día aún no ha llegado. Si quieres, puedes escribir un plan por adelantado.",
+    createFuture: "Escribir un plan para este día",
+    mainLabel: "Tarea principal",
+    doneLabel: "Tareas hechas",
+    noneDone: "No hay tareas marcadas",
+    habitLabel: "Hábito",
+    habitLine: "{status} · {goal}",
+    ratingLabel: "Valoración del día",
+    ratingNoteLabel: "Por qué esta valoración",
+    eveningLabel: "Nota de la noche",
+  },
+
+  history: {
+    title: "Días anteriores",
+    crumb: "Mi día",
+    lead: "Los registros de días anteriores. Toca un día para ver los detalles.",
+    empty: "Todavía no hay ningún día guardado. Aparecerá aquí cuando escribas la tarea principal de hoy.",
+    emptyAction: "Planificar mi día",
+    today: "Hoy",
+    noMain: "Sin tarea principal",
+    eveningSnippet: "Nota de la noche: {text}",
+    open: "Editar",
+    delete: "Borrar",
+    detailBrain: "Lo que tenía en la cabeza",
+    detailStep: "Primer paso pequeño",
+    detailExtras: "Tareas extra",
+    detailStart: "Plan para empezar",
+    detailTime: "Tiempo dedicado",
+    detailWorked: "¿Qué funcionó?",
+    detailEasier: "¿Qué puedo hacer más fácil mañana?",
+    detailRating: "Valoración del día",
+    detailRatingNote: "Por qué esta valoración",
+    detailDone: "hecho",
+    deleteTitle: "¿Quieres borrar este día?",
+    deleteBody: "El registro del {date} se borrará de forma permanente de este dispositivo. No se puede deshacer.",
+    deleteConfirm: "Sí, borrar",
+    deleted: "Se ha borrado el registro del {date}.",
+  },
+
+  habit: {
+    title: "Mi hábito",
+    introTitle: "Un solo hábito pequeño",
+    introBody: "Aquí trabajas en un solo hábito a la vez. Primero lo conviertes en un comienzo lo más pequeño posible y luego miras cómo va durante unos días.",
+    introTrial: "Para la primera prueba te proponemos un periodo de siete días. No es el tiempo que se tarda en adquirir un hábito; es un periodo corto para ver si el plan encaja contigo.",
+    startSetup: "Preparar mi plan",
+    continueSetup: "Continuar la preparación",
+
+    setupTitle: "Plan del hábito",
+    editTitle: "Editar el plan",
+    stepOf: "Paso {n}/{total}",
+    finish: "Guardar el plan",
+    summaryStepTitle: "¿Está listo tu plan?",
+    summaryStepLead: "Un resumen hecho con tus respuestas. Si quieres cambiar algo, puedes volver atrás.",
+
+    steps: {
+      goal: {
+        label: "¿Qué quiero hacer?",
+        hint: "Basta con una dirección general. En los siguientes pasos lo haremos más pequeño.",
+        example: "Estudiar matemáticas con regularidad",
+      },
+      start: {
+        label: "¿Cuál es el comienzo más pequeño que puedo llevar a cabo?",
+        hint: "Elige algo tan pequeño que puedas hacerlo incluso en un mal día.",
+        example: "Estudiar cinco minutos o resolver un ejercicio",
+      },
+      anchor: {
+        label: "¿A qué momento lo voy a unir?",
+        hint: "Elige un momento que ya ocurre cada día: una comida, un trayecto, una rutina.",
+        example: "Después de cenar",
+      },
+      place: {
+        label: "¿Dónde voy a empezar?",
+        hint: "Nombra un lugar concreto, como tu escritorio o la mesa de la cocina.",
+        example: "En mi escritorio",
+      },
+      ease: {
+        label: "¿Cómo voy a hacer más fácil empezar?",
+        hint: "Una sola preparación que te allane el camino antes de empezar.",
+        example: "Dejar el libro y el lápiz en la mesa de antemano",
+      },
+      smaller: {
+        label: "¿Cuál es mi opción más pequeña para un día difícil?",
+        hint: "Un comienzo de reserva para los días en que estés cansado o muy ocupado.",
+        example: "Solo leer un ejercicio",
+      },
+    },
+
+    summarySentence: "{anchor}, en {place}, voy a probar esto: {start}",
+    summaryLabels: {
+      goal: "Mi objetivo",
+      anchor: "Cuándo",
+      place: "Dónde",
+      start: "Comienzo pequeño",
+      ease: "Para hacerlo más fácil",
+      smaller: "En un día difícil",
+    },
+    planTitle: "Mi plan",
+    editPlan: "Editar el plan",
+    versionNotice: "Has cambiado tu objetivo. Tus registros anteriores seguirán vinculados al plan antiguo; los nuevos pertenecerán a este plan nuevo.",
+    savedPlan: "Plan guardado.",
+
+    todayTitle: "Hoy",
+    dayTitle: "{date}",
+    statusQuestion: "¿Qué tal ha ido hoy?",
+    statusLegend: "Registro del {date}",
+    statuses: {
+      done: "Hice mi paso pequeño.",
+      smaller: "Hice mi opción más pequeña.",
+      skipped: "Hoy no lo hice.",
+    },
+    statusShort: { done: "Lo hice", smaller: "Hice la versión pequeña", skipped: "No lo hice", none: "Sin registro" },
+    clearStatus: "Borrar el registro",
+    noteLabel: "¿Qué me facilitó o me dificultó empezar hoy?",
+    notePlaceholder: "Opcional, basta con una frase",
+    noteNeedsStatus: "La nota se guarda cuando eliges una opción para ese día.",
+    olderPlan: "Este registro pertenece a un plan anterior: {goal}",
+
+    weekTitle: "Últimos siete días",
+    weekHint: "Toca un día para cambiar su registro.",
+    weekTrialNote: "Siete días no es el tiempo que se tarda en adquirir un hábito; es un periodo corto para valorar la primera prueba.",
+    legend: "Leyenda",
+
+    reviewTitle: "Valoración",
+    reviewLead: "Puedes responder cuando quieras. Tus respuestas se guardan en este plan.",
+    reviewOpen: "Abrir la valoración",
+    reviewFit: "¿Qué paso inicial me encajó?",
+    reviewContext: "¿Qué momento o entorno me lo hizo más fácil?",
+    reviewShrink: "¿Qué podría hacer más pequeño en el próximo intento?",
+
+    previousPlans: "Planes anteriores",
+    previousPlanItem: "{goal} · {count} días registrados",
+  },
+
+  settings: {
+    title: "Ajustes y datos",
+    close: "Cerrar",
+    motionTitle: "Animaciones",
+    motionHint: "Desactivadas, todas las funciones siguen funcionando igual.",
+    motionSystem: "Según el dispositivo",
+    motionOn: "Activadas",
+    motionOff: "Desactivadas",
+    motionSystemReduced: "Tu dispositivo tiene activada la preferencia de reducir el movimiento, así que ahora las animaciones están desactivadas.",
+    textSizeTitle: "Tamaño del texto del libro",
+    appearanceTitle: "Apariencia",
+    themeTitle: "Tema",
+    themeLight: "Claro",
+    themeDark: "Oscuro",
+    themeSystem: "Según el dispositivo",
+    themeSystemNow: "Tu dispositivo usa ahora el tema {mode}.",
+    themeModeLight: "claro",
+    themeModeDark: "oscuro",
+    languageTitle: "Idioma (Language)",
+    languageHint: "Cambia el idioma de la aplicación. Tus registros se quedan como están. Por ahora, el texto del libro solo está disponible en turco.",
+
+    dataTitle: "¿Dónde están tus registros?",
+    dataPoints: [
+      "Tus registros se guardan solo en este dispositivo y en este navegador.",
+      "No hay sincronización automática entre tu móvil, tu tableta y tu ordenador.",
+      "Si borras los datos del navegador (historial, datos de sitios), tus registros también pueden borrarse.",
+      "Te recomendamos hacer copias de seguridad con regularidad.",
+    ],
+    dataCount: "En este dispositivo hay {days} días registrados y {habitDays} días con registro del hábito.",
+
+    exportTitle: "Hacer una copia de seguridad",
+    exportHint: "Tus registros diarios, las valoraciones de tus días, tu plan de hábito y tus preferencias de apariencia, en un solo archivo. Guárdalo en un lugar de confianza.",
+    exportButton: "Descargar el archivo de copia",
+    exportCopyButton: "Mostrar la copia como texto",
+    exportCopyHint: "Si la descarga no funciona, puedes copiar este texto y pegarlo en una nota. Para restaurar, usas ese mismo texto.",
+    exportTextLabel: "Texto de la copia",
+    copy: "Copiar el texto",
+    copied: "Copiado",
+    copyFailed: "No se pudo copiar. El texto está seleccionado; puedes copiarlo a mano.",
+    exportDone: "Descarga iniciada: {file}. Si el archivo no se descargó, usa el botón \"Mostrar la copia como texto\".",
+    exportEmpty: "Todavía no hay registros que copiar.",
+
+    importTitle: "Restaurar desde una copia",
+    importHint: "Elige un archivo de copia que hayas hecho antes. También se aceptan copias de versiones anteriores. Primero se revisa el archivo y se te muestra qué va a cambiar.",
+    importFileLabel: "Elegir un archivo de copia",
+    importPasteToggle: "Pegar texto en lugar de un archivo",
+    importPasteLabel: "Texto de la copia",
+    importPasteButton: "Revisar el texto",
+    importCheckTitle: "Antes de restaurar",
+    importOldVersion: "Esta copia es de una versión anterior y solo contiene registros diarios. Tu plan de hábito y sus registros se quedarán como están.",
+    importOldFields: "Esta copia es de una versión más antigua. La información que no está en la copia (p. ej., la valoración del día o el tema) se mantendrá como está en este dispositivo.",
+    importDaysAdded: "Se añadirán {n} días.",
+    importDaysSame: "{n} días son iguales a los de este dispositivo; no cambiarán.",
+    importDaysChanged: "Se sustituirá el registro de {n} días por el de la copia:",
+    importChangeLine: "{date}: \"{after}\" en lugar de \"{before}\"",
+    importMore: "y {n} días más",
+    importHabitPlans: "Se añadirán {n} planes de hábito.",
+    importHabitLogAdded: "Se añadirán {n} días de registro del hábito.",
+    importHabitLogChanged: "Se cambiarán {n} días de registro del hábito:",
+    importPlansChanged: "Se sustituirán {n} planes de hábito por los de la copia:",
+    importPlanDiff: "Plan \"{goal}\" · {field}: \"{after}\" en lugar de \"{before}\"",
+    importReviewsChanged: "Se cambiarán las respuestas de valoración de {n} planes:",
+    importReviewDiff: "\"{goal}\" · {field}: \"{after}\" en lugar de \"{before}\"",
+    importFieldNames: {
+      goal: "Objetivo", start: "Comienzo pequeño", anchor: "Cuándo", place: "Dónde", ease: "Para hacerlo más fácil", smaller: "En un día difícil",
+      archived: "Archivado", fit: "Qué comienzo encajó", context: "Qué momento/entorno", shrink: "Qué podría hacer más pequeño",
+    },
+    importEmptyValue: "vacío",
+    importRatingShort: "valoración {n}",
+    importHabitKeepsActive: "Tu plan de hábito activo en este dispositivo no cambiará.",
+    importHabitAdoptsActive: "El plan de hábito de la copia pasará a ser el plan activo.",
+    importSettings: "Tus preferencias de apariencia (tema, animaciones, tamaño del texto) se actualizarán con las de la copia.",
+    importKept: "Todos los registros que no aparecen en esta lista se quedarán como están.",
+    importNothing: "Todo lo que hay en la copia es igual a lo de este dispositivo. No hay nada nuevo que restaurar.",
+    importConfirm: "Restaurar",
+    importDone: "Restauración completada.",
+    importErrorTitle: "No se pudo restaurar esta copia",
+    importErrorKept: "No se ha hecho ningún cambio en tus registros actuales.",
+    importErrors: {
+      tooLarge: "El archivo es demasiado grande. Las copias de esta aplicación no suelen pasar de unos pocos cientos de kilobytes.",
+      notJson: "No se pudo leer el archivo. Asegúrate de elegir un archivo de copia (.json) hecho con esta aplicación.",
+      wrongApp: "Este archivo no parece una copia de Pequeños pasos, días más claros.",
+      wrongVersion: "Esta copia es de una versión que la aplicación no reconoce.",
+      badDays: "Los registros de días de la copia no tienen el formato esperado.",
+      badDate: "La copia contiene una fecha no válida: {key}",
+      badField: "La copia contiene un valor inesperado ({key}: {field}).",
+      empty: "La copia no contiene registros que restaurar.",
+      readFailed: "Hubo un problema al leer el archivo. Inténtalo de nuevo.",
+    },
+
+    resetTitle: "Borrar todos los registros",
+    resetHint: "Borra todos tus registros diarios y los datos del hábito de este dispositivo. Te recomendamos hacer antes una copia de seguridad.",
+    resetButton: "Borrar todos los registros",
+    resetConfirmTitle: "¿Borrar todos los registros?",
+    resetConfirmBody: "Se borrarán de forma permanente de este dispositivo {days} días registrados y los datos de tu hábito. No se puede deshacer.",
+    resetConfirm: "Sí, borrar todo",
+    resetDone: "Se han borrado todos los registros.",
+
+    aboutTitle: "Sobre esta versión",
+    aboutBody: "Versión de prueba. La introducción y el primer capítulo del libro están listos; el segundo y el tercero aún no están escritos. La aplicación se abre con un enlace web y necesita internet la primera vez; el uso sin conexión todavía no se ha comprobado en el móvil.",
+  },
+};
+
+</script>
+<script>
+/*
+ * Testi dell'interfaccia (italiano). Stesse chiavi di tr.js (verificate da tests/i18n.test.mjs).
+ * Il testo del libro resta per ora solo in turco (content/book.tr.js).
+ */
+window.GX_I18N = window.GX_I18N || {};
+window.GX_I18N.it = {
+  name: "Italiano",
+  locale: "it-IT",
+  htmlLang: "it",
+  features: { sentenceSummary: false },
+
+  boot: {
+    description: "Una breve lettura, un piano giornaliero più chiaro e una piccola prova di abitudine.",
+    loading: "Preparazione dell'app…",
+    slowHint: "Se questa schermata resta visibile per più di qualche secondo, apri il prodotto dal link web in Safari o Chrome.",
+    noscript: "Questa visualizzazione non riesce a eseguire il codice dell'app. Apri il prodotto dal link web in Safari o Chrome.",
+    errorTitle: "Impossibile avviare l'app",
+    errorBody: "La pagina si è aperta, ma c'è stato un problema durante l'avvio dell'app. Se i tuoi dati sono salvati in questo browser, non sono stati cancellati.",
+    errorSteps: "Prova a ricaricare la pagina. Se il problema continua, copia i dettagli tecnici qui sotto e inviali.",
+    timeoutTitle: "L'app ci sta mettendo più del previsto ad aprirsi",
+    timeoutBody: "L'app non è riuscita ad avviarsi da {sec} secondi. La connessione potrebbe essere lenta, oppure questa visualizzazione potrebbe non riuscire a eseguire del tutto il codice dell'app.",
+    unsupportedTitle: "Questo browser non è supportato",
+    unsupportedBody: "Questo browser non offre le funzioni di base di cui l'app ha bisogno. Usa una versione aggiornata di Safari o Chrome.",
+    reload: "Ricarica la pagina",
+    details: "Dettagli tecnici",
+    copyDetails: "Copia i dettagli",
+    copied: "Copiato",
+    viewErrorTitle: "Impossibile aprire questa schermata",
+    viewErrorBody: "C'è stato un problema nel mostrare questa sezione. Puoi continuare a usare le altre sezioni; i tuoi dati non sono cambiati.",
+    goHome: "Torna alla schermata iniziale",
+  },
+
+  dates: {
+    months: ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+    weekdays: ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"],
+    weekdaysShort: ["dom", "lun", "mar", "mer", "gio", "ven", "sab"],
+    weekdaysMondayFirst: ["lun", "mar", "mer", "gio", "ven", "sab", "dom"],
+  },
+
+  app: {
+    brand: "Genix Studio",
+    title: "Piccoli passi, giornate più chiare",
+    skipToContent: "Vai al contenuto",
+    settingsButton: "Impostazioni",
+    settingsLabel: "Impostazioni e dati",
+  },
+
+  nav: {
+    label: "Sezioni principali",
+    read: "Leggi",
+    day: "Giornata",
+    habit: "Abitudine",
+  },
+
+  common: {
+    cancel: "Annulla",
+    back: "Indietro",
+    next: "Avanti",
+    skip: "Salta questo passo",
+    save: "Salva",
+    edit: "Modifica",
+    delete: "Elimina",
+    close: "Chiudi",
+    saved: "Salvato",
+    useExample: "Usa l'esempio",
+    example: "Esempio: {text}",
+    requiredError: "Per continuare, compila brevemente questo campo.",
+    optional: "Facoltativo",
+    yes: "sì",
+    no: "no",
+  },
+
+  save: {
+    failed: "Impossibile salvare. Al momento il browser non permette a questa pagina di conservare dati (ad es. scheda in incognito o spazio di archiviazione pieno). Quello che hai scritto è ancora sullo schermo; fai un backup per non perderlo.",
+    failedAction: "Fai il backup come testo",
+    storageWarning: "Questo browser non permette di conservare dati. Quello che scrivi potrebbe andare perso alla chiusura della pagina. Dalle Impostazioni puoi fare un backup come testo.",
+  },
+
+  home: {
+    coverBrand: "Genix Studio",
+    coverTitle: "Piccoli passi, giornate più chiare",
+    coverSubtitle: "Una breve lettura e un planner giornaliero tranquillo",
+    description: "Una breve lettura, un piano giornaliero più chiaro e una piccola prova di abitudine.",
+    startReading: "Inizia a leggere",
+    planToday: "Pianifica la mia giornata",
+    habitLink: "Ti va di provare una piccola abitudine?",
+    continueTitle: "Riprendi da dove eri rimasto",
+    continueReading: "Torna al capitolo {chapter}",
+    continueDay: "Torna al piano di oggi",
+    continueHabit: "Torna alla tua prova di abitudine",
+    privacyNote: "I tuoi dati restano solo in questo browser, su questo dispositivo. Non serve creare un account.",
+    languageButton: "Lingua: {name}",
+  },
+
+  reader: {
+    contentsTitle: "Leggi il libro",
+    contentsLead: "Ogni capitolo è diviso in parti brevi, da leggere in viaggio o durante una pausa.",
+    chapterLabel: "Capitolo {n}",
+    continueReading: "Riprendi da dove eri rimasto",
+    startChapter: "Leggi il capitolo",
+    notWritten: "Non ancora scritto",
+    notWrittenHint: "Questo capitolo verrà aggiunto in una prossima versione.",
+    backToContents: "Indice",
+    partLabel: "Parte {n}/{total}",
+    progress: "Letto circa il {p}%",
+    progressShort: "{p}%",
+    textSizeLabel: "Dimensione del testo",
+    textSizes: { standard: "Standard", large: "Grande", larger: "Più grande" },
+    researchLabel: "Cosa dice la ricerca?",
+    limitsLabel: "Limite",
+    researchMore: "Dettagli e fonte",
+    suggestionLabel: "Il mio consiglio",
+    exerciseLabel: "Piccolo esercizio",
+    summaryLabel: "In sintesi",
+    sourcesTitle: "Fonti usate in questo capitolo",
+    exerciseToPlanner: "Fallo in «Giornata»",
+    timerStart: "Avvia un timer di 3 minuti",
+    timerStop: "Ferma il timer",
+    timerDone: "I tre minuti sono passati. Puoi fermarti qui; la lista non deve essere completa.",
+    timerRemaining: "Tempo rimanente: {time}",
+    nextChapter: "Capitolo successivo: {title}",
+    nextChapterSoon: "I prossimi capitoli non sono ancora stati scritti. Nel frattempo puoi scegliere l'attività principale di oggi in «Giornata».",
+    goToDay: "Vai a «Giornata»",
+    readingTime: "Circa {min} minuti di lettura",
+    bookLanguageNote: "Per ora il testo del libro è disponibile solo in turco. La traduzione è in preparazione; le sezioni «Giornata» e «Abitudine» sono interamente in italiano.",
+  },
+
+  day: {
+    titleToday: "La mia giornata",
+    titlePast: "Un giorno passato",
+    titleFuture: "Un giorno futuro",
+    futureBanner: "Questo giorno non è ancora arrivato. Puoi scrivere un piano; la valutazione della giornata si apre quando arriva il giorno.",
+    pastBanner: "Questo giorno è già passato. Le modifiche vengono comunque salvate in questa data.",
+    backToToday: "Torna a oggi",
+    backToBook: "Torna al punto del libro in cui eri",
+    historyLink: "Giorni passati",
+    newDayBanner: "È iniziato un nuovo giorno. Quello che hai scritto ieri è stato salvato così com'è.",
+    openNewDay: "Apri il piano di oggi",
+
+    mainLabel: "L'attività principale di oggi",
+    mainHint: "L'unica cosa che, una volta fatta, ti farebbe sentire più leggero.",
+    mainPlaceholder: "Es. La prima bozza della presentazione",
+    stepLabel: "Il primo piccolo passo",
+    stepHint: "Abbastanza piccolo da poterlo iniziare in pochi minuti.",
+    stepPlaceholder: "Es. Aprire il file e scrivere tre titoli",
+    mainDoneLabel: "Segna l'attività principale come completata",
+
+    brainToggle: "Prima voglio scrivere quello che ho in testa.",
+    brainLabel: "Quello che ho in testa",
+    brainHint: "Scrivi quello che ti viene in mente, in breve e senza un ordine.",
+    brainPlaceholder: "Pagare la bolletta, chiamare la mamma, bozza del report…",
+
+    extrasToggle: "Aggiungi due piccole attività extra.",
+    extrasHint: "Al massimo due. Se non c'è spazio, è un segnale: lasciala per domani.",
+    extraLabel: "Attività extra {n}",
+    extraPlaceholder: "Es. Scrivere l'indirizzo per la spedizione",
+    extraDoneLabel: "Segna l'attività extra {n} come completata",
+
+    startToggle: "Scegli quando iniziare.",
+    startHint: "Il piano di partenza usa il tuo primo piccolo passo; scrivi solo il momento e il luogo.",
+    whenLabel: "Quando?",
+    whenPlaceholder: "Es. Subito dopo pranzo",
+    whereLabel: "Dove?",
+    wherePlaceholder: "Es. Al piano di sopra della biblioteca",
+    startNeedsStep: "Per il piano di partenza, scrivi prima il primo piccolo passo qui sopra.",
+    startSentence: "{when}, {where}, inizierò con questo passo: {step}",
+    startLabelled: "Il mio piano di partenza",
+    startWhen: "Quando",
+    startWhere: "Dove",
+    startStep: "Primo passo",
+    legacyTitle: "Questa voce contiene un vecchio testo \"cosa farò?\"",
+    legacyBody: "Nella versione precedente avevi scritto questo nel piano di partenza:",
+    legacyUseStep: "Usa il primo piccolo passo",
+    legacyUseStepHint: "Il vecchio testo viene rimosso; nel piano di partenza compare il tuo primo piccolo passo.",
+    legacyMoveToStep: "Usa questo testo come primo piccolo passo",
+    legacyResolved: "Ora il piano di partenza usa il tuo primo piccolo passo.",
+
+    timeLabel: "Quanto tempo posso dedicarci oggi?",
+    timeOptions: { "5": "5 minuti", "15": "15 minuti", "30": "30 minuti", custom: "Lo decido io" },
+    timeClear: "Annulla la scelta",
+    timeCustomLabel: "Il tempo che puoi dedicarci",
+    timeCustomPlaceholder: "Es. 45 minuti",
+    timeTips: {
+      "5": "Cinque minuti possono bastare per entrare in un'attività. Prova a tenere il primo passo abbastanza piccolo da starci dentro.",
+      "15": "In quindici minuti puoi fare il primo passo e dare un'occhiata al successivo. Se non finisci, annota in una riga dove sei arrivato.",
+      "30": "Con trenta minuti, decidere in anticipo cosa fare dopo il primo passo può semplificarti le cose. Anche una breve pausa fa parte del piano.",
+      custom: "Basta scrivere il tempo. Non è un limite ma una stima; l'attività può richiedere più o meno tempo.",
+    },
+
+    eveningToggle: "Fai una breve valutazione la sera.",
+    ratingLegend: "Com'è andata oggi per te?",
+    ratingLegendPast: "Com'è andato questo giorno per te?",
+    ratingHint: "Non è un voto al rendimento; serve a valutare la giornata dal tuo punto di vista.",
+    ratingOptions: { "1": "1 — Giornata difficile", "2": "2 — Un po' di fatica", "3": "3 — Così così", "4": "4 — È andata bene", "5": "5 — È andata molto bene" },
+    ratingClear: "Annulla la scelta",
+    ratingFuture: "Potrai valutarlo quando arriverà questo giorno.",
+    ratingNoteLabel: "Perché ho scelto questo valore?",
+    ratingNotePlaceholder: "Facoltativo, basta una frase",
+    eveningHint: "Breve e senza giudicarti.",
+    workedLabel: "Cosa ha funzionato oggi?",
+    workedPlaceholder: "Es. Lasciare il telefono in un'altra stanza",
+    easierLabel: "Cosa posso rendere più facile domani?",
+    easierPlaceholder: "Es. Preparare lo zaino la sera prima",
+
+    filled: "compilato",
+    doneFeedback: "Segnato",
+    undoneFeedback: "Segno rimosso",
+  },
+
+  calendar: {
+    toggle: "Calendario",
+    toggleHint: "Giorni precedenti e successivi in vista mensile",
+    prevMonth: "Mese precedente",
+    nextMonth: "Mese successivo",
+    today: "Torna a oggi",
+    monthTitle: "{month} {year}",
+    legendTitle: "Legenda",
+    legendToday: "Oggi",
+    legendSelected: "Giorno selezionato",
+    legendPlan: "C'è un piano",
+    legendHabit: "C'è una voce di abitudine",
+    legendRating: "Valutazione della giornata (1–5)",
+    legendNote: "I giorni vuoti non sono una mancanza; semplicemente non c'è nulla di scritto.",
+    cellToday: "oggi",
+    cellSelected: "selezionato",
+    cellPlan: "c'è un piano",
+    cellHabit: "abitudine: {status}",
+    cellRating: "valutazione {n}/5",
+    cellEmpty: "nessuna voce",
+    summaryTitle: "{date}",
+    openHere: "Questo giorno è aperto qui sotto.",
+    openDay: "Apri e modifica il giorno",
+    emptyPast: "Ancora nessuna voce per questo giorno.",
+    emptyToday: "Ancora nessuna voce per oggi.",
+    createPast: "Crea una voce per questo giorno",
+    emptyFuture: "Questo giorno non è ancora arrivato. Se vuoi, puoi scrivere un piano in anticipo.",
+    createFuture: "Scrivi un piano per questo giorno",
+    mainLabel: "Attività principale",
+    doneLabel: "Attività completate",
+    noneDone: "Nessuna attività segnata",
+    habitLabel: "Abitudine",
+    habitLine: "{status} · {goal}",
+    ratingLabel: "Valutazione della giornata",
+    ratingNoteLabel: "Perché questo valore",
+    eveningLabel: "Nota della sera",
+  },
+
+  history: {
+    title: "Giorni passati",
+    crumb: "Giornata",
+    lead: "Le voci dei giorni precedenti. Tocca un giorno per vederne i dettagli.",
+    empty: "Ancora nessun giorno salvato. Comparirà qui quando scriverai l'attività principale di oggi.",
+    emptyAction: "Pianifica la mia giornata",
+    today: "Oggi",
+    noMain: "Nessuna attività principale scritta",
+    eveningSnippet: "Nota della sera: {text}",
+    open: "Modifica",
+    delete: "Elimina",
+    detailBrain: "Quello che avevo in testa",
+    detailStep: "Primo piccolo passo",
+    detailExtras: "Attività extra",
+    detailStart: "Piano di partenza",
+    detailTime: "Tempo dedicato",
+    detailWorked: "Cosa ha funzionato?",
+    detailEasier: "Cosa posso rendere più facile domani?",
+    detailRating: "Valutazione della giornata",
+    detailRatingNote: "Perché questo valore",
+    detailDone: "completata",
+    deleteTitle: "Vuoi eliminare questo giorno?",
+    deleteBody: "La voce del {date} verrà eliminata definitivamente da questo dispositivo. L'operazione non si può annullare.",
+    deleteConfirm: "Sì, elimina",
+    deleted: "La voce del {date} è stata eliminata.",
+  },
+
+  habit: {
+    title: "La mia abitudine",
+    introTitle: "Una sola piccola abitudine",
+    introBody: "Qui lavori su una sola abitudine alla volta. Prima la trasformi in un inizio il più piccolo possibile, poi guardi come va per qualche giorno.",
+    introTrial: "Per la prima prova ti suggeriamo un periodo di sette giorni. Non è il tempo necessario per formare un'abitudine: è solo un breve intervallo per capire se il piano fa per te.",
+    startSetup: "Crea il mio piano",
+    continueSetup: "Continua la configurazione",
+
+    setupTitle: "Piano dell'abitudine",
+    editTitle: "Modifica il piano",
+    stepOf: "Passo {n}/{total}",
+    finish: "Salva il piano",
+    summaryStepTitle: "Il tuo piano è pronto?",
+    summaryStepLead: "Un riepilogo delle tue risposte. Se vuoi cambiare qualcosa, puoi tornare indietro.",
+
+    steps: {
+      goal: {
+        label: "Cosa voglio fare?",
+        hint: "Basta una direzione generale. Nei passi successivi la renderemo più piccola.",
+        example: "Studiare matematica con regolarità",
+      },
+      start: {
+        label: "Qual è l'inizio più piccolo che posso fare davvero?",
+        hint: "Scegli qualcosa di così piccolo da riuscirci anche in una giornata storta.",
+        example: "Studiare cinque minuti o risolvere un esercizio",
+      },
+      anchor: {
+        label: "A quale momento la collego?",
+        hint: "Scegli un momento che c'è già ogni giorno: un pasto, un tragitto, una routine.",
+        example: "Dopo cena",
+      },
+      place: {
+        label: "Dove inizierò?",
+        hint: "Indica un luogo preciso, come la scrivania o il tavolo della cucina.",
+        example: "Alla mia scrivania",
+      },
+      ease: {
+        label: "Come mi renderò più facile iniziare?",
+        hint: "Una sola preparazione che ti spiani la strada prima di iniziare.",
+        example: "Mettere in anticipo il libro e la penna sulla scrivania",
+      },
+      smaller: {
+        label: "Qual è la mia opzione più piccola per una giornata difficile?",
+        hint: "Un inizio di riserva per i giorni in cui sei stanco o pieno di impegni.",
+        example: "Leggere soltanto un esercizio",
+      },
+    },
+
+    summarySentence: "{anchor}, {place}, proverò a: {start}",
+    summaryLabels: {
+      goal: "Il mio obiettivo",
+      anchor: "Quando",
+      place: "Dove",
+      start: "Piccolo inizio",
+      ease: "Per renderlo più facile",
+      smaller: "Nei giorni difficili",
+    },
+    planTitle: "Il mio piano",
+    editPlan: "Modifica il piano",
+    versionNotice: "Hai cambiato obiettivo. Le voci precedenti resteranno legate al vecchio piano; quelle nuove apparterranno a questo nuovo piano.",
+    savedPlan: "Piano salvato.",
+
+    todayTitle: "Oggi",
+    dayTitle: "{date}",
+    statusQuestion: "Com'è andata oggi?",
+    statusLegend: "Voce per {date}",
+    statuses: {
+      done: "Ho fatto il mio piccolo passo.",
+      smaller: "Ho fatto la mia opzione più piccola.",
+      skipped: "Oggi non l'ho fatto.",
+    },
+    statusShort: { done: "Fatto", smaller: "Fatta la versione più piccola", skipped: "Non fatto", none: "Nessuna voce" },
+    clearStatus: "Cancella la voce",
+    noteLabel: "Cosa mi ha reso più facile o più difficile iniziare oggi?",
+    notePlaceholder: "Facoltativo, basta una frase",
+    noteNeedsStatus: "La nota viene salvata quando fai una scelta per quel giorno.",
+    olderPlan: "Questa voce appartiene al piano precedente: {goal}",
+
+    weekTitle: "Ultimi sette giorni",
+    weekHint: "Tocca un giorno per modificarne la voce.",
+    weekTrialNote: "Sette giorni non sono il tempo per formare un'abitudine; sono un breve intervallo per valutare la prima prova.",
+    legend: "Legenda",
+
+    reviewTitle: "Valutazione",
+    reviewLead: "Puoi rispondere quando vuoi. Le risposte vengono salvate in questo piano.",
+    reviewOpen: "Apri la valutazione",
+    reviewFit: "Quale passo iniziale ha funzionato per me?",
+    reviewContext: "Quale momento o ambiente mi ha semplificato le cose?",
+    reviewShrink: "Cosa posso rendere più piccolo nella prossima prova?",
+
+    previousPlans: "Piani precedenti",
+    previousPlanItem: "{goal} · {count} giorni registrati",
+  },
+
+  settings: {
+    title: "Impostazioni e dati",
+    close: "Chiudi",
+    motionTitle: "Animazioni",
+    motionHint: "Quando sono disattivate, tutte le funzioni restano uguali.",
+    motionSystem: "Segui il dispositivo",
+    motionOn: "Attive",
+    motionOff: "Disattivate",
+    motionSystemReduced: "Sul dispositivo è attiva la preferenza per ridurre il movimento, quindi le animazioni ora sono disattivate.",
+    textSizeTitle: "Dimensione del testo del libro",
+    appearanceTitle: "Aspetto",
+    themeTitle: "Tema",
+    themeLight: "Chiaro",
+    themeDark: "Scuro",
+    themeSystem: "Segui il dispositivo",
+    themeSystemNow: "Al momento il dispositivo usa il tema {mode}.",
+    themeModeLight: "chiaro",
+    themeModeDark: "scuro",
+    languageTitle: "Lingua (Language)",
+    languageHint: "Cambia la lingua dell'app. I tuoi dati restano come sono. Per ora il testo del libro è disponibile solo in turco.",
+
+    dataTitle: "Dove sono i tuoi dati?",
+    dataPoints: [
+      "I tuoi dati restano solo su questo dispositivo, in questo browser.",
+      "Non c'è sincronizzazione automatica tra telefono, tablet e computer.",
+      "Se cancelli i dati del browser (cronologia, dati dei siti), potresti cancellare anche le tue voci.",
+      "Ti consigliamo di fare un backup regolarmente.",
+    ],
+    dataCount: "Su questo dispositivo ci sono {days} giorni registrati e {habitDays} giorni di abitudine registrati.",
+
+    exportTitle: "Fai un backup",
+    exportHint: "Le voci giornaliere, le valutazioni delle giornate, il piano dell'abitudine e le preferenze di aspetto in un unico file. Conservalo in un posto di cui ti fidi.",
+    exportButton: "Scarica il file di backup",
+    exportCopyButton: "Mostra il backup come testo",
+    exportCopyHint: "Se il download non funziona, puoi copiare questo testo e incollarlo in una nota. Per il ripristino userai lo stesso testo.",
+    exportTextLabel: "Testo del backup",
+    copy: "Copia il testo",
+    copied: "Copiato",
+    copyFailed: "Impossibile copiare. Il testo è selezionato; puoi copiarlo a mano.",
+    exportDone: "Download avviato: {file}. Se il file non è stato scaricato, usa il pulsante \"Mostra il backup come testo\".",
+    exportEmpty: "Non c'è ancora nulla da salvare nel backup.",
+
+    importTitle: "Ripristina da un backup",
+    importHint: "Scegli un file di backup che hai creato in precedenza. Sono accettati anche i backup delle versioni precedenti. Il file viene controllato prima; ti verrà mostrato cosa cambierà.",
+    importFileLabel: "Scegli il file di backup",
+    importPasteToggle: "Incolla un testo invece del file",
+    importPasteLabel: "Testo del backup",
+    importPasteButton: "Controlla il testo",
+    importCheckTitle: "Prima del ripristino",
+    importOldVersion: "Questo backup proviene da una versione precedente e contiene solo le voci giornaliere. Il piano dell'abitudine e le sue voci resteranno come sono.",
+    importOldFields: "Questo backup proviene da una versione più vecchia. Le informazioni che non contiene (ad es. valutazione della giornata, tema) resteranno come sono su questo dispositivo.",
+    importDaysAdded: "Verranno aggiunti {n} giorni.",
+    importDaysSame: "{n} giorni sono uguali a quelli su questo dispositivo; non cambieranno.",
+    importDaysChanged: "Le voci di {n} giorni verranno sostituite con quelle del backup:",
+    importChangeLine: "{date}: \"{after}\" al posto di \"{before}\"",
+    importMore: "e altri {n} giorni",
+    importHabitPlans: "Verranno aggiunti {n} piani di abitudine.",
+    importHabitLogAdded: "Verranno aggiunte {n} voci giornaliere di abitudine.",
+    importHabitLogChanged: "Verranno modificate {n} voci giornaliere di abitudine:",
+    importPlansChanged: "{n} piani di abitudine verranno sostituiti con quelli del backup:",
+    importPlanDiff: "Piano \"{goal}\" · {field}: \"{after}\" al posto di \"{before}\"",
+    importReviewsChanged: "Cambieranno le risposte alla valutazione di {n} piani:",
+    importReviewDiff: "\"{goal}\" · {field}: \"{after}\" al posto di \"{before}\"",
+    importFieldNames: {
+      goal: "Obiettivo", start: "Piccolo inizio", anchor: "Quando", place: "Dove", ease: "Per renderlo più facile", smaller: "Nei giorni difficili",
+      archived: "Archiviato", fit: "Quale inizio ha funzionato", context: "Quale momento/ambiente", shrink: "Cosa posso ridurre",
+    },
+    importEmptyValue: "vuoto",
+    importRatingShort: "valutazione {n}",
+    importHabitKeepsActive: "Il piano di abitudine attivo su questo dispositivo non cambierà.",
+    importHabitAdoptsActive: "Il piano di abitudine del backup diventerà il piano attivo.",
+    importSettings: "Le preferenze di aspetto (tema, animazioni, dimensione del testo) verranno aggiornate con quelle del backup.",
+    importKept: "Tutte le voci che non compaiono in questo elenco resteranno come sono.",
+    importNothing: "Tutto nel backup è uguale a quanto c'è su questo dispositivo. Non c'è nulla di nuovo da ripristinare.",
+    importConfirm: "Ripristina",
+    importDone: "Ripristino completato.",
+    importErrorTitle: "Impossibile ripristinare questo backup",
+    importErrorKept: "I tuoi dati attuali non sono stati modificati.",
+    importErrors: {
+      tooLarge: "Il file è troppo grande. I backup di questa app di solito non superano qualche centinaio di kilobyte.",
+      notJson: "Impossibile leggere il file. Assicurati di aver scelto un file di backup (.json) creato con questa app.",
+      wrongApp: "Questo file non sembra un backup di Piccoli passi, giornate più chiare.",
+      wrongVersion: "Questo backup proviene da una versione che l'app non riconosce.",
+      badDays: "Le voci giornaliere del backup non sono nel formato previsto.",
+      badDate: "Il backup contiene una data non valida: {key}",
+      badField: "Il backup contiene un valore inatteso ({key}: {field}).",
+      empty: "Nel backup non c'è nessuna voce da ripristinare.",
+      readFailed: "Si è verificato un problema durante la lettura del file. Riprova.",
+    },
+
+    resetTitle: "Elimina tutti i dati",
+    resetHint: "Elimina tutte le voci giornaliere e i dati dell'abitudine su questo dispositivo. Ti consigliamo di fare prima un backup.",
+    resetButton: "Elimina tutti i dati",
+    resetConfirmTitle: "Eliminare tutti i dati?",
+    resetConfirmBody: "Le voci di {days} giorni e i dati dell'abitudine su questo dispositivo verranno eliminati definitivamente. L'operazione non si può annullare.",
+    resetConfirm: "Sì, elimina tutto",
+    resetDone: "Tutti i dati sono stati eliminati.",
+
+    aboutTitle: "Informazioni su questa versione",
+    aboutBody: "Versione di prova. L'introduzione e il primo capitolo del libro sono pronti; il secondo e il terzo capitolo non sono ancora stati scritti. L'app si apre da un link web e la prima volta richiede una connessione a Internet; l'uso offline non è ancora stato verificato su telefono.",
+  },
+};
+
+</script>
+<script>
+/*
+ * Interfaceteksten (Nederlands). Zelfde sleutels als tr.js (tests/i18n.test.mjs controleert dit).
+ * De boektekst staat niet hier: content/book.tr.js (het boek is voorlopig alleen in het Turks).
+ */
+window.GX_I18N = window.GX_I18N || {};
+window.GX_I18N.nl = {
+  name: "Nederlands",
+  locale: "nl-NL",
+  htmlLang: "nl",
+  features: { sentenceSummary: false },
+
+  boot: {
+    description: "Een korte leestekst, een helderder dagplan en een kleine gewoonte om uit te proberen.",
+    loading: "De app wordt klaargezet…",
+    slowHint: "Blijft dit scherm langer dan een paar seconden staan? Open de app dan via de weblink in Safari of Chrome.",
+    noscript: "In deze weergave kan de code van de app niet worden uitgevoerd. Open de app via de weblink in Safari of Chrome.",
+    errorTitle: "De app kon niet starten",
+    errorBody: "De pagina is geopend, maar er ging iets mis bij het starten van de app. Als je gegevens in deze browser staan, zijn ze niet verwijderd.",
+    errorSteps: "Probeer de pagina te vernieuwen. Blijft het probleem bestaan, kopieer dan de technische details hieronder en stuur ze op.",
+    timeoutTitle: "Het openen van de app duurt langer dan verwacht",
+    timeoutBody: "De app is na {sec} seconden nog niet gestart. Misschien is de verbinding traag, of kan deze weergave de code van de app niet volledig uitvoeren.",
+    unsupportedTitle: "Deze browser wordt niet ondersteund",
+    unsupportedBody: "Deze browser biedt niet de basisfuncties die de app nodig heeft. Gebruik een recente versie van Safari of Chrome.",
+    reload: "Pagina vernieuwen",
+    details: "Technische details",
+    copyDetails: "Details kopiëren",
+    copied: "Gekopieerd",
+    viewErrorTitle: "Dit scherm kon niet worden geopend",
+    viewErrorBody: "Er ging iets mis bij het tonen van dit onderdeel. Je kunt de andere onderdelen gewoon blijven gebruiken; je gegevens zijn niet veranderd.",
+    goHome: "Terug naar het beginscherm",
+  },
+
+  dates: {
+    months: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
+    weekdays: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"],
+    weekdaysShort: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+    weekdaysMondayFirst: ["ma", "di", "wo", "do", "vr", "za", "zo"],
+  },
+
+  app: {
+    brand: "Genix Studio",
+    title: "Kleine stappen, heldere dagen",
+    skipToContent: "Naar de inhoud",
+    settingsButton: "Instellingen",
+    settingsLabel: "Instellingen en gegevens",
+  },
+
+  nav: {
+    label: "Hoofdonderdelen",
+    read: "Lezen",
+    day: "Mijn dag",
+    habit: "Gewoonte",
+  },
+
+  common: {
+    cancel: "Annuleren",
+    back: "Terug",
+    next: "Verder",
+    skip: "Deze stap overslaan",
+    save: "Opslaan",
+    edit: "Bewerken",
+    delete: "Verwijderen",
+    close: "Sluiten",
+    saved: "Opgeslagen",
+    useExample: "Voorbeeld gebruiken",
+    example: "Voorbeeld: {text}",
+    requiredError: "Vul dit veld kort in om verder te gaan.",
+    optional: "Optioneel",
+    yes: "ja",
+    no: "nee",
+  },
+
+  save: {
+    failed: "Opslaan is niet gelukt. De browser staat deze pagina op dit moment niet toe gegevens te bewaren (bijv. een privévenster of een volle opslag). Wat je hebt geschreven staat nog op het scherm; maak een back-up zodat het niet verloren gaat.",
+    failedAction: "Back-up als tekst maken",
+    storageWarning: "Deze browser staat het bewaren van gegevens niet toe. Wat je schrijft, kan verdwijnen als je de pagina sluit. Via Instellingen kun je een back-up als tekst maken.",
+  },
+
+  home: {
+    coverBrand: "Genix Studio",
+    coverTitle: "Kleine stappen, heldere dagen",
+    coverSubtitle: "Een korte leestekst en een rustige dagplanner",
+    description: "Een korte leestekst, een helderder dagplan en een kleine gewoonte om uit te proberen.",
+    startReading: "Begin met lezen",
+    planToday: "Plan mijn dag",
+    habitLink: "Zin om een kleine gewoonte uit te proberen?",
+    continueTitle: "Ga verder waar je was",
+    continueReading: "Terug naar {chapter}",
+    continueDay: "Terug naar het plan van vandaag",
+    continueHabit: "Terug naar je gewoonte",
+    privacyNote: "Je gegevens worden alleen in deze browser op dit apparaat bewaard. Je hoeft geen account aan te maken.",
+    languageButton: "Taal: {name}",
+  },
+
+  reader: {
+    contentsTitle: "Het boek lezen",
+    contentsLead: "Elk hoofdstuk bestaat uit korte delen; je kunt ze onderweg of tijdens een pauze lezen.",
+    chapterLabel: "Hoofdstuk {n}",
+    continueReading: "Ga verder waar je was",
+    startChapter: "Hoofdstuk lezen",
+    notWritten: "Nog niet geschreven",
+    notWrittenHint: "Dit hoofdstuk komt in een volgende versie.",
+    backToContents: "Inhoud",
+    partLabel: "Deel {n}/{total}",
+    progress: "Ongeveer {p}% gelezen",
+    progressShort: "{p}%",
+    textSizeLabel: "Tekstgrootte",
+    textSizes: { standard: "Standaard", large: "Groot", larger: "Groter" },
+    researchLabel: "Wat zegt onderzoek?",
+    limitsLabel: "Beperking",
+    researchMore: "Details en bron",
+    suggestionLabel: "Mijn suggestie",
+    exerciseLabel: "Kleine oefening",
+    summaryLabel: "Samenvatting van het hoofdstuk",
+    sourcesTitle: "Bronnen die in dit hoofdstuk zijn gebruikt",
+    exerciseToPlanner: "Doe dit in Mijn dag",
+    timerStart: "Start timer van 3 minuten",
+    timerStop: "Timer stoppen",
+    timerDone: "De drie minuten zijn om. Je mag stoppen met schrijven; de lijst hoeft niet compleet te zijn.",
+    timerRemaining: "Resterende tijd: {time}",
+    nextChapter: "Volgend hoofdstuk: {title}",
+    nextChapterSoon: "De volgende hoofdstukken zijn nog niet geschreven. Intussen kun je in Mijn dag de hoofdtaak van vandaag kiezen.",
+    goToDay: "Naar Mijn dag",
+    readingTime: "Ongeveer {min} minuten lezen",
+    bookLanguageNote: "De boektekst is voorlopig alleen in het Turks beschikbaar. Er wordt aan een vertaling gewerkt; Mijn dag en Gewoonte zijn volledig in het Nederlands.",
+  },
+
+  day: {
+    titleToday: "Mijn dag vandaag",
+    titlePast: "Een eerdere dag",
+    titleFuture: "Een komende dag",
+    futureBanner: "Deze dag is nog niet aangebroken. Je kunt alvast een plan schrijven; de dagbeoordeling wordt beschikbaar zodra het die dag is.",
+    pastBanner: "Deze dag ligt achter je. Je wijzigingen worden toch op deze datum opgeslagen.",
+    backToToday: "Terug naar vandaag",
+    backToBook: "Terug naar waar je was in het boek",
+    historyLink: "Eerdere dagen",
+    newDayBanner: "Er is een nieuwe dag begonnen. Wat je gisteren hebt ingevuld, is bewaard zoals het was.",
+    openNewDay: "Plan van vandaag openen",
+
+    mainLabel: "Hoofdtaak van vandaag",
+    mainHint: "De ene taak die je opluchting geeft als hij vandaag af is.",
+    mainPlaceholder: "Bijv. eerste opzet van de presentatie",
+    stepLabel: "Eerste kleine stap",
+    stepHint: "Zo klein dat je er binnen een paar minuten mee kunt beginnen.",
+    stepPlaceholder: "Bijv. het bestand openen en drie kopjes typen",
+    mainDoneLabel: "Hoofdtaak markeren als klaar",
+
+    brainToggle: "Ik wil eerst opschrijven wat er in mijn hoofd zit.",
+    brainLabel: "Wat er in mijn hoofd zit",
+    brainHint: "Schrijf kort op wat er bij je opkomt, in willekeurige volgorde.",
+    brainPlaceholder: "Rekening betalen, mijn moeder bellen, opzet verslag…",
+
+    extrasToggle: "Twee kleine extra taken toevoegen.",
+    extrasHint: "Hooguit twee. Past er niets meer bij, dan is dat een teken: bewaar het voor morgen.",
+    extraLabel: "Extra taak {n}",
+    extraPlaceholder: "Bijv. adres voor het pakketje opschrijven",
+    extraDoneLabel: "Extra taak {n} markeren als klaar",
+
+    startToggle: "Bepalen wanneer ik begin.",
+    startHint: "Je eerste kleine stap wordt in het startplan gebruikt; schrijf alleen het moment en de plek op.",
+    whenLabel: "Wanneer?",
+    whenPlaceholder: "Bijv. direct na de lunch",
+    whereLabel: "Waar?",
+    wherePlaceholder: "Bijv. op de bovenste verdieping van de bibliotheek",
+    startNeedsStep: "Schrijf hierboven eerst je eerste kleine stap op voor het startplan.",
+    startSentence: "{when}, {where} begin ik met deze stap: {step}",
+    startLabelled: "Mijn startplan",
+    startWhen: "Moment",
+    startWhere: "Plek",
+    startStep: "Eerste stap",
+    legacyTitle: "Deze dag bevat nog een oude tekst bij \"wat ga ik doen?\"",
+    legacyBody: "In de vorige versie had je dit in je startplan geschreven:",
+    legacyUseStep: "Eerste kleine stap gebruiken",
+    legacyUseStepHint: "De oude tekst wordt verwijderd; in het startplan zie je je eerste kleine stap.",
+    legacyMoveToStep: "Deze tekst als eerste kleine stap gebruiken",
+    legacyResolved: "Het startplan gebruikt nu je eerste kleine stap.",
+
+    timeLabel: "Hoeveel tijd kan ik hier vandaag aan besteden?",
+    timeOptions: { "5": "5 minuten", "15": "15 minuten", "30": "30 minuten", custom: "Bepaal ik zelf" },
+    timeClear: "Keuze wissen",
+    timeCustomLabel: "Tijd die je kunt vrijmaken",
+    timeCustomPlaceholder: "Bijv. 45 minuten",
+    timeTips: {
+      "5": "Vijf minuten kan genoeg zijn om ergens in te komen. Probeer de eerste stap zo klein te houden dat hij in die tijd past.",
+      "15": "In een kwartier kun je de eerste stap zetten en een blik werpen op de volgende. Is het niet af, noteer dan in één regel waar je bent gebleven.",
+      "30": "Bij een halfuur helpt het misschien om vooraf te kiezen wat je na de eerste stap doet. Een korte pauze tussendoor hoort ook bij het plan.",
+      custom: "Schrijf gewoon de tijd op. Het is een schatting, geen grens; het kan langer of korter duren.",
+    },
+
+    eveningToggle: "'s Avonds kort terugkijken.",
+    ratingLegend: "Hoe was vandaag voor jou?",
+    ratingLegendPast: "Hoe was deze dag voor jou?",
+    ratingHint: "Dit is geen score voor succes; het is jouw eigen kijk op je dag.",
+    ratingOptions: { "1": "1 — Zware dag", "2": "2 — Viel me wat zwaar", "3": "3 — Zo-zo", "4": "4 — Ging goed", "5": "5 — Ging heel goed" },
+    ratingClear: "Keuze wissen",
+    ratingFuture: "Je kunt deze dag beoordelen zodra het zover is.",
+    ratingNoteLabel: "Waarom gaf ik dit cijfer?",
+    ratingNotePlaceholder: "Optioneel, één zin is genoeg",
+    eveningHint: "Kort en zonder oordeel.",
+    workedLabel: "Wat werkte vandaag?",
+    workedPlaceholder: "Bijv. mijn telefoon in een andere kamer leggen",
+    easierLabel: "Wat kan ik morgen makkelijker maken?",
+    easierPlaceholder: "Bijv. mijn tas de avond ervoor inpakken",
+
+    filled: "ingevuld",
+    doneFeedback: "Gemarkeerd",
+    undoneFeedback: "Markering verwijderd",
+  },
+
+  calendar: {
+    toggle: "Kalender",
+    toggleHint: "Eerdere en latere dagen in maandweergave",
+    prevMonth: "Vorige maand",
+    nextMonth: "Volgende maand",
+    today: "Terug naar vandaag",
+    monthTitle: "{month} {year}",
+    legendTitle: "Markeringen",
+    legendToday: "Vandaag",
+    legendSelected: "Geselecteerde dag",
+    legendPlan: "Plan ingevuld",
+    legendHabit: "Gewoonte ingevuld",
+    legendRating: "Dagbeoordeling (1–5)",
+    legendNote: "Lege dagen zijn geen tekort; er is alleen niets ingevuld.",
+    cellToday: "vandaag",
+    cellSelected: "geselecteerd",
+    cellPlan: "plan ingevuld",
+    cellHabit: "gewoonte: {status}",
+    cellRating: "beoordeling {n}/5",
+    cellEmpty: "niets ingevuld",
+    summaryTitle: "{date}",
+    openHere: "Deze dag staat hieronder open.",
+    openDay: "Dag openen en bewerken",
+    emptyPast: "Voor deze dag is nog niets ingevuld.",
+    emptyToday: "Voor vandaag is nog niets ingevuld.",
+    createPast: "Iets invullen voor deze dag",
+    emptyFuture: "Deze dag is nog niet aangebroken. Als je wilt, kun je alvast een plan schrijven.",
+    createFuture: "Plan schrijven voor deze dag",
+    mainLabel: "Hoofdtaak",
+    doneLabel: "Afgeronde taken",
+    noneDone: "Geen taken gemarkeerd",
+    habitLabel: "Gewoonte",
+    habitLine: "{status} · {goal}",
+    ratingLabel: "Dagbeoordeling",
+    ratingNoteLabel: "Waarom dit cijfer",
+    eveningLabel: "Avondnotitie",
+  },
+
+  history: {
+    title: "Eerdere dagen",
+    crumb: "Mijn dag",
+    lead: "Wat je op eerdere dagen hebt ingevuld. Tik op een dag voor de details.",
+    empty: "Er zijn nog geen dagen opgeslagen. Zodra je de hoofdtaak van vandaag invult, verschijnt die hier.",
+    emptyAction: "Plan mijn dag",
+    today: "Vandaag",
+    noMain: "Geen hoofdtaak ingevuld",
+    eveningSnippet: "Avondnotitie: {text}",
+    open: "Bewerken",
+    delete: "Verwijderen",
+    detailBrain: "Wat er in mijn hoofd zat",
+    detailStep: "Eerste kleine stap",
+    detailExtras: "Extra taken",
+    detailStart: "Startplan",
+    detailTime: "Vrijgemaakte tijd",
+    detailWorked: "Wat werkte?",
+    detailEasier: "Wat kan ik morgen makkelijker maken?",
+    detailRating: "Dagbeoordeling",
+    detailRatingNote: "Waarom dit cijfer",
+    detailDone: "klaar",
+    deleteTitle: "Wil je deze dag verwijderen?",
+    deleteBody: "Wat je op {date} hebt ingevuld, wordt definitief van dit apparaat verwijderd. Dit kan niet ongedaan worden gemaakt.",
+    deleteConfirm: "Ja, verwijderen",
+    deleted: "De gegevens van {date} zijn verwijderd.",
+  },
+
+  habit: {
+    title: "Mijn gewoonte",
+    introTitle: "Eén kleine gewoonte",
+    introBody: "Hier werk je aan één gewoonte tegelijk. Eerst maak je er een zo klein mogelijk begin van, daarna kijk je een paar dagen hoe het gaat.",
+    introTrial: "Voor een eerste poging stellen we een periode van zeven dagen voor. Dat is niet de tijd die nodig is om een gewoonte op te bouwen, maar een korte periode om te zien of het plan bij je past.",
+    startSetup: "Mijn plan opstellen",
+    continueSetup: "Verder met opstellen",
+
+    setupTitle: "Plan voor je gewoonte",
+    editTitle: "Plan bewerken",
+    stepOf: "Stap {n}/{total}",
+    finish: "Plan opslaan",
+    summaryStepTitle: "Is je plan klaar?",
+    summaryStepLead: "Een samenvatting van je antwoorden. Wil je iets veranderen, dan kun je teruggaan.",
+
+    steps: {
+      goal: {
+        label: "Wat wil ik doen?",
+        hint: "Een globale richting is genoeg. In de volgende stappen maken we het kleiner.",
+        example: "Regelmatig wiskunde oefenen",
+      },
+      start: {
+        label: "Wat is het kleinste begin dat haalbaar is?",
+        hint: "Kies iets wat zo klein is dat je het zelfs op een slechte dag kunt doen.",
+        example: "Vijf minuten oefenen of één opgave maken",
+      },
+      anchor: {
+        label: "Aan welk moment koppel ik het?",
+        hint: "Kies een moment dat er elke dag al is: een maaltijd, een reis, een vaste gewoonte.",
+        example: "Na het avondeten",
+      },
+      place: {
+        label: "Waar begin ik?",
+        hint: "Noem één concrete plek, zoals je bureau of de keukentafel.",
+        example: "Aan mijn bureau",
+      },
+      ease: {
+        label: "Hoe maak ik het makkelijker om te beginnen?",
+        hint: "Eén voorbereiding die de weg vrijmaakt voordat je begint.",
+        example: "Boek en pen alvast op tafel leggen",
+      },
+      smaller: {
+        label: "Wat is mijn kleinere optie op een zware dag?",
+        hint: "Een reservebegin voor dagen waarop je moe of druk bent.",
+        example: "Alleen één opgave doorlezen",
+      },
+    },
+
+    summarySentence: "{anchor}, {place} probeer ik dit: {start}",
+    summaryLabels: {
+      goal: "Mijn doel",
+      anchor: "Wanneer",
+      place: "Waar",
+      start: "Klein begin",
+      ease: "Om het makkelijker te maken",
+      smaller: "Op een zware dag",
+    },
+    planTitle: "Mijn plan",
+    editPlan: "Plan bewerken",
+    versionNotice: "Je hebt je doel veranderd. Wat je eerder hebt ingevuld, blijft bij het oude plan horen; nieuwe invoer hoort bij dit nieuwe plan.",
+    savedPlan: "Plan opgeslagen.",
+
+    todayTitle: "Vandaag",
+    dayTitle: "{date}",
+    statusQuestion: "Hoe ging het vandaag?",
+    statusLegend: "Invoer voor {date}",
+    statuses: {
+      done: "Ik heb mijn kleine stap gedaan.",
+      smaller: "Ik heb mijn kleinere optie gedaan.",
+      skipped: "Vandaag heb ik het niet gedaan.",
+    },
+    statusShort: { done: "Gedaan", smaller: "Kleinere optie gedaan", skipped: "Niet gedaan", none: "Niets ingevuld" },
+    clearStatus: "Invoer wissen",
+    noteLabel: "Wat maakte het vandaag makkelijker of moeilijker om te beginnen?",
+    notePlaceholder: "Optioneel, één zin is genoeg",
+    noteNeedsStatus: "De notitie wordt opgeslagen zodra je voor die dag een keuze maakt.",
+    olderPlan: "Deze invoer hoort bij een eerder plan: {goal}",
+
+    weekTitle: "Afgelopen zeven dagen",
+    weekHint: "Tik op een dag om je invoer te wijzigen.",
+    weekTrialNote: "Zeven dagen is niet de tijd die nodig is om een gewoonte op te bouwen; het is een korte periode om je eerste poging te bekijken.",
+    legend: "Weergave",
+
+    reviewTitle: "Terugblik",
+    reviewLead: "Je kunt deze vragen beantwoorden wanneer je wilt. Je antwoorden worden bij dit plan bewaard.",
+    reviewOpen: "Terugblik openen",
+    reviewFit: "Welke eerste stap paste bij mij?",
+    reviewContext: "Welk moment of welke omgeving maakte het makkelijker?",
+    reviewShrink: "Wat kan ik bij de volgende poging kleiner maken?",
+
+    previousPlans: "Eerdere plannen",
+    previousPlanItem: "{goal} · {count} dagen ingevuld",
+  },
+
+  settings: {
+    title: "Instellingen en gegevens",
+    close: "Sluiten",
+    motionTitle: "Animaties",
+    motionHint: "Als ze uit staan, werkt alles precies hetzelfde.",
+    motionSystem: "Apparaatinstelling volgen",
+    motionOn: "Aan",
+    motionOff: "Uit",
+    motionSystemReduced: "Op je apparaat staat 'minder beweging' aan, daarom zijn animaties nu uit.",
+    textSizeTitle: "Tekstgrootte van het boek",
+    appearanceTitle: "Weergave",
+    themeTitle: "Thema",
+    themeLight: "Licht",
+    themeDark: "Donker",
+    themeSystem: "Apparaatinstelling volgen",
+    themeSystemNow: "Je apparaat gebruikt nu het {mode} thema.",
+    themeModeLight: "lichte",
+    themeModeDark: "donkere",
+    languageTitle: "Taal (Language)",
+    languageHint: "Verandert de taal van de app. Wat je hebt ingevuld, blijft zoals het is. De boektekst is voorlopig alleen in het Turks beschikbaar.",
+
+    dataTitle: "Waar staan je gegevens?",
+    dataPoints: [
+      "Je gegevens worden alleen op dit apparaat en in deze browser bewaard.",
+      "Er is geen automatische synchronisatie tussen je telefoon, tablet en computer.",
+      "Als je browsergegevens wist (geschiedenis, sitegegevens), kunnen ook je gegevens hier verdwijnen.",
+      "We raden je aan regelmatig een back-up te maken.",
+    ],
+    dataCount: "Op dit apparaat staan {days} ingevulde dagen en {habitDays} dagen voor je gewoonte.",
+
+    exportTitle: "Back-up maken",
+    exportHint: "Je dagen, dagbeoordelingen, gewoonteplan en weergavevoorkeuren in één bestand. Bewaar het bestand op een plek die je vertrouwt.",
+    exportButton: "Back-upbestand downloaden",
+    exportCopyButton: "Back-up als tekst tonen",
+    exportCopyHint: "Werkt downloaden niet, dan kun je deze tekst kopiëren en in een notitie plakken. Bij het terugzetten gebruik je dezelfde tekst.",
+    exportTextLabel: "Back-uptekst",
+    copy: "Tekst kopiëren",
+    copied: "Gekopieerd",
+    copyFailed: "Kopiëren is niet gelukt. De tekst is geselecteerd; je kunt hem zelf kopiëren.",
+    exportDone: "Download gestart: {file}. Is het bestand niet gedownload, gebruik dan de knop \"Back-up als tekst tonen\".",
+    exportEmpty: "Er is nog niets om een back-up van te maken.",
+
+    importTitle: "Back-up terugzetten",
+    importHint: "Kies een back-upbestand dat je eerder hebt gemaakt. Back-ups van oudere versies worden ook geaccepteerd. Het bestand wordt eerst gecontroleerd en je ziet wat er verandert.",
+    importFileLabel: "Back-upbestand kiezen",
+    importPasteToggle: "Tekst plakken in plaats van een bestand",
+    importPasteLabel: "Back-uptekst",
+    importPasteButton: "Tekst controleren",
+    importCheckTitle: "Voordat je terugzet",
+    importOldVersion: "Deze back-up komt uit een vorige versie en bevat alleen je dagen. Je gewoonteplan en de bijbehorende invoer blijven zoals ze zijn.",
+    importOldFields: "Deze back-up komt uit een oudere versie. Gegevens die er niet in staan (bijv. dagbeoordeling, thema) blijven zoals ze op dit apparaat zijn.",
+    importDaysAdded: "{n} dagen worden toegevoegd.",
+    importDaysSame: "{n} dagen zijn gelijk aan die op dit apparaat en veranderen niet.",
+    importDaysChanged: "{n} dagen worden vervangen door de versie uit de back-up:",
+    importChangeLine: "{date}: \"{after}\" in plaats van \"{before}\"",
+    importMore: "en nog {n} dagen",
+    importHabitPlans: "{n} gewoonteplannen worden toegevoegd.",
+    importHabitLogAdded: "{n} dagen gewoonte-invoer worden toegevoegd.",
+    importHabitLogChanged: "{n} dagen gewoonte-invoer worden gewijzigd:",
+    importPlansChanged: "{n} gewoonteplannen worden vervangen door de versie uit de back-up:",
+    importPlanDiff: "Plan \"{goal}\" · {field}: \"{after}\" in plaats van \"{before}\"",
+    importReviewsChanged: "De terugblik-antwoorden van {n} plannen worden gewijzigd:",
+    importReviewDiff: "\"{goal}\" · {field}: \"{after}\" in plaats van \"{before}\"",
+    importFieldNames: {
+      goal: "Doel", start: "Klein begin", anchor: "Wanneer", place: "Waar", ease: "Om het makkelijker te maken", smaller: "Op een zware dag",
+      archived: "Gearchiveerd", fit: "Welk begin paste", context: "Welk moment/welke omgeving", shrink: "Wat kan kleiner",
+    },
+    importEmptyValue: "leeg",
+    importRatingShort: "beoordeling {n}",
+    importHabitKeepsActive: "Je actieve gewoonteplan op dit apparaat verandert niet.",
+    importHabitAdoptsActive: "Het gewoonteplan uit de back-up wordt je actieve plan.",
+    importSettings: "Je weergavevoorkeuren (thema, animaties, tekstgrootte) worden bijgewerkt met die uit de back-up.",
+    importKept: "Alles wat niet in deze lijst staat, blijft zoals het is.",
+    importNothing: "Alles in de back-up is gelijk aan wat op dit apparaat staat. Er is niets nieuws om terug te zetten.",
+    importConfirm: "Terugzetten",
+    importDone: "De back-up is teruggezet.",
+    importErrorTitle: "Deze back-up kon niet worden teruggezet",
+    importErrorKept: "Er is niets veranderd aan je huidige gegevens.",
+    importErrors: {
+      tooLarge: "Het bestand is te groot. Back-ups van deze app zijn meestal niet groter dan een paar honderd kilobyte.",
+      notJson: "Het bestand kon niet worden gelezen. Controleer of je een back-upbestand (.json) van deze app hebt gekozen.",
+      wrongApp: "Dit bestand lijkt geen back-up van Kleine stappen, heldere dagen te zijn.",
+      wrongVersion: "Deze back-up komt uit een versie die de app niet herkent.",
+      badDays: "De dagen in de back-up hebben niet de verwachte vorm.",
+      badDate: "De back-up bevat een ongeldige datum: {key}",
+      badField: "De back-up bevat een onverwachte waarde ({key}: {field}).",
+      empty: "De back-up bevat niets om terug te zetten.",
+      readFailed: "Er ging iets mis bij het lezen van het bestand. Probeer het opnieuw.",
+    },
+
+    resetTitle: "Alle gegevens verwijderen",
+    resetHint: "Verwijdert al je dagen en gewoontegegevens op dit apparaat. We raden aan eerst een back-up te maken.",
+    resetButton: "Alle gegevens verwijderen",
+    resetConfirmTitle: "Alle gegevens verwijderen?",
+    resetConfirmBody: "Je {days} ingevulde dagen en je gewoontegegevens op dit apparaat worden definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
+    resetConfirm: "Ja, alles verwijderen",
+    resetDone: "Alle gegevens zijn verwijderd.",
+
+    aboutTitle: "Over deze versie",
+    aboutBody: "Proefversie. De inleiding en het eerste hoofdstuk van het boek zijn klaar; het tweede en derde hoofdstuk zijn nog niet geschreven. De app opent via een weblink en heeft bij de eerste keer openen internet nodig; gebruik zonder internet is nog niet op een telefoon getest.",
   },
 };
 
@@ -1967,6 +4869,7 @@ window.GX_ART = {
     if (THEMES.indexOf(s.theme) >= 0) out.theme = s.theme;
     if (s.calendarOpen === true) out.calendarOpen = true;
     if (s.welcomed === true) out.welcomed = true;
+    if (typeof s.lang === "string" && /^[a-z]{2}$/.test(s.lang)) out.lang = s.lang; // arayüz dili: yalnızca bu cihazda, yedeğe girmez
     if (s.reading && typeof s.reading === "object" && typeof s.reading.chapterId === "string") {
       out.reading = { chapterId: s.reading.chapterId.slice(0, 40), blockId: typeof s.reading.blockId === "string" ? s.reading.blockId.slice(0, 40) : null };
     }
@@ -2340,19 +5243,22 @@ window.GX_ART = {
  * Küçük Adımlar, Daha Net Günler — uygulama mantığı.
  * Ana bölümler: Oku (#oku, #oku-<bolum>), Günüm (#gunum, #gun-YYYY-AA-GG, #gecmis), Alışkanlığım (#aliskanlik, #aliskanlik-kur).
  * Açılış: #hosgeldin (adres boşken de açılış gösterilir).
- * Metinler: i18n/tr.js (GX_STRINGS), kitap: content/book.tr.js (GX_BOOK), veri: storage.js (GX_STORE).
+ * Metinler: i18n/<dil>.js (GX_I18N; Türkçe, English, Deutsch, Français, Español, Italiano, Nederlands),
+ * kitap: content/book.tr.js (GX_BOOK, şimdilik yalnızca Türkçe), veri: storage.js (GX_STORE).
  */
 (function () {
   "use strict";
 
-  var S = window.GX_STRINGS;
+  var I18N = window.GX_I18N || (window.GX_STRINGS ? { tr: window.GX_STRINGS } : null);
+  var LANG_ORDER = ["tr", "en", "de", "fr", "es", "it", "nl"];
+  var S = I18N && (I18N.tr || I18N.en);
   var BOOK = window.GX_BOOK;
   var ART = window.GX_ART;
   var STORE = window.GX_STORE;
   var BOOT = window.GX_BOOT || { ready: function () {}, fail: function (e) { throw e; }, details: function () { return ""; } };
 
   if (!S || !BOOK || !ART || !STORE) {
-    var missing = [["i18n/tr.js", S], ["content/book.tr.js", BOOK], ["illustrations.js", ART], ["storage.js", STORE]]
+    var missing = [["i18n/*.js", S], ["content/book.tr.js", BOOK], ["illustrations.js", ART], ["storage.js", STORE]]
       .filter(function (x) { return !x[1]; }).map(function (x) { return x[0]; });
     BOOT.fail(new Error("Uygulama dosyaları eksik yüklendi: " + missing.join(", ")), "yükleme");
     return;
@@ -2366,10 +5272,44 @@ window.GX_ART = {
   }
   var store = STORE.createStore(storage || { getItem: function () { throw 0; }, setItem: function () { throw 0; }, removeItem: function () {} });
 
+  /* ================= Dil ================= */
+
+  /** Kullanılabilir diller, sabit sırayla (yalnızca dosyası yüklenmiş olanlar). */
+  function languages() {
+    return LANG_ORDER.filter(function (l) { return I18N[l]; });
+  }
+
+  /**
+   * Dil seçimi: kayıtlı tercih → cihazın dil listesindeki ilk desteklenen dil → İngilizce.
+   * Tercih yalnızca bu cihazda tutulur ve yedeğe girmez.
+   */
+  function pickLanguage() {
+    var saved = store.getSettings().lang;
+    if (saved && I18N[saved]) return saved;
+    var list = [];
+    try {
+      list = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""]);
+    } catch (e) { list = []; }
+    for (var i = 0; i < list.length; i++) {
+      var code = String(list[i] || "").toLowerCase().split(/[-_]/)[0];
+      if (I18N[code]) return code;
+    }
+    return I18N.en ? "en" : languages()[0];
+  }
+  var lang = pickLanguage();
+  S = I18N[lang];
+
   /* ================= Yardımcılar ================= */
 
+  function lookupIn(obj, path) {
+    return path.split(".").reduce(function (o, k) { return o == null ? o : o[k]; }, obj);
+  }
+  /** Seçili dilde yoksa İngilizce, o da yoksa Türkçe metin kullanılır (testler eksik anahtara izin vermez). */
   function get(path) {
-    return path.split(".").reduce(function (o, k) { return o == null ? o : o[k]; }, S);
+    var v = lookupIn(S, path);
+    if (v == null && I18N.en) v = lookupIn(I18N.en, path);
+    if (v == null && I18N.tr) v = lookupIn(I18N.tr, path);
+    return v;
   }
 
   /** Metin anahtarını bulur ve {yer tutucuları} doldurur. */
@@ -2409,6 +5349,7 @@ window.GX_ART = {
   var ICON_INFO = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5" stroke-linecap="round"/></svg>';
   var ICON_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   var ICON_CHEV = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  var ICON_GLOBE = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
   var ICON_BACK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
 
   /** Intl desteklenmez ya da hata verirse tarihleri tr.js'teki ay/gün adlarıyla biçimlendir; açılış engellenmez. */
@@ -2421,11 +5362,16 @@ window.GX_ART = {
       return { format: fallback };
     }
   }
-  var dateFmt = makeFormatter({ weekday: "long", day: "numeric", month: "long", year: "numeric" }, function (d) {
-    return d.getDate() + " " + S.dates.months[d.getMonth()] + " " + d.getFullYear() + " " + S.dates.weekdays[d.getDay()];
-  });
-  var shortFmt = makeFormatter({ day: "numeric", month: "long" }, function (d) { return d.getDate() + " " + S.dates.months[d.getMonth()]; });
-  var wdFmt = makeFormatter({ weekday: "short" }, function (d) { return S.dates.weekdaysShort[d.getDay()]; });
+  var dateFmt, shortFmt, wdFmt;
+  /** Dil değişince tarih biçimleri de yeniden kurulur. */
+  function buildFormatters() {
+    dateFmt = makeFormatter({ weekday: "long", day: "numeric", month: "long", year: "numeric" }, function (d) {
+      return d.getDate() + " " + S.dates.months[d.getMonth()] + " " + d.getFullYear() + " " + S.dates.weekdays[d.getDay()];
+    });
+    shortFmt = makeFormatter({ day: "numeric", month: "long" }, function (d) { return d.getDate() + " " + S.dates.months[d.getMonth()]; });
+    wdFmt = makeFormatter({ weekday: "short" }, function (d) { return S.dates.weekdaysShort[d.getDay()]; });
+  }
+  buildFormatters();
   function formatDate(key) { return dateFmt.format(STORE.keyToDate(key)); }
   function formatShort(key) { return shortFmt.format(STORE.keyToDate(key)); }
 
@@ -2539,7 +5485,7 @@ window.GX_ART = {
       input.checked = value === o.value;
       return h("label", { class: "choice", for: name + "-" + o.value }, [
         input,
-        h("span", null, [opts.marks ? h("i", { class: "mark", "aria-hidden": "true" }) : null, o.label]),
+        h("span", { lang: o.lang || null }, [opts.marks ? h("i", { class: "mark", "aria-hidden": "true" }) : null, o.label]),
       ]);
     })));
   }
@@ -2619,6 +5565,7 @@ window.GX_ART = {
   /* ---------- Pencereler: showModal yoksa basit yedek görünüm ---------- */
 
   function openDialog(dlg) {
+    if (dlg.open) return; // zaten açık (ör. dil değişince içerik yeniden çizildi)
     if (typeof dlg.showModal === "function") {
       try {
         dlg.showModal();
@@ -2811,11 +5758,25 @@ window.GX_ART = {
         h("button", { type: "button", class: "btn btn--quiet", id: "habit-link", text: t("home.habitLink"), onclick: function () { navigate("aliskanlik"); } }),
         continueBtn ? h("div", { class: "home__continue" }, [h("p", { class: "label", text: t("home.continueTitle") }), continueBtn]) : null,
         h("p", { class: "note-line" }, [h("span", { html: ICON_INFO }), h("span", { text: t("home.privacyNote") })]),
+        h("button", { type: "button", class: "btn btn--quiet lang-btn", id: "home-language", "aria-haspopup": "dialog", onclick: function () { openSettings({ focusLanguage: true }); } }, [
+          h("span", { "aria-hidden": "true", html: ICON_GLOBE }),
+          h("span", { text: t("home.languageButton", { name: S.name }) }),
+        ]),
       ]),
     ]));
   }
 
   /* ================= Kitap ================= */
+
+  /** Kitap metninin dili (kitap şimdilik yalnızca Türkçe). Arayüz başka dildeyse kitap öğeleri lang ile işaretlenir. */
+  var BOOK_LANG = BOOK.lang || "tr";
+  function bookLangAttr() {
+    return S.htmlLang === BOOK_LANG ? null : BOOK_LANG;
+  }
+  function bookLanguageNote() {
+    if (S.htmlLang === BOOK_LANG) return null;
+    return h("p", { class: "note-line", id: "book-lang-note" }, [h("span", { html: ICON_INFO }), h("span", { text: t("reader.bookLanguageNote") })]);
+  }
 
   function renderContents() {
     var reading = store.getSettings().reading;
@@ -2824,12 +5785,13 @@ window.GX_ART = {
 
     viewEl.appendChild(h("section", { class: "stack-lg", "aria-labelledby": "toc-title" }, [
       h("div", { class: "page-head" }, [
-        h("p", { class: "eyebrow", text: BOOK.title }),
+        h("p", { class: "eyebrow", lang: bookLangAttr(), text: BOOK.title }),
         h("h1", { id: "toc-title", text: t("reader.contentsTitle") }),
         h("p", { class: "muted", text: t("reader.contentsLead") }),
+        bookLanguageNote(),
       ]),
       resumeCh ? h("div", { class: "box box--action" }, [
-        h("p", { text: (chapterLabel(resumeCh) ? chapterLabel(resumeCh) + " · " : "") + resumeCh.title }),
+        h("p", null, [chapterLabel(resumeCh) ? chapterLabel(resumeCh) + " · " : "", h("span", { lang: bookLangAttr(), text: resumeCh.title })]),
         h("button", { type: "button", class: "btn btn--primary", id: "resume-reading", text: t("reader.continueReading"), onclick: function () {
           state.resume = reading.blockId;
           navigate("oku-" + resumeCh.id);
@@ -2841,7 +5803,7 @@ window.GX_ART = {
             chapterLabel(ch) ? h("span", { text: chapterLabel(ch) }) : null,
             h("span", { text: ch.available ? t("reader.readingTime", { min: ch.minutes }) : t("reader.notWritten") }),
           ]),
-          h("span", { class: "toc__title", text: ch.title }),
+          h("span", { class: "toc__title", lang: bookLangAttr(), text: ch.title }),
           ch.available
             ? h("button", { type: "button", class: "btn btn--secondary", "data-open-chapter": ch.id, text: t("reader.startChapter"), onclick: function () { state.resume = "top"; navigate("oku-" + ch.id); } })
             : h("p", { class: "hint", text: t("reader.notWrittenHint") }),
@@ -3002,9 +5964,10 @@ window.GX_ART = {
 
     var article = h("article", { class: "reader", "data-size": textSize(), "aria-labelledby": "chapter-title" }, [
       h("header", { class: "reader__head" }, [
-        h("p", { class: "eyebrow", text: chapterLabel(ch) || BOOK.title }),
-        h("h1", { id: "chapter-title", text: ch.title }),
+        chapterLabel(ch) ? h("p", { class: "eyebrow", text: chapterLabel(ch) }) : h("p", { class: "eyebrow", lang: bookLangAttr(), text: BOOK.title }),
+        h("h1", { id: "chapter-title", lang: bookLangAttr(), text: ch.title }),
         h("p", { class: "hint", text: t("reader.readingTime", { min: ch.minutes }) }),
+        bookLanguageNote(),
         h("div", { class: "reader__tools" }, [textSizeControl(function (v) {
           var anchorBlock = currentBlock();
           article.setAttribute("data-size", v);
@@ -3021,6 +5984,7 @@ window.GX_ART = {
       ]);
       blocks.forEach(function (b) {
         var el = renderBlock(b, ch);
+        if (el && bookLangAttr()) el.setAttribute("lang", bookLangAttr());
         if (el) sec.appendChild(el);
       });
       article.appendChild(sec);
@@ -3476,7 +6440,7 @@ window.GX_ART = {
       }
       if (!w && !wh) return;
       var box = h("div", { class: "start-out" }, [h("span", { class: "label", text: t("day.startLabelled") })]);
-      if (w && wh && isLocative(wh)) {
+      if (w && wh && S.features.sentenceSummary && isLocative(wh)) {
         box.appendChild(h("p", { id: "start-sentence", text: t("day.startSentence", { when: w, where: midSentence(wh), step: midSentence(st) }) }));
       } else {
         box.appendChild(h("dl", null, [
@@ -3660,7 +6624,7 @@ window.GX_ART = {
 
   function planSummary(plan) {
     var nodes = [];
-    if (plan.anchor && plan.place && plan.start && isLocative(plan.place)) {
+    if (plan.anchor && plan.place && plan.start && S.features.sentenceSummary && isLocative(plan.place)) {
       nodes.push(h("p", { class: "plan-sentence", id: "plan-sentence", text: t("habit.summarySentence", { anchor: plan.anchor, place: midSentence(plan.place), start: midSentence(plan.start) }) }));
     }
     nodes.push(h("dl", { class: "plan-sum" }, ["goal", "anchor", "place", "start", "ease", "smaller"].filter(function (f) { return plan[f]; }).map(function (f) {
@@ -4022,6 +6986,15 @@ window.GX_ART = {
       themeNote.hidden = e.target.value !== "system";
     });
 
+    // Dil: seçenekler her dilin kendi adıyla gösterilir; seçim yalnızca bu cihazda saklanır (yedeğe girmez).
+    var langGroup = choiceGroup("lang", t("settings.languageTitle"), languages().map(function (l) {
+      return { value: l, label: I18N[l].name, lang: I18N[l].htmlLang };
+    }), lang, { cls: "choices--row", hideLegend: true, id: "lang-choices" });
+    langGroup.addEventListener("change", function (e) {
+      setLanguage(e.target.value);
+      openSettings({ focusLanguage: true });
+    });
+
     var sizes = textSizeControl(function (v) {
       var r = document.querySelector(".reader");
       if (r) r.setAttribute("data-size", v);
@@ -4103,8 +7076,8 @@ window.GX_ART = {
       return parts.length ? parts.join(" · ") : "—";
     }
     function fieldValue(v) {
-      if (v === true) return "evet";
-      if (v === false) return "hayır";
+      if (v === true) return t("common.yes");
+      if (v === false) return t("common.no");
       return v ? clip(v, 40) : t("settings.importEmptyValue");
     }
     function handleImportText(text) {
@@ -4203,6 +7176,11 @@ window.GX_ART = {
         h("h2", { id: "settings-title", text: t("settings.title") }),
         h("button", { type: "button", class: "btn btn--secondary", id: "close-settings", text: t("settings.close"), onclick: function () { closeDialog(dlg); } }),
       ]),
+      h("section", { class: "panel-section", id: "language-section" }, [
+        h("h3", { text: t("settings.languageTitle") }),
+        h("p", { class: "hint", text: t("settings.languageHint") }),
+        langGroup,
+      ]),
       h("section", { class: "panel-section" }, [
         h("h3", { text: t("settings.dataTitle") }),
         h("ul", null, S.settings.dataPoints.map(function (p) { return h("li", { text: p }); })),
@@ -4266,6 +7244,9 @@ window.GX_ART = {
       showExportText();
       $("export-section").scrollIntoView({ block: "start" });
       $("export-text").focus();
+    } else if (opts.focusLanguage) {
+      var checked = document.querySelector('input[name="lang"]:checked');
+      if (checked) checked.focus();
     } else {
       $("close-settings").focus();
     }
@@ -4281,11 +7262,34 @@ window.GX_ART = {
     if (r.bottom > vv.height - 8 || r.top < 8) el.scrollIntoView({ block: "center", behavior: "auto" });
   }
 
-  function init() {
-    viewEl = $("view");
+  /** Sayfadaki sabit metinler (üst çubuk, sekmeler), belge dili ve başlık. */
+  function applyStaticTexts() {
     document.documentElement.lang = S.htmlLang;
     document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
     document.querySelectorAll("[data-t-label]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-label"))); });
+    document.title = t("app.title");
+    var desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute("content", t("home.description"));
+    // Ana ekrana eklerken önerilen ad (iOS bu etiketi okur)
+    var appTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+    if (appTitle) appTitle.setAttribute("content", t("app.title").split(",")[0]);
+  }
+
+  /** Arayüz dilini değiştirir: tercih kaydedilir, metinler ve açık ekran yeniden çizilir. Kayıtlar değişmez. */
+  function setLanguage(code) {
+    if (!I18N[code] || code === lang) return;
+    flushSave();
+    lang = code;
+    S = I18N[code];
+    store.setSettings({ lang: code });
+    buildFormatters();
+    applyStaticTexts();
+    route();
+  }
+
+  function init() {
+    viewEl = $("view");
+    applyStaticTexts();
     applyMotion();
     applyTheme();
     if (reduceMQ.addEventListener) reduceMQ.addEventListener("change", applyMotion);

@@ -1,12 +1,17 @@
 /*
- * Arayüz metinleri (Türkçe).
- * Kitap içeriği burada değil: content/book.tr.js
- * İngilizce sürüm için bu dosyanın aynı anahtarlarla bir kopyası (en.js) hazırlanır.
+ * Arayüz metinleri (Türkçe). Diğer diller aynı anahtarlarla: en.js, de.js, fr.js, es.js, it.js, nl.js
+ * (tests/i18n.test.mjs anahtarların, yer tutucuların ve dizi uzunluklarının aynı olduğunu denetler).
+ * Kitap içeriği burada değil: content/book.tr.js (kitap şimdilik yalnızca Türkçe).
  * {degisken} biçimindeki yer tutucular app.js içindeki t() fonksiyonu ile doldurulur.
  */
-window.GX_STRINGS = {
+window.GX_I18N = window.GX_I18N || {};
+window.GX_I18N.tr = {
+  name: "Türkçe",
   locale: "tr-TR",
   htmlLang: "tr",
+  // Türkçeye özgü dil bilgisi: yer bulunma ekiyle (-de/-da) bittiğinde özet cümle kurulur.
+  // Diğer dillerde false: özet her zaman etiketli satırlar olarak gösterilir.
+  features: { sentenceSummary: true },
 
   // Başlangıç ekranı ve açılış hataları. Bu metinler derleme sırasında HTML'e ve başlangıç betiğine yazılır,
   // böylece JavaScript hiç çalışmasa ya da uygulama başlatılamasa da görünür.
@@ -69,6 +74,8 @@ window.GX_STRINGS = {
     example: "Örnek: {text}",
     requiredError: "Devam etmek için bu alanı kısaca doldur.",
     optional: "İsteğe bağlı",
+    yes: "evet",
+    no: "hayır",
   },
 
   save: {
@@ -90,6 +97,7 @@ window.GX_STRINGS = {
     continueDay: "Bugünün planına dön",
     continueHabit: "Alışkanlık denemene dön",
     privacyNote: "Kayıtların yalnızca bu cihazdaki bu tarayıcıda tutulur. Hesap açman gerekmez.",
+    languageButton: "Dil: {name}",
   },
 
   reader: {
@@ -122,6 +130,8 @@ window.GX_STRINGS = {
     nextChapterSoon: "Sonraki bölümler henüz yazılmadı. Bu arada Günüm'de bugünün ana işini seçebilirsin.",
     goToDay: "Günüm'e geç",
     readingTime: "Yaklaşık {min} dakikalık okuma",
+    // Arayüz Türkçe değilken kitap ekranlarında gösterilir (Türkçede kullanılmaz)
+    bookLanguageNote: "Kitap metni şimdilik yalnızca Türkçe. Çevirisi hazırlanıyor; Günüm ve Alışkanlığım bölümleri seçtiğin dilde.",
   },
 
   day: {
@@ -383,6 +393,8 @@ window.GX_STRINGS = {
     themeSystemNow: "Cihazın şu an {mode} temada.",
     themeModeLight: "açık",
     themeModeDark: "koyu",
+    languageTitle: "Dil (Language)",
+    languageHint: "Arayüzün dilini değiştirir. Kayıtların değişmez. Kitap metni şimdilik yalnızca Türkçe.",
 
     dataTitle: "Kayıtların nerede?",
     dataPoints: [
@@ -465,3 +477,6 @@ window.GX_STRINGS = {
     aboutBody: "Deneme sürümü. Kitabın giriş ve ilk bölümü hazır; ikinci ve üçüncü bölüm henüz yazılmadı. Uygulama web bağlantısıyla açılır ve ilk açılışta internet gerektirir; internetsiz kullanım henüz telefonda doğrulanmadı.",
   },
 };
+
+// Eski adla erişim (Türkçe); uygulama dili app.js'te seçilir.
+window.GX_STRINGS = window.GX_I18N.tr;

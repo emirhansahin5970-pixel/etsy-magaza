@@ -146,16 +146,18 @@ for (const [label, url] of [["yerel dosya", FILE_URL], ["HTTPS", HTTPS + "/"]]) 
 /* ---------- 4. JavaScript çalışıyor ama başlangıç başarısız ---------- */
 await run("Uygulama dosyası eksik/bozuk yüklenirse anlaşılır hata ve ayrı teknik ayrıntı görünür", async () => {
   const { ctx, page } = await ctxFor();
-  // tr.js'in tanımladığı metinler hiç oluşmasın (dosya yarım inmiş gibi)
-  await page.addInitScript(() => Object.defineProperty(window, "GX_STRINGS", { get() { return undefined; }, set() {}, configurable: false }));
+  // Dil dosyalarının tanımladığı metinler hiç oluşmasın (dosyalar yarım inmiş gibi)
+  await page.addInitScript(() => {
+    for (const k of ["GX_I18N", "GX_STRINGS"]) Object.defineProperty(window, k, { get() { return undefined; }, set() {}, configurable: false });
+  });
   await page.goto(HTTPS + "/");
   await page.locator("#boot-error").getByRole("heading", { name: "Uygulama başlatılamadı" }).waitFor({ timeout: 4000 });
   await page.getByRole("button", { name: "Sayfayı yenile" }).waitFor();
   assert.equal(await page.locator("#boot-error-details").isVisible(), false, "ayrıntı ayrı ve kapalı alanda");
   await page.locator("summary", { hasText: "Teknik ayrıntılar" }).click();
   const details = await page.inputValue("#boot-error-details");
-  assert.match(details, /Uygulama dosyaları eksik yüklendi: i18n\/tr\.js/);
-  assert.match(details, /GX_STRINGS YOK/);
+  assert.match(details, /Uygulama dosyaları eksik yüklendi: i18n\/\*\.js/);
+  assert.match(details, /GX_I18N YOK/);
   await page.screenshot({ path: join(shots, "boot-03-baslatma-hatasi.png"), fullPage: true });
   await ctx.close();
 });

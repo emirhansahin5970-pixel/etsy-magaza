@@ -14,21 +14,28 @@ const root = dirname(fileURLToPath(import.meta.url));
 const src = (p) => join(root, "src", p);
 const read = (p) => readFileSync(src(p), "utf8");
 
-// Arayüz metinlerini oku (tek kaynak: i18n/tr.js)
+// Arayüz metinlerini oku (i18n/<dil>.js). HTML Türkçe derlenir; diğer dillerin başlangıç metinleri boot.js'e yazılır.
+const LANGS = ["tr", "en", "de", "fr", "es", "it", "nl"];
 const sandbox = { window: {} };
-vm.runInNewContext(read("i18n/tr.js"), sandbox);
-const S = sandbox.window.GX_STRINGS;
-const lookup = (path) => {
+for (const l of LANGS) vm.runInNewContext(read(`i18n/${l}.js`), sandbox);
+const I18N = sandbox.window.GX_I18N;
+const lookupIn = (S, path) => {
   const v = path.split(".").reduce((o, k) => (o == null ? o : o[k]), S);
   if (typeof v !== "string") throw new Error(`Metin bulunamadı: ${path}`);
   return v;
 };
+const lookup = (path, lang = "tr") => lookupIn(I18N[lang], path);
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 let html = read("index.html");
 
 // 1) Sabit metinler: <tag ... data-t="anahtar" ...></tag> → içerik doldurulur
-html = html.replace(/(<(\w+)\b[^>]*\sdata-t="([^"]+)"[^>]*>)(<\/\2>)/g, (_, open, tag, key, close) => open + esc(lookup(key)) + close);
+const staticKeys = new Set(["app.title"]);
+for (const m of html.matchAll(/\sdata-t(?:-label)?="([^"]+)"/g)) staticKeys.add(m[1]);
+html = html.replace(/(<(\w+)\b[^>]*\sdata-t="([^"]+)"[^>]*>)(<\/\2>)/g, (_, open, tag, key, close) => {
+  const lang = (open.match(/\sdata-t-lang="(\w+)"/) || [])[1] || "tr";
+  return open + esc(lookup(key, lang)) + close;
+});
 html = html.replace(/(<\w+\b[^>]*\sdata-t-label="([^"]+)")/g, (m, open, key) => `${open} aria-label="${esc(lookup(key))}"`);
 if (/data-t="[^"]+"[^>]*><\//.test(html)) throw new Error("Doldurulmamış data-t kaldı");
 
@@ -36,7 +43,11 @@ if (/data-t="[^"]+"[^>]*><\//.test(html)) throw new Error("Doldurulmamış data-
 html = html.replace(/<link rel="stylesheet" href="styles\.css">/, () => `<style>\n${read("styles.css")}\n</style>`);
 html = html.replace(/<script src="([^"]+)"><\/script>/g, (_, file) => {
   let code = read(file);
-  if (file === "boot.js") code = code.replace("/*@BOOT_STRINGS@*/ {}", JSON.stringify(S.boot));
+  if (file === "boot.js") {
+    const boot = {};
+    for (const l of LANGS) boot[l] = { boot: I18N[l].boot, ui: Object.fromEntries([...staticKeys].map((k) => [k, lookup(k, l)])) };
+    code = code.replace("/*@BOOT_STRINGS@*/ {}", JSON.stringify(boot));
+  }
   code = code.replace(/<\/script/gi, "<\\/script");
   return `<script>\n${code}\n</script>`;
 });

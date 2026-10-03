@@ -338,6 +338,7 @@
     if (THEMES.indexOf(s.theme) >= 0) out.theme = s.theme;
     if (s.calendarOpen === true) out.calendarOpen = true;
     if (s.welcomed === true) out.welcomed = true;
+    if (typeof s.lang === "string" && /^[a-z]{2}$/.test(s.lang)) out.lang = s.lang; // arayüz dili: yalnızca bu cihazda, yedeğe girmez
     if (s.reading && typeof s.reading === "object" && typeof s.reading.chapterId === "string") {
       out.reading = { chapterId: s.reading.chapterId.slice(0, 40), blockId: typeof s.reading.blockId === "string" ? s.reading.blockId.slice(0, 40) : null };
     }

@@ -10,7 +10,7 @@ Bu dosya, Claude Code'un bu projede yeni bir oturumda bağlamı hızla kavramas�
 - **Amaç:** Üç işlev: (1) kısa, görselli bir kitap okumak, (2) gerçekçi bir günlük plan yapmak, (3) tek bir alışkanlığı küçük adımlarla denemek. Kitap, planlayıcı ve alışkanlık bölümü birbirinden bağımsız kullanılabilmeli.
 - **Hedef kitle:** Üniversite öğrencileri, çalışma hayatına yeni başlayanlar, nereden başlayacağını bilemeyenler, ayrıntılı planlama sistemlerinden bunalanlar.
 - **Repo:** `emirhansahin5970-pixel/etsy-magaza`
-- **Dil:** İletişim, kitap ve arayüz Türkçe. İngilizce sürüm daha sonra hazırlanacak, dil değiştirici yok. Kod ve commit mesajları İngilizce.
+- **Dil:** Sahiple iletişim Türkçe. Kod ve commit mesajları İngilizce. **Arayüz 7 dilde** (2026-10-03 kararı, Etsy'nin site dilleri + Türkçe): Türkçe, English, Deutsch, Français, Español, Italiano, Nederlands. Kitap metni şimdilik yalnızca Türkçe; Türkçe bölüm 2–3 bittikten sonra çevrilecek. Çeviriler satıştan önce anadili konuşan biri tarafından gözden geçirilmeli.
 
 ## Ürün Kuralları (değiştirmeden önce sahibine sor)
 
@@ -39,7 +39,7 @@ Bu dosya, Claude Code'un bu projede yeni bir oturumda bağlamı hızla kavramas�
 app/src/index.html         İskelet + JavaScript'siz başlangıç ekranı ve noscript (@artifact-* işaretçileri derleme için)
 app/src/boot.js            Başlangıç güvenlik ağı (ES3): font yükleme, hata/zaman aşımı ekranı, GX_BOOT.ready()/fail()
 app/src/styles.css         Tasarım tokenleri en üstte
-app/src/i18n/tr.js         BÜTÜN arayüz metinleri → window.GX_STRINGS
+app/src/i18n/<dil>.js      Arayüz metinleri → window.GX_I18N.<dil> (tr, en, de, fr, es, it, nl; tr.js ana kaynak, GX_STRINGS = tr)
 app/src/content/book.tr.js Kitap içeriği ve kaynakça → window.GX_BOOK
 app/src/illustrations.js   SVG görseller → window.GX_ART
 app/src/storage.js         Veri katmanı, şema 2, geçiş ve yedek → window.GX_STORE (Node'da require edilebilir)
@@ -53,6 +53,8 @@ tests/e2e.mjs              Chromium uçtan uca testleri (17 senaryo)
 tests/boot.mjs             Açılış testleri (13): HTTPS, yerel dosya, JavaScript kapalı, başlangıç hataları, eksik API'ler
 tests/pwa.mjs              Barındırılan klasör testleri (4): alt yol, manifest/simgeler, service worker, internetsiz yeniden açılış
 tests/v3.mjs               Sürüm 3 testleri (15): takvim, değerlendirme, tema, v1/v2 uyumluluğu, yedek
+tests/i18n.test.mjs        Dil dosyaları: anahtar, yer tutucu ve dizi uzunluğu eşitliği, Türkçe kalmış metin yok
+tests/lang.mjs             Dil testleri (8): cihaz diline göre açılış, değiştirme/kalıcılık, kitap dili notu, tarih, başlangıç ekranı, 7 dilde 320 px
 tests/contrast.mjs         İki temada renk kontrastı denetimi (metin ≥ 4.5:1, kenarlık/odak ≥ 3:1)
 tests/fixtures/            Önceki sürümlerin (v1, v2) uygulaması, localStorage içeriği ve yedeği: geriye uyumluluk testleri için
 docs/telefon-test-listesi.md  Açılış teşhisi + sahibin gerçek cihazda uygulayacağı test listesi
@@ -60,7 +62,15 @@ docs/barindirma.md         Web bağlantısında yayınlama adımları
 ```
 
 Rotalar: `#hosgeldin` (boş adres de açılışa gider), `#oku`, `#oku-<bolumId>`, `#gunum` (eski `#planla` de çalışır), `#gun-YYYY-AA-GG`, `#gecmis`, `#aliskanlik`, `#aliskanlik-kur`.
-Depolama anahtarları: `gx.ssc.days.v1` (günler; şema 2'de de aynı anahtar), `gx.ssc.habit.v1` (alışkanlık), `gx.ssc.settings.v1` (tercihler: motion, textSize, theme, calendarOpen, reading, lastPlace), `gx.ssc.meta` (şema sürümü), `gx.ssc.beforeRestore` (geri yüklemeden önceki kopya).
+Depolama anahtarları: `gx.ssc.days.v1` (günler; şema 2'de de aynı anahtar), `gx.ssc.habit.v1` (alışkanlık), `gx.ssc.settings.v1` (tercihler: motion, textSize, theme, calendarOpen, reading, lastPlace, lang), `gx.ssc.meta` (şema sürümü), `gx.ssc.beforeRestore` (geri yüklemeden önceki kopya).
+
+### Dil (i18n)
+- Seçim: kayıtlı `settings.lang` → cihazın dil listesindeki ilk desteklenen dil → İngilizce. Otomatik seçim kaydedilmez; kullanıcı Ayarlar'dan (ya da açılıştaki "Dil: …" düğmesinden) seçince kaydedilir. Dil tercihi yedeğe girmez (cihaz tercihi).
+- Yeni metin eklerken: önce tr.js, sonra aynı anahtarı 6 dile ekle; `tests/i18n.test.mjs` eksik/fazla anahtarı yakalar.
+- HTML Türkçe derlenir; boot.js cihaz dilini seçip başlangıç ekranının metinlerini hemen o dile çevirir (derleme her dilin boot + sabit metinlerini boot.js'e yazar). noscript metni Türkçe + İngilizce.
+- Türkçeye özgü özet cümleleri (`-de/-da` kuralı) yalnızca `features.sentenceSummary: true` olan dilde (tr) kurulur; diğer dillerde etiketli özet.
+- Arayüz Türkçe değilken kitap ekranlarında "kitap şimdilik Türkçe" notu çıkar ve kitap metni `lang="tr"` ile işaretlenir.
+- Bilinen eksik: uygulama tanımındaki (manifest) ad Türkçe; iOS ana ekran adı ise seçili dile göre ayarlanır.
 
 ### Veri şeması ve geçiş (önemli)
 - Şema 3. Geçiş, okuma sırasında `migrateDay` ile yapılır: eksik `time` alanı `{budget:"", custom:""}`, eksik `rating` null, eksik `ratingNote` "" olur. Yalnızca puan girilmiş gün de geçerli kayıttır. Gelecek güne `rating` kaydedilmez (saveDay reddeder). Eski `start.what` metni **silinmez**; Günüm ekranı gösterir ve kullanıcı "İlk küçük adımı kullan" ya da "Bu metni ilk küçük adım yap" seçeneklerinden birini seçebilir.
@@ -78,6 +88,8 @@ node tests/boot.mjs                    # açılış testleri (önce build; opens
 node tests/pwa.mjs                     # web uygulaması testleri (önce build)
 node tests/v3.mjs                      # sürüm 3 testleri (önce build)
 node tests/contrast.mjs                # renk kontrastı (iki tema)
+node --test tests/i18n.test.mjs        # dil dosyalarının tutarlılığı
+node tests/lang.mjs                    # dil testleri (önce build)
 npm test                               # hepsi
 ```
 
@@ -114,11 +126,15 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 
 - [x] Sürüm 3 (2026-10-04): aylık takvim + gün özeti, gün değerlendirmesi (1–5), açık/koyu/cihaz teması, şema 3, yedekte alan-yok/alan-boş ayrımı, plan/değerlendirme farkları önizlemede. Form kenarlığı kontrastı düzeltildi (önceden 1.7:1). Testler: kontrast hedefte, birim 25/25, uçtan uca 17/17, açılış 13/13, web 4/4, v3 15/15. Gerçek cihazda doğrulanmadı.
 
+- [x] Çok dilli arayüz (2026-10-03): 7 dil, dil seçici (Ayarlar + açılış), cihaz diline göre açılış, başlangıç ekranı da çevrilir. Testler: i18n 14/14 (+ birim 25/25), dil 8/8, diğerleri değişmeden geçiyor. Çeviriler yapay zekâ çevirisi; anadili konuşan kontrolü yapılmadı. Gerçek cihazda doğrulanmadı.
+
 ### Sıradaki Adımlar (sahibin prototip değerlendirmesinden SONRA)
 - [ ] Sahibin açılış teşhisi sonucunu al (`docs/telefon-test-listesi.md` üstteki tablo): önizleme mi, tarayıcı mı, hata ayrıntısı ne?
 - [x] GitHub Pages yayında (2026-10-03, ilk başarılı yayın): https://emirhansahin5970-pixel.github.io/etsy-magaza/
 - [ ] Gerçek HTTPS adresinde iPhone/iPad testi (sahip yapacak)
 - [ ] Sahibin sürüm 2 telefon/tablet kontrol sonuçlarını al (`docs/telefon-test-listesi.md`, 10 adım) ve geri bildirimlere göre düzelt
+- [ ] Çevirileri anadili konuşanlara kontrol ettir (en, de, fr, es, it, nl); Etsy ilan metinlerini aynı dillere çevir
+- [ ] Kitap bölümlerini 6 dile çevir (Türkçe bölüm 2–3 ve kapanış bittikten sonra)
 - [ ] Bölüm 2 (~1.000 kelime, Gollwitzer kaynakları, görsel: büyük işin küçük adımlara ayrılması)
 - [ ] Bölüm 3 (~900 kelime, Lally 2010, görsel: esnek günlük plan, 7 günlük deneme)
 - [ ] Kısa bir kapanış ve tam kaynakça
@@ -135,5 +151,6 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 - 2026-10-03: Telefonda boş ekran bildirimi. Kanıtlar: (1) JavaScript çalışmazsa eski HTML'de bütün metinler boş kalıyordu; (2) Google Fonts isteği yanıtsız kalırsa sayfa en az 8 sn başlamıyordu (Chromium ölçümü). Cihazdaki asıl neden henüz doğrulanmadı.
 - 2026-10-03: Sahip iPhone 17 Pro'da indirilen HTML dosyasında yalnızca başlığı gördü. Neden: iOS dosya önizlemesi JavaScript çalıştırmıyor (Apple forumu, iOS 13+). Çözüm: dosya yerine GitHub Pages adresi + Ana Ekrana Ekle.
 
+- 2026-10-03: DİL KARARI (sahip): Türkçe + Etsy'nin site dilleri (en, de, fr, es, it, nl). Arayüz şimdi, kitap Türkçe bölümler bitince. Hitap samimi: du/tu/tú/tu/je. Arapça/Çince/Hintçe Etsy payı düşük ve sağdan sola düzen gerektirdiği için şimdilik yok.
 - 2026-10-03: SATIŞ MODELİ KARARI (sahip): En kolay yol. Etsy dijital ilan → alıcıya otomatik PDF → PDF içinde uygulama bağlantısı. Sipariş başına iş yok. Kişiye özel kod/hesap YOK (sahip zahmetli buldu). Paylaşım yayılırsa: adres yolunu değiştir (aynı alan adında kalınca kullanıcı kayıtları korunur), Etsy'deki PDF'i güncelle. Kopyalayıp satan olursa Etsy IP bildirim formu. Değer stratejisi: güncellemeler (yeni bölümler aynı bağlantıda), marka, PDF kitap.
 - 2026-10-04: Sahip kararı: V3 ve sonraki değişiklikler çalışma dalında birikir; sahip "bitti" deyince TEK SEFERDE main'e alınır (GitHub Pages o zaman güncellenir). Ara sürümler claude.ai Artifact bağlantısında güncellenir.
