@@ -109,7 +109,8 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 
 ### Sıradaki Adımlar (sahibin prototip değerlendirmesinden SONRA)
 - [ ] Sahibin açılış teşhisi sonucunu al (`docs/telefon-test-listesi.md` üstteki tablo): önizleme mi, tarayıcı mı, hata ayrıntısı ne?
-- [ ] Barındırma seçimi (`docs/barindirma.md`) ve gerçek HTTPS adresinde telefon testi
+- [x] GitHub Pages yayında (2026-10-03, ilk başarılı yayın): https://emirhansahin5970-pixel.github.io/etsy-magaza/
+- [ ] Gerçek HTTPS adresinde iPhone/iPad testi (sahip yapacak)
 - [ ] Sahibin sürüm 2 telefon/tablet kontrol sonuçlarını al (`docs/telefon-test-listesi.md`, 10 adım) ve geri bildirimlere göre düzelt
 - [ ] Bölüm 2 (~1.000 kelime, Gollwitzer kaynakları, görsel: büyük işin küçük adımlara ayrılması)
 - [ ] Bölüm 3 (~900 kelime, Lally 2010, görsel: esnek günlük plan, 7 günlük deneme)
