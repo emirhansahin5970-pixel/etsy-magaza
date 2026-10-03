@@ -4,6 +4,34 @@
  * Görseller süslemeden çok anlamı taşır; açıklayıcı metinleri (alt) kitap içeriğinde tutulur.
  */
 window.GX_ART = {
+  // Kapak motifi: dağınık çizgilerden tek bir yola, yolun başında küçük bir adım.
+  cover:
+    '<svg viewBox="0 0 240 150" role="img" aria-hidden="true" focusable="false">' +
+    '<path class="cv-scribble" d="M18 40c10-8 20 6 30-2s18 6 26-1"/>' +
+    '<path class="cv-scribble" d="M14 62c12 6 20-8 32-2s14 8 24 1"/>' +
+    '<path class="cv-scribble" d="M26 84c8-5 16 5 24-1"/>' +
+    '<path class="cv-path" d="M80 70c30 0 40 50 80 50h66"/>' +
+    '<rect class="cv-step" x="150" y="104" width="22" height="12" rx="3"/>' +
+    '<rect class="cv-step" x="176" y="92" width="22" height="24" rx="3"/>' +
+    '<rect class="cv-step cv-step--far" x="202" y="78" width="22" height="38" rx="3"/>' +
+    '<circle class="cv-dot" cx="161" cy="96" r="5"/>' +
+    '<circle class="cv-sun" cx="206" cy="36" r="16"/>' +
+    "</svg>",
+
+  // Alışkanlık: bir an (çapa) → küçük başlangıç → kısa not; ve tekrar.
+  habitLoop:
+    '<svg viewBox="0 0 320 150" role="img" aria-hidden="true" focusable="false">' +
+    '<path class="il-loop" d="M70 112c40 26 140 26 180 0"/>' +
+    '<path class="il-arrow-head" d="M76 103l-7 9 11 3"/>' +
+    '<circle class="il-node" cx="60" cy="62" r="34"/>' +
+    '<circle class="il-node il-node--main" cx="160" cy="52" r="38"/>' +
+    '<circle class="il-node" cx="260" cy="62" r="34"/>' +
+    '<path class="il-arrow" d="M98 58h20"/><path class="il-arrow-head" d="M114 52l7 6-7 6"/>' +
+    '<path class="il-arrow" d="M202 58h18"/><path class="il-arrow-head" d="M216 52l7 6-7 6"/>' +
+    '<circle class="il-clock" cx="60" cy="62" r="15"/><path class="il-clock-hand" d="M60 53v9l6 4"/>' +
+    '<rect class="il-step" x="142" y="58" width="12" height="12" rx="2"/><rect class="il-step" x="157" y="48" width="12" height="22" rx="2"/><circle class="il-dot" cx="148" cy="50" r="5"/>' +
+    '<path class="il-rule" d="M248 54h24M248 64h18M248 74h22"/>' +
+    "</svg>",
   // Karşılama: büyük bir iş, küçük basamaklara ayrılıyor; ilk basamakta turuncu bir başlangıç noktası.
   smallSteps:
     '<svg viewBox="0 0 320 150" role="img" aria-hidden="true" focusable="false">' +

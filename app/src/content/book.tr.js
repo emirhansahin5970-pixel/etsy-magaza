@@ -3,11 +3,11 @@
  * Arayüz metinleri burada değil: i18n/tr.js
  *
  * Blok türleri:
- *   h        – ara başlık
+ *   h        – ara başlık (her ara başlık yeni bir kısa okuma parçası başlatır)
  *   p        – paragraf
  *   scene    – gündelik sahne (paragraflar dizisi)
  *   figure   – görsel (illustrations.js içindeki anahtar + açıklama)
- *   research – araştırma bulgusu (refs: kaynak kimlikleri)
+ *   research – araştırma: kısa bulgu (finding), sınırlılık (limits), açılabilir ayrıntı (details), refs: kaynak kimlikleri
  *   suggestion – yazarın kendi önerisi (araştırma bulgusundan ayrı tutulur)
  *   exercise – küçük uygulama (planner: planlayıcıdaki hedef alan)
  *   summary  – tek cümlelik bölüm özeti
@@ -58,7 +58,9 @@ window.GX_BOOK = {
         {
           id: "b1-arastirma-1",
           type: "research",
-          text: "Masicampo ve Baumeister'ın 2011'de yayımlanan bir dizi deneyinde, bitmemiş bir hedefi hatırlatılan katılımcıların, ilgisiz bir okuma görevi sırasında akıllarının o hedefe daha sık kaydığı görüldü. Aynı hedef için belirli bir plan yapmalarına izin verildiğinde bu etki ortadan kalktı. Araştırmacılara göre fark yaratan, işi yalnızca hatırlamak değil, onun için somut bir plan kurmaktı. Bu çalışmalar laboratuvarda, çoğunlukla üniversite öğrencileriyle yapıldı; günlük hayatta herkeste aynı sonucu vereceği anlamına gelmez.",
+          finding: "Bir dizi deneyde, bitmemiş bir hedefi hatırlatılan katılımcıların aklı, ilgisiz bir okuma sırasında o hedefe daha sık kaydı. Aynı hedef için belirli bir plan yapmalarına izin verildiğinde bu etki ortadan kalktı.",
+          limits: "Deneyler laboratuvarda, çoğunlukla üniversite öğrencileriyle yapıldı. Günlük hayatta herkeste aynı sonucu vermeyebilir.",
+          details: "Araştırmacılara göre fark yaratan, işi yalnızca hatırlamak değil, onun için somut bir plan kurmaktı. Bu kitapta yazmak ilk adım; plan ikinci bölümün konusu.",
           refs: ["masicampo2011"],
         },
 
@@ -77,7 +79,9 @@ window.GX_BOOK = {
         {
           id: "b1-arastirma-2",
           type: "research",
-          text: "Scullin ve arkadaşlarının 2018'de yayımladığı bir uyku laboratuvarı çalışmasında, 57 genç yetişkin yatmadan önce beş dakika yazı yazdı. Önümüzdeki günlerde yapacaklarını yazanlar, son günlerde tamamladıklarını yazanlara göre ortalamada daha çabuk uykuya daldı. Yapılacaklarını daha ayrıntılı yazanlar da daha çabuk uyudu. Çalışma tek bir gece, uyku sorunu olmayan küçük bir grupla yapıldı. Yazmanın herkesin uykusuna iyi geleceğini göstermiyor; ama listeyi akıldan kâğıda taşımanın rahatlatıcı olabileceğine dair ilginç bir ipucu veriyor.",
+          finding: "Bir uyku laboratuvarı çalışmasında, yatmadan önce beş dakika boyunca önümüzdeki günlerde yapacaklarını yazan genç yetişkinler, son günlerde tamamladıklarını yazanlara göre ortalamada daha çabuk uykuya daldı.",
+          limits: "Tek bir gece, uyku sorunu olmayan 57 kişilik küçük bir grup. Yazmanın herkesin uykusuna iyi geleceğini göstermiyor.",
+          details: "Yapılacaklarını daha ayrıntılı yazanlar da daha çabuk uyudu. Bu bulgu, listeyi akıldan kâğıda taşımanın rahatlatıcı olabileceğine dair bir ipucu olarak okunmalı; kesin bir sonuç olarak değil.",
           refs: ["scullin2018"],
         },
 
