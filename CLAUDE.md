@@ -10,7 +10,7 @@ Bu dosya, Claude Code'un bu projede yeni bir oturumda bağlamı hızla kavramas�
 - **Amaç:** Üç işlev: (1) kısa, görselli bir kitap okumak, (2) gerçekçi bir günlük plan yapmak, (3) tek bir alışkanlığı küçük adımlarla denemek. Kitap, planlayıcı ve alışkanlık bölümü birbirinden bağımsız kullanılabilmeli.
 - **Hedef kitle:** Üniversite öğrencileri, çalışma hayatına yeni başlayanlar, nereden başlayacağını bilemeyenler, ayrıntılı planlama sistemlerinden bunalanlar.
 - **Repo:** `emirhansahin5970-pixel/etsy-magaza`
-- **Dil:** Sahiple iletişim Türkçe. Kod ve commit mesajları İngilizce. **Arayüz 7 dilde** (2026-10-03 kararı, Etsy'nin site dilleri + Türkçe): Türkçe, English, Deutsch, Français, Español, Italiano, Nederlands. Kitap metni şimdilik yalnızca Türkçe; Türkçe bölüm 2–3 bittikten sonra çevrilecek. Çeviriler satıştan önce anadili konuşan biri tarafından gözden geçirilmeli.
+- **Dil:** Sahiple iletişim Türkçe. Kod ve commit mesajları İngilizce. **Arayüz 7 dilde** (2026-10-03 kararı, Etsy'nin site dilleri + Türkçe): Türkçe, English, Deutsch, Français, Español, Italiano, Nederlands. **İlk açılış her cihazda İngilizce** (2026-10-04 sahip kararı); kullanıcı üstteki küre (EN) düğmesinden dil seçer. Kitap da 7 dilde (book.<dil>.js). Çeviriler satıştan önce anadili konuşan biri tarafından gözden geçirilmeli.
 
 ## Ürün Kuralları (değiştirmeden önce sahibine sor)
 
@@ -28,7 +28,7 @@ Bu dosya, Claude Code'un bu projede yeni bir oturumda bağlamı hızla kavramas�
 
 ## Teknoloji
 
-- Bağımlılığı olmayan, düz HTML, CSS ve JavaScript (ES5 uyumlu IIFE; boot.js ES3). Derleme dosyaları tek HTML'de birleştirir ve `data-t` metinlerini tr.js'ten HTML'e yazar (JavaScript'siz görünüm için).
+- Bağımlılığı olmayan, düz HTML, CSS ve JavaScript (ES5 uyumlu IIFE; boot.js ES3). Derleme dosyaları tek HTML'de birleştirir ve `data-t` metinlerini en.js'ten HTML'e yazar (JavaScript'siz görünüm için; ilk açılış dili İngilizce).
 - Açılış kuralları: Google Fonts çizimi engellememeli (`media="print"` + boot.js). Başlangıçta kullanılan her tarayıcı API'si korumalı olmalı (Intl, localStorage, showModal yedekleri var). Hata durumunda boş ekran değil, mesaj ve ayrı teknik ayrıntı gösterilir.
 - Yazı tipleri Google Fonts'tan geliyor (Fraunces, Figtree). Yüklenmezse sistem yazı tiplerine düşer; testler fontlar engellenmiş hâlde çalışır.
 - Testler için Node 22'nin `node:test` modülü ve sistemdeki Playwright (Chromium, `/opt/node-tools/node_modules/playwright`) kullanılıyor. Bu ortamda WebKit/Safari motoru yok.
@@ -40,7 +40,7 @@ app/src/index.html         İskelet + JavaScript'siz başlangıç ekranı ve nos
 app/src/boot.js            Başlangıç güvenlik ağı (ES3): font yükleme, hata/zaman aşımı ekranı, GX_BOOT.ready()/fail()
 app/src/styles.css         Tasarım tokenleri en üstte
 app/src/i18n/<dil>.js      Arayüz metinleri → window.GX_I18N.<dil> (tr, en, de, fr, es, it, nl; tr.js ana kaynak, GX_STRINGS = tr)
-app/src/content/book.tr.js Kitap içeriği ve kaynakça → window.GX_BOOK
+app/src/content/book.<dil>.js Kitap → window.GX_BOOKS.<dil> (tr ana kaynak + kaynakça; diğer diller aynı bölüm/blok kimlikleri, kaynakça yok)
 app/src/illustrations.js   SVG görseller → window.GX_ART
 app/src/storage.js         Veri katmanı, şema 2, geçiş ve yedek → window.GX_STORE (Node'da require edilebilir)
 app/src/app.js             Yönlendirme ve ekranlar
@@ -54,7 +54,10 @@ tests/boot.mjs             Açılış testleri (13): HTTPS, yerel dosya, JavaScr
 tests/pwa.mjs              Barındırılan klasör testleri (4): alt yol, manifest/simgeler, service worker, internetsiz yeniden açılış
 tests/v3.mjs               Sürüm 3 testleri (15): takvim, değerlendirme, tema, v1/v2 uyumluluğu, yedek
 tests/i18n.test.mjs        Dil dosyaları: anahtar, yer tutucu ve dizi uzunluğu eşitliği, Türkçe kalmış metin yok
-tests/lang.mjs             Dil testleri (8): cihaz diline göre açılış, değiştirme/kalıcılık, kitap dili notu, tarih, başlangıç ekranı, 7 dilde 320 px
+tests/lang.mjs             Dil testleri (9): ilk açılış İngilizce, küre düğmesi, değiştirme/kalıcılık, kitap dili notu, tarih, başlangıç ekranı, 7 dilde 320 px
+tests/book.test.mjs        Kitap çevirilerinin yapısı Türkçe ile aynı, Türkçe harf kalmamış
+tests/helpers.mjs          turkishUI(): eski Türkçe testler için dil tercihini tr gösterir
+etsy/                      Etsy paketi: build.mjs (teslim PDF'i, 7 dilde kitap PDF'i, ilan görselleri), listing.md, listing-translations.md, ETSY-YUKLEME.md (sahip rehberi), fonts/ (OFL)
 tests/contrast.mjs         İki temada renk kontrastı denetimi (metin ≥ 4.5:1, kenarlık/odak ≥ 3:1)
 tests/fixtures/            Önceki sürümlerin (v1, v2) uygulaması, localStorage içeriği ve yedeği: geriye uyumluluk testleri için
 docs/telefon-test-listesi.md  Açılış teşhisi + sahibin gerçek cihazda uygulayacağı test listesi
@@ -65,12 +68,12 @@ Rotalar: `#hosgeldin` (boş adres de açılışa gider), `#oku`, `#oku-<bolumId>
 Depolama anahtarları: `gx.ssc.days.v1` (günler; şema 2'de de aynı anahtar), `gx.ssc.habit.v1` (alışkanlık), `gx.ssc.settings.v1` (tercihler: motion, textSize, theme, calendarOpen, reading, lastPlace, lang), `gx.ssc.meta` (şema sürümü), `gx.ssc.beforeRestore` (geri yüklemeden önceki kopya).
 
 ### Dil (i18n)
-- Seçim: kayıtlı `settings.lang` → cihazın dil listesindeki ilk desteklenen dil → İngilizce. Otomatik seçim kaydedilmez; kullanıcı Ayarlar'dan (ya da açılıştaki "Dil: …" düğmesinden) seçince kaydedilir. Dil tercihi yedeğe girmez (cihaz tercihi).
+- Seçim: kayıtlı `settings.lang`, yoksa İngilizce (cihaz dili kullanılmaz; sahip kararı). Otomatik seçim kaydedilmez; kullanıcı Ayarlar'dan (ya da açılıştaki "Dil: …" düğmesinden) seçince kaydedilir. Dil tercihi yedeğe girmez (cihaz tercihi).
 - Yeni metin eklerken: önce tr.js, sonra aynı anahtarı 6 dile ekle; `tests/i18n.test.mjs` eksik/fazla anahtarı yakalar.
-- HTML Türkçe derlenir; boot.js cihaz dilini seçip başlangıç ekranının metinlerini hemen o dile çevirir (derleme her dilin boot + sabit metinlerini boot.js'e yazar). noscript metni Türkçe + İngilizce.
+- HTML İngilizce derlenir; boot.js kayıtlı dili okuyup başlangıç ekranının metinlerini hemen o dile çevirir (derleme her dilin boot + sabit metinlerini boot.js'e yazar). noscript metni Türkçe + İngilizce.
 - Türkçeye özgü özet cümleleri (`-de/-da` kuralı) yalnızca `features.sentenceSummary: true` olan dilde (tr) kurulur; diğer dillerde etiketli özet.
-- Arayüz Türkçe değilken kitap ekranlarında "kitap şimdilik Türkçe" notu çıkar ve kitap metni `lang="tr"` ile işaretlenir.
-- Bilinen eksik: uygulama tanımındaki (manifest) ad Türkçe; iOS ana ekran adı ise seçili dile göre ayarlanır.
+- Kitap seçili dilde açılır; o dilde kitap yoksa Türkçe kitap + not gösterilir (lang="tr"). Okuma konumu bölüm/blok kimliğiyle saklandığı için dil değişince korunur.
+- Manifest adı İngilizce ("Small Steps"); iOS ana ekran adı seçili dile göre ayarlanır.
 
 ### Veri şeması ve geçiş (önemli)
 - Şema 3. Geçiş, okuma sırasında `migrateDay` ile yapılır: eksik `time` alanı `{budget:"", custom:""}`, eksik `rating` null, eksik `ratingNote` "" olur. Yalnızca puan girilmiş gün de geçerli kayıttır. Gelecek güne `rating` kaydedilmez (saveDay reddeder). Eski `start.what` metni **silinmez**; Günüm ekranı gösterir ve kullanıcı "İlk küçük adımı kullan" ya da "Bu metni ilk küçük adım yap" seçeneklerinden birini seçebilir.
@@ -90,6 +93,8 @@ node tests/v3.mjs                      # sürüm 3 testleri (önce build)
 node tests/contrast.mjs                # renk kontrastı (iki tema)
 node --test tests/i18n.test.mjs        # dil dosyalarının tutarlılığı
 node tests/lang.mjs                    # dil testleri (önce build)
+node --test tests/book.test.mjs        # kitap çevirilerinin yapısı
+cd etsy && npm install && node build.mjs  # Etsy paketi → etsy/out/ (APP_URL ile bağlantı değiştirilebilir)
 npm test                               # hepsi
 ```
 
@@ -118,7 +123,7 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 - [x] Sürüm 2 (2026-10-03): üç sekme (Oku / Günüm / Alışkanlığım), kapaklı açılış ekranı ve devam seçeneği, okuma parçaları, ilerleme, yazı boyutu, açılır araştırma ayrıntıları, sadeleştirilmiş Günüm ekranı, zaman seçimi, alışkanlık bölümü, şema 2 ve geriye uyumluluk. Birim testleri 16/16, Chromium uçtan uca testleri 17/17.
 
 ### Kelime sayıları (kaynakça hariç)
-- Başlarken: 133 · Bölüm 1: 806 · Toplam: yaklaşık 940 (hedef 2.500–3.500)
+- Türkçe: Başlarken 132 · Bölüm 1 800 · Bölüm 2 770 · Bölüm 3 692 · Kapanış 101 · Toplam ~2.500 (İngilizce karşılığı ~3.600)
 
 - [x] Sürüm 2.1 (2026-10-03): telefonda boş ekran bildirimi üzerine açılış güvenliği. JavaScript'siz başlangıç ekranı + noscript, başlangıç hata ve zaman aşımı ekranı, font yüklemesi engellemez, Intl/showModal/localStorage yedekleri. Açılış testleri 13/13, birim 16/16, uçtan uca 17/17. Gerçek cihazda henüz doğrulanmadı.
 
@@ -128,19 +133,18 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 
 - [x] Çok dilli arayüz (2026-10-03): 7 dil, dil seçici (Ayarlar + açılış), cihaz diline göre açılış, başlangıç ekranı da çevrilir. Testler: i18n 14/14 (+ birim 25/25), dil 8/8, diğerleri değişmeden geçiyor. Çeviriler yapay zekâ çevirisi; anadili konuşan kontrolü yapılmadı. Gerçek cihazda doğrulanmadı.
 
+- [x] Satışa hazırlık (2026-10-04): ilk açılış İngilizce + üstte küre/dil düğmesi; Bölüm 2, 3 ve kapanış yazıldı (Gollwitzer 1999/2006, Lally 2010); kitap 6 dile çevrildi; Etsy paketi (START HERE PDF'i, 7 dilde kitap PDF'i, 8 ilan görseli, ilan metni + 5 dil). Testler: birim+i18n+kitap 52/52, e2e 17/17, açılış 13/13, web 4/4, v3 15/15, dil 9/9. Gerçek cihazda doğrulanmadı; çeviriler anadili kontrolünden geçmedi.
+
 ### Sıradaki Adımlar (sahibin prototip değerlendirmesinden SONRA)
 - [ ] Sahibin açılış teşhisi sonucunu al (`docs/telefon-test-listesi.md` üstteki tablo): önizleme mi, tarayıcı mı, hata ayrıntısı ne?
 - [x] GitHub Pages yayında (2026-10-03, ilk başarılı yayın): https://emirhansahin5970-pixel.github.io/etsy-magaza/
 - [ ] Gerçek HTTPS adresinde iPhone/iPad testi (sahip yapacak)
 - [ ] Sahibin sürüm 2 telefon/tablet kontrol sonuçlarını al (`docs/telefon-test-listesi.md`, 10 adım) ve geri bildirimlere göre düzelt
 - [ ] Çevirileri anadili konuşanlara kontrol ettir (en, de, fr, es, it, nl); Etsy ilan metinlerini aynı dillere çevir
-- [ ] Kitap bölümlerini 6 dile çevir (Türkçe bölüm 2–3 ve kapanış bittikten sonra)
-- [ ] Bölüm 2 (~1.000 kelime, Gollwitzer kaynakları, görsel: büyük işin küçük adımlara ayrılması)
-- [ ] Bölüm 3 (~900 kelime, Lally 2010, görsel: esnek günlük plan, 7 günlük deneme)
-- [ ] Kısa bir kapanış ve tam kaynakça
-- [ ] Mobilde okunacak düz PDF mini kitap (Türkçe karakterleri ve görselleri kontrol et; etkileşim varmış gibi tanıtma)
+- [x] Kitap 7 dilde, Bölüm 2–3, kapanış, kaynakça, PDF kitap (etsy/build.mjs)
 - [ ] Kullanım belgesi (web sürümüne erişim, web ile PDF arasındaki fark) ve yardım metni (veri saklama, yedekleme, tarayıcı gereksinimleri)
-- [ ] Teslim PDF'i: uygulama bağlantısı, iPhone/Android'e kurulum adımları, kişisel kullanım şartları ("paylaşılamaz, satılamaz")
+- [x] Teslim PDF'i (START HERE): bağlantı + QR, kurulum, veri/yedek, lisans, 6 dilde hızlı başlangıç
+- [ ] Etsy'de yapay zekâ kullanımı beyanı kuralını kontrol et (etsy/ETSY-YUKLEME.md)
 - [ ] Satıştan hemen önce: depoyu gizli yap + yayını gizli depoyla çalışan bir yere taşı (ör. Cloudflare Pages), tahmin edilemez adres (ör. /k7m2x9/). Sahibe ekran ekran tarif et.
 
 ### Notlar / Kararlar
