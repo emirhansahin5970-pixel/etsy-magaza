@@ -10,8 +10,8 @@
  * Uygulama başarıyla başlayınca app.js, GX_BOOT.ready() çağırır ve başlangıç ekranı uygulama ekranıyla değişir.
  *
  * Metinler i18n/<dil>.js dosyalarındaki "boot" bölümünden derleme sırasında buraya yazılır (her dil için:
- * { boot: {...}, ui: { "app.title": ... } }). HTML Türkçe derlenir; cihazın ya da kayıtlı tercihin dili
- * başkaysa başlangıç ekranının sabit metinleri burada o dile çevrilir.
+ * { boot: {...}, ui: { "app.title": ... } }). HTML İngilizce derlenir; kayıtlı dil tercihi başkaysa
+ * başlangıç ekranının sabit metinleri burada o dile çevrilir.
  */
 (function (w, d) {
   var ALL = /*@BOOT_STRINGS@*/ {};
@@ -22,22 +22,13 @@
   var errors = [];
   var t0 = new Date().getTime();
 
-  /** Kayıtlı dil tercihi → cihazın dil listesi → İngilizce (app.js ile aynı kural). */
+  /** Kayıtlı dil tercihi, yoksa İngilizce (app.js ile aynı kural). */
   function pickLang() {
-    var i, code, list = [];
     try {
       var st = w.JSON.parse(w.localStorage.getItem("gx.ssc.settings.v1") || "{}");
       if (st && typeof st.lang === "string" && ALL[st.lang]) return st.lang;
     } catch (e) {}
-    try {
-      var n = w.navigator;
-      list = n.languages && n.languages.length ? n.languages : [n.language || n.userLanguage || ""];
-    } catch (e) {}
-    for (i = 0; i < list.length; i++) {
-      code = String(list[i] || "").toLowerCase().split("-")[0].split("_")[0];
-      if (ALL[code]) return code;
-    }
-    return ALL.en ? "en" : "tr";
+    return "en";
   }
 
   function s(key) {

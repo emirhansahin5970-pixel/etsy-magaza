@@ -122,12 +122,13 @@ window.GX_I18N.tr = {
     summaryLabel: "Bölümün özeti",
     sourcesTitle: "Bu bölümde yararlanılan kaynaklar",
     exerciseToPlanner: "Bunu Günüm'de yap",
+    exerciseToHabit: "Bunu Alışkanlığım'da dene",
     timerStart: "3 dakikalık sayacı başlat",
     timerStop: "Sayacı durdur",
     timerDone: "Üç dakika doldu. Yazdıklarını bırakabilirsin; liste tamam olmak zorunda değil.",
     timerRemaining: "Kalan süre: {time}",
     nextChapter: "Sonraki bölüm: {title}",
-    nextChapterSoon: "Sonraki bölümler henüz yazılmadı. Bu arada Günüm'de bugünün ana işini seçebilirsin.",
+    nextChapterSoon: "Kitabın sonuna geldin. Günüm'de istediğin gün bugünün ana işini seçebilirsin.",
     goToDay: "Günüm'e geç",
     readingTime: "Yaklaşık {min} dakikalık okuma",
     // Arayüz Türkçe değilken kitap ekranlarında gösterilir (Türkçede kullanılmaz)
@@ -394,7 +395,7 @@ window.GX_I18N.tr = {
     themeModeLight: "açık",
     themeModeDark: "koyu",
     languageTitle: "Dil (Language)",
-    languageHint: "Arayüzün dilini değiştirir. Kayıtların değişmez. Kitap metni şimdilik yalnızca Türkçe.",
+    languageHint: "Uygulamanın ve kitabın dilini değiştirir. Kayıtların değişmez.",
 
     dataTitle: "Kayıtların nerede?",
     dataPoints: [
@@ -474,7 +475,7 @@ window.GX_I18N.tr = {
     resetDone: "Bütün kayıtlar silindi.",
 
     aboutTitle: "Bu sürüm hakkında",
-    aboutBody: "Deneme sürümü. Kitabın giriş ve ilk bölümü hazır; ikinci ve üçüncü bölüm henüz yazılmadı. Uygulama web bağlantısıyla açılır ve ilk açılışta internet gerektirir; internetsiz kullanım henüz telefonda doğrulanmadı.",
+    aboutBody: "Bu sürümde kitabın tamamı (giriş, üç bölüm ve kapanış), günlük planlayıcı ve alışkanlık bölümü var. Uygulama web bağlantısıyla açılır; ilk açılışta internet bağlantısı gerekir. Kayıtların yalnızca bu cihazdaki bu tarayıcıda tutulur.",
   },
 };
 

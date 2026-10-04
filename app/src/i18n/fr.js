@@ -114,12 +114,13 @@ window.GX_I18N.fr = {
     summaryLabel: "En résumé",
     sourcesTitle: "Sources utilisées dans ce chapitre",
     exerciseToPlanner: "Le faire dans Ma journée",
+    exerciseToHabit: "L’essayer dans Mon habitude",
     timerStart: "Lancer un minuteur de 3 minutes",
     timerStop: "Arrêter le minuteur",
     timerDone: "Les trois minutes sont écoulées. Tu peux t’arrêter là ; la liste n’a pas besoin d’être complète.",
     timerRemaining: "Temps restant : {time}",
     nextChapter: "Chapitre suivant : {title}",
-    nextChapterSoon: "Les chapitres suivants ne sont pas encore écrits. En attendant, tu peux choisir la tâche principale du jour dans Ma journée.",
+    nextChapterSoon: "Tu es arrivé·e à la fin du livre. Tu peux choisir la tâche principale du jour dans Ma journée quand tu veux.",
     goToDay: "Aller à Ma journée",
     readingTime: "Environ {min} minutes de lecture",
     bookLanguageNote: "Le texte du livre n’est pour l’instant disponible qu’en turc. Une traduction est en préparation ; « Ma journée » et « Mon habitude » sont entièrement en français.",
@@ -385,7 +386,7 @@ window.GX_I18N.fr = {
     themeModeLight: "clair",
     themeModeDark: "sombre",
     languageTitle: "Langue (Language)",
-    languageHint: "Change la langue de l’application. Tes données restent telles quelles. Le texte du livre n’est pour l’instant disponible qu’en turc.",
+    languageHint: "Change la langue de l’application et du livre. Tes données restent telles quelles.",
 
     dataTitle: "Où sont tes données ?",
     dataPoints: [
@@ -465,6 +466,6 @@ window.GX_I18N.fr = {
     resetDone: "Toutes les données ont été supprimées.",
 
     aboutTitle: "À propos de cette version",
-    aboutBody: "Version d’essai. L’introduction et le premier chapitre du livre sont prêts ; les chapitres deux et trois ne sont pas encore écrits. L’application s’ouvre via un lien web et nécessite Internet à la première ouverture ; l’utilisation hors ligne n’a pas encore été vérifiée sur téléphone.",
+    aboutBody: "Cette version contient le livre complet (introduction, trois chapitres et une conclusion), le planificateur quotidien et la partie habitude. L’application s’ouvre via un lien web et nécessite une connexion Internet à la première ouverture. Tes données sont conservées uniquement dans ce navigateur, sur cet appareil.",
   },
 };

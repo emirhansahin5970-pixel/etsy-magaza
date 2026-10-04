@@ -1,5 +1,5 @@
-<title>Küçük Adımlar, Daha Net Günler</title>
-<meta name="description" content="Genix Studio: kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.">
+<title>Small Steps, Clear Days</title>
+<meta name="description" content="Genix Studio: a short read, a clearer daily plan and a small habit trial.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#fbf6ec" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191b1a" media="(prefers-color-scheme: dark)">
@@ -187,6 +187,8 @@ p { margin: 0; }
   display: inline-flex; align-items: center; gap: 0.4rem;
   border: 1.5px solid var(--line-strong); background: var(--paper); border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 0.95rem;
 }
+.topbar__actions { display: flex; flex-wrap: wrap; gap: 0.4rem; min-width: 0; max-width: 100%; }
+.lang-top { padding-inline: 0.6rem 0.75rem; letter-spacing: 0.04em; }
 .settings-btn svg { flex: none; width: 1.25rem; height: 1.25rem; stroke: var(--ink); fill: none; stroke-width: 1.8; stroke-linecap: round; }
 
 .tabs { padding-inline: var(--gutter); border-bottom: 1px solid var(--line); }
@@ -545,8 +547,8 @@ dialog[open] { animation: dialog-in var(--dur) var(--ease); }
 }
 
 /* ---------- Başlangıç ekranı ve açılış hataları (JavaScript gerektirmez) ---------- */
-.is-booting .tabs, .is-booting .settings-btn,
-.is-failed .tabs, .is-failed .settings-btn { display: none; }
+.is-booting .tabs, .is-booting .topbar__actions,
+.is-failed .tabs, .is-failed .topbar__actions { display: none; }
 .boot-screen { display: grid; gap: 1rem; max-width: var(--measure); padding-block: 1rem 2rem; }
 .boot-screen > * { min-width: 0; }
 .boot-status { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; color: var(--sage-deep); }
@@ -629,29 +631,35 @@ dialog.is-fallback[open] {
 }
 
 </style>
-<!-- data-t ile işaretli metinler derleme sırasında i18n/tr.js'ten doldurulur (data-t-lang varsa o dilden); JavaScript çalışmasa da görünürler.
-     Cihazın dili başkaysa boot.js bu metinleri hemen o dile çevirir. -->
+<!-- data-t ile işaretli metinler derleme sırasında i18n/en.js'ten doldurulur (data-t-lang varsa o dilden); JavaScript çalışmasa da görünürler.
+     Kayıtlı dil tercihi başkaysa boot.js bu metinleri hemen o dile çevirir. -->
 <div id="app-root" class="is-booting">
-<a class="skip" href="#main" data-t="app.skipToContent">İçeriğe geç</a>
+<a class="skip" href="#main" data-t="app.skipToContent">Skip to content</a>
 
 <header class="topbar">
   <div class="topbar__inner">
     <a class="brand" href="#hosgeldin">
       <span class="brand__studio" data-t="app.brand">Genix Studio</span>
-      <span class="brand__title" data-t="app.title">Küçük Adımlar, Daha Net Günler</span>
+      <span class="brand__title" data-t="app.title">Small Steps, Clear Days</span>
     </a>
+    <div class="topbar__actions">
+    <button type="button" class="settings-btn lang-top" id="open-language" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span id="lang-code">EN</span>
+    </button>
     <button type="button" class="settings-btn" id="open-settings" aria-haspopup="dialog">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.8 12h2.4M18.8 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
-      <span data-t="app.settingsButton">Ayarlar</span>
+      <span data-t="app.settingsButton">Settings</span>
     </button>
+    </div>
   </div>
 </header>
 
-<nav class="tabs" data-t-label="nav.label" aria-label="Ana bölümler">
+<nav class="tabs" data-t-label="nav.label" aria-label="Main sections">
   <ul class="tabs__list">
-    <li><button type="button" class="tab" data-nav="oku" data-t="nav.read">Oku</button></li>
-    <li><button type="button" class="tab" data-nav="gunum" data-t="nav.day">Günüm</button></li>
-    <li><button type="button" class="tab" data-nav="aliskanlik" data-t="nav.habit">Alışkanlığım</button></li>
+    <li><button type="button" class="tab" data-nav="oku" data-t="nav.read">Read</button></li>
+    <li><button type="button" class="tab" data-nav="gunum" data-t="nav.day">My Day</button></li>
+    <li><button type="button" class="tab" data-nav="aliskanlik" data-t="nav.habit">My Habit</button></li>
   </ul>
 </nav>
 
@@ -660,15 +668,15 @@ dialog.is-fallback[open] {
     <!-- Başlangıç ekranı: JavaScript gerektirmez. Uygulama başlayınca yerine uygulama ekranı gelir. -->
     <section class="boot-screen" id="boot-screen" aria-labelledby="boot-title">
       <p class="eyebrow" data-t="app.brand">Genix Studio</p>
-      <h1 id="boot-title" data-t="app.title">Küçük Adımlar, Daha Net Günler</h1>
-      <p class="lead" data-t="boot.description">Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.</p>
-      <p class="boot-status" id="boot-status" role="status"><span class="boot-dot" aria-hidden="true"></span><span data-t="boot.loading">Uygulama hazırlanıyor…</span></p>
+      <h1 id="boot-title" data-t="app.title">Small Steps, Clear Days</h1>
+      <p class="lead" data-t="boot.description">A short read, a clearer daily plan and a small habit trial.</p>
+      <p class="boot-status" id="boot-status" role="status"><span class="boot-dot" aria-hidden="true"></span><span data-t="boot.loading">Getting the app ready…</span></p>
       <noscript>
-        <p class="boot-noscript" data-t="boot.noscript">Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.</p>
-        <p class="boot-noscript" lang="en" data-t-lang="en" data-t="boot.noscript">This view can't run the app's code. Open the product from its web link in Safari or Chrome.</p>
+        <p class="boot-noscript" data-t="boot.noscript">This view can't run the app's code. Open the product from its web link in Safari or Chrome.</p>
+        <p class="boot-noscript" lang="tr" data-t-lang="tr" data-t="boot.noscript">Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.</p>
         <style>.boot-status, .boot-hint { display: none !important; }</style>
       </noscript>
-      <p class="hint boot-hint" data-t="boot.slowHint">Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.</p>
+      <p class="hint boot-hint" data-t="boot.slowHint">If this screen stays up for more than a few seconds, open the product from its web link in Safari or Chrome.</p>
     </section>
   </div>
 </main>
@@ -693,8 +701,8 @@ dialog.is-fallback[open] {
  * Uygulama başarıyla başlayınca app.js, GX_BOOT.ready() çağırır ve başlangıç ekranı uygulama ekranıyla değişir.
  *
  * Metinler i18n/<dil>.js dosyalarındaki "boot" bölümünden derleme sırasında buraya yazılır (her dil için:
- * { boot: {...}, ui: { "app.title": ... } }). HTML Türkçe derlenir; cihazın ya da kayıtlı tercihin dili
- * başkaysa başlangıç ekranının sabit metinleri burada o dile çevrilir.
+ * { boot: {...}, ui: { "app.title": ... } }). HTML İngilizce derlenir; kayıtlı dil tercihi başkaysa
+ * başlangıç ekranının sabit metinleri burada o dile çevrilir.
  */
 (function (w, d) {
   var ALL = {"tr":{"boot":{"description":"Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.","loading":"Uygulama hazırlanıyor…","slowHint":"Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın.","noscript":"Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.","errorTitle":"Uygulama başlatılamadı","errorBody":"Sayfa açıldı ama uygulama başlarken bir sorun oluştu. Kayıtların bu tarayıcıda duruyorsa silinmedi.","errorSteps":"Sayfayı yenilemeyi dene. Sorun sürerse aşağıdaki teknik ayrıntıları kopyalayıp gönder.","timeoutTitle":"Uygulama beklenenden uzun sürede açılıyor","timeoutBody":"Uygulama {sec} saniyedir başlatılamadı. Bağlantı yavaş olabilir ya da bu görünüm uygulamanın kodunu tam çalıştıramıyor olabilir.","unsupportedTitle":"Bu tarayıcı desteklenmiyor","unsupportedBody":"Bu tarayıcı uygulamanın ihtiyaç duyduğu temel özellikleri sunmuyor. Güncel Safari veya Chrome kullan.","reload":"Sayfayı yenile","details":"Teknik ayrıntılar","copyDetails":"Ayrıntıları kopyala","copied":"Kopyalandı","viewErrorTitle":"Bu ekran açılamadı","viewErrorBody":"Bu bölüm gösterilirken bir sorun oluştu. Diğer bölümleri kullanmaya devam edebilirsin; kayıtların değişmedi.","goHome":"Açılış ekranına dön"},"ui":{"app.title":"Küçük Adımlar, Daha Net Günler","app.skipToContent":"İçeriğe geç","app.brand":"Genix Studio","app.settingsButton":"Ayarlar","nav.label":"Ana bölümler","nav.read":"Oku","nav.day":"Günüm","nav.habit":"Alışkanlığım","boot.description":"Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.","boot.loading":"Uygulama hazırlanıyor…","boot.noscript":"Bu görünüm uygulamanın kodunu çalıştıramıyor. Ürünü Safari veya Chrome’da web bağlantısından açın.","boot.slowHint":"Bu ekran birkaç saniyeden uzun kalırsa ürünü Safari veya Chrome'da web bağlantısından açın."}},"en":{"boot":{"description":"A short read, a clearer daily plan and a small habit trial.","loading":"Getting the app ready…","slowHint":"If this screen stays up for more than a few seconds, open the product from its web link in Safari or Chrome.","noscript":"This view can't run the app's code. Open the product from its web link in Safari or Chrome.","errorTitle":"The app couldn't start","errorBody":"The page opened, but something went wrong while the app was starting. If your entries are stored in this browser, they haven't been deleted.","errorSteps":"Try reloading the page. If the problem continues, copy the technical details below and send them.","timeoutTitle":"The app is taking longer than expected to open","timeoutBody":"The app hasn't started for {sec} seconds. The connection may be slow, or this view may not be able to fully run the app's code.","unsupportedTitle":"This browser isn't supported","unsupportedBody":"This browser doesn't offer some basic features the app needs. Please use an up-to-date version of Safari or Chrome.","reload":"Reload page","details":"Technical details","copyDetails":"Copy details","copied":"Copied","viewErrorTitle":"This screen couldn't open","viewErrorBody":"Something went wrong while showing this section. You can keep using the other sections; your entries haven't changed.","goHome":"Back to the start screen"},"ui":{"app.title":"Small Steps, Clear Days","app.skipToContent":"Skip to content","app.brand":"Genix Studio","app.settingsButton":"Settings","nav.label":"Main sections","nav.read":"Read","nav.day":"My Day","nav.habit":"My Habit","boot.description":"A short read, a clearer daily plan and a small habit trial.","boot.loading":"Getting the app ready…","boot.noscript":"This view can't run the app's code. Open the product from its web link in Safari or Chrome.","boot.slowHint":"If this screen stays up for more than a few seconds, open the product from its web link in Safari or Chrome."}},"de":{"boot":{"description":"Eine kurze Lektüre, ein klarerer Tagesplan und ein kleiner Gewohnheitsversuch.","loading":"App wird vorbereitet …","slowHint":"Wenn dieser Bildschirm länger als ein paar Sekunden bleibt, öffne das Produkt über den Weblink in Safari oder Chrome.","noscript":"Diese Ansicht kann den Code der App nicht ausführen. Öffne das Produkt über den Weblink in Safari oder Chrome.","errorTitle":"Die App konnte nicht starten","errorBody":"Die Seite wurde geöffnet, aber beim Start der App ist ein Problem aufgetreten. Wenn deine Einträge in diesem Browser gespeichert sind, wurden sie nicht gelöscht.","errorSteps":"Lade die Seite neu. Wenn das Problem bleibt, kopiere die technischen Details unten und schick sie uns.","timeoutTitle":"Die App braucht länger als erwartet","timeoutBody":"Die App konnte seit {sec} Sekunden nicht starten. Vielleicht ist die Verbindung langsam, oder diese Ansicht kann den Code der App nicht vollständig ausführen.","unsupportedTitle":"Dieser Browser wird nicht unterstützt","unsupportedBody":"Diesem Browser fehlen grundlegende Funktionen, die die App braucht. Nutze eine aktuelle Version von Safari oder Chrome.","reload":"Seite neu laden","details":"Technische Details","copyDetails":"Details kopieren","copied":"Kopiert","viewErrorTitle":"Diese Ansicht konnte nicht geöffnet werden","viewErrorBody":"Beim Anzeigen dieses Bereichs ist ein Problem aufgetreten. Die anderen Bereiche kannst du weiter nutzen; deine Einträge sind unverändert.","goHome":"Zum Startbildschirm"},"ui":{"app.title":"Kleine Schritte, klarere Tage","app.skipToContent":"Zum Inhalt springen","app.brand":"Genix Studio","app.settingsButton":"Einstellungen","nav.label":"Hauptbereiche","nav.read":"Lesen","nav.day":"Mein Tag","nav.habit":"Gewohnheit","boot.description":"Eine kurze Lektüre, ein klarerer Tagesplan und ein kleiner Gewohnheitsversuch.","boot.loading":"App wird vorbereitet …","boot.noscript":"Diese Ansicht kann den Code der App nicht ausführen. Öffne das Produkt über den Weblink in Safari oder Chrome.","boot.slowHint":"Wenn dieser Bildschirm länger als ein paar Sekunden bleibt, öffne das Produkt über den Weblink in Safari oder Chrome."}},"fr":{"boot":{"description":"Une courte lecture, un plan de journée plus clair et un petit essai d’habitude.","loading":"Préparation de l’application…","slowHint":"Si cet écran reste affiché plus de quelques secondes, ouvre le produit via le lien web dans Safari ou Chrome.","noscript":"Cet affichage ne peut pas exécuter le code de l’application. Ouvre le produit via le lien web dans Safari ou Chrome.","errorTitle":"Impossible de démarrer l’application","errorBody":"La page s’est ouverte, mais un problème est survenu au démarrage de l’application. Si tes données sont enregistrées dans ce navigateur, elles n’ont pas été supprimées.","errorSteps":"Essaie d’actualiser la page. Si le problème persiste, copie les détails techniques ci-dessous et envoie-les.","timeoutTitle":"L’application met plus de temps que prévu à s’ouvrir","timeoutBody":"L’application n’a pas pu démarrer depuis {sec} secondes. La connexion est peut-être lente, ou cet affichage ne peut pas exécuter entièrement le code de l’application.","unsupportedTitle":"Ce navigateur n’est pas pris en charge","unsupportedBody":"Ce navigateur ne propose pas les fonctions de base dont l’application a besoin. Utilise une version récente de Safari ou de Chrome.","reload":"Actualiser la page","details":"Détails techniques","copyDetails":"Copier les détails","copied":"Copié","viewErrorTitle":"Impossible d’ouvrir cet écran","viewErrorBody":"Un problème est survenu en affichant cette partie. Tu peux continuer à utiliser les autres parties ; tes données n’ont pas changé.","goHome":"Revenir à l’écran d’accueil"},"ui":{"app.title":"Petits pas, journées plus claires","app.skipToContent":"Aller au contenu","app.brand":"Genix Studio","app.settingsButton":"Réglages","nav.label":"Sections principales","nav.read":"Lire","nav.day":"Ma journée","nav.habit":"Mon habitude","boot.description":"Une courte lecture, un plan de journée plus clair et un petit essai d’habitude.","boot.loading":"Préparation de l’application…","boot.noscript":"Cet affichage ne peut pas exécuter le code de l’application. Ouvre le produit via le lien web dans Safari ou Chrome.","boot.slowHint":"Si cet écran reste affiché plus de quelques secondes, ouvre le produit via le lien web dans Safari ou Chrome."}},"es":{"boot":{"description":"Una lectura breve, un plan diario más claro y una pequeña prueba de hábito.","loading":"Preparando la aplicación…","slowHint":"Si esta pantalla tarda más de unos segundos, abre el producto en Safari o Chrome desde el enlace web.","noscript":"Esta vista no puede ejecutar el código de la aplicación. Abre el producto en Safari o Chrome desde el enlace web.","errorTitle":"No se pudo iniciar la aplicación","errorBody":"La página se abrió, pero hubo un problema al iniciar la aplicación. Si tus registros están en este navegador, no se han borrado.","errorSteps":"Prueba a recargar la página. Si el problema continúa, copia los detalles técnicos de abajo y envíalos.","timeoutTitle":"La aplicación está tardando más de lo esperado","timeoutBody":"La aplicación lleva {sec} segundos sin poder iniciarse. Puede que la conexión sea lenta o que esta vista no pueda ejecutar del todo el código de la aplicación.","unsupportedTitle":"Este navegador no es compatible","unsupportedBody":"Este navegador no ofrece funciones básicas que la aplicación necesita. Usa una versión actual de Safari o Chrome.","reload":"Recargar la página","details":"Detalles técnicos","copyDetails":"Copiar detalles","copied":"Copiado","viewErrorTitle":"No se pudo abrir esta pantalla","viewErrorBody":"Hubo un problema al mostrar esta sección. Puedes seguir usando las demás secciones; tus registros no han cambiado.","goHome":"Volver a la pantalla de inicio"},"ui":{"app.title":"Pequeños pasos, días más claros","app.skipToContent":"Ir al contenido","app.brand":"Genix Studio","app.settingsButton":"Ajustes","nav.label":"Secciones principales","nav.read":"Leer","nav.day":"Mi día","nav.habit":"Mi hábito","boot.description":"Una lectura breve, un plan diario más claro y una pequeña prueba de hábito.","boot.loading":"Preparando la aplicación…","boot.noscript":"Esta vista no puede ejecutar el código de la aplicación. Abre el producto en Safari o Chrome desde el enlace web.","boot.slowHint":"Si esta pantalla tarda más de unos segundos, abre el producto en Safari o Chrome desde el enlace web."}},"it":{"boot":{"description":"Una breve lettura, un piano giornaliero più chiaro e una piccola prova di abitudine.","loading":"Preparazione dell'app…","slowHint":"Se questa schermata resta visibile per più di qualche secondo, apri il prodotto dal link web in Safari o Chrome.","noscript":"Questa visualizzazione non riesce a eseguire il codice dell'app. Apri il prodotto dal link web in Safari o Chrome.","errorTitle":"Impossibile avviare l'app","errorBody":"La pagina si è aperta, ma c'è stato un problema durante l'avvio dell'app. Se i tuoi dati sono salvati in questo browser, non sono stati cancellati.","errorSteps":"Prova a ricaricare la pagina. Se il problema continua, copia i dettagli tecnici qui sotto e inviali.","timeoutTitle":"L'app ci sta mettendo più del previsto ad aprirsi","timeoutBody":"L'app non è riuscita ad avviarsi da {sec} secondi. La connessione potrebbe essere lenta, oppure questa visualizzazione potrebbe non riuscire a eseguire del tutto il codice dell'app.","unsupportedTitle":"Questo browser non è supportato","unsupportedBody":"Questo browser non offre le funzioni di base di cui l'app ha bisogno. Usa una versione aggiornata di Safari o Chrome.","reload":"Ricarica la pagina","details":"Dettagli tecnici","copyDetails":"Copia i dettagli","copied":"Copiato","viewErrorTitle":"Impossibile aprire questa schermata","viewErrorBody":"C'è stato un problema nel mostrare questa sezione. Puoi continuare a usare le altre sezioni; i tuoi dati non sono cambiati.","goHome":"Torna alla schermata iniziale"},"ui":{"app.title":"Piccoli passi, giornate più chiare","app.skipToContent":"Vai al contenuto","app.brand":"Genix Studio","app.settingsButton":"Impostazioni","nav.label":"Sezioni principali","nav.read":"Leggi","nav.day":"Giornata","nav.habit":"Abitudine","boot.description":"Una breve lettura, un piano giornaliero più chiaro e una piccola prova di abitudine.","boot.loading":"Preparazione dell'app…","boot.noscript":"Questa visualizzazione non riesce a eseguire il codice dell'app. Apri il prodotto dal link web in Safari o Chrome.","boot.slowHint":"Se questa schermata resta visibile per più di qualche secondo, apri il prodotto dal link web in Safari o Chrome."}},"nl":{"boot":{"description":"Een korte leestekst, een helderder dagplan en een kleine gewoonte om uit te proberen.","loading":"De app wordt klaargezet…","slowHint":"Blijft dit scherm langer dan een paar seconden staan? Open de app dan via de weblink in Safari of Chrome.","noscript":"In deze weergave kan de code van de app niet worden uitgevoerd. Open de app via de weblink in Safari of Chrome.","errorTitle":"De app kon niet starten","errorBody":"De pagina is geopend, maar er ging iets mis bij het starten van de app. Als je gegevens in deze browser staan, zijn ze niet verwijderd.","errorSteps":"Probeer de pagina te vernieuwen. Blijft het probleem bestaan, kopieer dan de technische details hieronder en stuur ze op.","timeoutTitle":"Het openen van de app duurt langer dan verwacht","timeoutBody":"De app is na {sec} seconden nog niet gestart. Misschien is de verbinding traag, of kan deze weergave de code van de app niet volledig uitvoeren.","unsupportedTitle":"Deze browser wordt niet ondersteund","unsupportedBody":"Deze browser biedt niet de basisfuncties die de app nodig heeft. Gebruik een recente versie van Safari of Chrome.","reload":"Pagina vernieuwen","details":"Technische details","copyDetails":"Details kopiëren","copied":"Gekopieerd","viewErrorTitle":"Dit scherm kon niet worden geopend","viewErrorBody":"Er ging iets mis bij het tonen van dit onderdeel. Je kunt de andere onderdelen gewoon blijven gebruiken; je gegevens zijn niet veranderd.","goHome":"Terug naar het beginscherm"},"ui":{"app.title":"Kleine stappen, heldere dagen","app.skipToContent":"Naar de inhoud","app.brand":"Genix Studio","app.settingsButton":"Instellingen","nav.label":"Hoofdonderdelen","nav.read":"Lezen","nav.day":"Mijn dag","nav.habit":"Gewoonte","boot.description":"Een korte leestekst, een helderder dagplan en een kleine gewoonte om uit te proberen.","boot.loading":"De app wordt klaargezet…","boot.noscript":"In deze weergave kan de code van de app niet worden uitgevoerd. Open de app via de weblink in Safari of Chrome.","boot.slowHint":"Blijft dit scherm langer dan een paar seconden staan? Open de app dan via de weblink in Safari of Chrome."}}};
@@ -705,22 +713,13 @@ dialog.is-fallback[open] {
   var errors = [];
   var t0 = new Date().getTime();
 
-  /** Kayıtlı dil tercihi → cihazın dil listesi → İngilizce (app.js ile aynı kural). */
+  /** Kayıtlı dil tercihi, yoksa İngilizce (app.js ile aynı kural). */
   function pickLang() {
-    var i, code, list = [];
     try {
       var st = w.JSON.parse(w.localStorage.getItem("gx.ssc.settings.v1") || "{}");
       if (st && typeof st.lang === "string" && ALL[st.lang]) return st.lang;
     } catch (e) {}
-    try {
-      var n = w.navigator;
-      list = n.languages && n.languages.length ? n.languages : [n.language || n.userLanguage || ""];
-    } catch (e) {}
-    for (i = 0; i < list.length; i++) {
-      code = String(list[i] || "").toLowerCase().split("-")[0].split("_")[0];
-      if (ALL[code]) return code;
-    }
-    return ALL.en ? "en" : "tr";
+    return "en";
   }
 
   function s(key) {
@@ -1042,12 +1041,13 @@ window.GX_I18N.tr = {
     summaryLabel: "Bölümün özeti",
     sourcesTitle: "Bu bölümde yararlanılan kaynaklar",
     exerciseToPlanner: "Bunu Günüm'de yap",
+    exerciseToHabit: "Bunu Alışkanlığım'da dene",
     timerStart: "3 dakikalık sayacı başlat",
     timerStop: "Sayacı durdur",
     timerDone: "Üç dakika doldu. Yazdıklarını bırakabilirsin; liste tamam olmak zorunda değil.",
     timerRemaining: "Kalan süre: {time}",
     nextChapter: "Sonraki bölüm: {title}",
-    nextChapterSoon: "Sonraki bölümler henüz yazılmadı. Bu arada Günüm'de bugünün ana işini seçebilirsin.",
+    nextChapterSoon: "Kitabın sonuna geldin. Günüm'de istediğin gün bugünün ana işini seçebilirsin.",
     goToDay: "Günüm'e geç",
     readingTime: "Yaklaşık {min} dakikalık okuma",
     // Arayüz Türkçe değilken kitap ekranlarında gösterilir (Türkçede kullanılmaz)
@@ -1314,7 +1314,7 @@ window.GX_I18N.tr = {
     themeModeLight: "açık",
     themeModeDark: "koyu",
     languageTitle: "Dil (Language)",
-    languageHint: "Arayüzün dilini değiştirir. Kayıtların değişmez. Kitap metni şimdilik yalnızca Türkçe.",
+    languageHint: "Uygulamanın ve kitabın dilini değiştirir. Kayıtların değişmez.",
 
     dataTitle: "Kayıtların nerede?",
     dataPoints: [
@@ -1394,7 +1394,7 @@ window.GX_I18N.tr = {
     resetDone: "Bütün kayıtlar silindi.",
 
     aboutTitle: "Bu sürüm hakkında",
-    aboutBody: "Deneme sürümü. Kitabın giriş ve ilk bölümü hazır; ikinci ve üçüncü bölüm henüz yazılmadı. Uygulama web bağlantısıyla açılır ve ilk açılışta internet gerektirir; internetsiz kullanım henüz telefonda doğrulanmadı.",
+    aboutBody: "Bu sürümde kitabın tamamı (giriş, üç bölüm ve kapanış), günlük planlayıcı ve alışkanlık bölümü var. Uygulama web bağlantısıyla açılır; ilk açılışta internet bağlantısı gerekir. Kayıtların yalnızca bu cihazdaki bu tarayıcıda tutulur.",
   },
 };
 
@@ -1519,12 +1519,13 @@ window.GX_I18N.en = {
     summaryLabel: "Chapter summary",
     sourcesTitle: "Sources used in this chapter",
     exerciseToPlanner: "Do this in My Day",
+    exerciseToHabit: "Try this in My Habit",
     timerStart: "Start a 3-minute timer",
     timerStop: "Stop timer",
     timerDone: "Three minutes are up. You can stop writing; the list doesn't have to be complete.",
     timerRemaining: "Time left: {time}",
     nextChapter: "Next chapter: {title}",
-    nextChapterSoon: "The next chapters aren't written yet. In the meantime, you can choose today's main task in My Day.",
+    nextChapterSoon: "You've reached the end of the book. You can choose today's main task in My Day whenever you like.",
     goToDay: "Go to My Day",
     readingTime: "About a {min}-minute read",
     bookLanguageNote: "The book text is currently available in Turkish only. A translation is in preparation; My Day and My Habit are fully in English.",
@@ -1790,7 +1791,7 @@ window.GX_I18N.en = {
     themeModeLight: "light",
     themeModeDark: "dark",
     languageTitle: "Language",
-    languageHint: "Changes the language of the app. Your entries stay as they are. The book text is currently available in Turkish only.",
+    languageHint: "Changes the language of the app and the book. Your entries stay as they are.",
 
     dataTitle: "Where are your entries?",
     dataPoints: [
@@ -1870,7 +1871,7 @@ window.GX_I18N.en = {
     resetDone: "All entries were deleted.",
 
     aboutTitle: "About this version",
-    aboutBody: "Trial version. The book's introduction and first chapter are ready; the second and third chapters aren't written yet. The app opens from a web link and needs internet the first time it opens; offline use hasn't been verified on phones yet.",
+    aboutBody: "This version includes the complete book (introduction, three chapters and a closing note), the daily planner and the habit section. The app opens from a web link and needs an internet connection the first time. Your entries are kept only in this browser on this device.",
   },
 };
 
@@ -1992,12 +1993,13 @@ window.GX_I18N.de = {
     summaryLabel: "Kapitel in einem Satz",
     sourcesTitle: "Quellen in diesem Kapitel",
     exerciseToPlanner: "In „Mein Tag“ umsetzen",
+    exerciseToHabit: "In „Gewohnheit“ ausprobieren",
     timerStart: "3-Minuten-Timer starten",
     timerStop: "Timer stoppen",
     timerDone: "Drei Minuten sind um. Du kannst aufhören; die Liste muss nicht vollständig sein.",
     timerRemaining: "Verbleibend: {time}",
     nextChapter: "Nächstes Kapitel: {title}",
-    nextChapterSoon: "Die nächsten Kapitel sind noch nicht geschrieben. Bis dahin kannst du in „Mein Tag“ die Hauptaufgabe für heute wählen.",
+    nextChapterSoon: "Du bist am Ende des Buches angekommen. In „Mein Tag“ kannst du jederzeit die Hauptaufgabe für heute wählen.",
     goToDay: "Zu „Mein Tag“",
     readingTime: "Etwa {min} Minuten Lesezeit",
     bookLanguageNote: "Der Buchtext ist vorerst nur auf Türkisch verfügbar. Eine Übersetzung ist in Arbeit; „Mein Tag“ und „Gewohnheit“ sind vollständig auf Deutsch.",
@@ -2263,7 +2265,7 @@ window.GX_I18N.de = {
     themeModeLight: "helle",
     themeModeDark: "dunkle",
     languageTitle: "Sprache (Language)",
-    languageHint: "Ändert die Sprache der App. Deine Einträge bleiben, wie sie sind. Der Buchtext ist vorerst nur auf Türkisch verfügbar.",
+    languageHint: "Ändert die Sprache der App und des Buches. Deine Einträge bleiben, wie sie sind.",
 
     dataTitle: "Wo sind deine Einträge?",
     dataPoints: [
@@ -2343,7 +2345,7 @@ window.GX_I18N.de = {
     resetDone: "Alle Einträge wurden gelöscht.",
 
     aboutTitle: "Über diese Version",
-    aboutBody: "Testversion. Einleitung und erstes Kapitel des Buches sind fertig; das zweite und dritte Kapitel sind noch nicht geschrieben. Die App wird über einen Weblink geöffnet und braucht beim ersten Öffnen Internet; die Nutzung ohne Internet wurde auf dem Handy noch nicht geprüft.",
+    aboutBody: "Diese Version enthält das ganze Buch (Einleitung, drei Kapitel und ein Schlusswort), den Tagesplaner und den Gewohnheitsbereich. Die App wird über einen Weblink geöffnet und braucht beim ersten Öffnen eine Internetverbindung. Deine Einträge werden nur in diesem Browser auf diesem Gerät gespeichert.",
   },
 };
 
@@ -2465,12 +2467,13 @@ window.GX_I18N.fr = {
     summaryLabel: "En résumé",
     sourcesTitle: "Sources utilisées dans ce chapitre",
     exerciseToPlanner: "Le faire dans Ma journée",
+    exerciseToHabit: "L’essayer dans Mon habitude",
     timerStart: "Lancer un minuteur de 3 minutes",
     timerStop: "Arrêter le minuteur",
     timerDone: "Les trois minutes sont écoulées. Tu peux t’arrêter là ; la liste n’a pas besoin d’être complète.",
     timerRemaining: "Temps restant : {time}",
     nextChapter: "Chapitre suivant : {title}",
-    nextChapterSoon: "Les chapitres suivants ne sont pas encore écrits. En attendant, tu peux choisir la tâche principale du jour dans Ma journée.",
+    nextChapterSoon: "Tu es arrivé·e à la fin du livre. Tu peux choisir la tâche principale du jour dans Ma journée quand tu veux.",
     goToDay: "Aller à Ma journée",
     readingTime: "Environ {min} minutes de lecture",
     bookLanguageNote: "Le texte du livre n’est pour l’instant disponible qu’en turc. Une traduction est en préparation ; « Ma journée » et « Mon habitude » sont entièrement en français.",
@@ -2736,7 +2739,7 @@ window.GX_I18N.fr = {
     themeModeLight: "clair",
     themeModeDark: "sombre",
     languageTitle: "Langue (Language)",
-    languageHint: "Change la langue de l’application. Tes données restent telles quelles. Le texte du livre n’est pour l’instant disponible qu’en turc.",
+    languageHint: "Change la langue de l’application et du livre. Tes données restent telles quelles.",
 
     dataTitle: "Où sont tes données ?",
     dataPoints: [
@@ -2816,7 +2819,7 @@ window.GX_I18N.fr = {
     resetDone: "Toutes les données ont été supprimées.",
 
     aboutTitle: "À propos de cette version",
-    aboutBody: "Version d’essai. L’introduction et le premier chapitre du livre sont prêts ; les chapitres deux et trois ne sont pas encore écrits. L’application s’ouvre via un lien web et nécessite Internet à la première ouverture ; l’utilisation hors ligne n’a pas encore été vérifiée sur téléphone.",
+    aboutBody: "Cette version contient le livre complet (introduction, trois chapitres et une conclusion), le planificateur quotidien et la partie habitude. L’application s’ouvre via un lien web et nécessite une connexion Internet à la première ouverture. Tes données sont conservées uniquement dans ce navigateur, sur cet appareil.",
   },
 };
 
@@ -2939,12 +2942,13 @@ window.GX_I18N.es = {
     summaryLabel: "Resumen del capítulo",
     sourcesTitle: "Fuentes utilizadas en este capítulo",
     exerciseToPlanner: "Hacerlo en Mi día",
+    exerciseToHabit: "Probarlo en Mi hábito",
     timerStart: "Iniciar un temporizador de 3 minutos",
     timerStop: "Detener el temporizador",
     timerDone: "Han pasado los tres minutos. Puedes dejar lo que escribiste; la lista no tiene que estar completa.",
     timerRemaining: "Tiempo restante: {time}",
     nextChapter: "Siguiente capítulo: {title}",
-    nextChapterSoon: "Los siguientes capítulos aún no están escritos. Mientras tanto, puedes elegir la tarea principal de hoy en Mi día.",
+    nextChapterSoon: "Has llegado al final del libro. Puedes elegir la tarea principal de hoy en Mi día cuando quieras.",
     goToDay: "Ir a Mi día",
     readingTime: "Unos {min} minutos de lectura",
     bookLanguageNote: "Por ahora, el texto del libro solo está disponible en turco. Estamos preparando la traducción; las secciones «Mi día» y «Mi hábito» están completamente en español.",
@@ -3210,7 +3214,7 @@ window.GX_I18N.es = {
     themeModeLight: "claro",
     themeModeDark: "oscuro",
     languageTitle: "Idioma (Language)",
-    languageHint: "Cambia el idioma de la aplicación. Tus registros se quedan como están. Por ahora, el texto del libro solo está disponible en turco.",
+    languageHint: "Cambia el idioma de la aplicación y del libro. Tus registros se quedan como están.",
 
     dataTitle: "¿Dónde están tus registros?",
     dataPoints: [
@@ -3290,7 +3294,7 @@ window.GX_I18N.es = {
     resetDone: "Se han borrado todos los registros.",
 
     aboutTitle: "Sobre esta versión",
-    aboutBody: "Versión de prueba. La introducción y el primer capítulo del libro están listos; el segundo y el tercero aún no están escritos. La aplicación se abre con un enlace web y necesita internet la primera vez; el uso sin conexión todavía no se ha comprobado en el móvil.",
+    aboutBody: "Esta versión incluye el libro completo (introducción, tres capítulos y un cierre), el planificador diario y la sección de hábito. La aplicación se abre con un enlace web y necesita conexión a internet la primera vez. Tus registros se guardan solo en este navegador, en este dispositivo.",
   },
 };
 
@@ -3412,12 +3416,13 @@ window.GX_I18N.it = {
     summaryLabel: "In sintesi",
     sourcesTitle: "Fonti usate in questo capitolo",
     exerciseToPlanner: "Fallo in «Giornata»",
+    exerciseToHabit: "Provalo in «Abitudine»",
     timerStart: "Avvia un timer di 3 minuti",
     timerStop: "Ferma il timer",
     timerDone: "I tre minuti sono passati. Puoi fermarti qui; la lista non deve essere completa.",
     timerRemaining: "Tempo rimanente: {time}",
     nextChapter: "Capitolo successivo: {title}",
-    nextChapterSoon: "I prossimi capitoli non sono ancora stati scritti. Nel frattempo puoi scegliere l'attività principale di oggi in «Giornata».",
+    nextChapterSoon: "Sei arrivato/a alla fine del libro. Puoi scegliere l'attività principale di oggi in «Giornata» quando vuoi.",
     goToDay: "Vai a «Giornata»",
     readingTime: "Circa {min} minuti di lettura",
     bookLanguageNote: "Per ora il testo del libro è disponibile solo in turco. La traduzione è in preparazione; le sezioni «Giornata» e «Abitudine» sono interamente in italiano.",
@@ -3683,7 +3688,7 @@ window.GX_I18N.it = {
     themeModeLight: "chiaro",
     themeModeDark: "scuro",
     languageTitle: "Lingua (Language)",
-    languageHint: "Cambia la lingua dell'app. I tuoi dati restano come sono. Per ora il testo del libro è disponibile solo in turco.",
+    languageHint: "Cambia la lingua dell'app e del libro. I tuoi dati restano come sono.",
 
     dataTitle: "Dove sono i tuoi dati?",
     dataPoints: [
@@ -3763,7 +3768,7 @@ window.GX_I18N.it = {
     resetDone: "Tutti i dati sono stati eliminati.",
 
     aboutTitle: "Informazioni su questa versione",
-    aboutBody: "Versione di prova. L'introduzione e il primo capitolo del libro sono pronti; il secondo e il terzo capitolo non sono ancora stati scritti. L'app si apre da un link web e la prima volta richiede una connessione a Internet; l'uso offline non è ancora stato verificato su telefono.",
+    aboutBody: "Questa versione contiene il libro completo (introduzione, tre capitoli e una conclusione), il planner giornaliero e la sezione abitudine. L'app si apre da un link web e la prima volta richiede una connessione a Internet. I tuoi dati restano solo in questo browser, su questo dispositivo.",
   },
 };
 
@@ -3885,12 +3890,13 @@ window.GX_I18N.nl = {
     summaryLabel: "Samenvatting van het hoofdstuk",
     sourcesTitle: "Bronnen die in dit hoofdstuk zijn gebruikt",
     exerciseToPlanner: "Doe dit in Mijn dag",
+    exerciseToHabit: "Probeer dit bij Gewoonte",
     timerStart: "Start timer van 3 minuten",
     timerStop: "Timer stoppen",
     timerDone: "De drie minuten zijn om. Je mag stoppen met schrijven; de lijst hoeft niet compleet te zijn.",
     timerRemaining: "Resterende tijd: {time}",
     nextChapter: "Volgend hoofdstuk: {title}",
-    nextChapterSoon: "De volgende hoofdstukken zijn nog niet geschreven. Intussen kun je in Mijn dag de hoofdtaak van vandaag kiezen.",
+    nextChapterSoon: "Je bent aan het einde van het boek. In Mijn dag kun je wanneer je wilt de hoofdtaak van vandaag kiezen.",
     goToDay: "Naar Mijn dag",
     readingTime: "Ongeveer {min} minuten lezen",
     bookLanguageNote: "De boektekst is voorlopig alleen in het Turks beschikbaar. Er wordt aan een vertaling gewerkt; Mijn dag en Gewoonte zijn volledig in het Nederlands.",
@@ -4156,7 +4162,7 @@ window.GX_I18N.nl = {
     themeModeLight: "lichte",
     themeModeDark: "donkere",
     languageTitle: "Taal (Language)",
-    languageHint: "Verandert de taal van de app. Wat je hebt ingevuld, blijft zoals het is. De boektekst is voorlopig alleen in het Turks beschikbaar.",
+    languageHint: "Verandert de taal van de app en het boek. Wat je hebt ingevuld, blijft zoals het is.",
 
     dataTitle: "Waar staan je gegevens?",
     dataPoints: [
@@ -4236,7 +4242,7 @@ window.GX_I18N.nl = {
     resetDone: "Alle gegevens zijn verwijderd.",
 
     aboutTitle: "Over deze versie",
-    aboutBody: "Proefversie. De inleiding en het eerste hoofdstuk van het boek zijn klaar; het tweede en derde hoofdstuk zijn nog niet geschreven. De app opent via een weblink en heeft bij de eerste keer openen internet nodig; gebruik zonder internet is nog niet op een telefoon getest.",
+    aboutBody: "Deze versie bevat het hele boek (inleiding, drie hoofdstukken en een slotwoord), de dagplanner en het gewoontedeel. De app opent via een weblink en heeft de eerste keer een internetverbinding nodig. Wat je invult, wordt alleen in deze browser op dit apparaat bewaard.",
   },
 };
 
@@ -4245,6 +4251,7 @@ window.GX_I18N.nl = {
 /*
  * Kitap içeriği (Türkçe): "Küçük Adımlar, Daha Net Günler"
  * Arayüz metinleri burada değil: i18n/tr.js
+ * Çeviriler: book.<dil>.js — aynı bölüm ve blok kimlikleri (okuma konumu dil değişince korunur); kaynakça yalnızca burada.
  *
  * Blok türleri:
  *   h        – ara başlık (her ara başlık yeni bir kısa okuma parçası başlatır)
@@ -4257,7 +4264,9 @@ window.GX_I18N.nl = {
  *   summary  – tek cümlelik bölüm özeti
  * Her bloğun benzersiz bir id'si var; okuma konumu bu id ile hatırlanır.
  */
-window.GX_BOOK = {
+window.GX_BOOKS = window.GX_BOOKS || {};
+window.GX_BOOKS.tr = {
+  lang: "tr",
   title: "Küçük Adımlar, Daha Net Günler",
   subtitle: "Kısa bir okuma ve sakin bir günlük planlayıcı",
 
@@ -4376,9 +4385,87 @@ window.GX_BOOK = {
       kind: "chapter",
       number: 2,
       title: "Bugünün Bir Ana İşi Olsun",
-      minutes: 8,
-      available: false,
-      blocks: [],
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b2-sahne",
+          type: "scene",
+          paragraphs: [
+            "Salı sabahı, saat 10.00. Deniz kütüphanede, pencerenin yanındaki masada. Önünde dünkü liste duruyor: on dört satır.",
+            "Önce ödev dosyasını açıyor. Birkaç dakika sonra staj formunun son tarihini hatırlıyor ve formu açıyor. Formda istenen belgeyi ararken kargo iadesinin süresine bakmak geliyor aklına. Sonra yeniden ödeve dönüyor.",
+            "Öğlene doğru ekranda yedi sekme açık. Hiçbiri bitmedi. Deniz bütün sabah çalıştığını biliyor, ama elinde gösterecek bir şey yok.",
+          ],
+        },
+
+        { id: "b2-h1", type: "h", text: "Liste bir plan değil" },
+        { id: "b2-p1", type: "p", text: "İlk bölümde aklındakileri bir yere yazdın. Bu, kafandaki yükü azaltır; ama sana bugün neyle başlayacağını söylemez. Liste bir envanterdir. On dört satıra aynı anda bakan biri, her birinin ötekinden daha acil olduğunu düşünmeye başlayabilir." },
+        { id: "b2-p2", type: "p", text: "Deniz'in sabahı da böyle geçti. Her iş geçerliydi, her geçiş mantıklıydı. Ama işler arasında gidip gelirken her seferinde nerede kaldığını yeniden hatırlaması gerekti. Gün, yarım kalmış başlangıçlarla doldu." },
+        { id: "b2-p3", type: "p", text: "Bu bölümde önerdiğim şey basit: Her gün için bir ana iş seç. Hayatındaki en önemli iş olması gerekmiyor. Ölçü şu: Akşam olduğunda bu iş bittiyse ya da ilerlediyse, rahatlayacak mısın? Cevap evetse, bugünün ana işi odur." },
+        { id: "b2-p4", type: "p", text: "Diğer işler kaybolmaz; listede beklerler. Bir ana iş seçmek, ötekilerden vazgeçmek değil, bugün onlara ne zaman bakacağını sonraya bırakmaktır." },
+
+        { id: "b2-h5", type: "h", text: "Seçmek zor geldiğinde" },
+        { id: "b2-p12", type: "p", text: "Bazı sabahlar iki ya da üç iş aynı derecede acil görünür. Böyle günlerde seçimi kolaylaştırabilecek birkaç soru var. Hangisinin bir son tarihi daha yakın? Hangisi bitmezse başka işleri de bekletir? Hangisini düşündüğünde göğsünde daha fazla ağırlık hissediyorsun?" },
+        { id: "b2-p13", type: "p", text: "Bu soruların her zaman net bir cevabı olmaz. O zaman yazı tura atmak bile, hiç seçmemekten daha iyi olabilir. Yanlış ana işi seçmek, gün boyu üç iş arasında gidip gelmekten çoğu zaman daha az yorar; çünkü en azından bir tanesi ilerler." },
+        { id: "b2-p14", type: "p", text: "Bir de şu var: Ana iş her gün büyük bir iş olmak zorunda değil. Yorgun olduğun, sınavdan yeni çıktığın ya da hasta olduğun bir günde ana iş “Çamaşırları yıkamak” olabilir. Ana iş, günün kapasitesine göre seçilir; olmak istediğin kişinin kapasitesine göre değil." },
+
+        { id: "b2-h2", type: "h", text: "Ana işi küçük bir adıma çevirmek" },
+        { id: "b2-p5", type: "p", text: "“Ödevi yaz” iyi bir ana iş olabilir ama kötü bir başlangıçtır. Çok büyüktür; nereden tutacağını bilemezsin. Başlamayı kolaylaştıran, ana işin ilk küçük adımıdır: birkaç dakikada yapılabilecek kadar somut bir hareket." },
+        { id: "b2-p6", type: "p", text: "Birkaç örnek: “Ödevi yaz” yerine “Ödev dosyasını açıp üç başlık yazmak”. “Staj başvurusu” yerine “Formdaki eksik belgeyi bulup klasöre koymak”. “Ev sahibiyle konuş” yerine “Kira mesajının ilk cümlesini yazmak”." },
+        { id: "b2-p7", type: "p", text: "İlk adımın amacı işi bitirmek değil, işe girmek. Bazen ilk adım bittikten sonra devam edersin, bazen etmezsin. İkisi de olur. Ama boş bir sayfanın karşısında beklemekle, üç başlığı yazılmış bir sayfaya dönmek arasında fark var." },
+
+        {
+          id: "b2-gorsel",
+          type: "figure",
+          art: "smallSteps",
+          alt: "Solda içinde birkaç satır bulunan büyük bir kutu; bir ok, sağa doğru yükselen dört küçük basamağa uzanıyor. İlk ve en alçak basamağın üstünde turuncu bir nokta var.",
+          caption: "Büyük bir iş tek seferde atlanmaz. İlk basamak, bugün atılabilecek kadar alçak olmalı.",
+        },
+
+        { id: "b2-h3", type: "h", text: "Ne zaman ve nerede?" },
+        { id: "b2-p8", type: "p", text: "İlk adımı seçtikten sonra bir soru daha kalıyor: Bunu ne zaman ve nerede yapacaksın? “Bugün bir ara” çoğu zaman günün sonuna kayar. “Öğle yemeğinden sonra, kütüphanenin üst katında” ise zihninde bir randevu gibi durur." },
+
+        {
+          id: "b2-arastirma-1",
+          type: "research",
+          finding: "Psikolog Peter Gollwitzer'ın “uygulama niyeti” adını verdiği planlar, bir hedefi ne zaman, nerede ve nasıl uygulayacağını önceden belirlemeyi içerir: “X durumu olduğunda Y'yi yapacağım.” 94 bağımsız testi bir araya getiren bir meta-analizde, böyle plan yapan katılımcıların hedeflerine ulaşma oranı, yalnızca hedef koyanlara göre ortalamada belirgin biçimde daha yüksekti.",
+          limits: "Etkinin büyüklüğü çalışmalar arasında değişiyordu ve araştırmaların bir bölümü laboratuvarda ya da öğrencilerle yapıldı. Ortalama bir etki, planın herkes için ve her işte işe yarayacağını göstermez.",
+          details: "Araştırmacılara göre bu tür planlar, “ne zaman başlasam?” kararını önceden verdiği için o an geldiğinde başlamayı kolaylaştırıyor. Bu kitapta Günüm'deki “Başlama zamanımı belirle” bölümü bu fikre dayanıyor.",
+          refs: ["gollwitzer1999", "gollwitzer2006"],
+        },
+
+        {
+          id: "b2-oneri",
+          type: "suggestion",
+          text: "Zamanı saat olarak değil, günün içinde zaten olan bir ana bağlamayı dene: “İlk dersten sonra”, “Kahvemi koyunca”, “Eve gelip çantamı bırakınca”. Saatler kayar; bu tür anlar ise çoğu gün yine gelir.",
+        },
+
+        { id: "b2-h4", type: "h", text: "Ek işler ve yarına kalanlar" },
+        { id: "b2-p9", type: "p", text: "Ana işin yanında gün içinde yapılması gereken küçük işler de olacak. Günüm'de bunlar için yalnızca iki yer var. Bu bir kısıtlama gibi görünebilir; aslında bir ölçü. İki satırdan fazlası gerekiyorsa, bugün belki zaten dolu bir gündür ve bazı işlerin yarına kalması doğaldır." },
+        { id: "b2-p10", type: "p", text: "Yarına kalan iş başarısızlık değil, bir karardır. Listede kalması, unutulmadığı anlamına gelir." },
+        { id: "b2-p11", type: "p", text: "Deniz o gün öğle yemeğinden sonra sekmelerin hepsini kapattı. Ana işi ödevdi; ilk adımı, dosyayı açıp üç başlık yazmaktı. Üst kattaki boş masaya oturdu. Başlıklar on dakika sürdü. Ardından ilk başlığın altına birkaç paragraf daha yazdı. Staj formu ve kargo, ertesi günün ek işleri oldu." },
+
+        {
+          id: "b2-uygulama",
+          type: "exercise",
+          title: "Bugünün ana işi",
+          planner: "main",
+          steps: [
+            "Listene bak ve şu soruyu sor: Akşam olduğunda hangisi ilerlemiş olsa rahatlarım?",
+            "O işi bugünün ana işi olarak yaz.",
+            "Altına, birkaç dakikada başlayabileceğin ilk küçük adımı yaz.",
+            "İstersen ne zaman ve nerede başlayacağını da ekle: “Öğle yemeğinden sonra, masamda” gibi.",
+            "Geri kalan işler listede bekleyebilir. Bugün için bu kadarı yeterli.",
+          ],
+        },
+
+        {
+          id: "b2-ozet",
+          type: "summary",
+          text: "Bugün için tek bir ana iş ve onun küçük bir ilk adımı, uzun bir listeye bakarak başlamaya çalışmaktan çoğu zaman daha kolaydır.",
+        },
+      ],
+      sources: ["gollwitzer1999", "gollwitzer2006"],
     },
 
     {
@@ -4387,8 +4474,98 @@ window.GX_BOOK = {
       number: 3,
       title: "Planını Hayatına Uydur",
       minutes: 7,
-      available: false,
-      blocks: [],
+      available: true,
+      blocks: [
+        {
+          id: "b3-sahne",
+          type: "scene",
+          paragraphs: [
+            "Perşembe. Deniz'in planı belliydi: Öğle yemeğinden sonra kütüphanede ödevin ikinci bölümü.",
+            "Ama grup toplantısı uzadı. Çıkışta yağmur başladı. Eve vardığında saat altıyı geçmişti; ıslak, yorgun ve biraz da sinirli.",
+            "Aklından geçen cümle tanıdıktı: “Bugün zaten bozuldu. Yarın düzgün başlarım.”",
+          ],
+        },
+
+        { id: "b3-h1", type: "h", text: "Plan bozulunca" },
+        { id: "b3-p1", type: "p", text: "Sabah yapılan plan, günün nasıl geçeceğine dair bir tahmindir. Toplantılar uzar, otobüsler gecikir, enerji beklenenden erken biter. Planın tutmaması, plan yapan kişinin bir hatası değil; tahminlerin doğası bu." },
+        { id: "b3-p2", type: "p", text: "Sorun çoğu zaman bozulan plan değil, ardından gelen “hep ya da hiç” düşüncesi. Plan aynen uygulanamıyorsa hiç uygulanmıyor gibi gelir. Oysa çoğu günde üç seçenek vardır." },
+        { id: "b3-p3", type: "p", text: "Birincisi, zamanı kaydırmak: “Öğleden sonra olmadı, akşam yemeğinden sonra yarım saat.” İkincisi, adımı küçültmek: “İkinci bölümü yazamam ama notlarımı bir kez okuyabilirim.” Üçüncüsü, bilerek ertelemek: “Bugün yapmıyorum; yarın sabah ilk iş bu.” Üçü de birer karar. Kaybolan gün ise karar verilmeyen gündür." },
+
+        { id: "b3-h2", type: "h", text: "Zor günler için daha küçük bir seçenek" },
+        { id: "b3-p4", type: "p", text: "İyi giden bir günde ilk adım kolaydır. Plan asıl zor günlerde sınanır. Bu yüzden, önceden bir “daha küçük seçenek” belirlemek işe yarayabilir: Kötü bir günde bile yapabileceğin kadar küçük bir yedek." },
+        { id: "b3-p5", type: "p", text: "Ödev için bu, dosyayı açıp tek bir cümle yazmak olabilir. Yürüyüş için evin önüne çıkıp beş dakika dolaşmak. Kitap okumak için bir sayfa. Küçük seçenek, işi yapmış sayılmak için değil, işle bağını koparmamak için var." },
+
+        {
+          id: "b3-gorsel",
+          type: "figure",
+          art: "flexiblePlan",
+          alt: "Soldan sağa giden kesik çizgili bir yol, ortadaki bir engelin etrafından kıvrılarak devam ediyor. Altta yedi küçük kare var; çoğu dolu, biri boş, sonuncusunun yanında turuncu bir nokta.",
+          caption: "Plan engelin etrafından dolaşabilir. Yedi günün birinde boşluk olması, yolun bittiği anlamına gelmez.",
+        },
+
+        { id: "b3-h3", type: "h", text: "Bir günü kaçırmak" },
+        { id: "b3-p6", type: "p", text: "Yeni bir alışkanlık denerken bir gün atlamak, çoğu insana her şeyi baştan başlatması gerekiyormuş gibi gelir. Seri sayaçları da bu duyguyu besler: Otuz günlük bir zincir tek bir günde sıfırlanır." },
+
+        {
+          id: "b3-arastirma-1",
+          type: "research",
+          finding: "Londra'da yapılan bir çalışmada 96 gönüllü, her gün aynı durumda yapacakları bir yeme, içme ya da hareket davranışı seçti ve 12 hafta boyunca bu davranışın ne kadar otomatik hâle geldiğini her gün kendileri değerlendirdi. Tek bir fırsatı kaçırmak, alışkanlığın oluşma sürecini belirgin biçimde bozmadı. Davranışın neredeyse otomatik hâle gelmesi, kişiden kişiye çok farklı sürelerde gerçekleşti: 18 ile 254 gün arasında.",
+          limits: "Küçük bir gönüllü grubu ve basit günlük davranışlar. Otomatiklik katılımcıların kendi değerlendirmesiyle ölçüldü ve bazı katılımcıların verileri modele iyi uymadı. Daha karmaşık davranışlarda sonuçlar farklı olabilir.",
+          details: "Çalışmada ortanca süre 66 gündü; ama bu bir ortalama değil, bir hedef de değil. Bulgu, “21 günde alışkanlık” gibi sabit sürelerin herkese uymadığını ve ara sıra bir günü kaçırmanın süreci sıfırlamadığını düşündürüyor.",
+          refs: ["lally2010"],
+        },
+
+        {
+          id: "b3-oneri",
+          type: "suggestion",
+          text: "Bir alışkanlığı denerken önce yedi günlük kısa bir deneme yap. Amaç yedi günde alışkanlık kazanmak değil; seçtiğin zamanın, yerin ve adımın sana uyup uymadığını görmek. Yedi günün sonunda planı değiştirmek, deneyin bir parçası.",
+        },
+
+        { id: "b3-h5", type: "h", text: "Plan sana uymuyorsa" },
+        { id: "b3-p10", type: "p", text: "Bazen sorun tek bir kötü gün değildir. Aynı plan birkaç gün üst üste tutmuyorsa, bu planın sana değil, senin plana uymaya çalıştığını gösterebilir. Sabah yedide koşmayı planlayan ama her sabah alarmı kapatan biri için asıl soru “Neden yapamıyorum?” değil, “Bu saat gerçekten bana uygun mu?” olabilir." },
+        { id: "b3-p11", type: "p", text: "Planı değiştirirken üç şeye bakabilirsin: zaman, yer ve adımın büyüklüğü. Çoğu zaman birini değiştirmek yeterli olur. Sabah yerine akşam, ev yerine kütüphane, yarım saat yerine on dakika. Hedef aynı kalabilir; yalnızca ona giden yol değişir." },
+        { id: "b3-p12", type: "p", text: "Bu değişiklikleri yaparken kendine bir deneyi yürüten biri gibi bakmak işe yarayabilir. Deneyler bazen beklenen sonucu vermez; bu, deneyi yapanın başarısız olduğu anlamına gelmez, yalnızca bir sonraki denemenin neyi değiştireceğini gösterir." },
+
+        { id: "b3-h4", type: "h", text: "Akşam iki soru" },
+        { id: "b3-p7", type: "p", text: "Günün sonunda planın ne kadarının gerçekleştiğini saymak yerine iki soru sormayı dene: Bugün ne işe yaradı? Yarın neyi kolaylaştırabilirim? İlki, işe yarayanı fark etmeni sağlar. İkincisi, ertesi günün planını bugünün deneyimine göre biraz düzeltir." },
+        { id: "b3-p8", type: "p", text: "Cevaplar küçük olabilir: “Telefonu başka odaya koymak işe yaradı.” “Yarın çantamı akşamdan hazırlarım.” Planlar böyle, günden güne küçük düzeltmelerle hayata uyar." },
+        { id: "b3-p9", type: "p", text: "Deniz o perşembe akşamı ödev dosyasını açtı ve ikinci bölüm için tek bir cümle yazdı. Sonra yattı. Ertesi sabah dosyayı açtığında, boş bir sayfa yerine bir cümle onu bekliyordu." },
+
+        {
+          id: "b3-uygulama",
+          type: "exercise",
+          title: "Yedi günlük küçük deneme",
+          planner: "habit",
+          steps: [
+            "Denemek istediğin tek bir alışkanlık seç.",
+            "En küçük uygulanabilir başlangıcını yaz: Kötü bir günde bile yapabileceğin kadar küçük.",
+            "Onu günün içinde zaten olan bir ana bağla ve nerede yapacağını belirle.",
+            "Zor günler için daha küçük bir seçenek ekle.",
+            "Yedi gün boyunca her akşam yalnızca şunu işaretle: yaptım, daha küçüğünü yaptım ya da yapmadım. Sonra planına yeniden bak.",
+          ],
+        },
+
+        {
+          id: "b3-ozet",
+          type: "summary",
+          text: "Plan bozulduğunda onu bırakmak yerine zamanını kaydırmak ya da adımını küçültmek çoğu zaman mümkündür; bir günü kaçırmak da yolun bittiği anlamına gelmez.",
+        },
+      ],
+      sources: ["lally2010"],
+    },
+
+    {
+      id: "kapanis",
+      kind: "outro",
+      title: "Kapanış",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "k1", type: "p", text: "Bu kitapta üç küçük fikir vardı: Aklındakileri bir yere bırakmak, bugün için tek bir ana iş ve onun ilk adımını seçmek, gün değişince planı da değiştirebilmek." },
+        { id: "k2", type: "p", text: "Bunların hiçbiri her günü kolaylaştırmayacak. Bazı günler liste uzun kalacak, ana iş ilerlemeyecek, deneme aksayacak. Bu, yöntemin ya da senin başarısız olduğun anlamına gelmez. Ertesi gün yeniden bir ana iş seçebilirsin." },
+        { id: "k3", type: "p", text: "Planlayıcı ve alışkanlık bölümü, kitabı okumayı bitirdikten sonra da burada. İstediğin gün açıp yalnızca bugünün ana işini yazabilir, istediğin gün hiç açmayabilirsin. Kayıtların yalnızca bu cihazda duruyor; ara sıra yedek almayı unutma." },
+        { id: "k4", type: "p", text: "Küçük adımlar her şeyi çözmez. Ama çoğu gün, başlamak için yeterli olabilir." },
+      ],
     },
   ],
 
@@ -4398,14 +4575,14 @@ window.GX_BOOK = {
    */
   sources: {
     masicampo2011: {
-      authors: "Masicampo, E. J. ve Baumeister, R. F.",
+      authors: "Masicampo, E. J. & Baumeister, R. F.",
       year: 2011,
       title: "Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals",
       venue: "Journal of Personality and Social Psychology, 101(4), 667–683",
       doi: "10.1037/a0024192",
     },
     scullin2018: {
-      authors: "Scullin, M. K., Krueger, M. L., Ballard, H. K., Pruett, N. ve Bliwise, D. L.",
+      authors: "Scullin, M. K., Krueger, M. L., Ballard, H. K., Pruett, N. & Bliwise, D. L.",
       year: 2018,
       title: "The effects of bedtime writing on difficulty falling asleep: A polysomnographic study comparing to-do lists and completed activity lists",
       venue: "Journal of Experimental Psychology: General, 147(1), 139–146",
@@ -4419,14 +4596,14 @@ window.GX_BOOK = {
       doi: "10.1037/0003-066X.54.7.493",
     },
     gollwitzer2006: {
-      authors: "Gollwitzer, P. M. ve Sheeran, P.",
+      authors: "Gollwitzer, P. M. & Sheeran, P.",
       year: 2006,
       title: "Implementation intentions and goal achievement: A meta-analysis of effects and processes",
       venue: "Advances in Experimental Social Psychology, 38, 69–119",
       doi: "10.1016/S0065-2601(06)38002-1",
     },
     lally2010: {
-      authors: "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W. ve Wardle, J.",
+      authors: "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W. & Wardle, J.",
       year: 2010,
       title: "How are habits formed: Modelling habit formation in the real world",
       venue: "European Journal of Social Psychology, 40(6), 998–1009",
@@ -4434,6 +4611,9 @@ window.GX_BOOK = {
     },
   },
 };
+
+// Eski adla erişim (Türkçe kitap)
+window.GX_BOOK = window.GX_BOOKS.tr;
 
 </script>
 <script>
@@ -4507,6 +4687,25 @@ window.GX_ART = {
     '<rect class="il-box" x="212" y="111" width="12" height="12" rx="3"/>' +
     '<rect class="il-box" x="212" y="133" width="12" height="12" rx="3"/>' +
     '<path class="il-check" d="M214 74l3 3 6-7"/>' +
+    "</svg>",
+
+  // Bölüm 3: Plan bir engelin etrafından dolaşarak sürer; altta yedi günlük deneme, bir gün boş.
+  flexiblePlan:
+    '<svg viewBox="0 0 320 180" role="img" aria-hidden="true" focusable="false">' +
+    '<path class="il-ground" d="M14 96h292"/>' +
+    '<rect class="il-soft" x="132" y="70" width="56" height="44" rx="8"/>' +
+    '<path class="il-scribble" d="M146 86c8-6 14 6 22 0s10 6 8 8"/>' +
+    '<path class="il-loop" d="M20 92h96c14 0 14-48 44-48s30 48 44 48h96"/>' +
+    '<circle class="il-dot" cx="20" cy="92" r="6"/>' +
+    '<path class="il-arrow-head" d="M292 85l9 7-9 7"/>' +
+    '<rect class="il-step" x="44" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="78" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="112" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-box" x="146" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="180" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="214" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="248" y="136" width="24" height="24" rx="5"/>' +
+    '<circle class="il-dot" cx="284" cy="148" r="5"/>' +
     "</svg>",
 };
 
@@ -5227,7 +5426,7 @@ window.GX_ART = {
  * Ana bölümler: Oku (#oku, #oku-<bolum>), Günüm (#gunum, #gun-YYYY-AA-GG, #gecmis), Alışkanlığım (#aliskanlik, #aliskanlik-kur).
  * Açılış: #hosgeldin (adres boşken de açılış gösterilir).
  * Metinler: i18n/<dil>.js (GX_I18N; Türkçe, English, Deutsch, Français, Español, Italiano, Nederlands),
- * kitap: content/book.tr.js (GX_BOOK, şimdilik yalnızca Türkçe), veri: storage.js (GX_STORE).
+ * kitap: content/book.<dil>.js (GX_BOOKS; kaynakça book.tr.js'te), veri: storage.js (GX_STORE).
  */
 (function () {
   "use strict";
@@ -5235,7 +5434,8 @@ window.GX_ART = {
   var I18N = window.GX_I18N || (window.GX_STRINGS ? { tr: window.GX_STRINGS } : null);
   var LANG_ORDER = ["tr", "en", "de", "fr", "es", "it", "nl"];
   var S = I18N && (I18N.tr || I18N.en);
-  var BOOK = window.GX_BOOK;
+  var BOOKS = window.GX_BOOKS || (window.GX_BOOK ? { tr: window.GX_BOOK } : {});
+  var BOOK = BOOKS.tr || window.GX_BOOK;
   var ART = window.GX_ART;
   var STORE = window.GX_STORE;
   var BOOT = window.GX_BOOT || { ready: function () {}, fail: function (e) { throw e; }, details: function () { return ""; } };
@@ -5263,24 +5463,22 @@ window.GX_ART = {
   }
 
   /**
-   * Dil seçimi: kayıtlı tercih → cihazın dil listesindeki ilk desteklenen dil → İngilizce.
+   * Dil seçimi: kayıtlı tercih, yoksa İngilizce (sahibin kararı: ilk açılış her cihazda İngilizce;
+   * kullanıcı dilini açılıştaki "Language" düğmesinden ya da Ayarlar'dan seçer).
    * Tercih yalnızca bu cihazda tutulur ve yedeğe girmez.
    */
   function pickLanguage() {
     var saved = store.getSettings().lang;
     if (saved && I18N[saved]) return saved;
-    var list = [];
-    try {
-      list = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""]);
-    } catch (e) { list = []; }
-    for (var i = 0; i < list.length; i++) {
-      var code = String(list[i] || "").toLowerCase().split(/[-_]/)[0];
-      if (I18N[code]) return code;
-    }
     return I18N.en ? "en" : languages()[0];
   }
   var lang = pickLanguage();
   S = I18N[lang];
+  /** Kitap seçili dilde varsa o, yoksa Türkçe (arayüzde not gösterilir). Bölüm ve blok kimlikleri bütün dillerde aynıdır. */
+  function pickBook() {
+    return BOOKS[lang] || BOOKS.tr || window.GX_BOOK;
+  }
+  BOOK = pickBook();
 
   /* ================= Yardımcılar ================= */
 
@@ -5752,12 +5950,14 @@ window.GX_ART = {
   /* ================= Kitap ================= */
 
   /** Kitap metninin dili (kitap şimdilik yalnızca Türkçe). Arayüz başka dildeyse kitap öğeleri lang ile işaretlenir. */
-  var BOOK_LANG = BOOK.lang || "tr";
+  function bookLang() {
+    return BOOK.lang || "tr";
+  }
   function bookLangAttr() {
-    return S.htmlLang === BOOK_LANG ? null : BOOK_LANG;
+    return S.htmlLang === bookLang() ? null : bookLang();
   }
   function bookLanguageNote() {
-    if (S.htmlLang === BOOK_LANG) return null;
+    if (S.htmlLang === bookLang()) return null;
     return h("p", { class: "note-line", id: "book-lang-note" }, [h("span", { html: ICON_INFO }), h("span", { text: t("reader.bookLanguageNote") })]);
   }
 
@@ -5796,7 +5996,7 @@ window.GX_ART = {
   }
 
   function citation(id) {
-    var s = BOOK.sources[id];
+    var s = (BOOK.sources || BOOKS.tr.sources)[id];
     if (!s) return null;
     var url = "https://doi.org/" + s.doi;
     return h("p", { class: "cite" }, [
@@ -5853,7 +6053,13 @@ window.GX_ART = {
       steps,
     ];
     if (b.timerSeconds) children.push(renderTimer(b.timerSeconds));
-    if (b.planner) {
+    if (b.planner === "habit") {
+      children.push(h("button", { type: "button", class: "btn btn--primary", "data-to-planner": b.planner, text: t("reader.exerciseToHabit"), onclick: function () {
+        store.setSettings({ reading: { chapterId: ch.id, blockId: b.id } });
+        state.habitDay = null;
+        navigate("aliskanlik");
+      } }));
+    } else if (b.planner) {
       children.push(h("button", { type: "button", class: "btn btn--primary", "data-to-planner": b.planner, text: t("reader.exerciseToPlanner"), onclick: function () {
         store.setSettings({ reading: { chapterId: ch.id, blockId: b.id } });
         state.cameFromBook = { chapterId: ch.id, blockId: b.id };
@@ -6494,6 +6700,14 @@ window.GX_ART = {
       requestAnimationFrame(function () { $("day-head").scrollIntoView({ block: "start" }); $("day-title").setAttribute("tabindex", "-1"); $("day-title").focus({ preventScroll: true }); });
     }
 
+    if (state.focusField === "main") {
+      state.focusField = null;
+      state.pendingScroll = true;
+      requestAnimationFrame(function () {
+        $("f-main").scrollIntoView({ block: "center", behavior: motionAllowed() ? "smooth" : "auto" });
+        $("f-main").focus({ preventScroll: true });
+      });
+    }
     if (state.focusField === "brain") {
       state.focusField = null;
       brain.open = true;
@@ -7251,6 +7465,10 @@ window.GX_ART = {
     document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
     document.querySelectorAll("[data-t-label]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-label"))); });
     document.title = t("app.title");
+    var code = $("lang-code");
+    if (code) code.textContent = S.htmlLang.toUpperCase();
+    var langBtn = $("open-language");
+    if (langBtn) langBtn.setAttribute("aria-label", t("home.languageButton", { name: S.name }));
     var desc = document.querySelector('meta[name="description"]');
     if (desc) desc.setAttribute("content", t("home.description"));
     // Ana ekrana eklerken önerilen ad (iOS bu etiketi okur)
@@ -7264,6 +7482,7 @@ window.GX_ART = {
     flushSave();
     lang = code;
     S = I18N[code];
+    BOOK = pickBook();
     store.setSettings({ lang: code });
     buildFormatters();
     applyStaticTexts();
@@ -7291,6 +7510,7 @@ window.GX_ART = {
       });
     });
     $("open-settings").addEventListener("click", function () { openSettings(); });
+    $("open-language").addEventListener("click", function () { openSettings({ focusLanguage: true }); });
     document.querySelector(".skip").addEventListener("click", function (e) {
       e.preventDefault();
       $("main").focus();

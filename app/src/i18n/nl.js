@@ -114,12 +114,13 @@ window.GX_I18N.nl = {
     summaryLabel: "Samenvatting van het hoofdstuk",
     sourcesTitle: "Bronnen die in dit hoofdstuk zijn gebruikt",
     exerciseToPlanner: "Doe dit in Mijn dag",
+    exerciseToHabit: "Probeer dit bij Gewoonte",
     timerStart: "Start timer van 3 minuten",
     timerStop: "Timer stoppen",
     timerDone: "De drie minuten zijn om. Je mag stoppen met schrijven; de lijst hoeft niet compleet te zijn.",
     timerRemaining: "Resterende tijd: {time}",
     nextChapter: "Volgend hoofdstuk: {title}",
-    nextChapterSoon: "De volgende hoofdstukken zijn nog niet geschreven. Intussen kun je in Mijn dag de hoofdtaak van vandaag kiezen.",
+    nextChapterSoon: "Je bent aan het einde van het boek. In Mijn dag kun je wanneer je wilt de hoofdtaak van vandaag kiezen.",
     goToDay: "Naar Mijn dag",
     readingTime: "Ongeveer {min} minuten lezen",
     bookLanguageNote: "De boektekst is voorlopig alleen in het Turks beschikbaar. Er wordt aan een vertaling gewerkt; Mijn dag en Gewoonte zijn volledig in het Nederlands.",
@@ -385,7 +386,7 @@ window.GX_I18N.nl = {
     themeModeLight: "lichte",
     themeModeDark: "donkere",
     languageTitle: "Taal (Language)",
-    languageHint: "Verandert de taal van de app. Wat je hebt ingevuld, blijft zoals het is. De boektekst is voorlopig alleen in het Turks beschikbaar.",
+    languageHint: "Verandert de taal van de app en het boek. Wat je hebt ingevuld, blijft zoals het is.",
 
     dataTitle: "Waar staan je gegevens?",
     dataPoints: [
@@ -465,6 +466,6 @@ window.GX_I18N.nl = {
     resetDone: "Alle gegevens zijn verwijderd.",
 
     aboutTitle: "Over deze versie",
-    aboutBody: "Proefversie. De inleiding en het eerste hoofdstuk van het boek zijn klaar; het tweede en derde hoofdstuk zijn nog niet geschreven. De app opent via een weblink en heeft bij de eerste keer openen internet nodig; gebruik zonder internet is nog niet op een telefoon getest.",
+    aboutBody: "Deze versie bevat het hele boek (inleiding, drie hoofdstukken en een slotwoord), de dagplanner en het gewoontedeel. De app opent via een weblink en heeft de eerste keer een internetverbinding nodig. Wat je invult, wordt alleen in deze browser op dit apparaat bewaard.",
   },
 };

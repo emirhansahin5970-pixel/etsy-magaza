@@ -114,12 +114,13 @@ window.GX_I18N.en = {
     summaryLabel: "Chapter summary",
     sourcesTitle: "Sources used in this chapter",
     exerciseToPlanner: "Do this in My Day",
+    exerciseToHabit: "Try this in My Habit",
     timerStart: "Start a 3-minute timer",
     timerStop: "Stop timer",
     timerDone: "Three minutes are up. You can stop writing; the list doesn't have to be complete.",
     timerRemaining: "Time left: {time}",
     nextChapter: "Next chapter: {title}",
-    nextChapterSoon: "The next chapters aren't written yet. In the meantime, you can choose today's main task in My Day.",
+    nextChapterSoon: "You've reached the end of the book. You can choose today's main task in My Day whenever you like.",
     goToDay: "Go to My Day",
     readingTime: "About a {min}-minute read",
     bookLanguageNote: "The book text is currently available in Turkish only. A translation is in preparation; My Day and My Habit are fully in English.",
@@ -385,7 +386,7 @@ window.GX_I18N.en = {
     themeModeLight: "light",
     themeModeDark: "dark",
     languageTitle: "Language",
-    languageHint: "Changes the language of the app. Your entries stay as they are. The book text is currently available in Turkish only.",
+    languageHint: "Changes the language of the app and the book. Your entries stay as they are.",
 
     dataTitle: "Where are your entries?",
     dataPoints: [
@@ -465,6 +466,6 @@ window.GX_I18N.en = {
     resetDone: "All entries were deleted.",
 
     aboutTitle: "About this version",
-    aboutBody: "Trial version. The book's introduction and first chapter are ready; the second and third chapters aren't written yet. The app opens from a web link and needs internet the first time it opens; offline use hasn't been verified on phones yet.",
+    aboutBody: "This version includes the complete book (introduction, three chapters and a closing note), the daily planner and the habit section. The app opens from a web link and needs an internet connection the first time. Your entries are kept only in this browser on this device.",
   },
 };

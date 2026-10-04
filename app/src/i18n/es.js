@@ -115,12 +115,13 @@ window.GX_I18N.es = {
     summaryLabel: "Resumen del capítulo",
     sourcesTitle: "Fuentes utilizadas en este capítulo",
     exerciseToPlanner: "Hacerlo en Mi día",
+    exerciseToHabit: "Probarlo en Mi hábito",
     timerStart: "Iniciar un temporizador de 3 minutos",
     timerStop: "Detener el temporizador",
     timerDone: "Han pasado los tres minutos. Puedes dejar lo que escribiste; la lista no tiene que estar completa.",
     timerRemaining: "Tiempo restante: {time}",
     nextChapter: "Siguiente capítulo: {title}",
-    nextChapterSoon: "Los siguientes capítulos aún no están escritos. Mientras tanto, puedes elegir la tarea principal de hoy en Mi día.",
+    nextChapterSoon: "Has llegado al final del libro. Puedes elegir la tarea principal de hoy en Mi día cuando quieras.",
     goToDay: "Ir a Mi día",
     readingTime: "Unos {min} minutos de lectura",
     bookLanguageNote: "Por ahora, el texto del libro solo está disponible en turco. Estamos preparando la traducción; las secciones «Mi día» y «Mi hábito» están completamente en español.",
@@ -386,7 +387,7 @@ window.GX_I18N.es = {
     themeModeLight: "claro",
     themeModeDark: "oscuro",
     languageTitle: "Idioma (Language)",
-    languageHint: "Cambia el idioma de la aplicación. Tus registros se quedan como están. Por ahora, el texto del libro solo está disponible en turco.",
+    languageHint: "Cambia el idioma de la aplicación y del libro. Tus registros se quedan como están.",
 
     dataTitle: "¿Dónde están tus registros?",
     dataPoints: [
@@ -466,6 +467,6 @@ window.GX_I18N.es = {
     resetDone: "Se han borrado todos los registros.",
 
     aboutTitle: "Sobre esta versión",
-    aboutBody: "Versión de prueba. La introducción y el primer capítulo del libro están listos; el segundo y el tercero aún no están escritos. La aplicación se abre con un enlace web y necesita internet la primera vez; el uso sin conexión todavía no se ha comprobado en el móvil.",
+    aboutBody: "Esta versión incluye el libro completo (introducción, tres capítulos y un cierre), el planificador diario y la sección de hábito. La aplicación se abre con un enlace web y necesita conexión a internet la primera vez. Tus registros se guardan solo en este navegador, en este dispositivo.",
   },
 };

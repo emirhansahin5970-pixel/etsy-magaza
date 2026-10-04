@@ -3,7 +3,7 @@
  * Ana bölümler: Oku (#oku, #oku-<bolum>), Günüm (#gunum, #gun-YYYY-AA-GG, #gecmis), Alışkanlığım (#aliskanlik, #aliskanlik-kur).
  * Açılış: #hosgeldin (adres boşken de açılış gösterilir).
  * Metinler: i18n/<dil>.js (GX_I18N; Türkçe, English, Deutsch, Français, Español, Italiano, Nederlands),
- * kitap: content/book.tr.js (GX_BOOK, şimdilik yalnızca Türkçe), veri: storage.js (GX_STORE).
+ * kitap: content/book.<dil>.js (GX_BOOKS; kaynakça book.tr.js'te), veri: storage.js (GX_STORE).
  */
 (function () {
   "use strict";
@@ -11,7 +11,8 @@
   var I18N = window.GX_I18N || (window.GX_STRINGS ? { tr: window.GX_STRINGS } : null);
   var LANG_ORDER = ["tr", "en", "de", "fr", "es", "it", "nl"];
   var S = I18N && (I18N.tr || I18N.en);
-  var BOOK = window.GX_BOOK;
+  var BOOKS = window.GX_BOOKS || (window.GX_BOOK ? { tr: window.GX_BOOK } : {});
+  var BOOK = BOOKS.tr || window.GX_BOOK;
   var ART = window.GX_ART;
   var STORE = window.GX_STORE;
   var BOOT = window.GX_BOOT || { ready: function () {}, fail: function (e) { throw e; }, details: function () { return ""; } };
@@ -39,24 +40,22 @@
   }
 
   /**
-   * Dil seçimi: kayıtlı tercih → cihazın dil listesindeki ilk desteklenen dil → İngilizce.
+   * Dil seçimi: kayıtlı tercih, yoksa İngilizce (sahibin kararı: ilk açılış her cihazda İngilizce;
+   * kullanıcı dilini açılıştaki "Language" düğmesinden ya da Ayarlar'dan seçer).
    * Tercih yalnızca bu cihazda tutulur ve yedeğe girmez.
    */
   function pickLanguage() {
     var saved = store.getSettings().lang;
     if (saved && I18N[saved]) return saved;
-    var list = [];
-    try {
-      list = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""]);
-    } catch (e) { list = []; }
-    for (var i = 0; i < list.length; i++) {
-      var code = String(list[i] || "").toLowerCase().split(/[-_]/)[0];
-      if (I18N[code]) return code;
-    }
     return I18N.en ? "en" : languages()[0];
   }
   var lang = pickLanguage();
   S = I18N[lang];
+  /** Kitap seçili dilde varsa o, yoksa Türkçe (arayüzde not gösterilir). Bölüm ve blok kimlikleri bütün dillerde aynıdır. */
+  function pickBook() {
+    return BOOKS[lang] || BOOKS.tr || window.GX_BOOK;
+  }
+  BOOK = pickBook();
 
   /* ================= Yardımcılar ================= */
 
@@ -528,12 +527,14 @@
   /* ================= Kitap ================= */
 
   /** Kitap metninin dili (kitap şimdilik yalnızca Türkçe). Arayüz başka dildeyse kitap öğeleri lang ile işaretlenir. */
-  var BOOK_LANG = BOOK.lang || "tr";
+  function bookLang() {
+    return BOOK.lang || "tr";
+  }
   function bookLangAttr() {
-    return S.htmlLang === BOOK_LANG ? null : BOOK_LANG;
+    return S.htmlLang === bookLang() ? null : bookLang();
   }
   function bookLanguageNote() {
-    if (S.htmlLang === BOOK_LANG) return null;
+    if (S.htmlLang === bookLang()) return null;
     return h("p", { class: "note-line", id: "book-lang-note" }, [h("span", { html: ICON_INFO }), h("span", { text: t("reader.bookLanguageNote") })]);
   }
 
@@ -572,7 +573,7 @@
   }
 
   function citation(id) {
-    var s = BOOK.sources[id];
+    var s = (BOOK.sources || BOOKS.tr.sources)[id];
     if (!s) return null;
     var url = "https://doi.org/" + s.doi;
     return h("p", { class: "cite" }, [
@@ -629,7 +630,13 @@
       steps,
     ];
     if (b.timerSeconds) children.push(renderTimer(b.timerSeconds));
-    if (b.planner) {
+    if (b.planner === "habit") {
+      children.push(h("button", { type: "button", class: "btn btn--primary", "data-to-planner": b.planner, text: t("reader.exerciseToHabit"), onclick: function () {
+        store.setSettings({ reading: { chapterId: ch.id, blockId: b.id } });
+        state.habitDay = null;
+        navigate("aliskanlik");
+      } }));
+    } else if (b.planner) {
       children.push(h("button", { type: "button", class: "btn btn--primary", "data-to-planner": b.planner, text: t("reader.exerciseToPlanner"), onclick: function () {
         store.setSettings({ reading: { chapterId: ch.id, blockId: b.id } });
         state.cameFromBook = { chapterId: ch.id, blockId: b.id };
@@ -1270,6 +1277,14 @@
       requestAnimationFrame(function () { $("day-head").scrollIntoView({ block: "start" }); $("day-title").setAttribute("tabindex", "-1"); $("day-title").focus({ preventScroll: true }); });
     }
 
+    if (state.focusField === "main") {
+      state.focusField = null;
+      state.pendingScroll = true;
+      requestAnimationFrame(function () {
+        $("f-main").scrollIntoView({ block: "center", behavior: motionAllowed() ? "smooth" : "auto" });
+        $("f-main").focus({ preventScroll: true });
+      });
+    }
     if (state.focusField === "brain") {
       state.focusField = null;
       brain.open = true;
@@ -2027,6 +2042,10 @@
     document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
     document.querySelectorAll("[data-t-label]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-label"))); });
     document.title = t("app.title");
+    var code = $("lang-code");
+    if (code) code.textContent = S.htmlLang.toUpperCase();
+    var langBtn = $("open-language");
+    if (langBtn) langBtn.setAttribute("aria-label", t("home.languageButton", { name: S.name }));
     var desc = document.querySelector('meta[name="description"]');
     if (desc) desc.setAttribute("content", t("home.description"));
     // Ana ekrana eklerken önerilen ad (iOS bu etiketi okur)
@@ -2040,6 +2059,7 @@
     flushSave();
     lang = code;
     S = I18N[code];
+    BOOK = pickBook();
     store.setSettings({ lang: code });
     buildFormatters();
     applyStaticTexts();
@@ -2067,6 +2087,7 @@
       });
     });
     $("open-settings").addEventListener("click", function () { openSettings(); });
+    $("open-language").addEventListener("click", function () { openSettings({ focusLanguage: true }); });
     document.querySelector(".skip").addEventListener("click", function (e) {
       e.preventDefault();
       $("main").focus();

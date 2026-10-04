@@ -1,6 +1,7 @@
 /*
  * Kitap içeriği (Türkçe): "Küçük Adımlar, Daha Net Günler"
  * Arayüz metinleri burada değil: i18n/tr.js
+ * Çeviriler: book.<dil>.js — aynı bölüm ve blok kimlikleri (okuma konumu dil değişince korunur); kaynakça yalnızca burada.
  *
  * Blok türleri:
  *   h        – ara başlık (her ara başlık yeni bir kısa okuma parçası başlatır)
@@ -13,7 +14,9 @@
  *   summary  – tek cümlelik bölüm özeti
  * Her bloğun benzersiz bir id'si var; okuma konumu bu id ile hatırlanır.
  */
-window.GX_BOOK = {
+window.GX_BOOKS = window.GX_BOOKS || {};
+window.GX_BOOKS.tr = {
+  lang: "tr",
   title: "Küçük Adımlar, Daha Net Günler",
   subtitle: "Kısa bir okuma ve sakin bir günlük planlayıcı",
 
@@ -132,9 +135,87 @@ window.GX_BOOK = {
       kind: "chapter",
       number: 2,
       title: "Bugünün Bir Ana İşi Olsun",
-      minutes: 8,
-      available: false,
-      blocks: [],
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b2-sahne",
+          type: "scene",
+          paragraphs: [
+            "Salı sabahı, saat 10.00. Deniz kütüphanede, pencerenin yanındaki masada. Önünde dünkü liste duruyor: on dört satır.",
+            "Önce ödev dosyasını açıyor. Birkaç dakika sonra staj formunun son tarihini hatırlıyor ve formu açıyor. Formda istenen belgeyi ararken kargo iadesinin süresine bakmak geliyor aklına. Sonra yeniden ödeve dönüyor.",
+            "Öğlene doğru ekranda yedi sekme açık. Hiçbiri bitmedi. Deniz bütün sabah çalıştığını biliyor, ama elinde gösterecek bir şey yok.",
+          ],
+        },
+
+        { id: "b2-h1", type: "h", text: "Liste bir plan değil" },
+        { id: "b2-p1", type: "p", text: "İlk bölümde aklındakileri bir yere yazdın. Bu, kafandaki yükü azaltır; ama sana bugün neyle başlayacağını söylemez. Liste bir envanterdir. On dört satıra aynı anda bakan biri, her birinin ötekinden daha acil olduğunu düşünmeye başlayabilir." },
+        { id: "b2-p2", type: "p", text: "Deniz'in sabahı da böyle geçti. Her iş geçerliydi, her geçiş mantıklıydı. Ama işler arasında gidip gelirken her seferinde nerede kaldığını yeniden hatırlaması gerekti. Gün, yarım kalmış başlangıçlarla doldu." },
+        { id: "b2-p3", type: "p", text: "Bu bölümde önerdiğim şey basit: Her gün için bir ana iş seç. Hayatındaki en önemli iş olması gerekmiyor. Ölçü şu: Akşam olduğunda bu iş bittiyse ya da ilerlediyse, rahatlayacak mısın? Cevap evetse, bugünün ana işi odur." },
+        { id: "b2-p4", type: "p", text: "Diğer işler kaybolmaz; listede beklerler. Bir ana iş seçmek, ötekilerden vazgeçmek değil, bugün onlara ne zaman bakacağını sonraya bırakmaktır." },
+
+        { id: "b2-h5", type: "h", text: "Seçmek zor geldiğinde" },
+        { id: "b2-p12", type: "p", text: "Bazı sabahlar iki ya da üç iş aynı derecede acil görünür. Böyle günlerde seçimi kolaylaştırabilecek birkaç soru var. Hangisinin bir son tarihi daha yakın? Hangisi bitmezse başka işleri de bekletir? Hangisini düşündüğünde göğsünde daha fazla ağırlık hissediyorsun?" },
+        { id: "b2-p13", type: "p", text: "Bu soruların her zaman net bir cevabı olmaz. O zaman yazı tura atmak bile, hiç seçmemekten daha iyi olabilir. Yanlış ana işi seçmek, gün boyu üç iş arasında gidip gelmekten çoğu zaman daha az yorar; çünkü en azından bir tanesi ilerler." },
+        { id: "b2-p14", type: "p", text: "Bir de şu var: Ana iş her gün büyük bir iş olmak zorunda değil. Yorgun olduğun, sınavdan yeni çıktığın ya da hasta olduğun bir günde ana iş “Çamaşırları yıkamak” olabilir. Ana iş, günün kapasitesine göre seçilir; olmak istediğin kişinin kapasitesine göre değil." },
+
+        { id: "b2-h2", type: "h", text: "Ana işi küçük bir adıma çevirmek" },
+        { id: "b2-p5", type: "p", text: "“Ödevi yaz” iyi bir ana iş olabilir ama kötü bir başlangıçtır. Çok büyüktür; nereden tutacağını bilemezsin. Başlamayı kolaylaştıran, ana işin ilk küçük adımıdır: birkaç dakikada yapılabilecek kadar somut bir hareket." },
+        { id: "b2-p6", type: "p", text: "Birkaç örnek: “Ödevi yaz” yerine “Ödev dosyasını açıp üç başlık yazmak”. “Staj başvurusu” yerine “Formdaki eksik belgeyi bulup klasöre koymak”. “Ev sahibiyle konuş” yerine “Kira mesajının ilk cümlesini yazmak”." },
+        { id: "b2-p7", type: "p", text: "İlk adımın amacı işi bitirmek değil, işe girmek. Bazen ilk adım bittikten sonra devam edersin, bazen etmezsin. İkisi de olur. Ama boş bir sayfanın karşısında beklemekle, üç başlığı yazılmış bir sayfaya dönmek arasında fark var." },
+
+        {
+          id: "b2-gorsel",
+          type: "figure",
+          art: "smallSteps",
+          alt: "Solda içinde birkaç satır bulunan büyük bir kutu; bir ok, sağa doğru yükselen dört küçük basamağa uzanıyor. İlk ve en alçak basamağın üstünde turuncu bir nokta var.",
+          caption: "Büyük bir iş tek seferde atlanmaz. İlk basamak, bugün atılabilecek kadar alçak olmalı.",
+        },
+
+        { id: "b2-h3", type: "h", text: "Ne zaman ve nerede?" },
+        { id: "b2-p8", type: "p", text: "İlk adımı seçtikten sonra bir soru daha kalıyor: Bunu ne zaman ve nerede yapacaksın? “Bugün bir ara” çoğu zaman günün sonuna kayar. “Öğle yemeğinden sonra, kütüphanenin üst katında” ise zihninde bir randevu gibi durur." },
+
+        {
+          id: "b2-arastirma-1",
+          type: "research",
+          finding: "Psikolog Peter Gollwitzer'ın “uygulama niyeti” adını verdiği planlar, bir hedefi ne zaman, nerede ve nasıl uygulayacağını önceden belirlemeyi içerir: “X durumu olduğunda Y'yi yapacağım.” 94 bağımsız testi bir araya getiren bir meta-analizde, böyle plan yapan katılımcıların hedeflerine ulaşma oranı, yalnızca hedef koyanlara göre ortalamada belirgin biçimde daha yüksekti.",
+          limits: "Etkinin büyüklüğü çalışmalar arasında değişiyordu ve araştırmaların bir bölümü laboratuvarda ya da öğrencilerle yapıldı. Ortalama bir etki, planın herkes için ve her işte işe yarayacağını göstermez.",
+          details: "Araştırmacılara göre bu tür planlar, “ne zaman başlasam?” kararını önceden verdiği için o an geldiğinde başlamayı kolaylaştırıyor. Bu kitapta Günüm'deki “Başlama zamanımı belirle” bölümü bu fikre dayanıyor.",
+          refs: ["gollwitzer1999", "gollwitzer2006"],
+        },
+
+        {
+          id: "b2-oneri",
+          type: "suggestion",
+          text: "Zamanı saat olarak değil, günün içinde zaten olan bir ana bağlamayı dene: “İlk dersten sonra”, “Kahvemi koyunca”, “Eve gelip çantamı bırakınca”. Saatler kayar; bu tür anlar ise çoğu gün yine gelir.",
+        },
+
+        { id: "b2-h4", type: "h", text: "Ek işler ve yarına kalanlar" },
+        { id: "b2-p9", type: "p", text: "Ana işin yanında gün içinde yapılması gereken küçük işler de olacak. Günüm'de bunlar için yalnızca iki yer var. Bu bir kısıtlama gibi görünebilir; aslında bir ölçü. İki satırdan fazlası gerekiyorsa, bugün belki zaten dolu bir gündür ve bazı işlerin yarına kalması doğaldır." },
+        { id: "b2-p10", type: "p", text: "Yarına kalan iş başarısızlık değil, bir karardır. Listede kalması, unutulmadığı anlamına gelir." },
+        { id: "b2-p11", type: "p", text: "Deniz o gün öğle yemeğinden sonra sekmelerin hepsini kapattı. Ana işi ödevdi; ilk adımı, dosyayı açıp üç başlık yazmaktı. Üst kattaki boş masaya oturdu. Başlıklar on dakika sürdü. Ardından ilk başlığın altına birkaç paragraf daha yazdı. Staj formu ve kargo, ertesi günün ek işleri oldu." },
+
+        {
+          id: "b2-uygulama",
+          type: "exercise",
+          title: "Bugünün ana işi",
+          planner: "main",
+          steps: [
+            "Listene bak ve şu soruyu sor: Akşam olduğunda hangisi ilerlemiş olsa rahatlarım?",
+            "O işi bugünün ana işi olarak yaz.",
+            "Altına, birkaç dakikada başlayabileceğin ilk küçük adımı yaz.",
+            "İstersen ne zaman ve nerede başlayacağını da ekle: “Öğle yemeğinden sonra, masamda” gibi.",
+            "Geri kalan işler listede bekleyebilir. Bugün için bu kadarı yeterli.",
+          ],
+        },
+
+        {
+          id: "b2-ozet",
+          type: "summary",
+          text: "Bugün için tek bir ana iş ve onun küçük bir ilk adımı, uzun bir listeye bakarak başlamaya çalışmaktan çoğu zaman daha kolaydır.",
+        },
+      ],
+      sources: ["gollwitzer1999", "gollwitzer2006"],
     },
 
     {
@@ -143,8 +224,98 @@ window.GX_BOOK = {
       number: 3,
       title: "Planını Hayatına Uydur",
       minutes: 7,
-      available: false,
-      blocks: [],
+      available: true,
+      blocks: [
+        {
+          id: "b3-sahne",
+          type: "scene",
+          paragraphs: [
+            "Perşembe. Deniz'in planı belliydi: Öğle yemeğinden sonra kütüphanede ödevin ikinci bölümü.",
+            "Ama grup toplantısı uzadı. Çıkışta yağmur başladı. Eve vardığında saat altıyı geçmişti; ıslak, yorgun ve biraz da sinirli.",
+            "Aklından geçen cümle tanıdıktı: “Bugün zaten bozuldu. Yarın düzgün başlarım.”",
+          ],
+        },
+
+        { id: "b3-h1", type: "h", text: "Plan bozulunca" },
+        { id: "b3-p1", type: "p", text: "Sabah yapılan plan, günün nasıl geçeceğine dair bir tahmindir. Toplantılar uzar, otobüsler gecikir, enerji beklenenden erken biter. Planın tutmaması, plan yapan kişinin bir hatası değil; tahminlerin doğası bu." },
+        { id: "b3-p2", type: "p", text: "Sorun çoğu zaman bozulan plan değil, ardından gelen “hep ya da hiç” düşüncesi. Plan aynen uygulanamıyorsa hiç uygulanmıyor gibi gelir. Oysa çoğu günde üç seçenek vardır." },
+        { id: "b3-p3", type: "p", text: "Birincisi, zamanı kaydırmak: “Öğleden sonra olmadı, akşam yemeğinden sonra yarım saat.” İkincisi, adımı küçültmek: “İkinci bölümü yazamam ama notlarımı bir kez okuyabilirim.” Üçüncüsü, bilerek ertelemek: “Bugün yapmıyorum; yarın sabah ilk iş bu.” Üçü de birer karar. Kaybolan gün ise karar verilmeyen gündür." },
+
+        { id: "b3-h2", type: "h", text: "Zor günler için daha küçük bir seçenek" },
+        { id: "b3-p4", type: "p", text: "İyi giden bir günde ilk adım kolaydır. Plan asıl zor günlerde sınanır. Bu yüzden, önceden bir “daha küçük seçenek” belirlemek işe yarayabilir: Kötü bir günde bile yapabileceğin kadar küçük bir yedek." },
+        { id: "b3-p5", type: "p", text: "Ödev için bu, dosyayı açıp tek bir cümle yazmak olabilir. Yürüyüş için evin önüne çıkıp beş dakika dolaşmak. Kitap okumak için bir sayfa. Küçük seçenek, işi yapmış sayılmak için değil, işle bağını koparmamak için var." },
+
+        {
+          id: "b3-gorsel",
+          type: "figure",
+          art: "flexiblePlan",
+          alt: "Soldan sağa giden kesik çizgili bir yol, ortadaki bir engelin etrafından kıvrılarak devam ediyor. Altta yedi küçük kare var; çoğu dolu, biri boş, sonuncusunun yanında turuncu bir nokta.",
+          caption: "Plan engelin etrafından dolaşabilir. Yedi günün birinde boşluk olması, yolun bittiği anlamına gelmez.",
+        },
+
+        { id: "b3-h3", type: "h", text: "Bir günü kaçırmak" },
+        { id: "b3-p6", type: "p", text: "Yeni bir alışkanlık denerken bir gün atlamak, çoğu insana her şeyi baştan başlatması gerekiyormuş gibi gelir. Seri sayaçları da bu duyguyu besler: Otuz günlük bir zincir tek bir günde sıfırlanır." },
+
+        {
+          id: "b3-arastirma-1",
+          type: "research",
+          finding: "Londra'da yapılan bir çalışmada 96 gönüllü, her gün aynı durumda yapacakları bir yeme, içme ya da hareket davranışı seçti ve 12 hafta boyunca bu davranışın ne kadar otomatik hâle geldiğini her gün kendileri değerlendirdi. Tek bir fırsatı kaçırmak, alışkanlığın oluşma sürecini belirgin biçimde bozmadı. Davranışın neredeyse otomatik hâle gelmesi, kişiden kişiye çok farklı sürelerde gerçekleşti: 18 ile 254 gün arasında.",
+          limits: "Küçük bir gönüllü grubu ve basit günlük davranışlar. Otomatiklik katılımcıların kendi değerlendirmesiyle ölçüldü ve bazı katılımcıların verileri modele iyi uymadı. Daha karmaşık davranışlarda sonuçlar farklı olabilir.",
+          details: "Çalışmada ortanca süre 66 gündü; ama bu bir ortalama değil, bir hedef de değil. Bulgu, “21 günde alışkanlık” gibi sabit sürelerin herkese uymadığını ve ara sıra bir günü kaçırmanın süreci sıfırlamadığını düşündürüyor.",
+          refs: ["lally2010"],
+        },
+
+        {
+          id: "b3-oneri",
+          type: "suggestion",
+          text: "Bir alışkanlığı denerken önce yedi günlük kısa bir deneme yap. Amaç yedi günde alışkanlık kazanmak değil; seçtiğin zamanın, yerin ve adımın sana uyup uymadığını görmek. Yedi günün sonunda planı değiştirmek, deneyin bir parçası.",
+        },
+
+        { id: "b3-h5", type: "h", text: "Plan sana uymuyorsa" },
+        { id: "b3-p10", type: "p", text: "Bazen sorun tek bir kötü gün değildir. Aynı plan birkaç gün üst üste tutmuyorsa, bu planın sana değil, senin plana uymaya çalıştığını gösterebilir. Sabah yedide koşmayı planlayan ama her sabah alarmı kapatan biri için asıl soru “Neden yapamıyorum?” değil, “Bu saat gerçekten bana uygun mu?” olabilir." },
+        { id: "b3-p11", type: "p", text: "Planı değiştirirken üç şeye bakabilirsin: zaman, yer ve adımın büyüklüğü. Çoğu zaman birini değiştirmek yeterli olur. Sabah yerine akşam, ev yerine kütüphane, yarım saat yerine on dakika. Hedef aynı kalabilir; yalnızca ona giden yol değişir." },
+        { id: "b3-p12", type: "p", text: "Bu değişiklikleri yaparken kendine bir deneyi yürüten biri gibi bakmak işe yarayabilir. Deneyler bazen beklenen sonucu vermez; bu, deneyi yapanın başarısız olduğu anlamına gelmez, yalnızca bir sonraki denemenin neyi değiştireceğini gösterir." },
+
+        { id: "b3-h4", type: "h", text: "Akşam iki soru" },
+        { id: "b3-p7", type: "p", text: "Günün sonunda planın ne kadarının gerçekleştiğini saymak yerine iki soru sormayı dene: Bugün ne işe yaradı? Yarın neyi kolaylaştırabilirim? İlki, işe yarayanı fark etmeni sağlar. İkincisi, ertesi günün planını bugünün deneyimine göre biraz düzeltir." },
+        { id: "b3-p8", type: "p", text: "Cevaplar küçük olabilir: “Telefonu başka odaya koymak işe yaradı.” “Yarın çantamı akşamdan hazırlarım.” Planlar böyle, günden güne küçük düzeltmelerle hayata uyar." },
+        { id: "b3-p9", type: "p", text: "Deniz o perşembe akşamı ödev dosyasını açtı ve ikinci bölüm için tek bir cümle yazdı. Sonra yattı. Ertesi sabah dosyayı açtığında, boş bir sayfa yerine bir cümle onu bekliyordu." },
+
+        {
+          id: "b3-uygulama",
+          type: "exercise",
+          title: "Yedi günlük küçük deneme",
+          planner: "habit",
+          steps: [
+            "Denemek istediğin tek bir alışkanlık seç.",
+            "En küçük uygulanabilir başlangıcını yaz: Kötü bir günde bile yapabileceğin kadar küçük.",
+            "Onu günün içinde zaten olan bir ana bağla ve nerede yapacağını belirle.",
+            "Zor günler için daha küçük bir seçenek ekle.",
+            "Yedi gün boyunca her akşam yalnızca şunu işaretle: yaptım, daha küçüğünü yaptım ya da yapmadım. Sonra planına yeniden bak.",
+          ],
+        },
+
+        {
+          id: "b3-ozet",
+          type: "summary",
+          text: "Plan bozulduğunda onu bırakmak yerine zamanını kaydırmak ya da adımını küçültmek çoğu zaman mümkündür; bir günü kaçırmak da yolun bittiği anlamına gelmez.",
+        },
+      ],
+      sources: ["lally2010"],
+    },
+
+    {
+      id: "kapanis",
+      kind: "outro",
+      title: "Kapanış",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "k1", type: "p", text: "Bu kitapta üç küçük fikir vardı: Aklındakileri bir yere bırakmak, bugün için tek bir ana iş ve onun ilk adımını seçmek, gün değişince planı da değiştirebilmek." },
+        { id: "k2", type: "p", text: "Bunların hiçbiri her günü kolaylaştırmayacak. Bazı günler liste uzun kalacak, ana iş ilerlemeyecek, deneme aksayacak. Bu, yöntemin ya da senin başarısız olduğun anlamına gelmez. Ertesi gün yeniden bir ana iş seçebilirsin." },
+        { id: "k3", type: "p", text: "Planlayıcı ve alışkanlık bölümü, kitabı okumayı bitirdikten sonra da burada. İstediğin gün açıp yalnızca bugünün ana işini yazabilir, istediğin gün hiç açmayabilirsin. Kayıtların yalnızca bu cihazda duruyor; ara sıra yedek almayı unutma." },
+        { id: "k4", type: "p", text: "Küçük adımlar her şeyi çözmez. Ama çoğu gün, başlamak için yeterli olabilir." },
+      ],
     },
   ],
 
@@ -154,14 +325,14 @@ window.GX_BOOK = {
    */
   sources: {
     masicampo2011: {
-      authors: "Masicampo, E. J. ve Baumeister, R. F.",
+      authors: "Masicampo, E. J. & Baumeister, R. F.",
       year: 2011,
       title: "Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals",
       venue: "Journal of Personality and Social Psychology, 101(4), 667–683",
       doi: "10.1037/a0024192",
     },
     scullin2018: {
-      authors: "Scullin, M. K., Krueger, M. L., Ballard, H. K., Pruett, N. ve Bliwise, D. L.",
+      authors: "Scullin, M. K., Krueger, M. L., Ballard, H. K., Pruett, N. & Bliwise, D. L.",
       year: 2018,
       title: "The effects of bedtime writing on difficulty falling asleep: A polysomnographic study comparing to-do lists and completed activity lists",
       venue: "Journal of Experimental Psychology: General, 147(1), 139–146",
@@ -175,14 +346,14 @@ window.GX_BOOK = {
       doi: "10.1037/0003-066X.54.7.493",
     },
     gollwitzer2006: {
-      authors: "Gollwitzer, P. M. ve Sheeran, P.",
+      authors: "Gollwitzer, P. M. & Sheeran, P.",
       year: 2006,
       title: "Implementation intentions and goal achievement: A meta-analysis of effects and processes",
       venue: "Advances in Experimental Social Psychology, 38, 69–119",
       doi: "10.1016/S0065-2601(06)38002-1",
     },
     lally2010: {
-      authors: "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W. ve Wardle, J.",
+      authors: "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W. & Wardle, J.",
       year: 2010,
       title: "How are habits formed: Modelling habit formation in the real world",
       venue: "European Journal of Social Psychology, 40(6), 998–1009",
@@ -190,3 +361,6 @@ window.GX_BOOK = {
     },
   },
 };
+
+// Eski adla erişim (Türkçe kitap)
+window.GX_BOOK = window.GX_BOOKS.tr;

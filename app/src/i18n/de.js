@@ -114,12 +114,13 @@ window.GX_I18N.de = {
     summaryLabel: "Kapitel in einem Satz",
     sourcesTitle: "Quellen in diesem Kapitel",
     exerciseToPlanner: "In „Mein Tag“ umsetzen",
+    exerciseToHabit: "In „Gewohnheit“ ausprobieren",
     timerStart: "3-Minuten-Timer starten",
     timerStop: "Timer stoppen",
     timerDone: "Drei Minuten sind um. Du kannst aufhören; die Liste muss nicht vollständig sein.",
     timerRemaining: "Verbleibend: {time}",
     nextChapter: "Nächstes Kapitel: {title}",
-    nextChapterSoon: "Die nächsten Kapitel sind noch nicht geschrieben. Bis dahin kannst du in „Mein Tag“ die Hauptaufgabe für heute wählen.",
+    nextChapterSoon: "Du bist am Ende des Buches angekommen. In „Mein Tag“ kannst du jederzeit die Hauptaufgabe für heute wählen.",
     goToDay: "Zu „Mein Tag“",
     readingTime: "Etwa {min} Minuten Lesezeit",
     bookLanguageNote: "Der Buchtext ist vorerst nur auf Türkisch verfügbar. Eine Übersetzung ist in Arbeit; „Mein Tag“ und „Gewohnheit“ sind vollständig auf Deutsch.",
@@ -385,7 +386,7 @@ window.GX_I18N.de = {
     themeModeLight: "helle",
     themeModeDark: "dunkle",
     languageTitle: "Sprache (Language)",
-    languageHint: "Ändert die Sprache der App. Deine Einträge bleiben, wie sie sind. Der Buchtext ist vorerst nur auf Türkisch verfügbar.",
+    languageHint: "Ändert die Sprache der App und des Buches. Deine Einträge bleiben, wie sie sind.",
 
     dataTitle: "Wo sind deine Einträge?",
     dataPoints: [
@@ -465,6 +466,6 @@ window.GX_I18N.de = {
     resetDone: "Alle Einträge wurden gelöscht.",
 
     aboutTitle: "Über diese Version",
-    aboutBody: "Testversion. Einleitung und erstes Kapitel des Buches sind fertig; das zweite und dritte Kapitel sind noch nicht geschrieben. Die App wird über einen Weblink geöffnet und braucht beim ersten Öffnen Internet; die Nutzung ohne Internet wurde auf dem Handy noch nicht geprüft.",
+    aboutBody: "Diese Version enthält das ganze Buch (Einleitung, drei Kapitel und ein Schlusswort), den Tagesplaner und den Gewohnheitsbereich. Die App wird über einen Weblink geöffnet und braucht beim ersten Öffnen eine Internetverbindung. Deine Einträge werden nur in diesem Browser auf diesem Gerät gespeichert.",
   },
 };

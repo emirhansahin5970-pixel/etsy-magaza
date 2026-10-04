@@ -14,7 +14,7 @@ const root = dirname(fileURLToPath(import.meta.url));
 const src = (p) => join(root, "src", p);
 const read = (p) => readFileSync(src(p), "utf8");
 
-// Arayüz metinlerini oku (i18n/<dil>.js). HTML Türkçe derlenir; diğer dillerin başlangıç metinleri boot.js'e yazılır.
+// Arayüz metinlerini oku (i18n/<dil>.js). HTML İngilizce derlenir (ilk açılış dili); diğer dillerin başlangıç metinleri boot.js'e yazılır.
 const LANGS = ["tr", "en", "de", "fr", "es", "it", "nl"];
 const sandbox = { window: {} };
 for (const l of LANGS) vm.runInNewContext(read(`i18n/${l}.js`), sandbox);
@@ -24,7 +24,7 @@ const lookupIn = (S, path) => {
   if (typeof v !== "string") throw new Error(`Metin bulunamadı: ${path}`);
   return v;
 };
-const lookup = (path, lang = "tr") => lookupIn(I18N[lang], path);
+const lookup = (path, lang = "en") => lookupIn(I18N[lang], path);
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 let html = read("index.html");
@@ -33,7 +33,7 @@ let html = read("index.html");
 const staticKeys = new Set(["app.title"]);
 for (const m of html.matchAll(/\sdata-t(?:-label)?="([^"]+)"/g)) staticKeys.add(m[1]);
 html = html.replace(/(<(\w+)\b[^>]*\sdata-t="([^"]+)"[^>]*>)(<\/\2>)/g, (_, open, tag, key, close) => {
-  const lang = (open.match(/\sdata-t-lang="(\w+)"/) || [])[1] || "tr";
+  const lang = (open.match(/\sdata-t-lang="(\w+)"/) || [])[1] || "en";
   return open + esc(lookup(key, lang)) + close;
 });
 html = html.replace(/(<\w+\b[^>]*\sdata-t-label="([^"]+)")/g, (m, open, key) => `${open} aria-label="${esc(lookup(key))}"`);

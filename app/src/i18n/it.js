@@ -114,12 +114,13 @@ window.GX_I18N.it = {
     summaryLabel: "In sintesi",
     sourcesTitle: "Fonti usate in questo capitolo",
     exerciseToPlanner: "Fallo in «Giornata»",
+    exerciseToHabit: "Provalo in «Abitudine»",
     timerStart: "Avvia un timer di 3 minuti",
     timerStop: "Ferma il timer",
     timerDone: "I tre minuti sono passati. Puoi fermarti qui; la lista non deve essere completa.",
     timerRemaining: "Tempo rimanente: {time}",
     nextChapter: "Capitolo successivo: {title}",
-    nextChapterSoon: "I prossimi capitoli non sono ancora stati scritti. Nel frattempo puoi scegliere l'attività principale di oggi in «Giornata».",
+    nextChapterSoon: "Sei arrivato/a alla fine del libro. Puoi scegliere l'attività principale di oggi in «Giornata» quando vuoi.",
     goToDay: "Vai a «Giornata»",
     readingTime: "Circa {min} minuti di lettura",
     bookLanguageNote: "Per ora il testo del libro è disponibile solo in turco. La traduzione è in preparazione; le sezioni «Giornata» e «Abitudine» sono interamente in italiano.",
@@ -385,7 +386,7 @@ window.GX_I18N.it = {
     themeModeLight: "chiaro",
     themeModeDark: "scuro",
     languageTitle: "Lingua (Language)",
-    languageHint: "Cambia la lingua dell'app. I tuoi dati restano come sono. Per ora il testo del libro è disponibile solo in turco.",
+    languageHint: "Cambia la lingua dell'app e del libro. I tuoi dati restano come sono.",
 
     dataTitle: "Dove sono i tuoi dati?",
     dataPoints: [
@@ -465,6 +466,6 @@ window.GX_I18N.it = {
     resetDone: "Tutti i dati sono stati eliminati.",
 
     aboutTitle: "Informazioni su questa versione",
-    aboutBody: "Versione di prova. L'introduzione e il primo capitolo del libro sono pronti; il secondo e il terzo capitolo non sono ancora stati scritti. L'app si apre da un link web e la prima volta richiede una connessione a Internet; l'uso offline non è ancora stato verificato su telefono.",
+    aboutBody: "Questa versione contiene il libro completo (introduzione, tre capitoli e una conclusione), il planner giornaliero e la sezione abitudine. L'app si apre da un link web e la prima volta richiede una connessione a Internet. I tuoi dati restano solo in questo browser, su questo dispositivo.",
   },
 };

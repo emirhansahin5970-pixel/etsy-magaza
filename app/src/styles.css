@@ -174,6 +174,8 @@ p { margin: 0; }
   display: inline-flex; align-items: center; gap: 0.4rem;
   border: 1.5px solid var(--line-strong); background: var(--paper); border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 0.95rem;
 }
+.topbar__actions { display: flex; flex-wrap: wrap; gap: 0.4rem; min-width: 0; max-width: 100%; }
+.lang-top { padding-inline: 0.6rem 0.75rem; letter-spacing: 0.04em; }
 .settings-btn svg { flex: none; width: 1.25rem; height: 1.25rem; stroke: var(--ink); fill: none; stroke-width: 1.8; stroke-linecap: round; }
 
 .tabs { padding-inline: var(--gutter); border-bottom: 1px solid var(--line); }
@@ -532,8 +534,8 @@ dialog[open] { animation: dialog-in var(--dur) var(--ease); }
 }
 
 /* ---------- Başlangıç ekranı ve açılış hataları (JavaScript gerektirmez) ---------- */
-.is-booting .tabs, .is-booting .settings-btn,
-.is-failed .tabs, .is-failed .settings-btn { display: none; }
+.is-booting .tabs, .is-booting .topbar__actions,
+.is-failed .tabs, .is-failed .topbar__actions { display: none; }
 .boot-screen { display: grid; gap: 1rem; max-width: var(--measure); padding-block: 1rem 2rem; }
 .boot-screen > * { min-width: 0; }
 .boot-status { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; color: var(--sage-deep); }

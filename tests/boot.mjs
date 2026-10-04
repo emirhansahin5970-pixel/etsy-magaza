@@ -10,6 +10,7 @@ import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import assert from "node:assert/strict";
+import { turkishUI } from "./helpers.mjs";
 
 const require = createRequire(import.meta.url);
 let playwright;
@@ -62,6 +63,7 @@ async function ctxFor(opts = {}) {
     viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, locale: "tr-TR", timezoneId: "Europe/Istanbul",
     ignoreHTTPSErrors: true, javaScriptEnabled: opts.js !== false, acceptDownloads: true,
   });
+  await turkishUI(ctx);
   if (opts.fonts === "hang") await ctx.route(/fonts\.(googleapis|gstatic)\.com/, () => new Promise(() => {}));
   else await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
   const page = await ctx.newPage();
@@ -132,8 +134,10 @@ for (const [label, url] of [["yerel dosya", FILE_URL], ["HTTPS", HTTPS + "/"]]) 
     const { ctx, page } = await ctxFor({ js: false });
     await page.goto(url);
     const text = await page.evaluate(() => document.body.innerText);
-    assert.match(text, /Küçük Adımlar, Daha Net Günler/);
-    assert.match(text, /Kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi\./);
+    // İlk açılış dili İngilizce; noscript uyarısı İngilizce + Türkçe
+    assert.match(text, /Small Steps, Clear Days/);
+    assert.match(text, /A short read, a clearer daily plan and a small habit trial\./);
+    assert.match(text, /This view can't run the app's code\. Open the product from its web link in Safari or Chrome\./);
     assert.match(text, /Bu görünüm uygulamanın kodunu çalıştıramıyor\. Ürünü Safari veya Chrome’da web bağlantısından açın\./);
     assert.equal(await page.locator("#boot-status").isVisible(), false, "JS yokken 'hazırlanıyor' yazmaz");
     assert.equal(await page.locator(".tabs").isVisible(), false, "çalışmayan sekmeler gizli");
@@ -231,7 +235,8 @@ await run("localStorage erişimi engelliyse uygulama açılır ve uyarı göster
   await page.addInitScript(() => Object.defineProperty(window, "localStorage", { get() { throw new DOMException("engelli", "SecurityError"); } }));
   await page.goto(HTTPS + "/#gunum");
   await started(page);
-  await page.getByText("Bu tarayıcı veri saklamaya izin vermiyor").waitFor();
+  // Tercih okunamadığı için ilk açılış dili (İngilizce)
+  await page.getByText("This browser doesn't allow data storage").waitFor();
   assert.deepEqual(errors, []);
   await ctx.close();
 });

@@ -1,4 +1,4 @@
-// Dil testleri: cihaz diline göre açılış, dil değiştirme ve kalıcılık, kitap dili notu, tarih biçimleri,
+// Dil testleri: ilk açılış İngilizce, dil değiştirme ve kalıcılık, kitap dili notu, tarih biçimleri,
 // başlangıç ekranının dili, yedeğe dil tercihinin girmemesi ve 7 dilde 320 px düzeni.
 // Chromium ile; telefon yalnızca ekran boyutu taklididir (gerçek cihaz testi DEĞİLDİR). Çevirilerin doğruluğunu denetlemez.
 // Kullanım: node app/build.mjs && node tests/lang.mjs
@@ -50,8 +50,8 @@ async function newPage(opts = {}) {
 const tabs = (page) => page.$$eval("[data-nav]", (e) => e.map((x) => x.textContent));
 const lsSettings = (page) => page.evaluate(() => JSON.parse(localStorage.getItem("gx.ssc.settings.v1") || "{}"));
 
-await run("Cihaz dili desteklenen bir dilse (de-DE) uygulama o dilde açılır; desteklenmeyen dilde (ja-JP) İngilizce", async () => {
-  for (const [locale, lang] of [["de-DE", "de"], ["fr-CA", "fr"], ["es-MX", "es"], ["it-IT", "it"], ["nl-BE", "nl"], ["en-GB", "en"], ["tr-TR", "tr"], ["ja-JP", "en"]]) {
+await run("İlk açılış cihaz dilinden bağımsız olarak İngilizce; üst çubukta dil düğmesi görünür", async () => {
+  for (const [locale, lang] of [["de-DE", "en"], ["fr-CA", "en"], ["tr-TR", "en"], ["ja-JP", "en"], ["en-US", "en"]]) {
     const { ctx, page, errors } = await newPage({ locale });
     await page.locator("#home-title").waitFor();
     assert.deepEqual(await tabs(page), [I[lang].nav.read, I[lang].nav.day, I[lang].nav.habit], locale);
@@ -59,9 +59,25 @@ await run("Cihaz dili desteklenen bir dilse (de-DE) uygulama o dilde açılır; 
     assert.equal(await page.title(), I[lang].app.title);
     assert.equal(await page.textContent("#home-language"), I[lang].home.languageButton.replace("{name}", I[lang].name));
     assert.deepEqual(await lsSettings(page).then((s) => s.lang), undefined, "otomatik seçim kaydedilmez; cihaz dili değişirse uygulama da değişir");
+    assert.equal(await page.textContent("#lang-code"), "EN");
+    assert.equal(await page.getAttribute("#open-language", "aria-label"), "Language: English");
     assert.deepEqual(errors, []);
     await ctx.close();
   }
+  // JavaScript'siz/başlangıç görünümü de İngilizce derlenir
+  assert.match(html.toString(), /<html lang="en">/);
+  assert.match(html.toString(), /<title>Small Steps, Clear Days<\/title>/);
+});
+
+await run("Üst çubuktaki dil düğmesi Ayarlar'ı dil seçimiyle açar; seçim sonrası kod değişir", async () => {
+  const { ctx, page } = await newPage({ locale: "en-US" });
+  await page.click("#open-language");
+  assert.equal(await page.evaluate(() => document.activeElement.id), "lang-en");
+  await page.click('label[for="lang-it"]');
+  await page.locator("#settings-title", { hasText: I.it.settings.title }).waitFor();
+  await page.click("#close-settings");
+  assert.equal(await page.textContent("#lang-code"), "IT");
+  await ctx.close();
 });
 
 await run("Dil Ayarlar'dan değiştirilir: metinler hemen değişir, pencere açık kalır, tercih saklanır, yeniden açılışta korunur, kayıtlar değişmez", async () => {
@@ -85,7 +101,7 @@ await run("Dil Ayarlar'dan değiştirilir: metinler hemen değişir, pencere aç
   assert.equal(await page.textContent("label[for=f-main]"), I.de.day.mainLabel);
   await page.reload();
   await page.locator("#f-main").waitFor();
-  assert.deepEqual(await tabs(page), [I.de.nav.read, I.de.nav.day, I.de.nav.habit], "yeniden açılışta tercih korunur (cihaz dili Türkçe olsa da)");
+  assert.deepEqual(await tabs(page), [I.de.nav.read, I.de.nav.day, I.de.nav.habit], "yeniden açılışta tercih korunur");
   // Yedeğe dil tercihi girmez
   const backup = JSON.parse(await page.evaluate(() => window.GX_STORE.createStore(localStorage).exportText()));
   assert.equal(backup.settings.lang, undefined);
@@ -120,7 +136,7 @@ await run("Arayüz Türkçe değilken kitap Türkçe kalır, not gösterilir ve 
   await page.screenshot({ path: join(shots, "lang-02-kitap-en.png") });
   await ctx.close();
   // Türkçede not yok, lang işareti gereksiz
-  const tr = await newPage({ hash: "#oku" });
+  const tr = await newPage({ hash: "#oku", seed: { "gx.ssc.settings.v1": JSON.stringify({ lang: "tr" }) } });
   await tr.page.locator("#toc-title").waitFor();
   assert.equal(await tr.page.locator("#book-lang-note").count(), 0);
   assert.equal(await tr.page.getAttribute(".toc__title >> nth=0", "lang"), null);
@@ -147,7 +163,7 @@ await run("Türkçe dışındaki dillerde başlama planı ve alışkanlık özet
   assert.equal(await page.locator("#start-sentence").count(), 0);
   assert.match(await page.textContent("#start-out"), new RegExp(I.en.day.startWhere));
   await ctx.close();
-  const tr = await newPage({ hash: "#gunum" });
+  const tr = await newPage({ hash: "#gunum", seed: { "gx.ssc.settings.v1": JSON.stringify({ lang: "tr" }) } });
   await tr.page.fill("#f-step", "Dosyayı açmak");
   await tr.page.click("#d-start summary");
   await tr.page.fill("#f-when", "Öğleden sonra");
@@ -156,8 +172,8 @@ await run("Türkçe dışındaki dillerde başlama planı ve alışkanlık özet
   await tr.ctx.close();
 });
 
-await run("Başlangıç hatası ekranı cihaz dilinde (Almanca) görünür", async () => {
-  const { ctx, page } = await newPage({ locale: "de-DE", init: () => Object.defineProperty(window, "GX_STORE", { get() { return undefined; }, set() {}, configurable: false }) });
+await run("Başlangıç hatası ekranı seçilmiş dilde (Almanca) görünür", async () => {
+  const { ctx, page } = await newPage({ locale: "de-DE", seed: { "gx.ssc.settings.v1": JSON.stringify({ lang: "de" }) }, init: () => Object.defineProperty(window, "GX_STORE", { get() { return undefined; }, set() {}, configurable: false }) });
   await page.locator("#boot-error").getByRole("heading", { name: I.de.boot.errorTitle }).waitFor({ timeout: 4000 });
   await page.getByRole("button", { name: I.de.boot.reload }).waitFor();
   assert.equal(await page.getAttribute("html", "lang"), "de");
