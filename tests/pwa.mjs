@@ -7,6 +7,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { join, dirname, extname, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
+import { turkishUI } from "./helpers.mjs";
 
 const require = createRequire(import.meta.url);
 let playwright;
@@ -36,6 +37,7 @@ async function run(name, fn) {
 }
 async function ctxFor() {
   const ctx = await browser.newContext({ viewport: { width: 393, height: 852 }, isMobile: true, hasTouch: true, locale: "tr-TR", timezoneId: "Europe/Istanbul" });
+  await turkishUI(ctx);
   await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
   const page = await ctx.newPage();
   const errors = [];
@@ -55,7 +57,7 @@ await run("Barındırılan klasör: sayfa, uygulama tanımı ve simgeler alt yol
     const touch = (await fetch(document.querySelector('link[rel="apple-touch-icon"]').href)).status;
     return { name: m.name, display: m.display, start: m.start_url, icons, touch };
   });
-  assert.equal(manifest.name, "Küçük Adımlar, Daha Net Günler");
+  assert.equal(manifest.name, "Small Steps, Clear Days");
   assert.equal(manifest.display, "standalone");
   assert.deepEqual(manifest.icons, [200, 200]);
   assert.equal(manifest.touch, 200);

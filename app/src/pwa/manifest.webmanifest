@@ -1,8 +1,8 @@
 {
-  "name": "Küçük Adımlar, Daha Net Günler",
-  "short_name": "Küçük Adımlar",
-  "description": "Genix Studio: kısa bir okuma, daha net bir günlük plan ve küçük bir alışkanlık denemesi.",
-  "lang": "tr",
+  "name": "Small Steps, Clear Days",
+  "short_name": "Small Steps",
+  "description": "Genix Studio: a short read, a clearer daily plan and a small habit trial.",
+  "lang": "en",
   "dir": "ltr",
   "start_url": "./#hosgeldin",
   "scope": "./",
@@ -10,7 +10,17 @@
   "background_color": "#fbf6ec",
   "theme_color": "#fbf6ec",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

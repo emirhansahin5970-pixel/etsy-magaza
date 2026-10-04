@@ -7,6 +7,7 @@ import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
+import { turkishUI } from "./helpers.mjs";
 
 const require = createRequire(import.meta.url);
 let playwright;
@@ -40,6 +41,7 @@ async function newPage(opts = {}) {
     viewport: opts.viewport || { width: 390, height: 844 }, isMobile: opts.isMobile ?? true, hasTouch: true,
     locale: "tr-TR", timezoneId: "Europe/Istanbul", colorScheme: opts.colorScheme || "light", acceptDownloads: true,
   });
+  await turkishUI(ctx);
   await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
   const page = await ctx.newPage();
   const errors = [];

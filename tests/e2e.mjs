@@ -6,6 +6,7 @@ import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
+import { turkishUI } from "./helpers.mjs";
 
 const require = createRequire(import.meta.url);
 let playwright;
@@ -48,6 +49,7 @@ async function newPage(opts = {}) {
     reducedMotion: opts.reducedMotion || "no-preference",
     acceptDownloads: true,
   });
+  await turkishUI(ctx);
   await ctx.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort()); // fontlar yüklenmezse de düzen bozulmamalı
   const page = await ctx.newPage();
   const errors = [];
@@ -481,10 +483,20 @@ await run("Kitap: parçalar, konuma dayalı ilerleme, yazı boyutu, açılır ka
   await page.waitForTimeout(300);
   const visible = await page.evaluate(() => { const r = document.getElementById("blk-b1-uygulama").getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0; });
   assert.ok(visible, "uygulama bloğuna dönülmeli");
-  // 2. ve 3. bölüm tamamlanmış gibi görünmez
+  // Kitabın bütün bölümleri açılabilir; "henüz yazılmadı" kalmadı
   await page.goto(URL_ + "#oku");
-  assert.equal(await page.locator('[data-open-chapter="bolum-2"]').count(), 0);
-  assert.equal(await page.getByText("Henüz yazılmadı").count(), 2);
+  for (const id of ["baslarken", "bolum-1", "bolum-2", "bolum-3", "kapanis"]) assert.equal(await page.locator(`[data-open-chapter="${id}"]`).count(), 1, id);
+  assert.equal(await page.getByText("Henüz yazılmadı").count(), 0);
+  // Bölüm 2'nin uygulaması Günüm'de ana iş alanına, Bölüm 3'ünki Alışkanlığım'a götürür
+  await page.click('[data-open-chapter="bolum-2"]');
+  await page.locator("[data-to-planner=main]").click();
+  await page.waitForFunction(() => document.activeElement?.id === "f-main");
+  await page.goto(URL_ + "#oku-bolum-3");
+  await page.locator("[data-to-planner=habit]").click();
+  await page.waitForFunction(() => location.hash === "#aliskanlik");
+  // Kapanıştan sonra "kitabın sonu" mesajı
+  await page.goto(URL_ + "#oku-kapanis");
+  await page.getByText("Kitabın sonuna geldin.").waitFor();
   await ctx.close();
 });
 

@@ -9,22 +9,56 @@
  *   4. Uygulama belirli bir sürede başlamazsa bunu söylemek.
  * Uygulama başarıyla başlayınca app.js, GX_BOOT.ready() çağırır ve başlangıç ekranı uygulama ekranıyla değişir.
  *
- * Metinler i18n/tr.js içindeki "boot" bölümünden derleme sırasında buraya yazılır.
+ * Metinler i18n/<dil>.js dosyalarındaki "boot" bölümünden derleme sırasında buraya yazılır (her dil için:
+ * { boot: {...}, ui: { "app.title": ... } }). HTML İngilizce derlenir; kayıtlı dil tercihi başkaysa
+ * başlangıç ekranının sabit metinleri burada o dile çevrilir.
  */
 (function (w, d) {
-  var STR = /*@BOOT_STRINGS@*/ {};
+  var ALL = /*@BOOT_STRINGS@*/ {};
+  var LANG = pickLang();
+  var STR = (ALL[LANG] && ALL[LANG].boot) || {};
   var TIMEOUT_MS = 12000;
   var started = false;
   var errors = [];
   var t0 = new Date().getTime();
 
+  /** Kayıtlı dil tercihi, yoksa İngilizce (app.js ile aynı kural). */
+  function pickLang() {
+    try {
+      var st = w.JSON.parse(w.localStorage.getItem("gx.ssc.settings.v1") || "{}");
+      if (st && typeof st.lang === "string" && ALL[st.lang]) return st.lang;
+    } catch (e) {}
+    return "en";
+  }
+
   function s(key) {
     if (STR[key]) return STR[key];
     try {
-      if (w.GX_STRINGS && w.GX_STRINGS.boot && w.GX_STRINGS.boot[key]) return w.GX_STRINGS.boot[key];
+      var all = w.GX_I18N || {};
+      var src = all[LANG] || all.en || w.GX_STRINGS;
+      if (src && src.boot && src.boot[key]) return src.boot[key];
     } catch (e) {}
     return key;
   }
+
+  // Başlangıç ekranının sabit metinleri (HTML'de Türkçe) seçilen dile çevrilir.
+  try {
+    var ui = ALL[LANG] && ALL[LANG].ui;
+    if (ui && d.querySelectorAll && d.documentElement.getAttribute("lang") !== LANG) {
+      var els = d.querySelectorAll("[data-t]"), j, key;
+      for (j = 0; j < els.length; j++) {
+        key = els[j].getAttribute("data-t");
+        if (ui[key] != null && !els[j].getAttribute("data-t-lang")) els[j].textContent = ui[key];
+      }
+      els = d.querySelectorAll("[data-t-label]");
+      for (j = 0; j < els.length; j++) {
+        key = els[j].getAttribute("data-t-label");
+        if (ui[key] != null) els[j].setAttribute("aria-label", ui[key]);
+      }
+      d.documentElement.setAttribute("lang", LANG);
+      if (ui["app.title"]) d.title = ui["app.title"];
+    }
+  } catch (e) {}
 
   // Eski tarayıcılar için küçük tamamlayıcı
   try {
@@ -83,10 +117,11 @@
   function detailsText(kind) {
     var lines = [];
     lines.push("Durum: " + kind);
+    lines.push("Dil: " + LANG);
     lines.push("Süre: " + (new Date().getTime() - t0) + " ms");
     lines.push("Adres türü: " + (w.location ? w.location.protocol : "?"));
     lines.push("Tarayıcı: " + (w.navigator ? w.navigator.userAgent : "?"));
-    var files = ["GX_STRINGS", "GX_BOOK", "GX_ART", "GX_STORE"], loaded = [];
+    var files = ["GX_I18N", "GX_BOOK", "GX_ART", "GX_STORE"], loaded = [];
     for (var i = 0; i < files.length; i++) loaded.push(files[i] + (w[files[i]] ? " var" : " YOK"));
     lines.push("Uygulama dosyaları: " + loaded.join(", "));
     lines.push("Özellikler: " + features().join(", "));

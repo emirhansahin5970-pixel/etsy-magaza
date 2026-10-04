@@ -4,7 +4,7 @@
   "description": "Genix Studio – Küçük Adımlar, Daha Net Günler: mini kitap ve günlük planlayıcı prototipi",
   "scripts": {
     "build": "node app/build.mjs",
-    "test": "node tests/contrast.mjs && node --test tests/storage.test.mjs && node app/build.mjs && node tests/e2e.mjs && node tests/boot.mjs && node tests/pwa.mjs && node tests/v3.mjs",
+    "test": "node tests/contrast.mjs && node --test tests/storage.test.mjs tests/i18n.test.mjs tests/book.test.mjs && node app/build.mjs && node tests/e2e.mjs && node tests/boot.mjs && node tests/pwa.mjs && node tests/v3.mjs && node tests/lang.mjs",
     "serve": "npx http-server app/dist -p 8080 -c-1"
   }
 }

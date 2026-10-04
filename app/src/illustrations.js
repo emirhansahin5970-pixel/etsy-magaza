@@ -69,4 +69,23 @@ window.GX_ART = {
     '<rect class="il-box" x="212" y="133" width="12" height="12" rx="3"/>' +
     '<path class="il-check" d="M214 74l3 3 6-7"/>' +
     "</svg>",
+
+  // Bölüm 3: Plan bir engelin etrafından dolaşarak sürer; altta yedi günlük deneme, bir gün boş.
+  flexiblePlan:
+    '<svg viewBox="0 0 320 180" role="img" aria-hidden="true" focusable="false">' +
+    '<path class="il-ground" d="M14 96h292"/>' +
+    '<rect class="il-soft" x="132" y="70" width="56" height="44" rx="8"/>' +
+    '<path class="il-scribble" d="M146 86c8-6 14 6 22 0s10 6 8 8"/>' +
+    '<path class="il-loop" d="M20 92h96c14 0 14-48 44-48s30 48 44 48h96"/>' +
+    '<circle class="il-dot" cx="20" cy="92" r="6"/>' +
+    '<path class="il-arrow-head" d="M292 85l9 7-9 7"/>' +
+    '<rect class="il-step" x="44" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="78" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="112" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-box" x="146" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="180" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="214" y="136" width="24" height="24" rx="5"/>' +
+    '<rect class="il-step" x="248" y="136" width="24" height="24" rx="5"/>' +
+    '<circle class="il-dot" cx="284" cy="148" r="5"/>' +
+    "</svg>",
 };
