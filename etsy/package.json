@@ -1,0 +1,8 @@
+{
+  "name": "genix-etsy-package",
+  "private": true,
+  "description": "Etsy satış paketi üretici: teslim PDF'i, kitap PDF'leri, ilan görselleri",
+  "type": "module",
+  "scripts": { "build": "node build.mjs" },
+  "devDependencies": { "qrcode": "1.5.4" }
+}

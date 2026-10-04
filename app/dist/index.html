@@ -4635,6 +4635,1878 @@ window.GX_BOOK = window.GX_BOOKS.tr;
 </script>
 <script>
 /*
+ * Book content (English): "Small Steps, Clear Days"
+ * Translation of book.tr.js: same chapter and block ids; the bibliography lives only in book.tr.js.
+ */
+window.GX_BOOKS = window.GX_BOOKS || {};
+window.GX_BOOKS.en = {
+  lang: "en",
+  title: "Small Steps, Clear Days",
+  subtitle: "A short read and a gentle daily planner",
+
+  chapters: [
+    {
+      id: "baslarken",
+      kind: "intro",
+      title: "Getting started",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "g1", type: "p", text: "This short book is for anyone trying to get through the day. For the person juggling classes, work, home and a phone that never stops buzzing, and who looks back in the evening and wonders, “What did I even do today?”" },
+        { id: "g2", type: "p", text: "You won’t find a big system here. No color-coded planners, no twenty-step morning routines, no promise to change everything overnight. Just three small ideas: put what’s on your mind somewhere outside your head, choose one main task for today, and let your plan change when your day does." },
+        { id: "g3", type: "p", text: "Each chapter is short enough to read on a bus ride. At the end of each one there’s an exercise that takes a few minutes. You can do it on paper or in the planner that comes with this app." },
+        { id: "g4", type: "p", text: "Now and then I’ll mention research. I’d like you to read it not as “science has proven,” but as “this is what was seen with certain people, under certain conditions.” What the research says and what I suggest are kept in separate boxes. Knowing which is which makes it easier to decide what you want to bring into your own life." },
+      ],
+    },
+
+    {
+      id: "bolum-1",
+      kind: "chapter",
+      number: 1,
+      title: "You Don’t Have to Keep It All in Your Head",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b1-sahne",
+          type: "scene",
+          paragraphs: [
+            "8:10 a.m. Sam is standing by the doors on the subway, holding the rail with one hand and scrolling through email with the other.",
+            "The thoughts don’t arrive in any order. The assignment due Friday. The message to the landlord about rent. The return package that needs to be dropped off. Mom’s birthday next week. The half-finished internship application. And last night Sam told a friend, “I’ll call you tomorrow.” When, exactly?",
+            "As the train pulls into the station, a familiar feeling creeps in: I’m forgetting something, but what? The day hasn’t even started, and Sam is already tired.",
+          ],
+        },
+
+        { id: "b1-h1", type: "h", text: "Your mind is a good reminder and a poor storage room" },
+        { id: "b1-p1", type: "p", text: "Sam’s problem isn’t laziness or being disorganized. The problem is that every task is sitting in the same place at the same time: inside Sam’s head." },
+        { id: "b1-p2", type: "p", text: "An unfinished task, as long as it isn’t written down somewhere, keeps reminding you of itself. The return package pops into your head during a lecture, the assignment while you’re eating. Sometimes these reminders help. But they don’t choose their order or their timing. An important task and a trivial one call out in the same voice." },
+        { id: "b1-p3", type: "p", text: "You end up with twenty half-thoughts and can’t fully think through any of them. That may be one reason you can feel busy all day and still feel, by evening, like you got nothing done." },
+
+        {
+          id: "b1-arastirma-1",
+          type: "research",
+          finding: "In a series of experiments, participants who were reminded of an unfinished goal had their minds drift to that goal more often during an unrelated reading task. When they were allowed to make a specific plan for that same goal, the effect disappeared.",
+          limits: "The experiments took place in a lab, mostly with university students. The results may not be the same for everyone in everyday life.",
+          details: "According to the researchers, what made the difference was not simply remembering the task but making a concrete plan for it. In this book, writing things down is the first step; planning is the subject of the second chapter.",
+          refs: ["masicampo2011"],
+        },
+
+        { id: "b1-h2", type: "h", text: "What writing it down is actually for" },
+        { id: "b1-p4", type: "p", text: "Writing down what’s on your mind isn’t a promise that you’ll do all of it. It’s more like parking it somewhere. When your car is in the parking lot, you don’t have to keep thinking about it; it’s enough to know where it is." },
+        { id: "b1-p5", type: "p", text: "A list on paper does three practical things. First, it lets you compare tasks. In your head they all look the same size; once they’re written down, you notice that some take two minutes and others take two weeks. Second, it eases the worry about forgetting, because now the paper does the remembering. Third, it makes the next step easier: deciding what to pick for today." },
+
+        {
+          id: "b1-gorsel",
+          type: "figure",
+          art: "thoughtsToPaper",
+          alt: "On the left, short lines and loops of different sizes tangled together; from the middle, an arrow leads to a sheet of paper on the right with neat lines. The paper has a few lines of writing and a small check mark next to one of them.",
+          caption: "In your head, everything gets tangled together. On paper, the same tasks line up and can be compared.",
+        },
+
+        {
+          id: "b1-arastirma-2",
+          type: "research",
+          finding: "In a sleep lab study, young adults who spent five minutes before bed writing down what they had to do in the coming days fell asleep faster, on average, than those who wrote about what they had completed in the past few days.",
+          limits: "A single night and a small group of 57 people without sleep problems. It doesn’t show that writing helps everyone sleep better.",
+          details: "Those who wrote their to-do lists in more detail also fell asleep faster. This finding should be read as a hint that moving the list from your mind to paper may be calming, not as a firm conclusion.",
+          refs: ["scullin2018"],
+        },
+
+        { id: "b1-h3", type: "h", text: "You don’t have to organize your whole life" },
+        { id: "b1-p6", type: "p", text: "At this point, the first idea that comes up is usually a big cleanup: download a new app, sort everything into categories, add colors, tags, priority levels. A week later, the system has become one more thing that needs looking after." },
+        { id: "b1-p7", type: "p", text: "There’s no need for that. The only thing you’ll do in this chapter is get what’s on your mind out of your head for a few minutes. No sorting, no ranking, no planning. We’ll get to that part in the second chapter, and even there we’ll choose one task, not twenty." },
+
+        {
+          id: "b1-oneri",
+          type: "suggestion",
+          text: "Keep the list in one place. If you write in your phone’s notes app one day, on a scrap of paper the next, and in a message draft the day after, your mind will just switch to trying to remember where the lists are. It doesn’t matter which place you choose; it matters that it’s the same place.",
+        },
+
+        { id: "b1-p8", type: "p", text: "It may also help to know this: your list is going to look messy. “Call Mom” will sit right above “Figure out what to do after graduation.” That’s normal. The list isn’t there to be tidy; it’s there to make the load in your head visible." },
+        { id: "b1-h4", type: "h", text: "What if the list gets long?" },
+        { id: "b1-p10", type: "p", text: "Many people who write everything down for the first time flinch a little when they look at the result. Fifteen, twenty lines. “I have this much to do?” But those tasks were already there; now they’re just countable." },
+        { id: "b1-p11", type: "p", text: "A long list doesn’t mean you have to do it all today. Some lines are a single text message, some are things that will take months, and some aren’t really tasks at all but worries: “Will I ever find an internship?” You don’t need to do anything to separate them for now. Just seeing that they aren’t all the same kind of thing can lighten the load a little." },
+        { id: "b1-p12", type: "p", text: "There may also be things that come to mind that you don’t want to write down. You don’t have to write everything. Nobody is going to see this list; it isn’t there to test you, just to free up a bit of room in your head." },
+        { id: "b1-p13", type: "p", text: "You might also notice that some tasks shrink as soon as they’re written down. “Message the landlord” feels like a big conversation in your head, but on paper it turns into a two-sentence text. That doesn’t happen with every task, but when it does, it’s a relief." },
+        { id: "b1-p9", type: "p", text: "After getting off the subway that morning, Sam spent three minutes typing everything that came to mind into the notes app. Fourteen lines. Sam didn’t do any of them right then. But after seeing the plan to call the friend at lunch and drop off the return package on the way home that evening, the rest got a little quieter." },
+
+        {
+          id: "b1-uygulama",
+          type: "exercise",
+          title: "The three-minute brain dump",
+          planner: "brain",
+          timerSeconds: 180,
+          steps: [
+            "Set a three-minute timer. You can also use the button below.",
+            "Write down every task that comes to mind, short and in no particular order. Don’t sort big from small: “Rent message,” “Assignment,” “Dentist appointment.”",
+            "Don’t write sentences that start with “I should…”; the name of the task is enough.",
+            "Stop when the timer goes off. The list may be incomplete; anything missing can be added later.",
+            "You don’t need to do anything with the list for now. Just know that it’s there.",
+          ],
+        },
+
+        {
+          id: "b1-ozet",
+          type: "summary",
+          text: "Writing down what’s on your mind doesn’t mean you have to do it right away; it just means you can stop carrying it all at once.",
+        },
+      ],
+      sources: ["masicampo2011", "scullin2018"],
+    },
+
+    {
+      id: "bolum-2",
+      kind: "chapter",
+      number: 2,
+      title: "Give Today One Main Task",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b2-sahne",
+          type: "scene",
+          paragraphs: [
+            "Tuesday, 10:00 a.m. Sam is in the library, at a table by the window. Yesterday’s list is right there: fourteen lines.",
+            "First, Sam opens the assignment file. A few minutes later, the internship form’s deadline comes to mind, so Sam opens the form. While looking for a document the form asks for, Sam remembers to check the deadline for the package return. Then it’s back to the assignment.",
+            "By late morning, seven tabs are open on the screen. None of them is finished. Sam knows the whole morning was spent working, but there’s nothing to show for it.",
+          ],
+        },
+
+        { id: "b2-h1", type: "h", text: "A list is not a plan" },
+        { id: "b2-p1", type: "p", text: "In the first chapter, you wrote down what was on your mind. That lightens the load in your head, but it doesn’t tell you what to start with today. A list is an inventory. Look at fourteen lines at once, and you may start to feel that each one is more urgent than the next." },
+        { id: "b2-p2", type: "p", text: "That’s how Sam’s morning went, too. Every task was legitimate, every switch made sense. But each time Sam jumped between tasks, it meant having to remember where things had been left off. The day filled up with half-finished starts." },
+        { id: "b2-p3", type: "p", text: "What I suggest in this chapter is simple: choose one main task for each day. It doesn’t have to be the most important thing in your life. Here’s the test: if this task were done, or had moved forward, by this evening, would you feel relieved? If the answer is yes, that’s today’s main task." },
+        { id: "b2-p4", type: "p", text: "The other tasks don’t disappear; they wait on the list. Choosing a main task doesn’t mean giving up on the others. It means deciding that when you’ll look at them can wait until later." },
+
+        { id: "b2-h5", type: "h", text: "When choosing feels hard" },
+        { id: "b2-p12", type: "p", text: "Some mornings, two or three tasks seem equally urgent. On days like that, a few questions can make the choice easier. Which one has the closer deadline? Which one, if it doesn’t get done, will hold up other things too? Which one sits heavier on your chest when you think about it?" },
+        { id: "b2-p13", type: "p", text: "These questions don’t always have a clear answer. In that case, even flipping a coin can be better than not choosing at all. Picking the “wrong” main task is often less tiring than bouncing between three tasks all day, because at least one of them moves forward." },
+        { id: "b2-p14", type: "p", text: "And one more thing: the main task doesn’t have to be a big one every day. On a day when you’re tired, just out of an exam or sick, the main task might be “Do the laundry.” You choose the main task based on what the day can hold, not on what the person you want to be could handle." },
+
+        { id: "b2-h2", type: "h", text: "Turning the main task into a small step" },
+        { id: "b2-p5", type: "p", text: "“Write the paper” can be a good main task, but it’s a bad starting point. It’s too big; you don’t know where to grab hold of it. What makes starting easier is the main task’s first small step: an action concrete enough to do in a few minutes." },
+        { id: "b2-p6", type: "p", text: "A few examples: instead of “Write the paper,” try “Open the file and write three headings.” Instead of “Internship application,” try “Find the missing document and put it in the folder.” Instead of “Talk to the landlord,” try “Write the first sentence of the rent message.”" },
+        { id: "b2-p7", type: "p", text: "The point of the first step isn’t to finish the task, it’s to get into it. Sometimes you keep going after the first step, and sometimes you don’t. Either is fine. But there’s a difference between waiting in front of a blank page and coming back to a page that already has three headings." },
+
+        {
+          id: "b2-gorsel",
+          type: "figure",
+          art: "smallSteps",
+          alt: "On the left, a large box with a few lines inside it; an arrow leads to four small steps rising to the right. There is an orange dot on the first and lowest step.",
+          caption: "You can’t clear a big task in one leap. The first step should be low enough to take today.",
+        },
+
+        { id: "b2-h3", type: "h", text: "When and where?" },
+        { id: "b2-p8", type: "p", text: "Once you’ve chosen the first step, one more question remains: when and where will you do it? “Sometime today” often slips to the end of the day. “After lunch, on the top floor of the library” sits in your mind like an appointment." },
+
+        {
+          id: "b2-arastirma-1",
+          type: "research",
+          finding: "Plans that psychologist Peter Gollwitzer calls “implementation intentions” involve deciding in advance when, where and how you will act on a goal: “When situation X arises, I will do Y.” In a meta-analysis that brought together 94 independent tests, participants who made plans like this reached their goals at a noticeably higher rate, on average, than those who only set goals.",
+          limits: "The size of the effect varied between studies, and some of the research was done in the lab or with students. An average effect doesn’t show that planning will work for everyone or for every task.",
+          details: "According to the researchers, plans like these make it easier to start when the moment comes, because the “When should I start?” decision has already been made. In this book, the “Set my start time” section in My Day is based on this idea.",
+          refs: ["gollwitzer1999", "gollwitzer2006"],
+        },
+
+        {
+          id: "b2-oneri",
+          type: "suggestion",
+          text: "Instead of tying the time to the clock, try tying it to a moment that already happens in your day: “After my first class,” “Once I’ve poured my coffee,” “When I get home and drop my bag.” Clock times slip; moments like these still come around on most days.",
+        },
+
+        { id: "b2-h4", type: "h", text: "Extra tasks and what carries over to tomorrow" },
+        { id: "b2-p9", type: "p", text: "Alongside the main task, there will also be small things that need doing during the day. In My Day, there are only two spots for these. That may look like a restriction; it’s really a gauge. If you need more than two lines, today may already be a full day, and it’s natural for some tasks to carry over to tomorrow." },
+        { id: "b2-p10", type: "p", text: "A task that carries over to tomorrow isn’t a failure; it’s a decision. Keeping it on the list means it hasn’t been forgotten." },
+        { id: "b2-p11", type: "p", text: "That day after lunch, Sam closed all the tabs. The main task was the assignment; the first step was to open the file and write three headings. Sam sat down at an empty table upstairs. The headings took ten minutes. Then Sam wrote a few more paragraphs under the first heading. The internship form and the package became the next day’s extra tasks." },
+
+        {
+          id: "b2-uygulama",
+          type: "exercise",
+          title: "Today’s main task",
+          planner: "main",
+          steps: [
+            "Look at your list and ask yourself: which one, if it moved forward, would let me feel relieved this evening?",
+            "Write that task down as today’s main task.",
+            "Below it, write the first small step you could start in a few minutes.",
+            "If you like, add when and where you’ll start, for example: “After lunch, at my desk.”",
+            "The rest of the tasks can wait on the list. For today, this is enough.",
+          ],
+        },
+
+        {
+          id: "b2-ozet",
+          type: "summary",
+          text: "One main task for today and a small first step toward it is often easier than trying to get started by staring at a long list.",
+        },
+      ],
+      sources: ["gollwitzer1999", "gollwitzer2006"],
+    },
+
+    {
+      id: "bolum-3",
+      kind: "chapter",
+      number: 3,
+      title: "Fit Your Plan to Your Life",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b3-sahne",
+          type: "scene",
+          paragraphs: [
+            "Thursday. Sam’s plan was clear: after lunch, the second section of the assignment, at the library.",
+            "But the group meeting ran long. On the way out, it started to rain. By the time Sam got home, it was past six: wet, tired and a little annoyed.",
+            "The thought that came up was a familiar one: “Today’s already ruined. I’ll start fresh tomorrow.”",
+          ],
+        },
+
+        { id: "b3-h1", type: "h", text: "When the plan falls apart" },
+        { id: "b3-p1", type: "p", text: "A plan made in the morning is a guess about how the day will go. Meetings run long, buses are late, energy runs out sooner than expected. A plan not working out isn’t a mistake on the part of the person who made it; that’s just the nature of guesses." },
+        { id: "b3-p2", type: "p", text: "The problem is often not the broken plan but the “all or nothing” thinking that follows. If the plan can’t be carried out exactly, it feels as if it can’t be carried out at all. But on most days, there are three options." },
+        { id: "b3-p3", type: "p", text: "The first is to shift the time: “The afternoon didn’t work, so half an hour after dinner.” The second is to shrink the step: “I can’t write the second section, but I can read through my notes once.” The third is to postpone on purpose: “I’m not doing it today; it’s the first thing tomorrow morning.” All three are decisions. The day that gets lost is the day no decision is made." },
+
+        { id: "b3-h2", type: "h", text: "A smaller option for hard days" },
+        { id: "b3-p4", type: "p", text: "On a day that’s going well, the first step is easy. A plan is really tested on the hard days. That’s why it can help to decide on a “smaller option” in advance: a backup small enough that you can do it even on a bad day." },
+        { id: "b3-p5", type: "p", text: "For an assignment, that might be opening the file and writing a single sentence. For walking, stepping outside and strolling around the block for five minutes. For reading, one page. The smaller option isn’t there so the task counts as done; it’s there so you don’t lose touch with it." },
+
+        {
+          id: "b3-gorsel",
+          type: "figure",
+          art: "flexiblePlan",
+          alt: "A dashed path running from left to right curves around an obstacle in the middle and continues. Below are seven small squares; most are filled, one is empty, and there is an orange dot next to the last one.",
+          caption: "A plan can go around an obstacle. A gap on one of seven days doesn’t mean the road has ended.",
+        },
+
+        { id: "b3-h3", type: "h", text: "Missing a day" },
+        { id: "b3-p6", type: "p", text: "When you’re trying out a new habit, skipping a day feels to many people as if they have to start all over again. Streak counters feed that feeling: a thirty-day chain resets in a single day." },
+
+        {
+          id: "b3-arastirma-1",
+          type: "research",
+          finding: "In a study in London, 96 volunteers each chose an eating, drinking or activity behavior to do in the same situation every day, and for 12 weeks rated each day for themselves how automatic that behavior had become. Missing a single opportunity did not noticeably disrupt the habit-forming process. How long it took for the behavior to become nearly automatic varied widely from person to person: between 18 and 254 days.",
+          limits: "A small group of volunteers and simple daily behaviors. Automaticity was measured by the participants’ own ratings, and some participants’ data did not fit the model well. Results may be different for more complex behaviors.",
+          details: "The median time in the study was 66 days, but this is neither an average nor a target. The finding suggests that fixed timeframes like “a habit in 21 days” don’t fit everyone, and that occasionally missing a day doesn’t reset the process.",
+          refs: ["lally2010"],
+        },
+
+        {
+          id: "b3-oneri",
+          type: "suggestion",
+          text: "When you try out a habit, start with a short seven-day trial. The goal isn’t to build the habit in seven days; it’s to see whether the time, place and step you chose actually suit you. Changing the plan at the end of the seven days is part of the experiment.",
+        },
+
+        { id: "b3-h5", type: "h", text: "If the plan doesn’t fit you" },
+        { id: "b3-p10", type: "p", text: "Sometimes the problem isn’t a single bad day. If the same plan keeps not working several days in a row, it may be a sign that you’re trying to fit the plan rather than the plan fitting you. For someone who plans to run at 7 a.m. but switches off the alarm every morning, the real question may not be “Why can’t I do this?” but “Does this time actually work for me?”" },
+        { id: "b3-p11", type: "p", text: "When you change a plan, you can look at three things: the time, the place and the size of the step. Changing just one is often enough. Evening instead of morning, the library instead of home, ten minutes instead of half an hour. The goal can stay the same; only the path to it changes." },
+        { id: "b3-p12", type: "p", text: "While you make these changes, it can help to see yourself as someone running an experiment. Experiments don’t always give the expected result; that doesn’t mean the person running them has failed, it just shows what to change in the next attempt." },
+
+        { id: "b3-h4", type: "h", text: "Two questions in the evening" },
+        { id: "b3-p7", type: "p", text: "At the end of the day, instead of counting how much of your plan actually happened, try asking two questions: What worked today? What could I make easier tomorrow? The first helps you notice what’s working. The second adjusts tomorrow’s plan a little, based on today’s experience." },
+        { id: "b3-p8", type: "p", text: "The answers can be small: “Putting my phone in another room helped.” “I’ll pack my bag the night before.” This is how plans come to fit your life: through small adjustments, day by day." },
+        { id: "b3-p9", type: "p", text: "That Thursday evening, Sam opened the assignment file and wrote a single sentence for the second section. Then Sam went to bed. The next morning, when Sam opened the file, there was a sentence waiting instead of a blank page." },
+
+        {
+          id: "b3-uygulama",
+          type: "exercise",
+          title: "A small seven-day trial",
+          planner: "habit",
+          steps: [
+            "Choose one habit you’d like to try.",
+            "Write down the smallest workable way to start: small enough that you could do it even on a bad day.",
+            "Tie it to a moment that already happens in your day, and decide where you’ll do it.",
+            "Add a smaller option for hard days.",
+            "For seven days, each evening, just mark one of these: I did it, I did a smaller version, or I didn’t do it. Then take another look at your plan.",
+          ],
+        },
+
+        {
+          id: "b3-ozet",
+          type: "summary",
+          text: "When a plan falls apart, instead of dropping it, you can often shift its time or shrink its step; and missing a day doesn’t mean the road has ended.",
+        },
+      ],
+      sources: ["lally2010"],
+    },
+
+    {
+      id: "kapanis",
+      kind: "outro",
+      title: "Closing",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "k1", type: "p", text: "This book had three small ideas: put what’s on your mind somewhere outside your head, choose one main task for today along with its first step, and let your plan change when your day does." },
+        { id: "k2", type: "p", text: "None of these will make every day easy. Some days the list will stay long, the main task won’t move, the trial will stumble. That doesn’t mean the method has failed, or that you have. Tomorrow, you can choose a main task again." },
+        { id: "k3", type: "p", text: "The planner and the habit section are still here after you finish the book. Some days you might open them just to write down today’s main task; other days you might not open them at all. Your entries are stored only on this device, so remember to make a backup now and then." },
+        { id: "k4", type: "p", text: "Small steps don’t solve everything. But on most days, they can be enough to get started." },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+/*
+ * Buchinhalt (Deutsch): "Kleine Schritte, klarere Tage"
+ * Übersetzung von book.tr.js; gleiche Kapitel- und Block-IDs. Das Literaturverzeichnis steht nur in book.tr.js.
+ */
+window.GX_BOOKS = window.GX_BOOKS || {};
+window.GX_BOOKS.de = {
+  lang: "de",
+  title: "Kleine Schritte, klarere Tage",
+  subtitle: "Eine kurze Lektüre und ein entspannter Tagesplaner",
+
+  chapters: [
+    {
+      id: "baslarken",
+      kind: "intro",
+      title: "Bevor es losgeht",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "g1", type: "p", text: "Dieses kurze Buch ist für alle geschrieben, die versuchen, irgendwie durch den Tag zu kommen. Für alle, die Uni, Job, Haushalt und die endlosen Benachrichtigungen auf dem Handy gleichzeitig tragen und sich abends fragen: „Was habe ich heute eigentlich geschafft?“" },
+        { id: "g2", type: "p", text: "Ein großes System findest du hier nicht. Keine farbcodierten Kalender, keine Morgenroutinen mit zwanzig Schritten und kein Versprechen, über Nacht alles zu ändern. Es gibt drei kleine Ideen: das, was dir im Kopf herumgeht, irgendwo ablegen; für heute eine einzige Hauptaufgabe wählen; und den Plan ändern dürfen, wenn sich der Tag ändert." },
+        { id: "g3", type: "p", text: "Jedes Kapitel ist kurz genug für eine Busfahrt. Am Ende jedes Kapitels steht eine Übung, die ein paar Minuten dauert. Du kannst sie auf Papier machen oder im Planer dieser App." },
+        { id: "g4", type: "p", text: "Ab und zu erwähne ich Studien. Lies sie bitte nicht als „Die Wissenschaft hat bewiesen …“, sondern als „Bei bestimmten Menschen, unter bestimmten Bedingungen hat man Folgendes beobachtet“. Was die Forschung sagt und was ich vorschlage, siehst du in getrennten Kästen. Zu wissen, was was ist, macht es leichter zu entscheiden, was du in dein eigenes Leben übernimmst." },
+      ],
+    },
+
+    {
+      id: "bolum-1",
+      kind: "chapter",
+      number: 1,
+      title: "Du musst nicht alles im Kopf behalten",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b1-sahne",
+          type: "scene",
+          paragraphs: [
+            "8:10 Uhr morgens. Lena steht in der U-Bahn an der Tür. Mit einer Hand hält sie sich an der Stange fest, mit der anderen scrollt sie auf dem Handy durch ihre E-Mails.",
+            "Die Gedanken kommen nicht der Reihe nach. Die Hausarbeit, die am Freitag fällig ist. Die Nachricht an den Vermieter wegen der Miete. Das Rücksendepaket, das zur Post muss. Mamas Geburtstag nächste Woche. Das halb ausgefüllte Formular für die Praktikumsbewerbung. Und gestern Abend hatte sie einer Freundin gesagt: „Ich ruf dich morgen an.“ Wann eigentlich?",
+            "Als die Bahn in die Station einfährt, meldet sich ein vertrautes Gefühl: Ich vergesse doch etwas – aber was? Der Tag hat noch nicht mal angefangen, und sie ist schon müde.",
+          ],
+        },
+
+        { id: "b1-h1", type: "h", text: "Der Kopf erinnert gut, aber er lagert schlecht" },
+        { id: "b1-p1", type: "p", text: "Lenas Problem ist weder Faulheit noch Chaos. Das Problem ist, dass alle Aufgaben gleichzeitig am selben Ort liegen: in ihrem Kopf." },
+        { id: "b1-p2", type: "p", text: "Eine unerledigte Aufgabe meldet sich immer wieder, solange sie nirgends notiert ist. In der Vorlesung fällt dir das Rücksendepaket ein, beim Essen die Hausarbeit. Manchmal sind diese Erinnerungen nützlich. Aber sie suchen sich weder Reihenfolge noch Zeitpunkt aus. Eine wichtige und eine unwichtige Aufgabe rufen gleich laut." },
+        { id: "b1-p3", type: "p", text: "Am Ende hast du zwanzig halbe Gedanken und kannst keinen davon zu Ende denken. Das könnte ein Grund sein, warum man sich den ganzen Tag beschäftigt fühlt und abends trotzdem das Gefühl hat, nichts geschafft zu haben." },
+
+        {
+          id: "b1-arastirma-1",
+          type: "research",
+          finding: "In einer Reihe von Experimenten schweiften Teilnehmende, die an ein unerledigtes Ziel erinnert worden waren, während einer Lesetätigkeit, die damit nichts zu tun hatte, häufiger zu diesem Ziel ab. Durften sie für dasselbe Ziel einen konkreten Plan machen, verschwand dieser Effekt.",
+          limits: "Die Experimente fanden im Labor statt, überwiegend mit Studierenden. Im Alltag muss sich bei allen nicht dasselbe Ergebnis zeigen.",
+          details: "Laut den Forschenden machte nicht das bloße Erinnern an die Aufgabe den Unterschied, sondern ein konkreter Plan dafür. In diesem Buch ist das Aufschreiben der erste Schritt; der Plan ist Thema des zweiten Kapitels.",
+          refs: ["masicampo2011"],
+        },
+
+        { id: "b1-h2", type: "h", text: "Wozu das Aufschreiben ganz praktisch gut ist" },
+        { id: "b1-p4", type: "p", text: "Aufzuschreiben, was dir im Kopf herumgeht, ist kein Versprechen, das alles auch zu erledigen. Es ist eher so, als würdest du es irgendwo parken. Wenn dein Auto auf dem Parkplatz steht, musst du nicht ständig daran denken; es reicht zu wissen, wo es steht." },
+        { id: "b1-p5", type: "p", text: "Eine Liste auf Papier leistet drei ganz konkrete Dinge. Erstens kannst du Aufgaben vergleichen. Im Kopf wirken alle gleich groß; auf dem Papier merkst du, dass manche zwei Minuten dauern und andere zwei Wochen. Zweitens lässt die Sorge nach, etwas zu vergessen, denn das Erinnern übernimmt jetzt das Papier. Drittens fällt der nächste Schritt leichter: die Entscheidung, was du dir für heute aussuchst." },
+
+        {
+          id: "b1-gorsel",
+          type: "figure",
+          art: "thoughtsToPaper",
+          alt: "Links kurze, ineinander verknäuelte Linien und Kringel in verschiedenen Größen; von der Mitte führt ein Pfeil zu einem Blatt Papier rechts mit ordentlichen Zeilen. Auf dem Blatt stehen einige Zeilen, neben einer davon ein kleines Häkchen.",
+          caption: "Im Kopf verheddert sich alles. Auf dem Papier stellen sich dieselben Aufgaben in eine Reihe und lassen sich vergleichen.",
+        },
+
+        {
+          id: "b1-arastirma-2",
+          type: "research",
+          finding: "In einer Studie in einem Schlaflabor schliefen junge Erwachsene, die vor dem Zubettgehen fünf Minuten lang aufschrieben, was sie in den nächsten Tagen erledigen wollten, im Durchschnitt schneller ein als diejenigen, die aufschrieben, was sie in den letzten Tagen erledigt hatten.",
+          limits: "Eine einzige Nacht, eine kleine Gruppe von 57 Personen ohne Schlafprobleme. Das zeigt nicht, dass Schreiben jedem beim Schlafen hilft.",
+          details: "Wer seine Aufgaben ausführlicher aufschrieb, schlief ebenfalls schneller ein. Dieser Befund ist als Hinweis zu lesen, dass es entlasten kann, die Liste vom Kopf aufs Papier zu bringen – nicht als sicheres Ergebnis.",
+          refs: ["scullin2018"],
+        },
+
+        { id: "b1-h3", type: "h", text: "Du musst nicht dein ganzes Leben ordnen" },
+        { id: "b1-p6", type: "p", text: "An dieser Stelle denkt man meistens zuerst an einen großen Aufräumtag: eine neue App herunterladen, alles in Kategorien einteilen, Farben, Labels, Prioritätsstufen. Eine Woche später ist das System selbst eine weitere Aufgabe, die gepflegt werden will." },
+        { id: "b1-p7", type: "p", text: "Das brauchst du nicht. In diesem Kapitel tust du nur eins: ein paar Minuten lang rausholen, was dir im Kopf herumgeht. Kein Sortieren, kein Ordnen, kein Plan. Dazu kommen wir im zweiten Kapitel, und auch dort wählen wir nur eine einzige Aufgabe aus, nicht zwanzig." },
+
+        {
+          id: "b1-oneri",
+          type: "suggestion",
+          text: "Führe die Liste an einem einzigen Ort. Wenn du heute in die Notizen-App schreibst, morgen auf einen Zettel und übermorgen in einen Nachrichtenentwurf, versucht dein Kopf als Nächstes, sich zu merken, wo die Listen sind. Welcher Ort es ist, ist egal; wichtig ist, dass es immer derselbe ist.",
+        },
+
+        { id: "b1-p8", type: "p", text: "Und noch etwas, das dir helfen kann: Deine Liste wird unordentlich aussehen. „Mama anrufen“ steht direkt über „Überlegen, was ich nach dem Abschluss mache“. Das ist normal. Die Liste ist nicht dazu da, ordentlich zu sein, sondern um sichtbar zu machen, was dich im Kopf belastet." },
+        { id: "b1-h4", type: "h", text: "Und wenn die Liste lang wird?" },
+        { id: "b1-p10", type: "p", text: "Viele, die zum ersten Mal alles aufschreiben, schrecken beim Blick auf die fertige Liste kurz zurück. Fünfzehn, zwanzig Zeilen. „So viel habe ich zu tun?“ Dabei waren diese Aufgaben die ganze Zeit schon da; jetzt kann man sie nur zählen." },
+        { id: "b1-p11", type: "p", text: "Eine lange Liste heißt nicht, dass du alles heute erledigen musst. Manche Zeilen sind mit einer Nachricht erledigt, manche sind Themen, die dich monatelang begleiten, und manche sind eigentlich gar keine Aufgabe, sondern eine Sorge: „Finde ich überhaupt ein Praktikum?“ Um das auseinanderzuhalten, musst du gerade nichts tun. Schon zu sehen, dass nicht alles von derselben Art ist, kann die Last ein bisschen leichter machen." },
+        { id: "b1-p12", type: "p", text: "Beim Schreiben fallen dir vielleicht auch Dinge ein, die du nicht aufschreiben willst. Du musst nicht alles aufschreiben. Diese Liste bekommt niemand zu sehen; sie soll dich nicht prüfen, sondern in deinem Kopf ein bisschen Platz schaffen." },
+        { id: "b1-p13", type: "p", text: "Vielleicht fällt dir auch auf, dass manche Aufgaben kleiner werden, sobald sie aufgeschrieben sind. „Nachricht an den Vermieter“ wirkt im Kopf wie ein großes Gespräch und wird auf dem Papier zu einer Nachricht mit zwei Sätzen. Das passiert nicht bei jeder Aufgabe, aber wenn es passiert, tut es gut." },
+        { id: "b1-p9", type: "p", text: "Als Lena an diesem Morgen aus der U-Bahn stieg, schrieb sie drei Minuten lang alles in ihre Handy-Notizen, was ihr einfiel. Es wurden vierzehn Zeilen. Nichts davon erledigte sie sofort. Aber als sie sah, dass sie ihre Freundin in der Mittagspause anrufen und das Rücksendepaket auf dem Heimweg zur Post bringen würde, wurde der Rest ein bisschen leiser." },
+
+        {
+          id: "b1-uygulama",
+          type: "exercise",
+          title: "Drei Minuten Kopf leeren",
+          planner: "brain",
+          timerSeconds: 180,
+          steps: [
+            "Stell dir einen Timer auf drei Minuten. Du kannst auch den Button unten verwenden.",
+            "Schreib jede Aufgabe auf, die dir einfällt, kurz und ohne Reihenfolge. Unterscheide nicht zwischen groß und klein: „Nachricht wegen Miete“, „Hausarbeit“, „Zahnarzttermin“.",
+            "Formuliere keine Sätze, die mit „Ich muss …“ anfangen; der Name der Aufgabe reicht.",
+            "Hör auf, wenn der Timer abläuft. Die Liste darf unvollständig bleiben; was fehlt, kannst du später ergänzen.",
+            "Mit der Liste musst du jetzt noch nichts machen. Es reicht zu wissen, dass sie da ist.",
+          ],
+        },
+
+        {
+          id: "b1-ozet",
+          type: "summary",
+          text: "Wenn du aufschreibst, was dir im Kopf herumgeht, musst du es nicht sofort erledigen – du hörst nur auf, alles gleichzeitig mit dir herumzutragen.",
+        },
+      ],
+      sources: ["masicampo2011", "scullin2018"],
+    },
+
+    {
+      id: "bolum-2",
+      kind: "chapter",
+      number: 2,
+      title: "Gib dem Tag eine Hauptaufgabe",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b2-sahne",
+          type: "scene",
+          paragraphs: [
+            "Dienstagmorgen, 10:00 Uhr. Lena sitzt in der Bibliothek am Tisch beim Fenster. Vor ihr liegt die Liste von gestern: vierzehn Zeilen.",
+            "Zuerst öffnet sie die Datei mit der Hausarbeit. Ein paar Minuten später fällt ihr die Frist für das Praktikumsformular ein, und sie öffnet das Formular. Während sie das geforderte Dokument sucht, kommt ihr der Gedanke, nachzusehen, bis wann das Paket zurückgeschickt werden muss. Dann geht sie wieder zur Hausarbeit.",
+            "Gegen Mittag sind sieben Tabs offen. Nichts davon ist fertig. Lena weiß, dass sie den ganzen Vormittag gearbeitet hat, aber sie hat nichts, was sie vorzeigen könnte.",
+          ],
+        },
+
+        { id: "b2-h1", type: "h", text: "Eine Liste ist noch kein Plan" },
+        { id: "b2-p1", type: "p", text: "Im ersten Kapitel hast du aufgeschrieben, was dir im Kopf herumgeht. Das nimmt Last von dir, sagt dir aber nicht, womit du heute anfangen sollst. Eine Liste ist eine Bestandsaufnahme. Wer auf vierzehn Zeilen gleichzeitig schaut, fängt leicht an zu glauben, dass jede dringender ist als die andere." },
+        { id: "b2-p2", type: "p", text: "Genau so lief Lenas Vormittag. Jede Aufgabe war berechtigt, jeder Wechsel ergab Sinn. Aber bei jedem Hin und Her musste sie sich erst wieder erinnern, wo sie stehen geblieben war. Der Tag füllte sich mit halben Anfängen." },
+        { id: "b2-p3", type: "p", text: "Was ich in diesem Kapitel vorschlage, ist einfach: Such dir für jeden Tag eine Hauptaufgabe aus. Es muss nicht die wichtigste Aufgabe deines Lebens sein. Der Maßstab ist: Wärst du am Abend erleichtert, wenn diese Aufgabe erledigt oder ein Stück vorangekommen ist? Wenn ja, ist sie die Hauptaufgabe für heute." },
+        { id: "b2-p4", type: "p", text: "Die anderen Aufgaben verschwinden nicht; sie warten auf der Liste. Eine Hauptaufgabe zu wählen heißt nicht, auf die anderen zu verzichten, sondern zu entscheiden, dich später um sie zu kümmern." },
+
+        { id: "b2-h5", type: "h", text: "Wenn die Wahl schwerfällt" },
+        { id: "b2-p12", type: "p", text: "An manchen Morgen wirken zwei oder drei Aufgaben gleich dringend. An solchen Tagen können ein paar Fragen die Wahl erleichtern. Welche hat die nähere Frist? Welche hält andere Dinge auf, wenn sie nicht fertig wird? Bei welcher spürst du mehr Druck auf der Brust, wenn du an sie denkst?" },
+        { id: "b2-p13", type: "p", text: "Nicht immer gibt es auf diese Fragen eine klare Antwort. Dann kann sogar eine Münze besser sein, als gar nicht zu wählen. Die „falsche“ Hauptaufgabe zu wählen ist oft weniger anstrengend, als den ganzen Tag zwischen drei Aufgaben hin- und herzuspringen; denn so kommt wenigstens eine voran." },
+        { id: "b2-p14", type: "p", text: "Und noch etwas: Die Hauptaufgabe muss nicht jeden Tag groß sein. An einem Tag, an dem du müde bist, gerade eine Prüfung hinter dir hast oder krank bist, kann die Hauptaufgabe „Wäsche waschen“ sein. Die Hauptaufgabe richtet sich danach, was der Tag hergibt – nicht danach, was die Person schaffen würde, die du gern wärst." },
+
+        { id: "b2-h2", type: "h", text: "Aus der Hauptaufgabe einen kleinen Schritt machen" },
+        { id: "b2-p5", type: "p", text: "„Hausarbeit schreiben“ kann eine gute Hauptaufgabe sein, ist aber ein schlechter Anfang. Sie ist zu groß; du weißt nicht, wo du sie anpacken sollst. Was den Anfang erleichtert, ist der erste kleine Schritt: eine Handlung, so konkret, dass sie in ein paar Minuten erledigt ist." },
+        { id: "b2-p6", type: "p", text: "Ein paar Beispiele: statt „Hausarbeit schreiben“ lieber „Die Datei öffnen und drei Überschriften notieren“. Statt „Praktikumsbewerbung“ lieber „Das fehlende Dokument für das Formular suchen und in den Ordner legen“. Statt „Mit dem Vermieter reden“ lieber „Den ersten Satz der Nachricht wegen der Miete schreiben“." },
+        { id: "b2-p7", type: "p", text: "Der erste Schritt soll die Aufgabe nicht erledigen, sondern dich in sie hineinbringen. Manchmal machst du nach dem ersten Schritt weiter, manchmal nicht. Beides ist in Ordnung. Aber es ist ein Unterschied, ob du vor einer leeren Seite wartest oder zu einer Seite zurückkommst, auf der schon drei Überschriften stehen." },
+
+        {
+          id: "b2-gorsel",
+          type: "figure",
+          art: "smallSteps",
+          alt: "Links ein großer Kasten mit einigen Zeilen darin; ein Pfeil führt zu vier kleinen Stufen, die nach rechts ansteigen. Auf der ersten und niedrigsten Stufe liegt ein orangefarbener Punkt.",
+          caption: "Über eine große Aufgabe springt man nicht in einem Satz. Die erste Stufe sollte so niedrig sein, dass du sie heute nehmen kannst.",
+        },
+
+        { id: "b2-h3", type: "h", text: "Wann und wo?" },
+        { id: "b2-p8", type: "p", text: "Wenn du den ersten Schritt gewählt hast, bleibt noch eine Frage: Wann und wo wirst du ihn machen? „Irgendwann heute“ rutscht oft ans Ende des Tages. „Nach dem Mittagessen, im oberen Stock der Bibliothek“ steht dagegen in deinem Kopf wie ein Termin." },
+
+        {
+          id: "b2-arastirma-1",
+          type: "research",
+          finding: "Pläne, die der Psychologe Peter Gollwitzer „Durchführungsintentionen“ (implementation intentions) nennt, legen im Voraus fest, wann, wo und wie man ein Ziel umsetzt: „Wenn Situation X eintritt, dann tue ich Y.“ In einer Metaanalyse, die 94 unabhängige Tests zusammenfasste, erreichten Teilnehmende, die solche Pläne machten, ihre Ziele im Durchschnitt deutlich häufiger als diejenigen, die sich nur ein Ziel gesetzt hatten.",
+          limits: "Die Größe des Effekts schwankte zwischen den Studien, und ein Teil der Untersuchungen fand im Labor oder mit Studierenden statt. Ein durchschnittlicher Effekt zeigt nicht, dass der Plan bei allen und für jede Aufgabe funktioniert.",
+          details: "Laut den Forschenden erleichtern solche Pläne den Start, weil die Entscheidung „Wann fange ich an?“ schon vorher getroffen ist und man im entscheidenden Moment einfach loslegen kann. In diesem Buch beruht der Bereich „Meine Startzeit festlegen“ in „Mein Tag“ auf dieser Idee.",
+          refs: ["gollwitzer1999", "gollwitzer2006"],
+        },
+
+        {
+          id: "b2-oneri",
+          type: "suggestion",
+          text: "Versuch, den Zeitpunkt nicht an eine Uhrzeit zu knüpfen, sondern an einen Moment, den es in deinem Tag sowieso gibt: „Nach der ersten Vorlesung“, „Wenn ich mir Kaffee eingeschenkt habe“, „Wenn ich nach Hause komme und die Tasche abstelle“. Uhrzeiten verschieben sich; solche Momente kommen an den meisten Tagen trotzdem.",
+        },
+
+        { id: "b2-h4", type: "h", text: "Nebenaufgaben und was auf morgen wartet" },
+        { id: "b2-p9", type: "p", text: "Neben der Hauptaufgabe gibt es im Laufe des Tages auch kleinere Dinge zu erledigen. In „Mein Tag“ ist dafür nur Platz für zwei. Das wirkt vielleicht wie eine Einschränkung; eigentlich ist es ein Maß. Wenn du mehr als zwei Zeilen brauchst, ist der Tag vielleicht ohnehin schon voll, und es ist ganz natürlich, dass manches auf morgen wartet." },
+        { id: "b2-p10", type: "p", text: "Eine Aufgabe, die auf morgen wartet, ist kein Scheitern, sondern eine Entscheidung. Dass sie auf der Liste bleibt, heißt, dass sie nicht vergessen ist." },
+        { id: "b2-p11", type: "p", text: "An diesem Tag schloss Lena nach dem Mittagessen alle Tabs. Ihre Hauptaufgabe war die Hausarbeit; der erste Schritt: die Datei öffnen und drei Überschriften notieren. Sie setzte sich oben an einen freien Tisch. Die Überschriften dauerten zehn Minuten. Danach schrieb sie unter die erste Überschrift noch ein paar Absätze. Das Praktikumsformular und das Paket wurden zu den Nebenaufgaben für den nächsten Tag." },
+
+        {
+          id: "b2-uygulama",
+          type: "exercise",
+          title: "Die Hauptaufgabe für heute",
+          planner: "main",
+          steps: [
+            "Schau auf deine Liste und frag dich: Bei welcher Aufgabe wäre ich heute Abend erleichtert, wenn sie vorangekommen ist?",
+            "Schreib diese Aufgabe als Hauptaufgabe für heute auf.",
+            "Schreib darunter den ersten kleinen Schritt, mit dem du in ein paar Minuten anfangen kannst.",
+            "Wenn du magst, ergänze, wann und wo du anfängst, zum Beispiel: „Nach dem Mittagessen, an meinem Schreibtisch“.",
+            "Alles andere kann auf der Liste warten. Für heute reicht das.",
+          ],
+        },
+
+        {
+          id: "b2-ozet",
+          type: "summary",
+          text: "Eine einzige Hauptaufgabe für heute und ein kleiner erster Schritt dazu sind meistens leichter als der Versuch, mit einem Blick auf eine lange Liste anzufangen.",
+        },
+      ],
+      sources: ["gollwitzer1999", "gollwitzer2006"],
+    },
+
+    {
+      id: "bolum-3",
+      kind: "chapter",
+      number: 3,
+      title: "Pass deinen Plan an dein Leben an",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b3-sahne",
+          type: "scene",
+          paragraphs: [
+            "Donnerstag. Lenas Plan stand fest: nach dem Mittagessen in der Bibliothek den zweiten Teil der Hausarbeit schreiben.",
+            "Aber das Gruppentreffen zog sich in die Länge. Beim Rausgehen fing es an zu regnen. Als sie zu Hause ankam, war es schon nach sechs; sie war nass, müde und ein bisschen gereizt.",
+            "Der Satz in ihrem Kopf war ihr vertraut: „Heute ist eh schon alles im Eimer. Morgen fange ich richtig an.“",
+          ],
+        },
+
+        { id: "b3-h1", type: "h", text: "Wenn der Plan nicht aufgeht" },
+        { id: "b3-p1", type: "p", text: "Ein Plan vom Morgen ist eine Schätzung, wie der Tag laufen wird. Besprechungen ziehen sich, Busse kommen zu spät, die Energie ist früher aufgebraucht als gedacht. Dass ein Plan nicht aufgeht, ist kein Fehler der Person, die ihn gemacht hat; so sind Schätzungen eben." },
+        { id: "b3-p2", type: "p", text: "Das Problem ist oft nicht der geplatzte Plan, sondern das „Alles oder nichts“-Denken, das danach kommt. Wenn sich der Plan nicht genau so umsetzen lässt, fühlt es sich an, als ginge gar nichts. Dabei gibt es an den meisten Tagen drei Möglichkeiten." },
+        { id: "b3-p3", type: "p", text: "Erstens: die Zeit verschieben. „Am Nachmittag hat es nicht geklappt, also eine halbe Stunde nach dem Abendessen.“ Zweitens: den Schritt verkleinern. „Den zweiten Teil schaffe ich nicht, aber ich kann meine Notizen einmal durchlesen.“ Drittens: bewusst verschieben. „Heute mache ich es nicht; morgen früh ist es das Erste.“ Alle drei sind Entscheidungen. Ein verlorener Tag ist ein Tag, an dem keine Entscheidung fällt." },
+
+        { id: "b3-h2", type: "h", text: "Eine kleinere Variante für schwere Tage" },
+        { id: "b3-p4", type: "p", text: "An einem guten Tag ist der erste Schritt leicht. Auf die Probe gestellt wird ein Plan an den schweren Tagen. Deshalb kann es helfen, vorher eine „kleinere Variante“ festzulegen: eine Notlösung, so klein, dass du sie auch an einem schlechten Tag schaffst." },
+        { id: "b3-p5", type: "p", text: "Bei der Hausarbeit kann das heißen, die Datei zu öffnen und einen einzigen Satz zu schreiben. Beim Spazierengehen: vor die Tür gehen und fünf Minuten um den Block laufen. Beim Lesen: eine Seite. Die kleine Variante ist nicht dafür da, dass die Aufgabe als erledigt gilt, sondern dafür, dass der Faden nicht reißt." },
+
+        {
+          id: "b3-gorsel",
+          type: "figure",
+          art: "flexiblePlan",
+          alt: "Ein gestrichelter Weg verläuft von links nach rechts und biegt in der Mitte um ein Hindernis herum. Darunter sieben kleine Quadrate; die meisten sind gefüllt, eines ist leer, neben dem letzten ein orangefarbener Punkt.",
+          caption: "Ein Plan kann um ein Hindernis herumführen. Eine Lücke an einem von sieben Tagen heißt nicht, dass der Weg zu Ende ist.",
+        },
+
+        { id: "b3-h3", type: "h", text: "Einen Tag auslassen" },
+        { id: "b3-p6", type: "p", text: "Wer eine neue Gewohnheit ausprobiert und einen Tag auslässt, hat oft das Gefühl, wieder ganz von vorn anfangen zu müssen. Serienzähler verstärken dieses Gefühl noch: Eine Kette von dreißig Tagen steht an einem einzigen Tag wieder auf null." },
+
+        {
+          id: "b3-arastirma-1",
+          type: "research",
+          finding: "In einer Studie in London wählten 96 Freiwillige ein Ess-, Trink- oder Bewegungsverhalten, das sie jeden Tag in derselben Situation ausführen wollten, und schätzten 12 Wochen lang täglich selbst ein, wie automatisch dieses Verhalten geworden war. Eine einzelne verpasste Gelegenheit beeinträchtigte die Gewohnheitsbildung nicht nennenswert. Bis das Verhalten nahezu automatisch ablief, dauerte es von Person zu Person sehr unterschiedlich lange: zwischen 18 und 254 Tagen.",
+          limits: "Eine kleine Gruppe von Freiwilligen und einfache Alltagshandlungen. Die Automatik wurde über die Selbsteinschätzung der Teilnehmenden gemessen, und die Daten einiger Teilnehmender passten nicht gut zum Modell. Bei komplexeren Verhaltensweisen können die Ergebnisse anders ausfallen.",
+          details: "Der Median lag in der Studie bei 66 Tagen; das ist aber weder ein Durchschnitt noch ein Ziel. Der Befund legt nahe, dass feste Zeiträume wie „In 21 Tagen zur Gewohnheit“ nicht für alle passen und dass ein gelegentlich verpasster Tag den Prozess nicht auf null setzt.",
+          refs: ["lally2010"],
+        },
+
+        {
+          id: "b3-oneri",
+          type: "suggestion",
+          text: "Wenn du eine Gewohnheit ausprobierst, mach zuerst einen kurzen Versuch über sieben Tage. Es geht nicht darum, in sieben Tagen eine Gewohnheit aufzubauen, sondern herauszufinden, ob die Zeit, der Ort und der Schritt, die du gewählt hast, zu dir passen. Den Plan nach den sieben Tagen zu ändern, gehört zum Versuch dazu.",
+        },
+
+        { id: "b3-h5", type: "h", text: "Wenn der Plan nicht zu dir passt" },
+        { id: "b3-p10", type: "p", text: "Manchmal liegt es nicht an einem einzelnen schlechten Tag. Wenn derselbe Plan mehrere Tage hintereinander nicht klappt, kann das ein Zeichen sein, dass nicht der Plan sich nach dir richtet, sondern du dich nach dem Plan. Wer sich vornimmt, um sieben Uhr morgens laufen zu gehen, aber jeden Morgen den Wecker ausmacht, für den lautet die eigentliche Frage vielleicht nicht „Warum schaffe ich das nicht?“, sondern „Passt diese Uhrzeit wirklich zu mir?“" },
+        { id: "b3-p11", type: "p", text: "Wenn du den Plan änderst, kannst du auf drei Dinge schauen: die Zeit, den Ort und die Größe des Schritts. Oft reicht es, eins davon zu ändern. Abends statt morgens, Bibliothek statt Zuhause, zehn Minuten statt einer halben Stunde. Das Ziel kann gleich bleiben; nur der Weg dorthin ändert sich." },
+        { id: "b3-p12", type: "p", text: "Bei solchen Änderungen kann es helfen, dich selbst wie jemanden zu sehen, der ein Experiment durchführt. Experimente liefern nicht immer das erwartete Ergebnis; das heißt nicht, dass die Person, die sie durchführt, gescheitert ist, sondern nur, was sie beim nächsten Versuch ändern kann." },
+
+        { id: "b3-h4", type: "h", text: "Zwei Fragen am Abend" },
+        { id: "b3-p7", type: "p", text: "Statt am Ende des Tages zu zählen, wie viel vom Plan geklappt hat, versuch es mit zwei Fragen: Was hat heute geholfen? Was kann ich mir für morgen leichter machen? Die erste lässt dich bemerken, was funktioniert. Die zweite passt den Plan für morgen ein wenig an das an, was du heute erlebt hast." },
+        { id: "b3-p8", type: "p", text: "Die Antworten dürfen klein sein: „Das Handy in ein anderes Zimmer zu legen hat geholfen.“ „Morgen packe ich meine Tasche schon am Abend vorher.“ So passen sich Pläne nach und nach dem Leben an, mit kleinen Korrekturen von Tag zu Tag." },
+        { id: "b3-p9", type: "p", text: "An diesem Donnerstagabend öffnete Lena die Datei mit der Hausarbeit und schrieb einen einzigen Satz für den zweiten Teil. Dann ging sie schlafen. Als sie die Datei am nächsten Morgen öffnete, wartete statt einer leeren Seite ein Satz auf sie." },
+
+        {
+          id: "b3-uygulama",
+          type: "exercise",
+          title: "Ein kleiner Versuch über sieben Tage",
+          planner: "habit",
+          steps: [
+            "Such dir eine einzige Gewohnheit aus, die du ausprobieren möchtest.",
+            "Schreib den kleinsten machbaren Anfang auf: so klein, dass du ihn auch an einem schlechten Tag schaffst.",
+            "Knüpf ihn an einen Moment, den es in deinem Tag sowieso gibt, und leg fest, wo du ihn machst.",
+            "Ergänze eine kleinere Variante für schwere Tage.",
+            "Markiere sieben Tage lang jeden Abend nur: gemacht, kleinere Variante gemacht oder nicht gemacht. Schau dir danach deinen Plan noch einmal an.",
+          ],
+        },
+
+        {
+          id: "b3-ozet",
+          type: "summary",
+          text: "Wenn ein Plan nicht aufgeht, kannst du ihn meistens zeitlich verschieben oder den Schritt verkleinern, statt ihn aufzugeben – und ein verpasster Tag heißt nicht, dass der Weg zu Ende ist.",
+        },
+      ],
+      sources: ["lally2010"],
+    },
+
+    {
+      id: "kapanis",
+      kind: "outro",
+      title: "Zum Schluss",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "k1", type: "p", text: "In diesem Buch ging es um drei kleine Ideen: das, was dir im Kopf herumgeht, irgendwo ablegen; für heute eine einzige Hauptaufgabe und ihren ersten Schritt wählen; und den Plan ändern dürfen, wenn sich der Tag ändert." },
+        { id: "k2", type: "p", text: "Nichts davon wird jeden Tag leicht machen. An manchen Tagen bleibt die Liste lang, die Hauptaufgabe kommt nicht voran, der Versuch gerät ins Stocken. Das heißt nicht, dass die Methode oder du versagt hast. Am nächsten Tag kannst du wieder eine Hauptaufgabe wählen." },
+        { id: "k3", type: "p", text: "Der Planer und der Bereich „Gewohnheit“ bleiben auch nach dem Lesen hier. An manchen Tagen kannst du sie öffnen und nur die Hauptaufgabe für heute eintragen, an anderen gar nicht hineinschauen. Deine Einträge bleiben nur auf diesem Gerät; denk daran, ab und zu ein Backup zu machen." },
+        { id: "k4", type: "p", text: "Kleine Schritte lösen nicht alles. Aber an den meisten Tagen reichen sie, um anzufangen." },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+/*
+ * Contenu du livre (français) : « Petits pas, journées plus claires »
+ * Traduit de book.tr.js ; mêmes chapitres et identifiants de blocs. La bibliographie reste dans book.tr.js.
+ */
+window.GX_BOOKS = window.GX_BOOKS || {};
+window.GX_BOOKS.fr = {
+  lang: "fr",
+  title: "Petits pas, journées plus claires",
+  subtitle: "Une courte lecture et un planificateur quotidien tout en douceur",
+
+  chapters: [
+    {
+      id: "baslarken",
+      kind: "intro",
+      title: "Pour commencer",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "g1", type: "p", text: "Ce petit livre a été écrit pour celles et ceux qui essaient de sauver leur journée. Pour qui porte en même temps les cours, le travail, la maison et les notifications sans fin du téléphone, et qui se demande le soir venu : « Mais qu’est-ce que j’ai fait aujourd’hui ? »" },
+        { id: "g2", type: "p", text: "Tu ne trouveras pas ici de grand système. Pas d’agendas à code couleur, pas de routines matinales en vingt étapes, pas de promesse de tout changer du jour au lendemain. Il y a trois petites idées : déposer quelque part ce que tu as en tête, choisir une seule tâche principale pour aujourd’hui, et pouvoir changer de plan quand la journée change." },
+        { id: "g3", type: "p", text: "Chaque chapitre est assez court pour être lu pendant un trajet en bus. À la fin de chacun, il y a un exercice de quelques minutes. Tu peux le faire sur papier ou dans le planificateur de cette application, comme tu préfères." },
+        { id: "g4", type: "p", text: "Je parlerai par endroits de recherches. J’aimerais que tu les lises non pas comme « la science l’a prouvé », mais comme « voici ce qu’on a observé chez certaines personnes, dans certaines conditions ». Tu verras ce que dit la recherche et ce que je te suggère dans des encadrés séparés. Savoir lequel est lequel t’aide à décider ce que tu veux garder pour ta propre vie." },
+      ],
+    },
+
+    {
+      id: "bolum-1",
+      kind: "chapter",
+      number: 1,
+      title: "Tu n’as pas à tout garder en tête",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b1-sahne",
+          type: "scene",
+          paragraphs: [
+            "8 h 10 du matin. Camille est debout dans le métro, près de la porte. D’une main, elle se tient à la barre ; de l’autre, elle consulte ses e-mails sur son téléphone.",
+            "Ses pensées n’arrivent pas dans l’ordre. Le devoir à rendre vendredi. Le message à écrire au propriétaire au sujet du loyer. Le colis à retourner, qu’il faut déposer au point relais. L’anniversaire de sa mère, la semaine prochaine. Le formulaire de candidature au stage, à moitié rempli. Et puis, hier soir, elle a dit à une amie : « Je t’appelle demain. » Mais quand, au juste ?",
+            "Alors que la rame approche de la station, une sensation familière monte en elle : j’oublie quelque chose, mais quoi ? La journée n’a même pas commencé, et elle est déjà fatiguée.",
+          ],
+        },
+
+        { id: "b1-h1", type: "h", text: "La tête : un bon pense-bête, un mauvais entrepôt" },
+        { id: "b1-p1", type: "p", text: "Le problème de Camille, ce n’est ni la paresse ni le désordre. C’est que toutes ses tâches se trouvent au même moment au même endroit : dans sa tête." },
+        { id: "b1-p2", type: "p", text: "Tant qu’une tâche inachevée n’est notée nulle part, elle se rappelle à toi de temps en temps. Le colis te revient en tête pendant un cours, le devoir pendant le repas. Ces rappels sont parfois utiles. Mais ils ne choisissent ni leur ordre ni leur moment. Une tâche importante et une tâche sans importance t’appellent de la même voix." },
+        { id: "b1-p3", type: "p", text: "Au final, tu te retrouves avec vingt pensées à moitié commencées, sans pouvoir aller au bout d’aucune. C’est peut-être l’une des raisons pour lesquelles on peut se sentir occupé toute la journée et avoir, le soir, l’impression de n’avoir rien fait." },
+
+        {
+          id: "b1-arastirma-1",
+          type: "research",
+          finding: "Dans une série d’expériences, les participants à qui l’on rappelait un objectif inachevé avaient l’esprit qui revenait plus souvent vers cet objectif pendant une lecture sans rapport. Quand on leur permettait de faire un plan précis pour ce même objectif, cet effet disparaissait.",
+          limits: "Les expériences ont été menées en laboratoire, surtout avec des étudiants. Le résultat ne sera pas forcément le même pour tout le monde dans la vie quotidienne.",
+          details: "Selon les chercheurs, ce qui faisait la différence n’était pas seulement de se souvenir de la tâche, mais de se donner un plan concret pour elle. Dans ce livre, écrire est la première étape ; le plan est le sujet du deuxième chapitre.",
+          refs: ["masicampo2011"],
+        },
+
+        { id: "b1-h2", type: "h", text: "À quoi sert concrètement d’écrire" },
+        { id: "b1-p4", type: "p", text: "Écrire ce que tu as en tête, ce n’est pas promettre de tout faire. C’est plutôt comme garer ces tâches quelque part. Quand ta voiture est au parking, tu n’as pas besoin d’y penser sans arrêt ; il suffit de savoir où elle est." },
+        { id: "b1-p5", type: "p", text: "Une liste posée sur le papier rend trois services concrets. D’abord, elle te permet de comparer tes tâches. Dans ta tête, elles semblent toutes de la même taille ; une fois écrites, tu remarques que certaines prennent deux minutes et d’autres deux semaines. Ensuite, elle apaise la peur d’oublier, puisque c’est désormais le papier qui se souvient à ta place. Enfin, elle facilite l’étape suivante : décider ce que tu vas choisir aujourd’hui." },
+
+        {
+          id: "b1-gorsel",
+          type: "figure",
+          art: "thoughtsToPaper",
+          alt: "À gauche, de courts traits et des boucles de tailles différentes, emmêlés les uns aux autres ; au milieu, une flèche mène à une feuille aux lignes bien rangées, à droite. Sur la feuille, quelques lignes, et une petite marque à côté de l’une d’elles.",
+          caption: "Dans ta tête, tout s’emmêle. Sur le papier, les mêmes tâches se mettent en file et deviennent comparables.",
+        },
+
+        {
+          id: "b1-arastirma-2",
+          type: "research",
+          finding: "Dans une étude menée dans un laboratoire du sommeil, les jeunes adultes qui avaient écrit pendant cinq minutes avant de se coucher ce qu’ils avaient à faire dans les jours suivants se sont endormis en moyenne plus vite que ceux qui avaient écrit ce qu’ils avaient terminé ces derniers jours.",
+          limits: "Une seule nuit, un petit groupe de 57 personnes sans troubles du sommeil. Cela ne montre pas qu’écrire améliorera le sommeil de tout le monde.",
+          details: "Ceux qui avaient détaillé davantage leurs tâches à faire se sont aussi endormis plus vite. Ce résultat est à lire comme un indice que faire passer la liste de la tête au papier peut soulager, et non comme une conclusion définitive.",
+          refs: ["scullin2018"],
+        },
+
+        { id: "b1-h3", type: "h", text: "Tu n’as pas à réorganiser toute ta vie" },
+        { id: "b1-p6", type: "p", text: "À ce stade, la première idée qui vient est souvent un grand ménage : télécharger une nouvelle application, tout ranger par catégories, des couleurs, des étiquettes, des niveaux de priorité. Une semaine plus tard, le système est devenu une tâche de plus à entretenir." },
+        { id: "b1-p7", type: "p", text: "Ce n’est pas nécessaire. Dans ce chapitre, la seule chose que tu vas faire, c’est sortir de ta tête, pendant quelques minutes, ce qui s’y trouve. Pas de classement, pas d’ordre, pas de plan. On y viendra au deuxième chapitre, et là encore, on choisira une seule tâche, pas vingt." },
+
+        {
+          id: "b1-oneri",
+          type: "suggestion",
+          text: "Garde ta liste à un seul endroit. Si tu écris un jour dans l’appli de notes du téléphone, le lendemain sur une feuille et le surlendemain dans un brouillon de message, ta tête va cette fois essayer de se souvenir où sont tes listes. Peu importe l’endroit ; l’important, c’est que ce soit toujours le même.",
+        },
+
+        { id: "b1-p8", type: "p", text: "Une chose encore peut t’être utile : ta liste va paraître en désordre. « Appeler maman » côtoiera « Réfléchir à ce que je ferai après mon diplôme ». C’est normal. La liste n’est pas là pour être bien rangée, mais pour rendre visible ce que tu portes dans ta tête." },
+        { id: "b1-h4", type: "h", text: "Et si la liste s’allonge ?" },
+        { id: "b1-p10", type: "p", text: "Beaucoup de gens qui écrivent tout pour la première fois ont un mouvement de recul en voyant la liste. Quinze, vingt lignes. « J’ai tout ça à faire ? » En réalité, ces tâches étaient déjà là ; simplement, maintenant, on peut les compter." },
+        { id: "b1-p11", type: "p", text: "Une longue liste ne veut pas dire que tu dois tout faire aujourd’hui. Certaines lignes tiennent en un message, d’autres concernent un sujet qui va durer des mois, et d’autres encore ne sont pas vraiment des tâches, mais des inquiétudes : « Est-ce que je vais trouver un stage ? » Pour l’instant, tu n’as rien à faire pour les trier. Rien que de voir qu’elles ne sont pas toutes de la même nature peut déjà alléger un peu la charge." },
+        { id: "b1-p12", type: "p", text: "Il se peut aussi que des choses te viennent en tête que tu n’as pas envie d’écrire. Rien ne t’oblige à tout noter. Personne ne verra cette liste ; elle n’est pas là pour te mettre à l’épreuve, mais pour libérer un peu de place dans ta tête." },
+        { id: "b1-p13", type: "p", text: "Tu remarqueras peut-être autre chose : certaines tâches rétrécissent dès qu’elles sont écrites. « Message au propriétaire » ressemblait dans ta tête à une grande conversation ; sur le papier, cela devient un message de deux phrases. Ce n’est pas le cas pour toutes les tâches, mais quand ça arrive, ça fait du bien." },
+        { id: "b1-p9", type: "p", text: "Ce matin-là, en sortant du métro, Camille a noté dans son téléphone, pendant trois minutes, tout ce qui lui venait à l’esprit. Cela a donné quatorze lignes. Elle n’en a fait aucune sur le moment. Mais quand elle a vu qu’elle appellerait son amie à la pause déjeuner et qu’elle déposerait le colis au point relais en rentrant le soir, le reste s’est un peu tu." },
+
+        {
+          id: "b1-uygulama",
+          type: "exercise",
+          title: "Vider sa tête en trois minutes",
+          planner: "brain",
+          timerSeconds: 180,
+          steps: [
+            "Lance un minuteur de trois minutes. Tu peux aussi utiliser le bouton ci-dessous.",
+            "Écris chaque tâche qui te vient, sans ordre et en quelques mots. Ne fais pas de différence entre grandes et petites : « Message loyer », « Devoir », « Rendez-vous dentiste ».",
+            "Ne fais pas de phrases qui commencent par « Je dois » ; le nom de la tâche suffit.",
+            "Arrête-toi quand le minuteur sonne. La liste peut rester incomplète ; ce qui manque pourra être ajouté plus tard.",
+            "Tu n’as rien à faire de cette liste pour l’instant. Sache simplement qu’elle est là.",
+          ],
+        },
+
+        {
+          id: "b1-ozet",
+          type: "summary",
+          text: "Écrire quelque part les tâches que tu as en tête ne t’oblige pas à les faire tout de suite ; cela te permet simplement d’arrêter de toutes les porter en même temps.",
+        },
+      ],
+      sources: ["masicampo2011", "scullin2018"],
+    },
+
+    {
+      id: "bolum-2",
+      kind: "chapter",
+      number: 2,
+      title: "Donne à ta journée une tâche principale",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b2-sahne",
+          type: "scene",
+          paragraphs: [
+            "Mardi matin, 10 h. Camille est à la bibliothèque, à une table près de la fenêtre. Devant elle, la liste de la veille : quatorze lignes.",
+            "Elle ouvre d’abord le fichier de son devoir. Quelques minutes plus tard, elle se souvient de la date limite du formulaire de stage et l’ouvre. En cherchant le document demandé dans le formulaire, elle pense à vérifier le délai pour retourner le colis. Puis elle revient à son devoir.",
+            "Vers midi, sept onglets sont ouverts à l’écran. Aucune tâche n’est terminée. Camille sait qu’elle a travaillé toute la matinée, mais elle n’a rien à montrer.",
+          ],
+        },
+
+        { id: "b2-h1", type: "h", text: "Une liste n’est pas un plan" },
+        { id: "b2-p1", type: "p", text: "Au premier chapitre, tu as écrit quelque part ce que tu avais en tête. Cela allège la charge ; mais cela ne te dit pas par quoi commencer aujourd’hui. Une liste est un inventaire. Quand on regarde quatorze lignes à la fois, on peut se mettre à penser que chacune est plus urgente que les autres." },
+        { id: "b2-p2", type: "p", text: "C’est ainsi que s’est passée la matinée de Camille. Chaque tâche était légitime, chaque changement avait sa logique. Mais en passant de l’une à l’autre, elle devait chaque fois se rappeler où elle en était. La journée s’est remplie de débuts inachevés." },
+        { id: "b2-p3", type: "p", text: "Ce que je te propose dans ce chapitre est simple : choisis une tâche principale pour chaque journée. Pas besoin que ce soit la tâche la plus importante de ta vie. Le critère est le suivant : si, ce soir, cette tâche est terminée ou a avancé, est-ce que ce sera un soulagement pour toi ? Si la réponse est oui, c’est la tâche principale du jour." },
+        { id: "b2-p4", type: "p", text: "Les autres tâches ne disparaissent pas ; elles attendent sur la liste. Choisir une tâche principale, ce n’est pas renoncer aux autres, c’est simplement décider qu’aujourd’hui, elles passent après." },
+
+        { id: "b2-h5", type: "h", text: "Quand choisir te semble difficile" },
+        { id: "b2-p12", type: "p", text: "Certains matins, deux ou trois tâches paraissent tout aussi urgentes. Ces jours-là, quelques questions peuvent t’aider à choisir. Laquelle a l’échéance la plus proche ? Laquelle, si elle n’est pas faite, bloque aussi d’autres tâches ? Laquelle te pèse le plus sur la poitrine quand tu y penses ?" },
+        { id: "b2-p13", type: "p", text: "Ces questions n’ont pas toujours de réponse claire. Dans ce cas, même tirer à pile ou face peut valoir mieux que ne rien choisir du tout. Choisir la « mauvaise » tâche principale fatigue souvent moins que de faire des allers-retours entre trois tâches toute la journée ; parce qu’au moins, l’une d’elles avance." },
+        { id: "b2-p14", type: "p", text: "Autre chose : la tâche principale n’a pas besoin d’être une grosse tâche tous les jours. Un jour où tu manques d’énergie, où tu sors tout juste d’un examen ou où tu es malade, la tâche principale peut être « Faire une lessive ». La tâche principale se choisit selon ce que la journée te permet, pas selon ce que la personne que tu voudrais être pourrait faire." },
+
+        { id: "b2-h2", type: "h", text: "Transformer la tâche principale en un petit pas" },
+        { id: "b2-p5", type: "p", text: "« Écrire le devoir » peut être une bonne tâche principale, mais c’est un mauvais point de départ. C’est trop gros ; tu ne sais pas par quel bout le prendre. Ce qui facilite le démarrage, c’est le premier petit pas de la tâche principale : une action assez concrète pour être faite en quelques minutes." },
+        { id: "b2-p6", type: "p", text: "Quelques exemples : au lieu de « Écrire le devoir », « Ouvrir le fichier du devoir et écrire trois titres ». Au lieu de « Candidature de stage », « Trouver le document manquant du formulaire et le mettre dans le dossier ». Au lieu de « Parler au propriétaire », « Écrire la première phrase du message sur le loyer »." },
+        { id: "b2-p7", type: "p", text: "Le but du premier pas n’est pas de finir la tâche, mais d’y entrer. Parfois, une fois le premier pas fait, tu continues ; parfois non. Les deux sont possibles. Mais il y a une différence entre attendre devant une page blanche et revenir à une page où trois titres sont déjà écrits." },
+
+        {
+          id: "b2-gorsel",
+          type: "figure",
+          art: "smallSteps",
+          alt: "À gauche, une grande boîte contenant quelques lignes ; une flèche mène à quatre petites marches qui montent vers la droite. Un point orange est posé sur la première marche, la plus basse.",
+          caption: "On ne franchit pas une grande tâche d’un seul bond. La première marche doit être assez basse pour être montée aujourd’hui.",
+        },
+
+        { id: "b2-h3", type: "h", text: "Quand et où ?" },
+        { id: "b2-p8", type: "p", text: "Une fois le premier pas choisi, il reste une question : quand et où vas-tu le faire ? « À un moment aujourd’hui » glisse souvent jusqu’à la fin de la journée. « Après le déjeuner, à l’étage de la bibliothèque », en revanche, s’installe dans ta tête comme un rendez-vous." },
+
+        {
+          id: "b2-arastirma-1",
+          type: "research",
+          finding: "Les plans que le psychologue Peter Gollwitzer appelle « intentions de mise en œuvre » consistent à décider à l’avance quand, où et comment on va agir pour un objectif : « Quand la situation X se présente, je fais Y. » Dans une méta-analyse réunissant 94 tests indépendants, les participants qui faisaient ce type de plan atteignaient leurs objectifs, en moyenne, nettement plus souvent que ceux qui se fixaient seulement un objectif.",
+          limits: "L’ampleur de l’effet variait d’une étude à l’autre, et une partie des recherches a été menée en laboratoire ou avec des étudiants. Un effet moyen ne montre pas que le plan fonctionnera pour tout le monde et pour toutes les tâches.",
+          details: "Selon les chercheurs, ces plans facilitent le démarrage au bon moment parce que la décision « Quand est-ce que je commence ? » a déjà été prise. Dans ce livre, la partie « Choisir quand je commence » de « Ma journée » s’appuie sur cette idée.",
+          refs: ["gollwitzer1999", "gollwitzer2006"],
+        },
+
+        {
+          id: "b2-oneri",
+          type: "suggestion",
+          text: "Plutôt qu’une heure précise, essaie de rattacher ton premier pas à un moment qui existe déjà dans ta journée : « Après mon premier cours », « Quand mon café est prêt », « Quand je rentre et que je pose mon sac ». Les horaires glissent ; ce genre de moment, lui, revient presque tous les jours.",
+        },
+
+        { id: "b2-h4", type: "h", text: "Tâches en plus et choses qui attendront demain" },
+        { id: "b2-p9", type: "p", text: "À côté de la tâche principale, il y aura aussi de petites choses à faire dans la journée. Dans « Ma journée », il n’y a que deux places pour elles. Cela peut ressembler à une contrainte ; c’est en fait un repère. S’il te faut plus de deux lignes, c’est peut-être que la journée est déjà bien remplie, et il est normal que certaines tâches attendent demain." },
+        { id: "b2-p10", type: "p", text: "Une tâche remise à demain n’est pas un échec, c’est une décision. Si elle reste sur la liste, c’est qu’elle n’est pas oubliée." },
+        { id: "b2-p11", type: "p", text: "Ce jour-là, après le déjeuner, Camille a fermé tous ses onglets. Sa tâche principale, c’était le devoir ; son premier pas, ouvrir le fichier et écrire trois titres. Elle s’est assise à une table libre à l’étage. Les titres lui ont pris dix minutes. Ensuite, elle a écrit quelques paragraphes sous le premier. Le formulaire de stage et le colis sont devenus les tâches en plus du lendemain." },
+
+        {
+          id: "b2-uygulama",
+          type: "exercise",
+          title: "La tâche principale du jour",
+          planner: "main",
+          steps: [
+            "Regarde ta liste et pose-toi cette question : laquelle de ces tâches, si elle avait avancé ce soir, me soulagerait ?",
+            "Écris-la comme tâche principale du jour.",
+            "En dessous, écris le premier petit pas par lequel tu peux commencer en quelques minutes.",
+            "Si tu veux, ajoute aussi quand et où tu vas commencer : par exemple « Après le déjeuner, à mon bureau ».",
+            "Le reste peut attendre sur la liste. Pour aujourd’hui, c’est suffisant.",
+          ],
+        },
+
+        {
+          id: "b2-ozet",
+          type: "summary",
+          text: "Une seule tâche principale pour aujourd’hui, avec un petit premier pas, c’est souvent plus facile que d’essayer de commencer en regardant une longue liste.",
+        },
+      ],
+      sources: ["gollwitzer1999", "gollwitzer2006"],
+    },
+
+    {
+      id: "bolum-3",
+      kind: "chapter",
+      number: 3,
+      title: "Adapte ton plan à ta vie",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b3-sahne",
+          type: "scene",
+          paragraphs: [
+            "Jeudi. Le plan de Camille était clair : après le déjeuner, à la bibliothèque, la deuxième partie du devoir.",
+            "Mais la réunion de groupe s’est éternisée. À la sortie, il s’est mis à pleuvoir. Quand elle est arrivée chez elle, il était plus de 18 h ; trempée, fatiguée et un peu énervée.",
+            "La phrase qui lui a traversé l’esprit lui était familière : « De toute façon, la journée est fichue. Demain, je repars sur de bonnes bases. »",
+          ],
+        },
+
+        { id: "b3-h1", type: "h", text: "Quand le plan déraille" },
+        { id: "b3-p1", type: "p", text: "Un plan fait le matin est une prévision de la façon dont la journée va se passer. Les réunions durent plus longtemps, les bus sont en retard, l’énergie s’épuise plus tôt que prévu. Si le plan ne tient pas, ce n’est pas une faute de la personne qui l’a fait ; c’est la nature même des prévisions." },
+        { id: "b3-p2", type: "p", text: "Le problème, souvent, ce n’est pas le plan qui déraille, mais la pensée « tout ou rien » qui suit. Si le plan ne peut pas être suivi à la lettre, on a l’impression qu’il ne sert plus à rien. Pourtant, la plupart des jours, il reste trois options." },
+        { id: "b3-p3", type: "p", text: "La première : décaler le moment. « Cet après-midi, ça n’a pas marché ; une demi-heure après le dîner. » La deuxième : réduire le pas. « Je ne peux pas écrire la deuxième partie, mais je peux relire mes notes une fois. » La troisième : reporter en connaissance de cause. « Aujourd’hui, je ne le fais pas ; demain matin, c’est la première chose que je fais. » Ce sont trois décisions. La journée perdue, elle, c’est celle où l’on ne décide rien." },
+
+        { id: "b3-h2", type: "h", text: "Une option plus petite pour les jours difficiles" },
+        { id: "b3-p4", type: "p", text: "Un jour où tout va bien, le premier pas est facile. C’est dans les jours difficiles que le plan est vraiment mis à l’épreuve. C’est pourquoi il peut être utile de prévoir à l’avance une « option plus petite » : une solution de secours assez petite pour que tu puisses la faire même un mauvais jour." },
+        { id: "b3-p5", type: "p", text: "Pour le devoir, ce peut être ouvrir le fichier et écrire une seule phrase. Pour la marche, sortir devant chez toi et faire un tour de cinq minutes. Pour la lecture, une page. L’option plus petite n’est pas là pour que la tâche compte comme faite, mais pour ne pas perdre le lien avec elle." },
+
+        {
+          id: "b3-gorsel",
+          type: "figure",
+          art: "flexiblePlan",
+          alt: "Un chemin en pointillés va de gauche à droite et contourne un obstacle placé au milieu avant de continuer. En bas, sept petits carrés : la plupart sont remplis, un est vide, et un point orange se trouve à côté du dernier.",
+          caption: "Le plan peut contourner l’obstacle. Un vide sur l’un des sept jours ne veut pas dire que le chemin s’arrête là.",
+        },
+
+        { id: "b3-h3", type: "h", text: "Manquer un jour" },
+        { id: "b3-p6", type: "p", text: "Quand on essaie une nouvelle habitude, sauter un jour donne à beaucoup de gens l’impression de devoir tout recommencer depuis le début. Les compteurs de séries entretiennent ce sentiment : une chaîne de trente jours retombe à zéro en une seule journée." },
+
+        {
+          id: "b3-arastirma-1",
+          type: "research",
+          finding: "Dans une étude menée à Londres, 96 volontaires ont choisi un comportement lié à l’alimentation, à la boisson ou à l’activité physique, à pratiquer chaque jour dans la même situation, et ont évalué eux-mêmes chaque jour, pendant 12 semaines, à quel point ce comportement était devenu automatique. Manquer une seule occasion n’a pas perturbé de façon notable le processus de formation de l’habitude. Le temps nécessaire pour que le comportement devienne presque automatique variait beaucoup d’une personne à l’autre : entre 18 et 254 jours.",
+          limits: "Un petit groupe de volontaires et des comportements quotidiens simples. L’automatisme a été mesuré à partir de l’évaluation des participants eux-mêmes, et les données de certains participants ne correspondaient pas bien au modèle. Les résultats pourraient être différents pour des comportements plus complexes.",
+          details: "Dans l’étude, la durée médiane était de 66 jours ; mais ce n’est ni une moyenne ni un objectif. Ce résultat laisse penser que les durées fixes du type « une habitude en 21 jours » ne conviennent pas à tout le monde, et que manquer un jour de temps en temps ne remet pas le processus à zéro.",
+          refs: ["lally2010"],
+        },
+
+        {
+          id: "b3-oneri",
+          type: "suggestion",
+          text: "Quand tu essaies une habitude, commence par un court essai de sept jours. Le but n’est pas d’acquérir l’habitude en sept jours ; c’est de voir si le moment, le lieu et le pas que tu as choisis te conviennent. Modifier le plan au bout des sept jours fait partie de l’essai.",
+        },
+
+        { id: "b3-h5", type: "h", text: "Si le plan ne te convient pas" },
+        { id: "b3-p10", type: "p", text: "Parfois, le problème n’est pas un seul mauvais jour. Si le même plan ne tient pas plusieurs jours de suite, c’est peut-être le signe que ce n’est pas le plan qui s’adapte à toi, mais toi qui essaies de t’adapter au plan. Pour quelqu’un qui prévoit d’aller courir à 7 h mais qui éteint son réveil tous les matins, la vraie question n’est peut-être pas « Pourquoi je n’y arrive pas ? », mais « Est-ce que cette heure me convient vraiment ? »" },
+        { id: "b3-p11", type: "p", text: "Pour modifier ton plan, tu peux regarder trois choses : le moment, le lieu et la taille du pas. Souvent, en changer une seule suffit. Le soir au lieu du matin, la bibliothèque au lieu de la maison, dix minutes au lieu d’une demi-heure. L’objectif peut rester le même ; seul le chemin pour y arriver change." },
+        { id: "b3-p12", type: "p", text: "En faisant ces changements, il peut être utile de te voir comme quelqu’un qui mène une expérience. Une expérience ne donne pas toujours le résultat attendu ; cela ne veut pas dire que la personne qui la mène a échoué, seulement que cela montre ce qu’il faut changer au prochain essai." },
+
+        { id: "b3-h4", type: "h", text: "Deux questions le soir" },
+        { id: "b3-p7", type: "p", text: "En fin de journée, au lieu de compter quelle part de ton plan s’est réalisée, essaie de te poser deux questions : qu’est-ce qui a marché aujourd’hui ? Qu’est-ce que je peux me faciliter pour demain ? La première t’aide à remarquer ce qui fonctionne. La seconde ajuste un peu le plan du lendemain en fonction de ce que tu as vécu aujourd’hui." },
+        { id: "b3-p8", type: "p", text: "Les réponses peuvent être toutes petites : « Mettre le téléphone dans une autre pièce, ça a marché. » « Demain, je prépare mon sac la veille. » C’est comme ça que les plans s’adaptent à la vie, par de petits ajustements, jour après jour." },
+        { id: "b3-p9", type: "p", text: "Ce jeudi soir-là, Camille a ouvert le fichier de son devoir et a écrit une seule phrase pour la deuxième partie. Puis elle est allée se coucher. Le lendemain matin, en ouvrant le fichier, ce n’est pas une page blanche qui l’attendait, mais une phrase." },
+
+        {
+          id: "b3-uygulama",
+          type: "exercise",
+          title: "Un petit essai de sept jours",
+          planner: "habit",
+          steps: [
+            "Choisis une seule habitude que tu as envie d’essayer.",
+            "Écris le plus petit début réalisable : assez petit pour que tu puisses le faire même un mauvais jour.",
+            "Rattache-le à un moment qui existe déjà dans ta journée et décide où tu le feras.",
+            "Ajoute une option plus petite pour les jours difficiles.",
+            "Pendant sept jours, chaque soir, coche seulement l’une de ces cases : je l’ai fait, j’ai fait la version plus petite, ou je ne l’ai pas fait. Ensuite, regarde ton plan à nouveau.",
+          ],
+        },
+
+        {
+          id: "b3-ozet",
+          type: "summary",
+          text: "Quand un plan déraille, plutôt que de l’abandonner, il est souvent possible de décaler son moment ou de réduire son pas ; et manquer un jour ne veut pas dire que le chemin s’arrête là.",
+        },
+      ],
+      sources: ["lally2010"],
+    },
+
+    {
+      id: "kapanis",
+      kind: "outro",
+      title: "Pour finir",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "k1", type: "p", text: "Ce livre contenait trois petites idées : déposer quelque part ce que tu as en tête, choisir une seule tâche principale pour aujourd’hui avec son premier pas, et pouvoir changer de plan quand la journée change." },
+        { id: "k2", type: "p", text: "Aucune ne rendra chaque journée facile. Certains jours, la liste restera longue, la tâche principale n’avancera pas, l’essai aura des ratés. Cela ne veut pas dire que la méthode a échoué, ni toi. Le lendemain, tu pourras de nouveau choisir une tâche principale." },
+        { id: "k3", type: "p", text: "Le planificateur et la partie habitude restent là, même une fois le livre terminé. Certains jours, tu peux l’ouvrir juste pour écrire la tâche principale du jour ; d’autres jours, tu peux ne pas l’ouvrir du tout. Tes entrées sont conservées uniquement sur cet appareil ; pense à faire une sauvegarde de temps en temps." },
+        { id: "k4", type: "p", text: "Les petits pas ne règlent pas tout. Mais la plupart des jours, ils peuvent suffire pour commencer." },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+/*
+ * Contenido del libro (español): "Pequeños pasos, días más claros"
+ * Traducción de book.tr.js: mismos capítulos e ids de bloque. La bibliografía solo está en book.tr.js.
+ */
+window.GX_BOOKS = window.GX_BOOKS || {};
+window.GX_BOOKS.es = {
+  lang: "es",
+  title: "Pequeños pasos, días más claros",
+  subtitle: "Una lectura breve y un planificador diario sin presiones",
+
+  chapters: [
+    {
+      id: "baslarken",
+      kind: "intro",
+      title: "Para empezar",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "g1", type: "p", text: "Este libro breve está escrito para quien intenta sacar el día adelante. Para quien carga a la vez con las clases, el trabajo, la casa y las notificaciones interminables del móvil, y al llegar la noche se pregunta: “¿Pero qué he hecho hoy?”." },
+        { id: "g2", type: "p", text: "Aquí no vas a encontrar un gran sistema. No hay agendas con códigos de colores, ni rutinas matutinas de veinte pasos, ni la promesa de cambiarlo todo de la noche a la mañana. Hay tres ideas pequeñas: dejar en algún sitio lo que tienes en la cabeza, elegir una sola tarea principal para hoy y poder cambiar el plan cuando cambia el día." },
+        { id: "g3", type: "p", text: "Cada capítulo es lo bastante corto como para leerlo en un trayecto en autobús. Al final de cada uno hay un ejercicio de pocos minutos. Puedes hacerlo en papel o en el planificador de esta aplicación, como prefieras." },
+        { id: "g4", type: "p", text: "De vez en cuando hablaré de investigaciones. Me gustaría que no las leyeras como “la ciencia lo ha demostrado”, sino como “con ciertas personas, en ciertas condiciones, se observó esto”. Lo que dice la investigación y lo que te sugiero yo aparecerán en recuadros distintos. Saber cuál es cuál te ayudará a decidir qué quieres llevarte a tu propia vida." },
+      ],
+    },
+
+    {
+      id: "bolum-1",
+      kind: "chapter",
+      number: 1,
+      title: "No tienes que llevarlo todo en la cabeza",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b1-sahne",
+          type: "scene",
+          paragraphs: [
+            "Son las 8:10 de la mañana. Lucía va de pie en el metro, junto a la puerta. Con una mano se agarra a la barra; con la otra revisa el correo en el móvil.",
+            "Lo que le pasa por la cabeza no llega en orden. El trabajo que tiene que entregar el viernes. El mensaje que debe escribirle al casero sobre el alquiler. El paquete de devolución que tiene que llevar a la oficina de envíos. El cumpleaños de su madre, la semana que viene. El formulario a medio rellenar de la solicitud de prácticas. Y anoche le dijo a una amiga: “Mañana te llamo”. ¿Cuándo pensaba llamarla?",
+            "Mientras el metro se acerca a la estación, aparece una sensación conocida: se me está olvidando algo, pero ¿qué? Y el día ni siquiera ha empezado y ya está cansada.",
+          ],
+        },
+
+        { id: "b1-h1", type: "h", text: "La mente recuerda bien, pero guarda mal" },
+        { id: "b1-p1", type: "p", text: "El problema de Lucía no es la pereza ni el desorden. El problema es que todas sus tareas están a la vez en el mismo lugar: dentro de su cabeza." },
+        { id: "b1-p2", type: "p", text: "Una tarea sin terminar, mientras no se anote en algún sitio, vuelve a recordarse de vez en cuando. Te acuerdas del paquete en mitad de una clase y del trabajo mientras comes. A veces estos recordatorios sirven. Pero no eligen ni su orden ni su momento. Una tarea importante y una sin importancia te llaman con la misma voz." },
+        { id: "b1-p3", type: "p", text: "Al final tienes veinte pensamientos a medias y no puedes pensar a fondo en ninguno. Esa puede ser una de las razones por las que pasas el día sin parar y, por la noche, tienes la impresión de no haber hecho nada." },
+
+        {
+          id: "b1-arastirma-1",
+          type: "research",
+          finding: "En una serie de experimentos, a los participantes a quienes se les recordaba una meta sin cumplir se les iba la mente hacia esa meta con más frecuencia durante una lectura que no tenía nada que ver. Cuando se les permitía hacer un plan concreto para esa misma meta, el efecto desaparecía.",
+          limits: "Los experimentos se hicieron en laboratorio, sobre todo con estudiantes universitarios. En la vida diaria puede que no tenga el mismo resultado en todo el mundo.",
+          details: "Según los investigadores, lo que marcó la diferencia no fue solo recordar la tarea, sino armar un plan concreto para ella. En este libro, escribir es el primer paso; el plan es el tema del segundo capítulo.",
+          refs: ["masicampo2011"],
+        },
+
+        { id: "b1-h2", type: "h", text: "Para qué sirve escribir" },
+        { id: "b1-p4", type: "p", text: "Escribir lo que tienes en la cabeza no es prometer que vas a hacerlo todo. Se parece más a aparcarlo en algún sitio. Mientras el coche está en el aparcamiento, no necesitas seguir pensando en él; te basta con saber dónde está." },
+        { id: "b1-p5", type: "p", text: "Una lista en papel cumple tres funciones concretas. La primera: te permite comparar las tareas. En tu cabeza todas parecen del mismo tamaño; al escribirlas, te das cuenta de que unas son de dos minutos y otras de dos semanas. La segunda: reduce el miedo a olvidar, porque ahora el papel se encarga de recordar. La tercera: facilita el siguiente paso, es decir, decidir qué vas a elegir hoy." },
+
+        {
+          id: "b1-gorsel",
+          type: "figure",
+          art: "thoughtsToPaper",
+          alt: "A la izquierda, trazos cortos y anillos de distintos tamaños enredados entre sí; desde el centro, una flecha llega a una hoja con renglones ordenados a la derecha. En la hoja hay algunas líneas y, junto a una de ellas, una pequeña marca.",
+          caption: "Dentro de la cabeza todo se enreda. En el papel, las mismas tareas se ponen en fila y se pueden comparar.",
+        },
+
+        {
+          id: "b1-arastirma-2",
+          type: "research",
+          finding: "En un estudio realizado en un laboratorio del sueño, los adultos jóvenes que pasaron cinco minutos antes de acostarse escribiendo lo que tenían que hacer en los próximos días se durmieron, de media, más rápido que quienes escribieron lo que habían terminado en los últimos días.",
+          limits: "Una sola noche y un grupo pequeño de 57 personas sin problemas de sueño. No demuestra que escribir vaya a mejorar el sueño de todo el mundo.",
+          details: "Quienes escribieron sus tareas pendientes con más detalle también se durmieron antes. Este hallazgo debe leerse como una pista de que pasar la lista de la cabeza al papel puede resultar tranquilizador, no como una conclusión definitiva.",
+          refs: ["scullin2018"],
+        },
+
+        { id: "b1-h3", type: "h", text: "No necesitas organizar toda tu vida" },
+        { id: "b1-p6", type: "p", text: "En este punto, lo primero que se le suele ocurrir a uno es hacer una gran limpieza: descargar una aplicación nueva, dividirlo todo en categorías, colores, etiquetas, niveles de prioridad. Una semana después, el sistema se ha convertido en una tarea más que hay que mantener." },
+        { id: "b1-p7", type: "p", text: "No hace falta. Lo único que vas a hacer en este capítulo es sacar de tu cabeza, durante unos minutos, lo que tienes dentro. Sin clasificar, sin ordenar, sin planificar. A esa parte llegaremos en el segundo capítulo, y allí también elegiremos una sola tarea, no veinte." },
+
+        {
+          id: "b1-oneri",
+          type: "suggestion",
+          text: "Ten la lista en un solo lugar. Si un día escribes en las notas del móvil, al día siguiente en un papel y al otro en el borrador de un mensaje, tu mente pasará a intentar recordar dónde están las listas. No importa qué lugar sea; importa que sea siempre el mismo.",
+        },
+
+        { id: "b1-p8", type: "p", text: "Y algo que te puede venir bien saber: tu lista se va a ver desordenada. “Llamar a mamá” estará justo encima de “Pensar qué hacer después de graduarme”. Es normal. La lista no está para ser ordenada, sino para hacer visible la carga que llevas en la cabeza." },
+        { id: "b1-h4", type: "h", text: "¿Y si la lista se alarga?" },
+        { id: "b1-p10", type: "p", text: "Mucha gente que lo escribe todo por primera vez se echa un poco atrás al ver la lista que sale. Quince, veinte líneas. “¿De verdad tengo tantas cosas que hacer?”. En realidad, esas tareas ya estaban ahí; solo que ahora se pueden contar." },
+        { id: "b1-p11", type: "p", text: "Una lista larga no significa que tengas que hacerlo todo hoy. Algunas líneas son cosa de un mensaje, otras son asuntos que durarán meses y otras, en realidad, no son tareas sino preocupaciones: “¿Encontraré unas prácticas?”. Por ahora no tienes que hacer nada para separarlas. Solo ver que no todas son del mismo tipo ya puede aligerar un poco la carga." },
+        { id: "b1-p12", type: "p", text: "Puede que, mientras escribes, se te ocurran cosas que no quieres poner por escrito. No tienes por qué escribirlo todo. Esta lista no se la vas a enseñar a nadie; su propósito no es ponerte a prueba, sino hacerte un poco de sitio en la cabeza." },
+        { id: "b1-p13", type: "p", text: "También puede que notes algo: algunas tareas se encogen en cuanto las escribes. “Mensaje al casero”, que en tu cabeza parecía una gran conversación, en el papel se convierte en un mensaje de dos frases. No pasa con todas, pero cuando pasa, sienta bien." },
+        { id: "b1-p9", type: "p", text: "Esa mañana, al bajarse del metro, Lucía pasó tres minutos escribiendo en las notas del móvil todo lo que se le ocurría. Le salieron catorce líneas. No hizo ninguna en ese momento. Pero al ver que llamaría a su amiga a la hora de comer y que dejaría el paquete de devolución en la oficina de envíos de camino a casa, el resto se quedó un poco más en silencio." },
+
+        {
+          id: "b1-uygulama",
+          type: "exercise",
+          title: "Vaciar la cabeza en tres minutos",
+          planner: "brain",
+          timerSeconds: 180,
+          steps: [
+            "Pon un temporizador de tres minutos. También puedes usar el botón de abajo.",
+            "Escribe cada tarea que se te ocurra, sin orden y en pocas palabras. No distingas entre grandes y pequeñas: “Mensaje del alquiler”, “Trabajo de clase”, “Cita con el dentista”.",
+            "No escribas frases que empiecen por “Tengo que”; basta con el nombre de la tarea.",
+            "Cuando suene el temporizador, para. La lista puede quedar incompleta; lo que falte se puede añadir después.",
+            "Por ahora no tienes que hacer nada con la lista. Basta con saber que está ahí.",
+          ],
+        },
+
+        {
+          id: "b1-ozet",
+          type: "summary",
+          text: "Escribir en algún sitio lo que tienes en la cabeza no te obliga a hacerlo enseguida; solo te permite dejar de cargar con todo a la vez.",
+        },
+      ],
+      sources: ["masicampo2011", "scullin2018"],
+    },
+
+    {
+      id: "bolum-2",
+      kind: "chapter",
+      number: 2,
+      title: "Dale al día una tarea principal",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b2-sahne",
+          type: "scene",
+          paragraphs: [
+            "Martes, 10:00 de la mañana. Lucía está en la biblioteca, en la mesa junto a la ventana. Delante tiene la lista de ayer: catorce líneas.",
+            "Primero abre el archivo del trabajo. A los pocos minutos se acuerda del plazo del formulario de prácticas y lo abre. Mientras busca el documento que le piden, se le ocurre mirar cuánto tiempo le queda para devolver el paquete. Luego vuelve al trabajo.",
+            "Cerca del mediodía tiene siete pestañas abiertas en la pantalla. No ha terminado ninguna. Lucía sabe que ha estado trabajando toda la mañana, pero no tiene nada que enseñar.",
+          ],
+        },
+
+        { id: "b2-h1", type: "h", text: "Una lista no es un plan" },
+        { id: "b2-p1", type: "p", text: "En el primer capítulo escribiste en algún sitio lo que tenías en la cabeza. Eso aligera la carga, pero no te dice por dónde empezar hoy. Una lista es un inventario. Quien mira catorce líneas a la vez puede empezar a pensar que cada una es más urgente que la anterior." },
+        { id: "b2-p2", type: "p", text: "Así fue la mañana de Lucía. Cada tarea tenía sentido; cada cambio era lógico. Pero al saltar de una tarea a otra, cada vez tenía que volver a recordar dónde se había quedado. El día se llenó de comienzos a medias." },
+        { id: "b2-p3", type: "p", text: "Lo que te propongo en este capítulo es sencillo: elige una tarea principal para cada día. No tiene que ser la tarea más importante de tu vida. La medida es esta: si al llegar la noche esta tarea está terminada o ha avanzado, ¿sentirás alivio? Si la respuesta es sí, esa es la tarea principal de hoy." },
+        { id: "b2-p4", type: "p", text: "Las demás tareas no desaparecen; esperan en la lista. Elegir una tarea principal no es renunciar a las demás, sino dejar para más tarde la decisión de cuándo ocuparte de ellas hoy." },
+
+        { id: "b2-h5", type: "h", text: "Cuando cuesta elegir" },
+        { id: "b2-p12", type: "p", text: "Algunas mañanas, dos o tres tareas parecen igual de urgentes. Esos días hay unas cuantas preguntas que pueden ayudarte a elegir. ¿Cuál tiene la fecha límite más cercana? ¿Cuál, si no se termina, deja otras tareas en espera? ¿Cuál te pesa más en el pecho cuando piensas en ella?" },
+        { id: "b2-p13", type: "p", text: "Estas preguntas no siempre tienen una respuesta clara. En ese caso, hasta echarlo a cara o cruz puede ser mejor que no elegir. Elegir la tarea principal equivocada suele cansar menos que pasarse el día saltando entre tres tareas, porque al menos una avanza." },
+        { id: "b2-p14", type: "p", text: "Y algo más: la tarea principal no tiene que ser cada día algo grande. Un día en que no te quedan fuerzas, acabas de salir de un examen o te encuentras mal, la tarea principal puede ser “Poner la lavadora”. La tarea principal se elige según lo que da de sí el día, no según lo que daría de sí la persona que te gustaría ser." },
+
+        { id: "b2-h2", type: "h", text: "Convertir la tarea principal en un paso pequeño" },
+        { id: "b2-p5", type: "p", text: "“Escribir el trabajo” puede ser una buena tarea principal, pero es un mal comienzo. Es demasiado grande; no sabes por dónde agarrarla. Lo que facilita empezar es el primer paso pequeño de la tarea principal: una acción lo bastante concreta como para hacerla en unos minutos." },
+        { id: "b2-p6", type: "p", text: "Algunos ejemplos: en lugar de “Escribir el trabajo”, “Abrir el archivo del trabajo y escribir tres títulos”. En lugar de “Solicitud de prácticas”, “Buscar el documento que falta para el formulario y guardarlo en la carpeta”. En lugar de “Hablar con el casero”, “Escribir la primera frase del mensaje sobre el alquiler”." },
+        { id: "b2-p7", type: "p", text: "El objetivo del primer paso no es terminar la tarea, sino meterte en ella. A veces, después del primer paso, sigues; a veces, no. Las dos cosas están bien. Pero no es lo mismo esperar delante de una página en blanco que volver a una página que ya tiene tres títulos escritos." },
+
+        {
+          id: "b2-gorsel",
+          type: "figure",
+          art: "smallSteps",
+          alt: "A la izquierda, una caja grande con algunas líneas dentro; una flecha llega hasta cuatro escalones pequeños que suben hacia la derecha. Sobre el primero, el más bajo, hay un punto naranja.",
+          caption: "Una tarea grande no se salva de un solo salto. El primer escalón tiene que ser lo bastante bajo como para subirlo hoy.",
+        },
+
+        { id: "b2-h3", type: "h", text: "¿Cuándo y dónde?" },
+        { id: "b2-p8", type: "p", text: "Después de elegir el primer paso, queda una pregunta más: ¿cuándo y dónde lo vas a hacer? “Hoy en algún momento” suele acabar desplazándose al final del día. En cambio, “Después de comer, en la planta de arriba de la biblioteca” se queda en tu mente como una cita." },
+
+        {
+          id: "b2-arastirma-1",
+          type: "research",
+          finding: "Los planes que el psicólogo Peter Gollwitzer llama “intenciones de implementación” consisten en decidir de antemano cuándo, dónde y cómo vas a llevar a cabo una meta: “Cuando se dé la situación X, haré Y”. En un metaanálisis que reunió 94 pruebas independientes, la proporción de participantes que alcanzaron sus metas haciendo este tipo de planes fue, de media, claramente más alta que la de quienes solo se fijaron una meta.",
+          limits: "El tamaño del efecto variaba de un estudio a otro, y parte de las investigaciones se hicieron en laboratorio o con estudiantes. Un efecto medio no demuestra que el plan vaya a funcionar para todo el mundo ni con cualquier tarea.",
+          details: "Según los investigadores, como este tipo de plan toma de antemano la decisión de “¿cuándo empiezo?”, facilita empezar cuando llega el momento. En este libro, la sección “Decidir cuándo empiezo” de Mi día se basa en esta idea.",
+          refs: ["gollwitzer1999", "gollwitzer2006"],
+        },
+
+        {
+          id: "b2-oneri",
+          type: "suggestion",
+          text: "Prueba a no fijar el momento con una hora, sino a vincularlo con algo que ya ocurre durante tu día: “Después de la primera clase”, “Cuando me haya servido el café”, “Cuando llegue a casa y deje la mochila”. Las horas se desplazan; estos momentos, en cambio, vuelven casi todos los días.",
+        },
+
+        { id: "b2-h4", type: "h", text: "Tareas extra y lo que queda para mañana" },
+        { id: "b2-p9", type: "p", text: "Además de la tarea principal, habrá pequeñas cosas que hacer a lo largo del día. En Mi día solo hay dos huecos para ellas. Puede parecer una limitación; en realidad, es una medida. Si necesitas más de dos líneas, quizá hoy ya sea un día lleno, y es natural que algunas tareas queden para mañana." },
+        { id: "b2-p10", type: "p", text: "Una tarea que queda para mañana no es un fracaso, sino una decisión. Que siga en la lista significa que no se ha olvidado." },
+        { id: "b2-p11", type: "p", text: "Ese día, después de comer, Lucía cerró todas las pestañas. Su tarea principal era el trabajo; su primer paso, abrir el archivo y escribir tres títulos. Se sentó en una mesa libre de la planta de arriba. Los títulos le llevaron diez minutos. Después escribió unos cuantos párrafos más bajo el primero. El formulario de prácticas y el paquete pasaron a ser las tareas extra del día siguiente." },
+
+        {
+          id: "b2-uygulama",
+          type: "exercise",
+          title: "La tarea principal de hoy",
+          planner: "main",
+          steps: [
+            "Mira tu lista y pregúntate: si esta noche hubiera avanzado, ¿cuál me daría más alivio?",
+            "Escribe esa tarea como la tarea principal de hoy.",
+            "Debajo, escribe el primer paso pequeño con el que puedes empezar en unos minutos.",
+            "Si quieres, añade también cuándo y dónde vas a empezar: por ejemplo, “Después de comer, en mi mesa”.",
+            "El resto de las tareas puede esperar en la lista. Por hoy, con esto basta.",
+          ],
+        },
+
+        {
+          id: "b2-ozet",
+          type: "summary",
+          text: "Una sola tarea principal para hoy, con un primer paso pequeño, suele ser más fácil que intentar empezar mirando una lista larga.",
+        },
+      ],
+      sources: ["gollwitzer1999", "gollwitzer2006"],
+    },
+
+    {
+      id: "bolum-3",
+      kind: "chapter",
+      number: 3,
+      title: "Adapta tu plan a tu vida",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b3-sahne",
+          type: "scene",
+          paragraphs: [
+            "Jueves. Lucía tenía el plan claro: después de comer, en la biblioteca, la segunda parte del trabajo.",
+            "Pero la reunión de grupo se alargó. Al salir, empezó a llover. Cuando llegó a casa, ya eran más de las seis; estaba empapada, cansada y algo irritada.",
+            "La frase que se le pasó por la cabeza le resultaba conocida: “Hoy ya está perdido. Mañana empiezo bien”.",
+          ],
+        },
+
+        { id: "b3-h1", type: "h", text: "Cuando el plan se tuerce" },
+        { id: "b3-p1", type: "p", text: "Un plan hecho por la mañana es una previsión de cómo irá el día. Las reuniones se alargan, los autobuses se retrasan, la energía se acaba antes de lo esperado. Que el plan no salga no es un fallo de quien lo hizo; así son las previsiones." },
+        { id: "b3-p2", type: "p", text: "Muchas veces el problema no es el plan que se tuerce, sino el pensamiento de “todo o nada” que viene después. Si el plan no se puede cumplir tal cual, parece que no se cumple en absoluto. Sin embargo, casi todos los días hay tres opciones." },
+        { id: "b3-p3", type: "p", text: "La primera, mover el momento: “Por la tarde no ha podido ser; media hora después de cenar”. La segunda, reducir el paso: “No puedo escribir la segunda parte, pero sí puedo leer mis apuntes una vez”. La tercera, aplazarlo a conciencia: “Hoy no lo hago; mañana por la mañana será lo primero”. Las tres son decisiones. El día que se pierde es el día en que no se decide nada." },
+
+        { id: "b3-h2", type: "h", text: "Una opción más pequeña para los días difíciles" },
+        { id: "b3-p4", type: "p", text: "En un día que va bien, el primer paso es fácil. Donde de verdad se pone a prueba un plan es en los días difíciles. Por eso puede servir decidir de antemano una “opción más pequeña”: un recurso de reserva tan pequeño que puedas hacerlo incluso en un mal día." },
+        { id: "b3-p5", type: "p", text: "Para el trabajo, podría ser abrir el archivo y escribir una sola frase. Para caminar, salir a la puerta de casa y dar una vuelta de cinco minutos. Para leer, una página. La opción pequeña no existe para que la tarea cuente como hecha, sino para no perder el vínculo con ella." },
+
+        {
+          id: "b3-gorsel",
+          type: "figure",
+          art: "flexiblePlan",
+          alt: "Un camino de línea discontinua va de izquierda a derecha y sigue adelante rodeando un obstáculo que hay en el centro. Debajo hay siete cuadraditos; la mayoría están rellenos, uno está vacío y junto al último hay un punto naranja.",
+          caption: "El plan puede rodear el obstáculo. Que uno de los siete días quede vacío no significa que el camino se haya acabado.",
+        },
+
+        { id: "b3-h3", type: "h", text: "Saltarse un día" },
+        { id: "b3-p6", type: "p", text: "Cuando estás probando un hábito nuevo, saltarte un día hace que mucha gente sienta que tiene que empezarlo todo de cero. Los contadores de rachas alimentan esa sensación: una cadena de treinta días vuelve a cero en un solo día." },
+
+        {
+          id: "b3-arastirma-1",
+          type: "research",
+          finding: "En un estudio realizado en Londres, 96 voluntarios eligieron una conducta relacionada con comer, beber o moverse para hacerla cada día en la misma situación, y durante 12 semanas valoraron ellos mismos, a diario, hasta qué punto se había vuelto automática. Perder una sola oportunidad no alteró de forma notable el proceso de formación del hábito. El tiempo que tardó la conducta en volverse casi automática varió mucho de una persona a otra: entre 18 y 254 días.",
+          limits: "Un grupo pequeño de voluntarios y conductas diarias sencillas. La automaticidad se midió con la valoración de los propios participantes, y los datos de algunos de ellos no se ajustaron bien al modelo. Con conductas más complejas, los resultados podrían ser distintos.",
+          details: "En el estudio, la mediana fue de 66 días; pero no es una media, ni tampoco una meta. El hallazgo sugiere que los plazos fijos del tipo “un hábito en 21 días” no sirven para todo el mundo y que saltarse un día de vez en cuando no reinicia el proceso.",
+          refs: ["lally2010"],
+        },
+
+        {
+          id: "b3-oneri",
+          type: "suggestion",
+          text: "Cuando pruebes un hábito, haz primero una prueba corta de siete días. El objetivo no es adquirir el hábito en siete días, sino ver si el momento, el lugar y el paso que has elegido encajan contigo. Cambiar el plan al cabo de los siete días forma parte del experimento.",
+        },
+
+        { id: "b3-h5", type: "h", text: "Si el plan no encaja contigo" },
+        { id: "b3-p10", type: "p", text: "A veces el problema no es un solo mal día. Si el mismo plan no sale varios días seguidos, puede que sea señal de que no es el plan el que se adapta a ti, sino tú quien intenta adaptarse al plan. Para alguien que planea salir a correr a las siete de la mañana pero apaga la alarma todos los días, la verdadera pregunta quizá no sea “¿Por qué no soy capaz?”, sino “¿De verdad me va bien esta hora?”." },
+        { id: "b3-p11", type: "p", text: "Al cambiar el plan, puedes fijarte en tres cosas: el momento, el lugar y el tamaño del paso. Muchas veces basta con cambiar una. Por la tarde en vez de por la mañana, la biblioteca en vez de casa, diez minutos en vez de media hora. La meta puede seguir siendo la misma; solo cambia el camino para llegar a ella." },
+        { id: "b3-p12", type: "p", text: "Mientras haces estos cambios, puede ayudarte mirarte como alguien que está llevando a cabo un experimento. Los experimentos no siempre dan el resultado esperado; eso no significa que quien los hace haya fracasado, solo indica qué hay que cambiar en el siguiente intento." },
+
+        { id: "b3-h4", type: "h", text: "Dos preguntas por la noche" },
+        { id: "b3-p7", type: "p", text: "Al final del día, en lugar de contar cuánto del plan se ha cumplido, prueba a hacerte dos preguntas: ¿Qué me ha funcionado hoy? ¿Qué puedo ponerme más fácil mañana? La primera te ayuda a fijarte en lo que funciona. La segunda corrige un poco el plan del día siguiente a partir de lo que has vivido hoy." },
+        { id: "b3-p8", type: "p", text: "Las respuestas pueden ser pequeñas: “Me ha funcionado dejar el móvil en otra habitación”. “Mañana preparo la mochila la noche anterior”. Así es como los planes se adaptan a la vida: con pequeños ajustes, día a día." },
+        { id: "b3-p9", type: "p", text: "Ese jueves por la noche, Lucía abrió el archivo del trabajo y escribió una sola frase para la segunda parte. Después se fue a dormir. A la mañana siguiente, al abrir el archivo, en lugar de una página en blanco la esperaba una frase." },
+
+        {
+          id: "b3-uygulama",
+          type: "exercise",
+          title: "Una pequeña prueba de siete días",
+          planner: "habit",
+          steps: [
+            "Elige un solo hábito que quieras probar.",
+            "Escribe el comienzo más pequeño que sea factible: tan pequeño que puedas hacerlo incluso en un mal día.",
+            "Vincúlalo a un momento que ya forme parte de tu día y decide dónde lo harás.",
+            "Añade una opción más pequeña para los días difíciles.",
+            "Durante siete días, cada noche marca solo esto: lo hice, hice la versión más pequeña o no lo hice. Después vuelve a mirar tu plan.",
+          ],
+        },
+
+        {
+          id: "b3-ozet",
+          type: "summary",
+          text: "Cuando el plan se tuerce, en lugar de abandonarlo, muchas veces puedes cambiarle el momento o reducir el paso; y saltarte un día tampoco significa que el camino se haya acabado.",
+        },
+      ],
+      sources: ["lally2010"],
+    },
+
+    {
+      id: "kapanis",
+      kind: "outro",
+      title: "Para terminar",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "k1", type: "p", text: "En este libro había tres ideas pequeñas: dejar en algún sitio lo que tienes en la cabeza, elegir una sola tarea principal para hoy y su primer paso, y poder cambiar el plan cuando cambia el día." },
+        { id: "k2", type: "p", text: "Ninguna de ellas hará que todos los días sean fáciles. Algunos días la lista seguirá siendo larga, la tarea principal no avanzará y la prueba se atascará. Eso no significa que el método haya fallado, ni que hayas fallado tú. Al día siguiente puedes volver a elegir una tarea principal." },
+        { id: "k3", type: "p", text: "El planificador y Mi hábito siguen aquí cuando termines de leer el libro. Puedes abrirlos el día que quieras y escribir solo la tarea principal de hoy, o no abrirlos en absoluto. Tus registros se guardan solo en este dispositivo; no olvides hacer una copia de seguridad de vez en cuando." },
+        { id: "k4", type: "p", text: "Los pasos pequeños no lo resuelven todo. Pero, casi todos los días, pueden bastar para empezar." },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+/*
+ * Contenuto del libro (italiano): "Piccoli passi, giornate più chiare"
+ * Traduzione di book.tr.js: stessi capitoli e stessi id dei blocchi; la bibliografia è solo in book.tr.js.
+ */
+window.GX_BOOKS = window.GX_BOOKS || {};
+window.GX_BOOKS.it = {
+  lang: "it",
+  title: "Piccoli passi, giornate più chiare",
+  subtitle: "Una breve lettura e un'agenda giornaliera senza pressioni",
+
+  chapters: [
+    {
+      id: "baslarken",
+      kind: "intro",
+      title: "Per cominciare",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "g1", type: "p", text: "Questo breve libro è scritto per chi cerca di portare a casa la giornata. Per chi si porta dietro tutto insieme, lezioni, lavoro, casa e le notifiche infinite del telefono, e la sera si chiede: «Ma oggi cosa ho fatto?»" },
+        { id: "g2", type: "p", text: "Qui non troverai un grande sistema. Niente agende con i colori, niente routine mattutine in venti passaggi, nessuna promessa di cambiare tutto in una notte. Ci sono tre piccole idee: appoggiare da qualche parte quello che hai in testa, scegliere una sola attività principale per oggi e, quando la giornata cambia, poter cambiare anche il piano." },
+        { id: "g3", type: "p", text: "Ogni capitolo è abbastanza breve da leggerlo durante un viaggio in autobus. Alla fine di ogni capitolo c'è un esercizio di pochi minuti. Puoi farlo su carta, se preferisci, oppure nell'agenda di questa app." },
+        { id: "g4", type: "p", text: "Ogni tanto parlerò di ricerche. Ti chiedo di leggerle non come «la scienza l'ha dimostrato», ma come «con alcune persone, in certe condizioni, si è osservato questo». Quello che dice la ricerca e quello che suggerisco io li troverai in riquadri separati. Sapere quale è quale ti aiuta a decidere cosa portare nella tua vita." },
+      ],
+    },
+
+    {
+      id: "bolum-1",
+      kind: "chapter",
+      number: 1,
+      title: "Non devi tenere tutto a mente",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b1-sahne",
+          type: "scene",
+          paragraphs: [
+            "Sono le 8:10 del mattino. Giulia è in metro, in piedi vicino alla porta. Con una mano si tiene al sostegno, con l'altra scorre le email sul telefono.",
+            "I pensieri non arrivano in ordine. La consegna di venerdì. Il messaggio da scrivere al padrone di casa per l'affitto. Il pacco del reso da portare al punto di ritiro. Il compleanno della mamma la settimana prossima. Il modulo lasciato a metà per la candidatura al tirocinio. E poi ieri sera aveva detto a un'amica: «Ti chiamo domani». Ma quando?",
+            "Mentre la metro si avvicina alla fermata, sente una sensazione familiare: sto dimenticando qualcosa, ma cosa? La giornata non è ancora cominciata e lei è già stanca.",
+          ],
+        },
+
+        { id: "b1-h1", type: "h", text: "La mente è un buon promemoria, ma un pessimo magazzino" },
+        { id: "b1-p1", type: "p", text: "Il problema di Giulia non è la pigrizia o il disordine. Il problema è che tutte le cose da fare stanno nello stesso momento nello stesso posto: dentro la sua testa." },
+        { id: "b1-p2", type: "p", text: "Una cosa non finita, finché non viene scritta da qualche parte, ogni tanto si fa sentire. Durante una lezione ti torna in mente il pacco del reso, mentre mangi la consegna. A volte questi richiami sono utili. Ma non scelgono né l'ordine né il momento. Una cosa importante e una senza importanza ti chiamano con la stessa voce." },
+        { id: "b1-p3", type: "p", text: "Alla fine ti ritrovi con venti pensieri a metà e non riesci a pensarne fino in fondo nemmeno uno. Questo potrebbe essere uno dei motivi per cui passi tutto il giorno a darti da fare e la sera hai l'impressione di non aver fatto niente." },
+
+        {
+          id: "b1-arastirma-1",
+          type: "research",
+          finding: "In una serie di esperimenti, ai partecipanti a cui veniva ricordato un obiettivo non ancora raggiunto la mente tornava più spesso a quell'obiettivo durante una lettura che non c'entrava nulla. Quando veniva permesso loro di fare un piano concreto per lo stesso obiettivo, questo effetto scompariva.",
+          limits: "Gli esperimenti sono stati condotti in laboratorio, per lo più con studenti universitari. Nella vita di tutti i giorni il risultato potrebbe non essere lo stesso per tutti.",
+          details: "Secondo i ricercatori, a fare la differenza non era solo ricordarsi della cosa da fare, ma costruire un piano concreto per farla. In questo libro scrivere è il primo passo; il piano è l'argomento del secondo capitolo.",
+          refs: ["masicampo2011"],
+        },
+
+        { id: "b1-h2", type: "h", text: "A cosa serve, in pratica, scrivere" },
+        { id: "b1-p4", type: "p", text: "Scrivere quello che hai in testa non è una promessa di fare tutte quelle cose. È più come parcheggiarle da qualche parte. Quando l'auto è nel parcheggio non devi continuare a pensarci; ti basta sapere dov'è." },
+        { id: "b1-p5", type: "p", text: "Una lista messa su carta fa tre cose concrete. Primo, ti permette di confrontare le cose da fare. In testa sembrano tutte grandi uguali; quando le scrivi, ti accorgi che alcune richiedono due minuti e altre due settimane. Secondo, riduce la paura di dimenticare, perché adesso a ricordare ci pensa la carta. Terzo, rende più facile il passo successivo, cioè decidere cosa scegliere per oggi." },
+
+        {
+          id: "b1-gorsel",
+          type: "figure",
+          art: "thoughtsToPaper",
+          alt: "A sinistra, brevi tratti e cerchi di dimensioni diverse, aggrovigliati tra loro; dal centro una freccia porta a un foglio a destra con righe ordinate. Sul foglio ci sono alcune righe e, accanto a una di esse, un piccolo segno.",
+          caption: "In testa tutto si aggroviglia. Sulla carta le stesse cose si mettono in fila e si possono confrontare.",
+        },
+
+        {
+          id: "b1-arastirma-2",
+          type: "research",
+          finding: "In uno studio in un laboratorio del sonno, i giovani adulti che prima di dormire avevano scritto per cinque minuti le cose da fare nei giorni successivi si sono addormentati, in media, più in fretta di quelli che avevano scritto le cose completate nei giorni precedenti.",
+          limits: "Una sola notte, un piccolo gruppo di 57 persone senza disturbi del sonno. Non dimostra che scrivere faccia bene al sonno di tutti.",
+          details: "Anche chi aveva scritto le cose da fare in modo più dettagliato si è addormentato più in fretta. Questo risultato va letto come un indizio che spostare la lista dalla testa alla carta può dare sollievo, non come una conclusione definitiva.",
+          refs: ["scullin2018"],
+        },
+
+        { id: "b1-h3", type: "h", text: "Non devi riorganizzare tutta la tua vita" },
+        { id: "b1-p6", type: "p", text: "A questo punto la prima idea che viene in mente di solito è una grande pulizia: scaricare una nuova app, dividere tutto in categorie, colori, etichette, livelli di priorità. Dopo una settimana il sistema diventa un'altra cosa di cui occuparsi." },
+        { id: "b1-p7", type: "p", text: "Non serve. In questo capitolo l'unica cosa che farai è tirare fuori, per qualche minuto, quello che hai in testa. Niente classificazioni, niente ordine, niente piano. A quella parte arriveremo nel secondo capitolo, e anche lì sceglieremo una sola cosa, non venti." },
+
+        {
+          id: "b1-oneri",
+          type: "suggestion",
+          text: "Tieni la lista in un unico posto. Se un giorno scrivi nelle note del telefono, il giorno dopo su un foglio e quello dopo ancora in una bozza di messaggio, la tua mente proverà a ricordare dove sono le liste. Non importa quale sia il posto; importa che sia sempre lo stesso.",
+        },
+
+        { id: "b1-p8", type: "p", text: "Può esserti utile sapere anche questo: la tua lista sembrerà disordinata. «Chiamare la mamma» starà proprio sopra «Pensare a cosa fare dopo la laurea». È normale. La lista non serve a essere ordinata, ma a rendere visibile il peso che hai in testa." },
+        { id: "b1-h4", type: "h", text: "E se la lista si allunga?" },
+        { id: "b1-p10", type: "p", text: "Molte persone che scrivono tutto per la prima volta, guardando la lista che ne esce, fanno per un attimo un passo indietro. Quindici, venti righe. «Ho davvero tutte queste cose da fare?» In realtà quelle cose c'erano già; solo che adesso si possono contare." },
+        { id: "b1-p11", type: "p", text: "Una lista lunga non significa che devi fare tutto oggi. Alcune righe si risolvono con un messaggio, altre sono questioni che dureranno mesi, altre ancora non sono affatto cose da fare, ma preoccupazioni: «Riuscirò a trovare un tirocinio?» Per ora non devi fare niente per separarle. Già vedere che non sono tutte dello stesso tipo può alleggerire un po' il peso." },
+        { id: "b1-p12", type: "p", text: "Mentre scrivi, potrebbero venirti in mente anche cose che non hai voglia di scrivere. Non è obbligatorio scrivere tutto. Questa lista non la vedrà nessuno; non serve a metterti alla prova, ma a liberare un po' di spazio nella tua testa." },
+        { id: "b1-p13", type: "p", text: "E potresti notare anche questo: alcune cose, appena scritte, si rimpiccioliscono. «Messaggio al padrone di casa» in testa sembra una lunga conversazione, sulla carta diventa un messaggio di due frasi. Non succede con tutto, ma quando succede fa bene." },
+        { id: "b1-p9", type: "p", text: "Quella mattina, scesa dalla metro, Giulia ha scritto per tre minuti nelle note del telefono tutto quello che le veniva in mente. Sono uscite quattordici righe. Sul momento non ne ha fatta nessuna. Ma quando ha visto che avrebbe chiamato la sua amica in pausa pranzo e che avrebbe lasciato il pacco del reso al punto di ritiro tornando a casa la sera, il resto si è fatto un po' più silenzioso." },
+
+        {
+          id: "b1-uygulama",
+          type: "exercise",
+          title: "Svuotare la testa in tre minuti",
+          planner: "brain",
+          timerSeconds: 180,
+          steps: [
+            "Imposta un timer di tre minuti. Puoi usare anche il pulsante qui sotto.",
+            "Scrivi ogni cosa da fare che ti viene in mente, in breve e senza ordine. Non distinguere tra grandi e piccole: «Messaggio affitto», «Compito», «Appuntamento dal dentista».",
+            "Non scrivere frasi che iniziano con «Dovrei»; basta il nome della cosa.",
+            "Quando il timer finisce, fermati. La lista può restare incompleta; quello che manca si può aggiungere dopo.",
+            "Per ora non devi fare niente con la lista. Ti basta sapere che è lì.",
+          ],
+        },
+
+        {
+          id: "b1-ozet",
+          type: "summary",
+          text: "Scrivere da qualche parte le cose che hai in testa non ti obbliga a farle subito; ti permette solo di smettere di portarle tutte insieme.",
+        },
+      ],
+      sources: ["masicampo2011", "scullin2018"],
+    },
+
+    {
+      id: "bolum-2",
+      kind: "chapter",
+      number: 2,
+      title: "Dai a oggi un'attività principale",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b2-sahne",
+          type: "scene",
+          paragraphs: [
+            "Martedì mattina, le 10:00. Giulia è in biblioteca, al tavolo vicino alla finestra. Davanti a sé ha la lista di ieri: quattordici righe.",
+            "Prima apre il file della consegna. Dopo qualche minuto si ricorda della scadenza del modulo per il tirocinio e apre il modulo. Mentre cerca il documento richiesto, le viene in mente di controllare entro quando va fatto il reso. Poi torna alla consegna.",
+            "Verso mezzogiorno sullo schermo ci sono sette schede aperte. Nessuna cosa è finita. Giulia sa di aver lavorato tutta la mattina, ma non ha niente da mostrare.",
+          ],
+        },
+
+        { id: "b2-h1", type: "h", text: "Una lista non è un piano" },
+        { id: "b2-p1", type: "p", text: "Nel primo capitolo hai scritto da qualche parte quello che avevi in testa. Questo alleggerisce il carico; ma non ti dice da cosa cominciare oggi. Una lista è un inventario. Chi guarda quattordici righe tutte insieme può cominciare a pensare che ognuna sia più urgente dell'altra." },
+        { id: "b2-p2", type: "p", text: "La mattina di Giulia è andata proprio così. Ogni cosa era valida, ogni passaggio aveva senso. Ma passando da una cosa all'altra, ogni volta ha dovuto ricordarsi di nuovo dove era rimasta. La giornata si è riempita di inizi lasciati a metà." },
+        { id: "b2-p3", type: "p", text: "Quello che ti propongo in questo capitolo è semplice: per ogni giornata scegli un'attività principale. Non deve essere la cosa più importante della tua vita. Il criterio è questo: se stasera questa cosa sarà finita o andata avanti, sarà un sollievo per te? Se la risposta è sì, quella è l'attività principale di oggi." },
+        { id: "b2-p4", type: "p", text: "Le altre cose non spariscono; aspettano nella lista. Scegliere un'attività principale non significa rinunciare alle altre, ma rimandare la decisione su quando occupartene." },
+
+        { id: "b2-h5", type: "h", text: "Quando scegliere è difficile" },
+        { id: "b2-p12", type: "p", text: "Certe mattine due o tre cose sembrano urgenti allo stesso modo. In giornate così, alcune domande possono rendere la scelta più facile. Quale ha la scadenza più vicina? Quale, se non viene finita, blocca anche altre cose? A quale pensi e senti più peso sul petto?" },
+        { id: "b2-p13", type: "p", text: "Queste domande non sempre hanno una risposta chiara. Allora anche tirare una moneta può essere meglio che non scegliere affatto. Scegliere l'attività principale sbagliata spesso stanca meno che passare tutto il giorno avanti e indietro tra tre cose, perché almeno una va avanti." },
+        { id: "b2-p14", type: "p", text: "E poi c'è questo: l'attività principale non deve essere ogni giorno una cosa grande. In una giornata di stanchezza, appena dopo un esame o quando non stai bene, l'attività principale può essere «Fare il bucato». L'attività principale si sceglie in base alle forze della giornata, non a quelle della persona che vorresti essere." },
+
+        { id: "b2-h2", type: "h", text: "Trasformare l'attività principale in un piccolo passo" },
+        { id: "b2-p5", type: "p", text: "«Scrivere la relazione» può essere una buona attività principale, ma è un pessimo punto di partenza. È troppo grande; non sai da che parte prenderla. Quello che rende più facile cominciare è il primo piccolo passo dell'attività principale: un gesto abbastanza concreto da poterlo fare in pochi minuti." },
+        { id: "b2-p6", type: "p", text: "Qualche esempio: invece di «Scrivere la relazione», «Aprire il file e scrivere tre titoli». Invece di «Candidatura per il tirocinio», «Trovare il documento che manca nel modulo e metterlo nella cartella». Invece di «Parlare con il padrone di casa», «Scrivere la prima frase del messaggio sull'affitto»." },
+        { id: "b2-p7", type: "p", text: "Lo scopo del primo passo non è finire la cosa, ma entrarci dentro. A volte, finito il primo passo, vai avanti; a volte no. Vanno bene entrambe le cose. Ma c'è differenza tra restare davanti a una pagina bianca e tornare a una pagina con tre titoli già scritti." },
+
+        {
+          id: "b2-gorsel",
+          type: "figure",
+          art: "smallSteps",
+          alt: "A sinistra, un grande riquadro con alcune righe all'interno; una freccia porta a quattro piccoli gradini che salgono verso destra. Sopra il primo gradino, il più basso, c'è un punto arancione.",
+          caption: "Una cosa grande non si supera con un salto solo. Il primo gradino deve essere abbastanza basso da poterlo salire oggi.",
+        },
+
+        { id: "b2-h3", type: "h", text: "Quando e dove?" },
+        { id: "b2-p8", type: "p", text: "Dopo aver scelto il primo passo resta ancora una domanda: quando e dove lo farai? «Oggi, prima o poi» spesso scivola fino a fine giornata. «Dopo pranzo, al piano di sopra della biblioteca», invece, nella tua testa diventa come un appuntamento." },
+
+        {
+          id: "b2-arastirma-1",
+          type: "research",
+          finding: "I piani che lo psicologo Peter Gollwitzer ha chiamato «intenzioni di implementazione» consistono nello stabilire in anticipo quando, dove e come mettere in pratica un obiettivo: «Quando si verifica la situazione X, farò Y». In una meta-analisi che ha riunito 94 test indipendenti, la percentuale di partecipanti che raggiungevano i propri obiettivi era, in media, nettamente più alta tra chi aveva fatto questo tipo di piano rispetto a chi si era limitato a fissare un obiettivo.",
+          limits: "L'entità dell'effetto variava da uno studio all'altro, e una parte delle ricerche è stata condotta in laboratorio o con studenti. Un effetto medio non dimostra che il piano funzioni per tutti e per ogni cosa.",
+          details: "Secondo i ricercatori, piani di questo tipo rendono più facile cominciare quando arriva il momento, perché la decisione «quando comincio?» è già stata presa in anticipo. In questo libro, la sezione «Scegli quando iniziare» in «Giornata» si basa su questa idea.",
+          refs: ["gollwitzer1999", "gollwitzer2006"],
+        },
+
+        {
+          id: "b2-oneri",
+          type: "suggestion",
+          text: "Prova a legare il momento non a un orario, ma a qualcosa che succede già nella tua giornata: «Dopo la prima lezione», «Dopo aver preparato il caffè», «Quando torno a casa e poso lo zaino». Gli orari slittano; momenti come questi, invece, nella maggior parte dei giorni arrivano comunque.",
+        },
+
+        { id: "b2-h4", type: "h", text: "Attività extra e cose che restano per domani" },
+        { id: "b2-p9", type: "p", text: "Oltre all'attività principale, durante la giornata ci saranno anche piccole cose da fare. In «Giornata» per queste ci sono solo due spazi. Può sembrare un limite; in realtà è una misura. Se ti servono più di due righe, forse oggi è già una giornata piena, ed è naturale che qualcosa resti per domani." },
+        { id: "b2-p10", type: "p", text: "Una cosa che resta per domani non è un fallimento, è una decisione. Il fatto che resti nella lista significa che non è stata dimenticata." },
+        { id: "b2-p11", type: "p", text: "Quel giorno, dopo pranzo, Giulia ha chiuso tutte le schede. La sua attività principale era la consegna; il primo passo era aprire il file e scrivere tre titoli. Si è seduta a un tavolo libero al piano di sopra. I titoli le hanno preso dieci minuti. Poi, sotto il primo titolo, ha scritto ancora qualche paragrafo. Il modulo del tirocinio e il reso sono diventati le attività extra del giorno dopo." },
+
+        {
+          id: "b2-uygulama",
+          type: "exercise",
+          title: "L'attività principale di oggi",
+          planner: "main",
+          steps: [
+            "Guarda la tua lista e chiediti: quale di queste cose, se stasera fosse andata avanti, mi darebbe sollievo?",
+            "Scrivi quella cosa come attività principale di oggi.",
+            "Sotto, scrivi il primo piccolo passo con cui puoi cominciare in pochi minuti.",
+            "Se vuoi, aggiungi anche quando e dove comincerai: per esempio «Dopo pranzo, alla mia scrivania».",
+            "Le altre cose possono aspettare nella lista. Per oggi basta così.",
+          ],
+        },
+
+        {
+          id: "b2-ozet",
+          type: "summary",
+          text: "Una sola attività principale per oggi e un suo piccolo primo passo spesso rendono più facile cominciare che provarci guardando una lunga lista.",
+        },
+      ],
+      sources: ["gollwitzer1999", "gollwitzer2006"],
+    },
+
+    {
+      id: "bolum-3",
+      kind: "chapter",
+      number: 3,
+      title: "Adatta il piano alla tua vita",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b3-sahne",
+          type: "scene",
+          paragraphs: [
+            "Giovedì. Il piano di Giulia era chiaro: dopo pranzo, in biblioteca, la seconda parte della consegna.",
+            "Ma la riunione del gruppo è andata per le lunghe. All'uscita ha cominciato a piovere. Quando è arrivata a casa erano passate le sei; bagnata, stanca e anche un po' nervosa.",
+            "La frase che le è passata per la testa era familiare: «Ormai oggi è andata. Domani comincio come si deve.»",
+          ],
+        },
+
+        { id: "b3-h1", type: "h", text: "Quando il piano salta" },
+        { id: "b3-p1", type: "p", text: "Il piano fatto al mattino è una previsione su come andrà la giornata. Le riunioni si allungano, gli autobus fanno ritardo, l'energia finisce prima del previsto. Se il piano non regge, non è un errore di chi l'ha fatto; le previsioni sono fatte così." },
+        { id: "b3-p2", type: "p", text: "Spesso il problema non è il piano saltato, ma il pensiero «tutto o niente» che arriva subito dopo. Se il piano non si può seguire alla lettera, sembra che non si possa seguire per niente. Eppure, nella maggior parte delle giornate, le possibilità sono tre." },
+        { id: "b3-p3", type: "p", text: "La prima è spostare il momento: «Il pomeriggio non è andato, mezz'ora dopo cena». La seconda è rimpicciolire il passo: «Non riesco a scrivere la seconda parte, ma posso rileggere una volta i miei appunti». La terza è rimandare di proposito: «Oggi non lo faccio; domattina è la prima cosa». Tutte e tre sono decisioni. La giornata persa, invece, è quella in cui non si decide niente." },
+
+        { id: "b3-h2", type: "h", text: "Un'opzione più piccola per i giorni difficili" },
+        { id: "b3-p4", type: "p", text: "In una giornata che va bene il primo passo è facile. Il piano viene messo alla prova soprattutto nei giorni difficili. Per questo può essere utile stabilire in anticipo un'«opzione più piccola»: un piano di riserva così piccolo da poterlo fare anche in una brutta giornata." },
+        { id: "b3-p5", type: "p", text: "Per la consegna può voler dire aprire il file e scrivere una sola frase. Per una camminata, uscire di casa e fare un giro di cinque minuti. Per la lettura, una pagina. L'opzione più piccola non serve a far finta di aver fatto la cosa, ma a non perdere il contatto con essa." },
+
+        {
+          id: "b3-gorsel",
+          type: "figure",
+          art: "flexiblePlan",
+          alt: "Un sentiero tratteggiato va da sinistra a destra e prosegue curvando attorno a un ostacolo al centro. In basso ci sono sette piccoli quadrati; quasi tutti pieni, uno vuoto, e accanto all'ultimo un punto arancione.",
+          caption: "Il piano può girare attorno all'ostacolo. Se uno dei sette giorni resta vuoto, non vuol dire che la strada sia finita.",
+        },
+
+        { id: "b3-h3", type: "h", text: "Saltare un giorno" },
+        { id: "b3-p6", type: "p", text: "Quando si prova una nuova abitudine, a molte persone saltare un giorno sembra voler dire dover ricominciare tutto da capo. I contatori di serie alimentano proprio questa sensazione: una catena di trenta giorni si azzera in un giorno solo." },
+
+        {
+          id: "b3-arastirma-1",
+          type: "research",
+          finding: "In uno studio condotto a Londra, 96 volontari hanno scelto un comportamento legato al mangiare, al bere o al movimento da fare ogni giorno nella stessa situazione e, per 12 settimane, hanno valutato ogni giorno da soli quanto quel comportamento fosse diventato automatico. Saltare una singola occasione non ha compromesso in modo marcato il processo di formazione dell'abitudine. Il tempo necessario perché il comportamento diventasse quasi automatico è stato molto diverso da persona a persona: tra 18 e 254 giorni.",
+          limits: "Un piccolo gruppo di volontari e comportamenti quotidiani semplici. L'automaticità è stata misurata con la valutazione dei partecipanti stessi, e i dati di alcuni partecipanti non si adattavano bene al modello. Con comportamenti più complessi i risultati potrebbero essere diversi.",
+          details: "Nello studio il tempo mediano era di 66 giorni; ma non è una media, e non è nemmeno un traguardo. Il risultato fa pensare che tempi fissi come «un'abitudine in 21 giorni» non vadano bene per tutti e che saltare ogni tanto un giorno non azzeri il processo.",
+          refs: ["lally2010"],
+        },
+
+        {
+          id: "b3-oneri",
+          type: "suggestion",
+          text: "Quando provi un'abitudine, comincia con una breve prova di sette giorni. Lo scopo non è prendere l'abitudine in sette giorni, ma vedere se il momento, il luogo e il passo che hai scelto fanno per te. Cambiare il piano alla fine dei sette giorni fa parte dell'esperimento.",
+        },
+
+        { id: "b3-h5", type: "h", text: "Se il piano non fa per te" },
+        { id: "b3-p10", type: "p", text: "A volte il problema non è una singola brutta giornata. Se lo stesso piano non regge per diversi giorni di fila, può essere il segno che sei tu a cercare di adattarti al piano, e non il piano ad adattarsi a te. Per chi ha deciso di correre alle sette del mattino ma ogni mattina spegne la sveglia, la vera domanda forse non è «Perché non ci riesco?», ma «Quest'ora va davvero bene per me?»" },
+        { id: "b3-p11", type: "p", text: "Quando cambi il piano puoi guardare tre cose: il momento, il luogo e la grandezza del passo. Spesso basta cambiarne una. La sera invece della mattina, la biblioteca invece di casa, dieci minuti invece di mezz'ora. L'obiettivo può restare lo stesso; cambia solo la strada per arrivarci." },
+        { id: "b3-p12", type: "p", text: "Mentre fai questi cambiamenti, può aiutare guardarti come qualcuno che sta conducendo un esperimento. Gli esperimenti a volte non danno il risultato atteso; questo non significa che chi li conduce abbia fallito, ma solo che si capisce cosa cambiare nel tentativo successivo." },
+
+        { id: "b3-h4", type: "h", text: "Due domande la sera" },
+        { id: "b3-p7", type: "p", text: "A fine giornata, invece di contare quanta parte del piano si è realizzata, prova a farti due domande: Cosa ha funzionato oggi? Cosa posso rendere più facile domani? La prima ti aiuta a notare quello che ha funzionato. La seconda corregge un po' il piano del giorno dopo in base all'esperienza di oggi." },
+        { id: "b3-p8", type: "p", text: "Le risposte possono essere piccole: «Mettere il telefono in un'altra stanza ha funzionato». «Domani preparo lo zaino la sera prima». È così che i piani si adattano alla vita: con piccole correzioni, giorno dopo giorno." },
+        { id: "b3-p9", type: "p", text: "Quel giovedì sera Giulia ha aperto il file della consegna e ha scritto una sola frase per la seconda parte. Poi è andata a dormire. La mattina dopo, quando ha aperto il file, invece di una pagina bianca l'aspettava una frase." },
+
+        {
+          id: "b3-uygulama",
+          type: "exercise",
+          title: "Una piccola prova di sette giorni",
+          planner: "habit",
+          steps: [
+            "Scegli una sola abitudine che vuoi provare.",
+            "Scrivi il suo inizio più piccolo possibile: abbastanza piccolo da poterlo fare anche in una brutta giornata.",
+            "Legalo a un momento che c'è già nella tua giornata e decidi dove lo farai.",
+            "Aggiungi un'opzione più piccola per i giorni difficili.",
+            "Per sette giorni, ogni sera segna soltanto: l'ho fatto, ho fatto la versione più piccola oppure non l'ho fatto. Poi riguarda il tuo piano.",
+          ],
+        },
+
+        {
+          id: "b3-ozet",
+          type: "summary",
+          text: "Quando il piano salta, invece di lasciarlo perdere spesso si può spostare il momento o rimpicciolire il passo; e saltare un giorno non vuol dire che la strada sia finita.",
+        },
+      ],
+      sources: ["lally2010"],
+    },
+
+    {
+      id: "kapanis",
+      kind: "outro",
+      title: "Per concludere",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "k1", type: "p", text: "In questo libro c'erano tre piccole idee: appoggiare da qualche parte quello che hai in testa, scegliere per oggi una sola attività principale e il suo primo passo, e poter cambiare il piano quando cambia la giornata." },
+        { id: "k2", type: "p", text: "Nessuna di queste renderà facile ogni giornata. Certi giorni la lista resterà lunga, l'attività principale non andrà avanti, la prova si incepperà. Questo non significa che abbia fallito il metodo, né che abbia fallito tu. Il giorno dopo puoi scegliere di nuovo un'attività principale." },
+        { id: "k3", type: "p", text: "L'agenda e la sezione dell'abitudine restano qui anche dopo che avrai finito di leggere il libro. Un giorno puoi aprirla e scrivere solo l'attività principale di oggi, un altro giorno puoi anche non aprirla affatto. I tuoi dati restano solo su questo dispositivo; ricordati di fare ogni tanto un backup." },
+        { id: "k4", type: "p", text: "I piccoli passi non risolvono tutto. Ma nella maggior parte dei giorni possono bastare per cominciare." },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+/*
+ * Boekinhoud (Nederlands): "Kleine stappen, heldere dagen"
+ * Vertaling van book.tr.js — zelfde hoofdstuk- en blok-id's; de bronnenlijst staat alleen in book.tr.js.
+ */
+window.GX_BOOKS = window.GX_BOOKS || {};
+window.GX_BOOKS.nl = {
+  lang: "nl",
+  title: "Kleine stappen, heldere dagen",
+  subtitle: "Een kort boek en een rustige dagplanner",
+
+  chapters: [
+    {
+      id: "baslarken",
+      kind: "intro",
+      title: "Om te beginnen",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "g1", type: "p", text: "Dit korte boek is geschreven voor iemand die probeert de dag door te komen. Voor iemand die studie, werk, huishouden en de eindeloze meldingen op de telefoon tegelijk draagt, en zich 's avonds afvraagt: “Wat heb ik vandaag eigenlijk gedaan?”" },
+        { id: "g2", type: "p", text: "Je vindt hier geen groot systeem. Geen agenda's met kleurcodes, geen ochtendroutines van twintig stappen en geen belofte dat alles van de ene op de andere dag verandert. Er zijn drie kleine ideeën: wat je in je hoofd hebt ergens neerleggen, één hoofdtaak voor vandaag kiezen, en je plan aanpassen als de dag anders loopt." },
+        { id: "g3", type: "p", text: "Elk hoofdstuk is kort genoeg om in de trein of de bus te lezen. Aan het eind van elk hoofdstuk staat een oefening van een paar minuten. Die kun je op papier doen, of in de planner in deze app." },
+        { id: "g4", type: "p", text: "Hier en daar noem ik onderzoek. Lees dat niet als “de wetenschap heeft bewezen”, maar als “bij sommige mensen, onder bepaalde omstandigheden, zag men dit”. Wat het onderzoek zegt en wat ik zelf voorstel, zie je in aparte kaders. Als je weet wat wat is, kun je makkelijker beslissen wat je meeneemt in je eigen leven." },
+      ],
+    },
+
+    {
+      id: "bolum-1",
+      kind: "chapter",
+      number: 1,
+      title: "Je hoeft niet alles te onthouden",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b1-sahne",
+          type: "scene",
+          paragraphs: [
+            "Het is 8.10 uur. Sanne staat in de metro, vlak bij de deur. Met één hand houdt ze zich vast aan de lus, met de andere scrolt ze door haar mail.",
+            "Haar gedachten komen niet netjes op volgorde. De opdracht die vrijdag ingeleverd moet worden. Het berichtje aan de verhuurder over de huur. Het retourpakketje dat nog naar het afhaalpunt moet. Haar moeder, die volgende week jarig is. Het half ingevulde formulier van de stage-aanvraag. En gisteravond had ze tegen een vriendin gezegd: “Ik bel je morgen.” Wanneer zou ze bellen?",
+            "Als de metro het station nadert, bekruipt haar een bekend gevoel: ik vergeet iets, maar wat? De dag is nog niet begonnen en ze is al moe.",
+          ],
+        },
+
+        { id: "b1-h1", type: "h", text: "Je hoofd is een goede herinnering, maar een slechte opslag" },
+        { id: "b1-p1", type: "p", text: "Sannes probleem is geen luiheid of slordigheid. Het probleem is dat al haar taken tegelijk op één plek staan: in haar hoofd." },
+        { id: "b1-p2", type: "p", text: "Een onafgemaakte taak meldt zich af en toe opnieuw, zolang je hem nergens hebt opgeschreven. Tijdens een college schiet het retourpakketje je te binnen, tijdens het eten de opdracht. Soms zijn die herinneringen nuttig. Maar ze kiezen hun moment en volgorde niet. Een belangrijke taak roept even hard als een onbelangrijke." },
+        { id: "b1-p3", type: "p", text: "Het resultaat: je hebt twintig halve gedachten en kunt er niet één helemaal afdenken. Dat kan een van de redenen zijn waarom je je de hele dag druk voelt en 's avonds het gevoel hebt dat je niets hebt gedaan." },
+
+        {
+          id: "b1-arastirma-1",
+          type: "research",
+          finding: "In een reeks experimenten dwaalden de gedachten van deelnemers die aan een onafgemaakt doel werden herinnerd, tijdens een leestaak die er niets mee te maken had, vaker af naar dat doel. Toen ze voor datzelfde doel een concreet plan mochten maken, verdween dit effect.",
+          limits: "De experimenten werden in een laboratorium gedaan, meestal met universiteitsstudenten. In het dagelijks leven geeft het misschien niet bij iedereen hetzelfde resultaat.",
+          details: "Volgens de onderzoekers maakte niet het onthouden van de taak het verschil, maar het maken van een concreet plan ervoor. In dit boek is opschrijven de eerste stap; plannen is het onderwerp van het tweede hoofdstuk.",
+          refs: ["masicampo2011"],
+        },
+
+        { id: "b1-h2", type: "h", text: "Waarom opschrijven helpt" },
+        { id: "b1-p4", type: "p", text: "Opschrijven wat er in je hoofd zit, is geen belofte dat je al die dingen gaat doen. Het lijkt meer op ze ergens parkeren. Als je auto in de parkeergarage staat, hoef je er niet steeds aan te denken; het is genoeg dat je weet waar hij staat." },
+        { id: "b1-p5", type: "p", text: "Een lijst op papier doet drie concrete dingen. Ten eerste kun je taken met elkaar vergelijken. In je hoofd lijken ze allemaal even groot; op papier zie je dat sommige twee minuten kosten en andere twee weken. Ten tweede neemt de angst om iets te vergeten af, omdat het papier het onthouden nu voor je doet. Ten derde wordt de volgende stap makkelijker: beslissen wat je vandaag kiest." },
+
+        {
+          id: "b1-gorsel",
+          type: "figure",
+          art: "thoughtsToPaper",
+          alt: "Links korte lijntjes en lussen van verschillende grootte die door elkaar lopen; vanuit het midden wijst een pijl naar een vel papier rechts met nette regels. Op het papier staan een paar regels, en naast één regel staat een klein vinkje.",
+          caption: "In je hoofd loopt alles door elkaar. Op papier komen dezelfde taken op een rij en kun je ze vergelijken.",
+        },
+
+        {
+          id: "b1-arastirma-2",
+          type: "research",
+          finding: "In een onderzoek in een slaaplaboratorium vielen jongvolwassenen die voor het slapengaan vijf minuten opschreven wat ze de komende dagen moesten doen, gemiddeld sneller in slaap dan degenen die opschreven wat ze de afgelopen dagen hadden afgerond.",
+          limits: "Eén nacht, een kleine groep van 57 mensen zonder slaapproblemen. Het laat niet zien dat opschrijven voor iedereen goed is voor de slaap.",
+          details: "Wie de takenlijst gedetailleerder opschreef, sliep ook sneller in. Lees deze bevinding als een aanwijzing dat het verplaatsen van de lijst van je hoofd naar papier rust kan geven, niet als een vaststaande conclusie.",
+          refs: ["scullin2018"],
+        },
+
+        { id: "b1-h3", type: "h", text: "Je hoeft niet je hele leven te organiseren" },
+        { id: "b1-p6", type: "p", text: "Op dit punt is de eerste ingeving vaak een grote opruimactie: een nieuwe app downloaden, alles in categorieën indelen, kleuren, labels, prioriteitsniveaus. Een week later is het systeem zelf weer een taak die onderhoud nodig heeft." },
+        { id: "b1-p7", type: "p", text: "Dat hoeft niet. Het enige wat je in dit hoofdstuk doet, is een paar minuten lang naar buiten halen wat er in je hoofd zit. Geen indeling, geen volgorde, geen plan. Daar komen we in het tweede hoofdstuk op, en ook dan kiezen we één taak, geen twintig." },
+
+        {
+          id: "b1-oneri",
+          type: "suggestion",
+          text: "Houd de lijst op één plek. Schrijf je de ene dag in de notitie-app op je telefoon, de volgende dag op een papiertje en de dag daarna in een concept-bericht, dan probeert je hoofd voortaan te onthouden waar je lijsten liggen. Welke plek het is, maakt niet uit; dat het steeds dezelfde plek is, wel.",
+        },
+
+        { id: "b1-p8", type: "p", text: "Het kan ook helpen om dit te weten: je lijst zal er rommelig uitzien. “Mama bellen” staat gewoon onder “Nadenken over wat ik na mijn afstuderen wil”. Dat is normaal. De lijst is er niet om netjes te zijn, maar om zichtbaar te maken wat je met je meedraagt." },
+        { id: "b1-h4", type: "h", text: "En als de lijst lang wordt?" },
+        { id: "b1-p10", type: "p", text: "Veel mensen die voor het eerst alles opschrijven, schrikken even als ze naar de lijst kijken. Vijftien, twintig regels. “Heb ik zoveel te doen?” Maar al die dingen waren er al; alleen kun je ze nu tellen." },
+        { id: "b1-p11", type: "p", text: "Een lange lijst betekent niet dat je alles vandaag moet doen. Sommige regels zijn een kwestie van één berichtje, andere een onderwerp dat maanden duurt, en sommige zijn eigenlijk geen taak maar een zorg: “Zal ik wel een stage vinden?” Om ze te scheiden hoef je nu nog niets te doen. Alleen al zien dat ze niet allemaal van dezelfde soort zijn, kan de last een beetje lichter maken." },
+        { id: "b1-p12", type: "p", text: "Er kunnen ook dingen bij je opkomen die je liever niet opschrijft. Je hoeft niet alles op te schrijven. Niemand krijgt deze lijst te zien; hij is er niet om je te testen, maar om wat ruimte in je hoofd te maken." },
+        { id: "b1-p13", type: "p", text: "Misschien merk je ook dit: sommige taken worden kleiner zodra ze op papier staan. “Bericht aan de verhuurder” voelt in je hoofd als een groot gesprek, maar op papier wordt het een bericht van twee zinnen. Dat gebeurt niet bij elke taak, maar als het gebeurt, is het fijn." },
+        { id: "b1-p9", type: "p", text: "Toen Sanne die ochtend uit de metro stapte, schreef ze drie minuten lang alles wat bij haar opkwam in de notities op haar telefoon. Het werden veertien regels. Ze deed er op dat moment niets mee. Maar toen ze zag dat ze haar vriendin in de lunchpauze zou bellen en het retourpakketje 's avonds op weg naar huis bij het afhaalpunt zou afgeven, werd de rest een beetje stiller." },
+
+        {
+          id: "b1-uygulama",
+          type: "exercise",
+          title: "Drie minuten je hoofd leegmaken",
+          planner: "brain",
+          timerSeconds: 180,
+          steps: [
+            "Zet een timer op drie minuten. Je kunt ook de knop hieronder gebruiken.",
+            "Schrijf elke taak die bij je opkomt kort op, in willekeurige volgorde. Maak geen onderscheid tussen groot en klein: “Bericht over de huur”, “Opdracht”, “Afspraak tandarts”.",
+            "Begin geen zinnen met “Ik moet”; de naam van de taak is genoeg.",
+            "Stop als de timer afgaat. De lijst mag onvolledig zijn; wat ontbreekt, kun je later nog toevoegen.",
+            "Je hoeft voorlopig niets met de lijst te doen. Weet gewoon dat hij er is.",
+          ],
+        },
+
+        {
+          id: "b1-ozet",
+          type: "summary",
+          text: "Als je de dingen in je hoofd ergens opschrijft, hoef je ze niet meteen te doen; je hoeft ze alleen niet langer allemaal tegelijk mee te dragen.",
+        },
+      ],
+      sources: ["masicampo2011", "scullin2018"],
+    },
+
+    {
+      id: "bolum-2",
+      kind: "chapter",
+      number: 2,
+      title: "Geef vandaag één hoofdtaak",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b2-sahne",
+          type: "scene",
+          paragraphs: [
+            "Dinsdagochtend, 10.00 uur. Sanne zit in de bibliotheek, aan het tafeltje bij het raam. Voor haar ligt de lijst van gisteren: veertien regels.",
+            "Eerst opent ze het bestand van haar opdracht. Na een paar minuten schiet de deadline van het stageformulier haar te binnen, en ze opent het formulier. Terwijl ze zoekt naar het document dat erbij moet, bedenkt ze dat ze moet kijken hoelang ze nog heeft om het pakketje te retourneren. Daarna gaat ze weer terug naar de opdracht.",
+            "Tegen de middag staan er zeven tabbladen open op haar scherm. Niets is af. Sanne weet dat ze de hele ochtend heeft gewerkt, maar ze heeft niets om te laten zien.",
+          ],
+        },
+
+        { id: "b2-h1", type: "h", text: "Een lijst is geen plan" },
+        { id: "b2-p1", type: "p", text: "In het eerste hoofdstuk heb je opgeschreven wat er in je hoofd zat. Dat maakt de last lichter, maar het vertelt je niet waarmee je vandaag begint. Een lijst is een inventaris. Wie naar veertien regels tegelijk kijkt, kan gaan denken dat elke regel dringender is dan de andere." },
+        { id: "b2-p2", type: "p", text: "Zo verliep Sannes ochtend ook. Elke taak was terecht, elke overstap logisch. Maar elke keer dat ze wisselde, moest ze opnieuw bedenken waar ze gebleven was. De dag raakte gevuld met half begonnen dingen." },
+        { id: "b2-p3", type: "p", text: "Wat ik in dit hoofdstuk voorstel, is eenvoudig: kies voor elke dag één hoofdtaak. Het hoeft niet de belangrijkste taak van je leven te zijn. De maatstaf is: als deze taak vanavond af is of verder is gekomen, ben je dan opgelucht? Is het antwoord ja, dan is dat de hoofdtaak van vandaag." },
+        { id: "b2-p4", type: "p", text: "De andere taken verdwijnen niet; ze wachten op de lijst. Een hoofdtaak kiezen betekent niet dat je de rest opgeeft, maar dat je de vraag wanneer je ernaar kijkt even uitstelt." },
+
+        { id: "b2-h5", type: "h", text: "Als kiezen moeilijk is" },
+        { id: "b2-p12", type: "p", text: "Sommige ochtenden lijken twee of drie taken even dringend. Op zulke dagen zijn er een paar vragen die het kiezen makkelijker kunnen maken. Welke heeft de dichtstbijzijnde deadline? Welke houdt ook andere dingen op als hij niet af komt? Bij welke voel je de meeste druk op je borst als je eraan denkt?" },
+        { id: "b2-p13", type: "p", text: "Die vragen hebben niet altijd een duidelijk antwoord. Dan kan zelfs kop of munt beter zijn dan helemaal niet kiezen. De ‘verkeerde’ hoofdtaak kiezen is vaak minder vermoeiend dan de hele dag heen en weer springen tussen drie taken; dan komt er tenminste één verder." },
+        { id: "b2-p14", type: "p", text: "En nog iets: de hoofdtaak hoeft niet elke dag groot te zijn. Op een dag dat je moe bent, net een tentamen achter de rug hebt of ziek bent, kan de hoofdtaak “De was doen” zijn. Je kiest de hoofdtaak naar wat de dag aankan, niet naar wat de persoon die je wilt zijn aankan." },
+
+        { id: "b2-h2", type: "h", text: "Van hoofdtaak naar een kleine stap" },
+        { id: "b2-p5", type: "p", text: "“De opdracht schrijven” kan een goede hoofdtaak zijn, maar het is een slecht begin. Het is te groot; je weet niet waar je moet beginnen. Wat het beginnen makkelijker maakt, is de eerste kleine stap van de hoofdtaak: een handeling die zo concreet is dat je hem in een paar minuten kunt doen." },
+        { id: "b2-p6", type: "p", text: "Een paar voorbeelden: niet “De opdracht schrijven”, maar “Het bestand openen en drie kopjes typen”. Niet “Stage-aanvraag”, maar “Het ontbrekende document voor het formulier opzoeken en in de map zetten”. Niet “Met de verhuurder praten”, maar “De eerste zin van het bericht over de huur schrijven”." },
+        { id: "b2-p7", type: "p", text: "Het doel van de eerste stap is niet de taak afmaken, maar erin komen. Soms ga je na die eerste stap door, soms niet. Allebei is prima. Maar er is verschil tussen wachten voor een lege pagina en terugkomen bij een pagina waar al drie kopjes op staan." },
+
+        {
+          id: "b2-gorsel",
+          type: "figure",
+          art: "smallSteps",
+          alt: "Links een grote doos met een paar regels erin; een pijl wijst naar vier kleine traptreden die naar rechts omhooglopen. Op de eerste en laagste trede staat een oranje stip.",
+          caption: "Een grote taak neem je niet in één sprong. De eerste trede moet laag genoeg zijn om vandaag te nemen.",
+        },
+
+        { id: "b2-h3", type: "h", text: "Wanneer en waar?" },
+        { id: "b2-p8", type: "p", text: "Als je de eerste stap hebt gekozen, blijft er nog één vraag over: wanneer en waar ga je hem doen? “Vandaag ergens” schuift vaak op naar het eind van de dag. “Na de lunch, op de bovenste verdieping van de bibliotheek” staat in je hoofd als een afspraak." },
+
+        {
+          id: "b2-arastirma-1",
+          type: "research",
+          finding: "Plannen die psycholoog Peter Gollwitzer ‘implementatie-intenties’ noemde, leggen van tevoren vast wanneer, waar en hoe je een doel uitvoert: “Als situatie X zich voordoet, dan doe ik Y.” In een meta-analyse waarin 94 onafhankelijke tests werden samengebracht, bereikten deelnemers die zo’n plan maakten hun doel gemiddeld duidelijk vaker dan deelnemers die alleen een doel stelden.",
+          limits: "De grootte van het effect verschilde tussen de onderzoeken, en een deel van het onderzoek werd in het laboratorium of met studenten gedaan. Een gemiddeld effect betekent niet dat het plan voor iedereen en bij elke taak werkt.",
+          details: "Volgens de onderzoekers maken zulke plannen het beginnen makkelijker als het moment daar is, omdat de beslissing “wanneer begin ik?” al van tevoren is genomen. In dit boek is het onderdeel “Bepalen wanneer ik begin” in Mijn dag op dit idee gebaseerd.",
+          refs: ["gollwitzer1999", "gollwitzer2006"],
+        },
+
+        {
+          id: "b2-oneri",
+          type: "suggestion",
+          text: "Probeer de tijd niet als klokuur vast te leggen, maar te koppelen aan een moment dat al in je dag zit: “Na het eerste college”, “Als ik koffie heb gezet”, “Als ik thuiskom en mijn tas neerzet”. Klokuren schuiven op; zulke momenten komen de meeste dagen gewoon weer langs.",
+        },
+
+        { id: "b2-h4", type: "h", text: "Extra taken en wat naar morgen gaat" },
+        { id: "b2-p9", type: "p", text: "Naast je hoofdtaak zijn er ook kleine dingen die die dag moeten gebeuren. In Mijn dag is daar maar plek voor twee. Dat lijkt misschien een beperking, maar het is eigenlijk een maatstaf. Heb je meer dan twee regels nodig, dan is vandaag waarschijnlijk al een volle dag en is het logisch dat sommige dingen naar morgen gaan." },
+        { id: "b2-p10", type: "p", text: "Een taak die naar morgen gaat, is geen mislukking maar een beslissing. Dat hij op de lijst blijft staan, betekent dat hij niet vergeten is." },
+        { id: "b2-p11", type: "p", text: "Die dag sloot Sanne na de lunch alle tabbladen. Haar hoofdtaak was de opdracht; haar eerste stap was het bestand openen en drie kopjes typen. Ze ging aan een leeg tafeltje op de bovenste verdieping zitten. De kopjes kostten tien minuten. Daarna schreef ze onder het eerste kopje nog een paar alinea's. Het stageformulier en het pakketje werden de extra taken voor de volgende dag." },
+
+        {
+          id: "b2-uygulama",
+          type: "exercise",
+          title: "De hoofdtaak van vandaag",
+          planner: "main",
+          steps: [
+            "Kijk naar je lijst en vraag jezelf: van welke taak word ik vanavond opgelucht als hij verder is gekomen?",
+            "Schrijf die taak op als de hoofdtaak van vandaag.",
+            "Schrijf eronder de eerste kleine stap waarmee je in een paar minuten kunt beginnen.",
+            "Als je wilt, zet je er ook bij wanneer en waar je begint, bijvoorbeeld: “Na de lunch, aan mijn bureau”.",
+            "De rest kan op de lijst wachten. Voor vandaag is dit genoeg.",
+          ],
+        },
+
+        {
+          id: "b2-ozet",
+          type: "summary",
+          text: "Eén hoofdtaak voor vandaag met een kleine eerste stap is vaak makkelijker dan proberen te beginnen terwijl je naar een lange lijst kijkt.",
+        },
+      ],
+      sources: ["gollwitzer1999", "gollwitzer2006"],
+    },
+
+    {
+      id: "bolum-3",
+      kind: "chapter",
+      number: 3,
+      title: "Laat je plan passen bij je leven",
+      minutes: 7,
+      available: true,
+      blocks: [
+        {
+          id: "b3-sahne",
+          type: "scene",
+          paragraphs: [
+            "Donderdag. Sannes plan stond vast: na de lunch in de bibliotheek aan het tweede deel van haar opdracht werken.",
+            "Maar het groepsoverleg liep uit. Toen ze naar buiten kwam, begon het te regenen. Toen ze thuiskwam, was het al na zessen; ze was nat, moe en ook een beetje geïrriteerd.",
+            "De gedachte die door haar hoofd ging, kende ze wel: “Vandaag is toch al mislukt. Morgen begin ik opnieuw, en dan goed.”",
+          ],
+        },
+
+        { id: "b3-h1", type: "h", text: "Als je plan in de war raakt" },
+        { id: "b3-p1", type: "p", text: "Een plan dat je 's ochtends maakt, is een inschatting van hoe de dag zal lopen. Overleggen lopen uit, bussen hebben vertraging, je energie is eerder op dan verwacht. Dat een plan niet uitkomt, is geen fout van degene die het maakte; zo werken inschattingen nu eenmaal." },
+        { id: "b3-p2", type: "p", text: "Het probleem is vaak niet het plan dat in de war raakt, maar de alles-of-niets-gedachte die daarop volgt. Als het plan niet precies zo kan, voelt het alsof het helemaal niet kan. Terwijl je op de meeste dagen drie mogelijkheden hebt." },
+        { id: "b3-p3", type: "p", text: "De eerste: de tijd verschuiven. “Vanmiddag lukte het niet, dan na het eten een halfuur.” De tweede: de stap kleiner maken. “Het tweede deel schrijven lukt niet, maar mijn aantekeningen één keer doorlezen wel.” De derde: bewust uitstellen. “Vandaag doe ik het niet; morgenochtend is dit het eerste wat ik doe.” Alle drie zijn een beslissing. Een verloren dag is een dag waarop je niets beslist." },
+
+        { id: "b3-h2", type: "h", text: "Een kleinere optie voor moeilijke dagen" },
+        { id: "b3-p4", type: "p", text: "Op een dag die goed loopt, is de eerste stap makkelijk. Een plan wordt pas echt op de proef gesteld op moeilijke dagen. Daarom kan het helpen om van tevoren een ‘kleinere optie’ te bedenken: een reserve die zo klein is dat je hem zelfs op een slechte dag kunt doen." },
+        { id: "b3-p5", type: "p", text: "Voor een opdracht kan dat zijn: het bestand openen en één zin schrijven. Voor wandelen: naar buiten gaan en vijf minuten een rondje om het huis lopen. Voor lezen: één bladzijde. De kleine optie is er niet om de taak af te vinken, maar om het contact met de taak niet te verliezen." },
+
+        {
+          id: "b3-gorsel",
+          type: "figure",
+          art: "flexiblePlan",
+          alt: "Een gestippeld pad dat van links naar rechts loopt, buigt om een obstakel in het midden heen en loopt dan verder. Onderaan staan zeven kleine vierkantjes; de meeste zijn gevuld, één is leeg, en naast het laatste staat een oranje stip.",
+          caption: "Een plan kan om een obstakel heen. Eén lege dag op de zeven betekent niet dat de weg ophoudt.",
+        },
+
+        { id: "b3-h3", type: "h", text: "Een dag overslaan" },
+        { id: "b3-p6", type: "p", text: "Als je een nieuwe gewoonte probeert, voelt één dag overslaan voor veel mensen alsof ze helemaal opnieuw moeten beginnen. Reeksentellers voeden dat gevoel: een ketting van dertig dagen staat in één dag weer op nul." },
+
+        {
+          id: "b3-arastirma-1",
+          type: "research",
+          finding: "In een onderzoek in Londen kozen 96 vrijwilligers een eet-, drink- of bewegingsgedrag dat ze elke dag in dezelfde situatie zouden doen, en gaven ze 12 weken lang elke dag zelf aan hoe automatisch dat gedrag was geworden. Eén gemiste gelegenheid verstoorde het ontstaan van de gewoonte niet duidelijk. Hoelang het duurde voordat het gedrag bijna automatisch was, verschilde sterk van persoon tot persoon: tussen de 18 en 254 dagen.",
+          limits: "Een kleine groep vrijwilligers en eenvoudige dagelijkse handelingen. Automatisme werd gemeten met de eigen beoordeling van de deelnemers, en de gegevens van een deel van de deelnemers pasten niet goed in het model. Bij ingewikkelder gedrag kunnen de resultaten anders zijn.",
+          details: "In het onderzoek was de mediaan 66 dagen; maar dat is geen gemiddelde, en ook geen streefdoel. De bevinding doet vermoeden dat vaste termijnen zoals “in 21 dagen een gewoonte” niet voor iedereen gelden, en dat af en toe een dag missen het proces niet op nul zet.",
+          refs: ["lally2010"],
+        },
+
+        {
+          id: "b3-oneri",
+          type: "suggestion",
+          text: "Als je een gewoonte uitprobeert, begin dan met een korte proef van zeven dagen. Het doel is niet om in zeven dagen een gewoonte op te bouwen, maar om te zien of de tijd, de plek en de stap die je hebt gekozen bij je passen. Na die zeven dagen je plan aanpassen hoort bij het experiment.",
+        },
+
+        { id: "b3-h5", type: "h", text: "Als het plan niet bij je past" },
+        { id: "b3-p10", type: "p", text: "Soms is het probleem niet één slechte dag. Lukt hetzelfde plan een paar dagen achter elkaar niet, dan kan dat betekenen dat niet het plan zich aan jou aanpast, maar jij je aan het plan probeert aan te passen. Voor iemand die om zeven uur 's ochtends wil hardlopen maar elke ochtend de wekker uitzet, is de echte vraag misschien niet “Waarom lukt het me niet?” maar “Past dit tijdstip eigenlijk wel bij mij?”" },
+        { id: "b3-p11", type: "p", text: "Als je je plan aanpast, kun je naar drie dingen kijken: de tijd, de plek en de grootte van de stap. Vaak is het genoeg om er één te veranderen. 's Avonds in plaats van 's ochtends, de bibliotheek in plaats van thuis, tien minuten in plaats van een halfuur. Het doel kan hetzelfde blijven; alleen de weg ernaartoe verandert." },
+        { id: "b3-p12", type: "p", text: "Bij het aanpassen kan het helpen om naar jezelf te kijken als iemand die een experiment uitvoert. Experimenten geven niet altijd het verwachte resultaat; dat betekent niet dat degene die ze uitvoert gefaald heeft, alleen dat duidelijk wordt wat je bij de volgende poging verandert." },
+
+        { id: "b3-h4", type: "h", text: "Twee vragen voor de avond" },
+        { id: "b3-p7", type: "p", text: "Probeer aan het eind van de dag niet te tellen hoeveel van je plan is gelukt, maar stel jezelf twee vragen: wat werkte er vandaag? Wat kan ik morgen makkelijker maken? De eerste helpt je zien wat werkt. De tweede stelt het plan voor morgen een beetje bij op basis van wat je vandaag hebt meegemaakt." },
+        { id: "b3-p8", type: "p", text: "De antwoorden mogen klein zijn: “Mijn telefoon in een andere kamer leggen hielp.” “Morgen pak ik mijn tas de avond ervoor al in.” Zo gaan plannen bij je leven passen: met kleine aanpassingen, van dag tot dag." },
+        { id: "b3-p9", type: "p", text: "Die donderdagavond opende Sanne het bestand van haar opdracht en schreef één zin voor het tweede deel. Daarna ging ze slapen. Toen ze het bestand de volgende ochtend opende, wachtte er geen lege pagina op haar, maar een zin." },
+
+        {
+          id: "b3-uygulama",
+          type: "exercise",
+          title: "Een kleine proef van zeven dagen",
+          planner: "habit",
+          steps: [
+            "Kies één gewoonte die je wilt uitproberen.",
+            "Schrijf het kleinste begin op dat haalbaar is: zo klein dat je het zelfs op een slechte dag kunt doen.",
+            "Koppel het aan een moment dat al in je dag zit, en bepaal waar je het doet.",
+            "Voeg een kleinere optie toe voor moeilijke dagen.",
+            "Vink zeven dagen lang elke avond alleen dit aan: gedaan, een kleinere versie gedaan, of niet gedaan. Kijk daarna opnieuw naar je plan.",
+          ],
+        },
+
+        {
+          id: "b3-ozet",
+          type: "summary",
+          text: "Als je plan in de war raakt, kun je het vaak verschuiven of de stap kleiner maken in plaats van het op te geven; en een dag missen betekent niet dat de weg ophoudt.",
+        },
+      ],
+      sources: ["lally2010"],
+    },
+
+    {
+      id: "kapanis",
+      kind: "outro",
+      title: "Tot slot",
+      minutes: 2,
+      available: true,
+      blocks: [
+        { id: "k1", type: "p", text: "Dit boek ging over drie kleine ideeën: wat je in je hoofd hebt ergens neerleggen, één hoofdtaak voor vandaag en de eerste stap daarvan kiezen, en je plan aanpassen als de dag anders loopt." },
+        { id: "k2", type: "p", text: "Geen van deze ideeën maakt elke dag makkelijk. Op sommige dagen blijft de lijst lang, komt de hoofdtaak niet verder of hapert je proef. Dat betekent niet dat de aanpak, of jij, gefaald heeft. De volgende dag kun je gewoon weer een hoofdtaak kiezen." },
+        { id: "k3", type: "p", text: "De planner en het onderdeel Gewoonte blijven er ook als je het boek uit hebt. Je kunt ze openen wanneer je wilt en alleen de hoofdtaak van vandaag opschrijven, of ze een dag helemaal niet openen. Je gegevens staan alleen op dit apparaat; vergeet niet af en toe een back-up te maken." },
+        { id: "k4", type: "p", text: "Kleine stappen lossen niet alles op. Maar op de meeste dagen kunnen ze genoeg zijn om te beginnen." },
+      ],
+    },
+  ],
+};
+
+</script>
+<script>
+/*
  * Kitap ve arayüz görselleri: elle çizilmiş, satır içi SVG.
  * Renkler CSS sınıflarından gelir (styles.css: .il-*), böylece PDF ve web aynı paleti kullanır.
  * Görseller süslemeden çok anlamı taşır; açıklayıcı metinleri (alt) kitap içeriğinde tutulur.

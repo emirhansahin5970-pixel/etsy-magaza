@@ -4,7 +4,7 @@
  * Kullanıcı kayıtları burada DEĞİL, tarayıcının localStorage alanındadır; bu dosya kayıtlara dokunmaz.
  * CACHE adı derleme sırasında içerik özetiyle değiştirilir; yeni sürüm yayınlanınca eski önbellek silinir.
  */
-var CACHE = "gx-ssc-7c8c7389fc";
+var CACHE = "gx-ssc-f07635e500";
 var ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 var FONT_HOSTS = ["fonts.googleapis.com", "fonts.gstatic.com"];
 

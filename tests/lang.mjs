@@ -121,26 +121,30 @@ await run("Açılış ekranındaki dil düğmesi Ayarlar'ı dil seçimiyle açar
   await ctx.close();
 });
 
-await run("Arayüz Türkçe değilken kitap Türkçe kalır, not gösterilir ve kitap metni lang=\"tr\" ile işaretlenir", async () => {
-  const { ctx, page } = await newPage({ locale: "en-US", hash: "#oku" });
-  await page.locator("#book-lang-note").waitFor();
-  assert.equal(await page.textContent("#book-lang-note"), I.en.reader.bookLanguageNote);
-  assert.equal(await page.textContent("#toc-title"), I.en.reader.contentsTitle);
-  assert.equal(await page.getAttribute(".toc__title >> nth=0", "lang"), "tr");
-  await page.click('[data-open-chapter="bolum-1"]');
-  await page.locator("#chapter-title").waitFor();
-  assert.equal(await page.getAttribute("#chapter-title", "lang"), "tr");
-  assert.ok(await page.locator("#book-lang-note").isVisible());
-  const marked = await page.$$eval("[data-block]", (e) => e.every((x) => x.getAttribute("lang") === "tr"));
-  assert.ok(marked, "bütün kitap blokları lang=tr");
-  await page.screenshot({ path: join(shots, "lang-02-kitap-en.png") });
+await run("Kitap seçilen dilde açılır: başlık, bölüm adı ve metin o dilde; 'yalnızca Türkçe' notu yok; dil değişince okuma konumu korunur", async () => {
+  const sb = { window: {} };
+  for (const l of LANGS) vm.runInNewContext(readFileSync(join(here, "..", "app", "src", "content", `book.${l}.js`), "utf8"), sb);
+  const B = JSON.parse(JSON.stringify(sb.window.GX_BOOKS));
+  for (const l of LANGS) {
+    const { ctx, page } = await newPage({ hash: "#oku", seed: { "gx.ssc.settings.v1": JSON.stringify({ lang: l }) } });
+    await page.locator("#toc-title").waitFor();
+    assert.equal(await page.locator("#book-lang-note").count(), 0, l);
+    assert.deepEqual(await page.$$eval(".toc__title", (e) => e.map((x) => x.textContent)), B[l].chapters.map((c) => c.title), l);
+    await page.click('[data-open-chapter="bolum-2"]');
+    assert.equal(await page.textContent("#chapter-title"), B[l].chapters[2].title, l);
+    assert.equal(await page.getAttribute("#chapter-title", "lang"), null);
+    assert.equal(await page.textContent("#blk-b2-ozet"), I[l].reader.summaryLabel + B[l].chapters[2].blocks.find((b) => b.id === "b2-ozet").text);
+    if (l === "en") await page.screenshot({ path: join(shots, "lang-02-kitap-en.png") });
+    await ctx.close();
+  }
+  // Okuma konumu bölüm/blok kimliğiyle saklanır; dil değişince aynı bölümde kalınır
+  const { ctx, page } = await newPage({ hash: "#oku-bolum-1" });
+  await page.locator("#chapter-title", { hasText: B.en.chapters[1].title }).waitFor();
+  await page.click("#open-language");
+  await page.click('label[for="lang-de"]');
+  await page.click("#close-settings");
+  await page.locator("#chapter-title", { hasText: B.de.chapters[1].title }).waitFor();
   await ctx.close();
-  // Türkçede not yok, lang işareti gereksiz
-  const tr = await newPage({ hash: "#oku", seed: { "gx.ssc.settings.v1": JSON.stringify({ lang: "tr" }) } });
-  await tr.page.locator("#toc-title").waitFor();
-  assert.equal(await tr.page.locator("#book-lang-note").count(), 0);
-  assert.equal(await tr.page.getAttribute(".toc__title >> nth=0", "lang"), null);
-  await tr.ctx.close();
 });
 
 await run("Tarihler ve takvim seçilen dilde; pazartesi başlangıç korunur", async () => {
@@ -185,7 +189,7 @@ await run("7 dilde 320 px'te yatay taşma yok; sekmeler sığar; dokunma alanlar
     for (const big of [false, true]) {
       const { ctx, page } = await newPage({ viewport: { width: 320, height: 640 }, seed: { "gx.ssc.settings.v1": JSON.stringify({ lang: l }) } });
       if (big) await page.addStyleTag({ content: "html{font-size:200% !important}" });
-      for (const hash of ["#hosgeldin", "#oku", "#gunum", "#aliskanlik", "#aliskanlik-kur", "#gecmis", "settings"]) {
+      for (const hash of ["#hosgeldin", "#oku", "#oku-bolum-2", "#gunum", "#aliskanlik", "#aliskanlik-kur", "#gecmis", "settings"]) {
         if (hash === "settings") await page.click("#open-settings");
         else { await page.evaluate((h) => { location.hash = h; }, hash); await page.waitForTimeout(50); }
         await page.evaluate(() => document.querySelectorAll("details").forEach((d) => (d.open = true)));
