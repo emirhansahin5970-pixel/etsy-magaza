@@ -6,6 +6,7 @@
 //   books/Book_<DİL>.pdf                               bütün kitap PDF'leri (ayrı ayrı)
 //   images/01-…png                                     Etsy ilan görselleri (2700×2025)
 //   screens/<dil>-*.png                                uygulama ekran görüntüleri (ilan görsellerinde kullanılır)
+//   Small-Steps-Clear-Days_Etsy-Package.zip            hepsi tek dosyada (upload + images + ilan metinleri + rehber)
 // Kullanım: npm run build (kökte) && cd etsy && npm install && node build.mjs
 // Bağlantı değişirse: APP_URL="https://…/" node build.mjs  (PDF'teki bağlantı ve QR kod yeniden üretilir)
 import { createRequire } from "node:module";
@@ -447,5 +448,9 @@ for (const [name, html] of listingPages(shots)) {
 }
 await browser.close();
 rmSync(join(OUT, "tmp"), { recursive: true, force: true });
+// Tek indirilebilir paket: yüklenecek dosyalar, ilan görselleri, ilan metinleri ve rehber
+const PACKAGE = join(OUT, "Small-Steps-Clear-Days_Etsy-Package.zip");
+execFileSync("zip", ["-r", "-q", PACKAGE, "upload", "images"], { cwd: OUT });
+execFileSync("zip", ["-j", "-q", PACKAGE, ...["listing.md", "listing-translations.md", "ETSY-UPLOAD-GUIDE.md"].map((f) => join(here, f))]);
 console.log("Bağlantı:", APP_URL);
 console.log("Çıktı:", OUT);

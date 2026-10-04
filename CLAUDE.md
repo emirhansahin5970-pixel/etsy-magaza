@@ -57,7 +57,7 @@ tests/i18n.test.mjs        Dil dosyaları: anahtar, yer tutucu ve dizi uzunluğu
 tests/lang.mjs             Dil testleri (9): ilk açılış İngilizce, küre düğmesi, değiştirme/kalıcılık, kitap dili notu, tarih, başlangıç ekranı, 7 dilde 320 px
 tests/book.test.mjs        Kitap çevirilerinin yapısı Türkçe ile aynı, Türkçe harf kalmamış
 tests/helpers.mjs          turkishUI(): eski Türkçe testler için dil tercihini tr gösterir
-etsy/                      Etsy paketi: build.mjs (teslim PDF'i, 7 dilde kitap PDF'i, ilan görselleri), listing.md, listing-translations.md, ETSY-YUKLEME.md (sahip rehberi), fonts/ (OFL)
+etsy/                      Etsy paketi: build.mjs (teslim PDF'i, 7 dilde kitap PDF'i, ilan görselleri), listing.md, listing-translations.md, ETSY-UPLOAD-GUIDE.md (sahip rehberi), fonts/ (OFL)
 tests/contrast.mjs         İki temada renk kontrastı denetimi (metin ≥ 4.5:1, kenarlık/odak ≥ 3:1)
 tests/fixtures/            Önceki sürümlerin (v1, v2) uygulaması, localStorage içeriği ve yedeği: geriye uyumluluk testleri için
 docs/telefon-test-listesi.md  Açılış teşhisi + sahibin gerçek cihazda uygulayacağı test listesi
@@ -144,7 +144,7 @@ Planlanan kullanım: Bölüm 2'de Gollwitzer'ın iki çalışması (uygulama niy
 - [x] Kitap 7 dilde, Bölüm 2–3, kapanış, kaynakça, PDF kitap (etsy/build.mjs)
 - [ ] Kullanım belgesi (web sürümüne erişim, web ile PDF arasındaki fark) ve yardım metni (veri saklama, yedekleme, tarayıcı gereksinimleri)
 - [x] Teslim PDF'i (START HERE): bağlantı + QR, kurulum, veri/yedek, lisans, 6 dilde hızlı başlangıç
-- [ ] Etsy'de yapay zekâ kullanımı beyanı kuralını kontrol et (etsy/ETSY-YUKLEME.md)
+- [ ] Etsy'de yapay zekâ kullanımı beyanı kuralını kontrol et (etsy/ETSY-UPLOAD-GUIDE.md)
 - [ ] Satıştan hemen önce: depoyu gizli yap + yayını gizli depoyla çalışan bir yere taşı (ör. Cloudflare Pages), tahmin edilemez adres (ör. /k7m2x9/). Sahibe ekran ekran tarif et.
 
 ### Notlar / Kararlar
